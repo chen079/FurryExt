@@ -1363,7 +1363,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                     let parentNode = button.parentNode;
                     if (button.innerText != '检查扩展更新') return;
-                    const address = 'https://gitee.com/Chen079/FurryExt/raw/master/furry/';
+                    const address = 'https://gitee.com/Chen079/FurryExt/raw/master/';
                     if (button.disabled) {
                         return;
                     } else {
