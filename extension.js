@@ -1369,7 +1369,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     } else {
                         button.innerHTML = '正在检查更新';
                         button.disabled = true;
-                        fetch(address + 'update.js',{
+                        fetch(address + 'updatecheck.js',{
                             method: 'GET',
                             mode:'cors',// 允许发送跨域请求
                             credentials: 'include',
