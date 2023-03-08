@@ -4,7 +4,7 @@
 	version: "2.0.8",
 
 	// 扩展的上一个版本
-	oldversion: "2.07",
+	oldversion: "2.0.7",
 
 	// 更新内容汇总
 	changeLog: `
