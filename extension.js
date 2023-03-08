@@ -45,67 +45,66 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             });
         },
     };
-    if (typeof game.furryCreateProgress != 'function') {
-        //以下代码引用自诗笺
-        game.furryCreateProgress = (title, max, fileName, value) => {
-            const parent = ui.create.div(ui.window, {
-                textAlign: 'center',
-                width: '300px',
-                height: '150px',
-                left: 'calc(50% - 150px)',
-                top: 'auto',
-                bottom: 'calc(50% - 75px)',
-                zIndex: '10',
-                boxShadow: 'rgb(0 0 0 / 40 %) 0 0 0 1px, rgb(0 0 0 / 20 %) 0 3px 10px',
-                backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4))',
-                borderRadius: '8px'
-            });
-            // 可拖动
-            parent.className = 'dialog';
-            const container = ui.create.div(parent, {
-                position: 'absolute',
-                top: '0',
-                left: '0',
-                width: '100%',
-                height: '100%'
-            });
-            container.ontouchstart = ui.click.dialogtouchStart;
-            container.ontouchmove = ui.click.touchScroll;
-            container.style.WebkitOverflowScrolling = 'touch';
-            parent.ontouchstart = ui.click.dragtouchdialog;
-            const caption = ui.create.div(container, '', title, {
-                position: 'relative',
-                paddingTop: '8px',
-                fontSize: '20px'
-            });
-            ui.create.node('br', container);
-            const tip = ui.create.div(container, {
-                position: 'relative',
-                paddingTop: '8px',
-                fontSize: '20px',
-                width: '100%'
-            });
-            const file = ui.create.node('span', tip, '', fileName);
-            file.style.width = file.style.maxWidth = '100%';
-            ui.create.node('br', tip);
-            const index = ui.create.node('span', tip, '', String(value || '0'));
-            ui.create.node('span', tip, '', '/');
-            const maxSpan = ui.create.node('span', tip, '', String(max || '未知'));
-            ui.create.node('br', container);
-            const progress = ui.create.node('progress.zxgxProgress', container);
-            progress.setAttribute('value', value || '0');
-            progress.setAttribute('max', max);
-            parent.getTitle = () => caption.innerText;
-            parent.setTitle = (title) => caption.innerText = title;
-            parent.getFileName = () => file.innerText;
-            parent.setFileName = (name) => file.innerText = name;
-            parent.getProgressValue = () => progress.value;
-            parent.setProgressValue = (value) => progress.value = index.innerText = value;
-            parent.getProgressMax = () => progress.max;
-            parent.setProgressMax = (max) => progress.max = maxSpan.innerText = max;
-            return parent;
-        };
-    }
+	if (typeof game.shijianCreateProgress != 'function') {
+		game.shijianCreateProgress = (title, max, fileName, value) => {
+			const parent = ui.create.div(ui.window, {
+				textAlign: 'center',
+				width: '300px',
+				height: '150px',
+				left: 'calc(50% - 150px)',
+				top: 'auto',
+				bottom: 'calc(50% - 75px)',
+				zIndex: '10',
+				boxShadow: 'rgb(0 0 0 / 40 %) 0 0 0 1px, rgb(0 0 0 / 20 %) 0 3px 10px',
+				backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4))',
+				borderRadius: '8px'
+			});
+			// 可拖动
+			parent.className = 'dialog';
+			const container = ui.create.div(parent, {
+				position: 'absolute',
+				top: '0',
+				left: '0',
+				width: '100%',
+				height: '100%'
+			});
+			container.ontouchstart = ui.click.dialogtouchStart;
+			container.ontouchmove = ui.click.touchScroll;
+			container.style.WebkitOverflowScrolling = 'touch';
+			parent.ontouchstart = ui.click.dragtouchdialog;
+			const caption = ui.create.div(container, '', title, {
+				position: 'relative',
+				paddingTop: '8px',
+				fontSize: '20px'
+			});
+			ui.create.node('br', container);
+			const tip = ui.create.div(container, {
+				position: 'relative',
+				paddingTop: '8px',
+				fontSize: '20px',
+				width: '100%'
+			});
+			const file = ui.create.node('span', tip, '', fileName);
+			file.style.width = file.style.maxWidth = '100%';
+			ui.create.node('br', tip);
+			const index = ui.create.node('span', tip, '', String(value || '0'));
+			ui.create.node('span', tip, '', '/');
+			const maxSpan = ui.create.node('span', tip, '', String(max || '未知'));
+			ui.create.node('br', container);
+			const progress = ui.create.node('progress.zxgxProgress', container);
+			progress.setAttribute('value', value || '0');
+			progress.setAttribute('max', max);
+			parent.getTitle = () => caption.innerText;
+			parent.setTitle = (title) => caption.innerText = title;
+			parent.getFileName = () => file.innerText;
+			parent.setFileName = (name) => file.innerText = name;
+			parent.getProgressValue = () => progress.value;
+			parent.setProgressValue = (value) => progress.value = index.innerText = value;
+			parent.getProgressMax = () => progress.max;
+			parent.setProgressMax = (max) => progress.max = maxSpan.innerText = max;
+			return parent;
+		};
+	}
     return {
         name: "福瑞拓展",
         editable: false, content: function (config, pack) {
@@ -503,56 +502,34 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
-            if (config.furry_onlineUpdate2) {
-                fetch('https://gitee.com/Chen079/FurryExt/raw/master/updatecheck.js', {
+			if(config.furry_onlineUpdate2){
+                fetch('https://gitee.com/Chen079/FurryExt/raw/master/updatecheck.js',{
                     method: 'GET',
-                    mode: 'cors',// 允许发送跨域请求
+                    mode:'cors',// 允许发送跨域请求
                     credentials: 'include',
                     headers: {
                         'Cache-Control': 'no-cache'//不缓存
                     }
                 })
-                    .then(response => {
-                        if (!response.ok) throw response;
+                .then(response => {
+                    if (!response.ok) throw response;
                         return response.text();
                     })
                     .then(text => {
                         var data = eval(text);
                         console.log(data);
-                        if (data.updateAuto == false) return;
+                        if(data.updateAuto==false) return;
                         var localVersion = lib.extensionPack.福瑞拓展.version || '0';
-
+                            
                         /** 
                         * 判断版本
                         * @param { string } v1 现有版本
                         * @param { string } v2 要更新的版本
                         * @returns { boolean | 'equal' } v1比v2小就返回true
                         */
-                        function compareVersion(v1 = '', v2 = '') {
-                            // 相等版本
-                            if (v1 === v2) return 'equal';
-                            let version_1 = v1.split('.').map(item => Number(item) || 0);
-                            let version_2 = v2.split('.').map(item => Number(item) || 0);
-                            // 现有版本: 无
-                            if (version_1.length == 1 && version_1[0] == 0) {
-                                // 要更新的版本不是 无
-                                if (version_2.length > 1 || version_2[0] > 0) return true;
-                            } else if (version_2.length == 1 && version_2[0] == 0) {
-                                // 要更新的版本是 无
-                                return true;
-                            } else {
-                                for (let i = 0; i < version_1.length && i < version_2.length; i++) {
-                                    version_1[i] = version_1[i] || 0;
-                                    version_2[i] = version_2[i] || 0;
-                                    if (version_2[i] > version_1[i]) return true;
-                                    if (version_1[i] > version_2[i]) return false;
-                                }
-                            }
-                        };
-
                         console.log(localVersion, data.version)
                         //if (!compareVersion(localVersion, data.version)) return;
-
+                        
                         function myConfirm(message, callback) {
                             if (navigator.notification && navigator.notification.confirm) {
                                 navigator.notification.confirm(message, index => {
@@ -562,7 +539,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                 window.confirm(message) && callback();
                             }
                         }
-
                         function furryUpdating() {
                             /**
                              * 下载一个文件
@@ -590,83 +566,84 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                             }, downloadFile);
                                         }, downloadFile);
                                 } else {
-                                    fetch(`${address + url}?date=${(new Date()).getTime()}`)
-                                        .then(response => response.arrayBuffer())
-                                        .then(arrayBuffer => {
-                                            // 先创建指定文件夹
-                                            game.ensureDirectory(path, () => {
-                                                var fs = require('fs');
-                                                var p = require('path');
-                                                var filePath = p.join(__dirname, path, url);
-                                                // 如果是个文件夹，就退出
-                                                if (fs.existsSync(filePath)) {
-                                                    var stat = fs.statSync(filePath);
-                                                    if (stat.isDirectory()) {
-                                                        console.error(`${path + '/' + url}是个文件夹`);
-                                                        return success(true);
-                                                    }
-                                                }
-                                                fs.writeFile(filePath, Buffer.from(arrayBuffer), null, e => {
-                                                    if (e) error(e);
-                                                    else success();
-                                                });
-                                            });
-                                        })
-                                        .catch(response => error(new Error(response.statusText)));
-                                }
-                            }
-
-                            /**
-                             * 下载文件列表
-                             * @param { string[] } files 
-                             */
-                            function downloadList(files) {
-                                if (!Array.isArray(files) || files.length == 0) return;
-                                var i = 0;
-                                var progress = game.furryCreateProgress('更新福瑞', files.length, files[0], i);
-                                var success = skip => {
-                                    // 下载完了就结束
-                                    if (!files[++i]) {
-                                        progress.setProgressValue(files.length);
-                                        progress.setFileName('下载完成');
-                                        setTimeout(() => {
-                                            // 移除进度条
-                                            progress.remove();
-                                            // 延时提示
-                                            setTimeout(() => {
-                                                alert('福瑞拓展更新完成，将自动重启');
-                                                game.reload();
-                                            }, 100);
-                                        }, 200);
-                                        return;
+                                            fetch(`${address + url}?date=${(new Date()).getTime()}`)
+                                                .then(response => response.arrayBuffer())
+                                                .then(arrayBuffer => {
+                                                    // 先创建指定文件夹
+                                                    game.ensureDirectory(path, () => {
+                                                        var fs = require('fs');
+                                                        var p = require('path');
+                                                        var filePath = p.join(__dirname, path, url);
+                                                        // 如果是个文件夹，就退出
+                                                        if (fs.existsSync(filePath)) {
+                                                            var stat = fs.statSync(filePath);
+                                                            if (stat.isDirectory()) {
+                                                                console.error(`${path + '/' + url}是个文件夹`);
+                                                                return success(true);
+                                                            }
+                                                        }
+                                                        fs.writeFile(filePath, Buffer.from(arrayBuffer), null, e => {
+                                                            if (e) error(e);
+                                                            else success();
+                                                        });
+                                                    });
+                                                })
+                                                .catch(response => error(new Error(response.statusText)));
+                                        }
                                     }
-                                    // 下载成功，更新进度
-                                    progress.setProgressValue(i);
-                                    progress.setFileName(files[i]);
-                                    download(files[i], success, error);
-                                };
-                                var error = errorText => {
-                                    console.log('下载失败', errorText);
-                                    progress.setFileName('重新下载: ' + files[i]);
-                                    download(files[i], success, error);
-                                };
 
-                                download(files[i], success, error);
-                            }
+                                    /**
+                                     * 下载文件列表
+                                     * @param { string[] } files 
+                                     */
+                                    function downloadList(files) {
+                                        if (!Array.isArray(files) || files.length == 0) return;
+                                        var i = 0;
+                                        var progress = game.shijianCreateProgress('更新福瑞拓展', files.length, files[0], i);
+                                        var success = skip => {
+                                            // 下载完了就结束
+                                            if (!files[++i]) {
+                                                progress.setProgressValue(files.length);
+                                                progress.setFileName('下载完成');
+                                                setTimeout(() => {
+                                                    // 移除进度条
+                                                    progress.remove();
+                                                    // 延时提示
+                                                    setTimeout(() => {
+                                                        alert('福瑞拓展更新完成，将自动重启');
+                                                        game.reload();
+                                                    }, 100);
+                                                }, 200);
+                                                return;
+                                            }
+                                            // 下载成功，更新进度
+                                            progress.setProgressValue(i);
+                                            progress.setFileName(files[i]);
+                                            download(files[i], success, error);
+                                        };
+                                        var error = errorText => {
+                                            console.log('下载失败', errorText);
+                                            progress.setFileName('重新下载: ' + files[i]);
+                                            download(files[i], success, error);
+                                        };
 
-                            /** @type { string[] } 要下载的文件 */
-                            //var files = localVersion == data.oldversion ? data.updateFiles : data.allFiles;
-                            var files = data.updateFiles;
-                            downloadList(files);
-                        }
+                                        download(files[i], success, error);
+                                    }
 
-                        if (data.version <= localVersion) return;
-                        else myConfirm(`福瑞检测到更新(v${data.version}), 是否更新?\n${data.changeLog}`, furryUpdating);
-                    })
-                    .catch(e => {
-                        alert(typeof e == 'string' ? '网络请求错误' : e.message);
-                    });
-            };
+                                    /** @type { string[] } 要下载的文件 */
+                                    //var files = localVersion == data.oldversion ? data.updateFiles : data.allFiles;
+                                    var files = data.updateFiles;
+                                    downloadList(files);
+                                }
+
+                                if (data.version<= localVersion) return;
+                                else myConfirm(`福瑞拓展检测到更新(v${data.version}), 是否更新?\n${data.changeLog}`, furryUpdating);
+                            })
+                            .catch(e => {
+                                alert(typeof e == 'string' ? '网络请求错误' : e.message);
+                            });
+			
+			};
             //检测无名杀版本
 			get.myCompareVersion=function(a,b){
 				if(!a)a="0.0.0";
@@ -1386,7 +1363,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                     let parentNode = button.parentNode;
                     if (button.innerText != '检查扩展更新') return;
-                    const address = 'https://gitee.com/Chen079/FurryExt/raw/master/';
+                    const address = 'https://gitee.com/Chen079/FurryExt/raw/master/furry/';
                     if (button.disabled) {
                         return;
                     } else {
@@ -1480,6 +1457,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                                         }, downloadFile);
                                                     }, downloadFile);
                                                 }, downloadFile);
+
+
                                         } else {
                                             fetch(`${address + url}?date=${(new Date()).getTime()}`)
                                                 .then(response => response.arrayBuffer())
@@ -1514,7 +1493,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     function downloadList(files) {
                                         if (!Array.isArray(files) || files.length == 0) return;
                                         var i = 0;
-                                        var progress = game.furryCreateProgress('更新福瑞拓展', files.length, files[0], i);
+                                        var progress = game.shijianCreateProgress('更新福瑞拓展', files.length, files[0], i);
                                         var success = skip => {
                                             // 下载完了就结束
                                             if (!files[++i]) {
