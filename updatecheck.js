@@ -28,12 +28,24 @@
 
 	// 本次更新的所有文件(不包括文件夹)
 	updateFiles: [
-		"extension.js",
-		"extension.css",
-		"asset/cards.js",
-		"asset/character.js",
-		"asset/drama.js",
-		"asset/furrymode.js"
+		'extension.css',
+		'extension.js',
+		'更新日志.txt',
+		'asset/cards.js',
+		'asset/character.js',
+		'asset/character.js.bak',
+		'asset/drama.js',
+		'asset/furrymode.js',
+		'asset/skin.js',
+		'image/character/fr_kmjia.jpg',
+		'image/character/fr_shark.jpg',
+		'image/character/fr_tiger.jpg',
+		'image/lutou/fr_kmjia.jpg',
+		'image/lutou/fr_shark.jpg',
+		'image/lutou/fr_tiger.jpg',
+		'image/others/gongnengbuchong.png',
+		'skin/lutou/fr_tiger/林中潜影.png',
+		'skin/standard/fr_tiger/林中潜影.jpg',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

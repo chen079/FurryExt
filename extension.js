@@ -652,8 +652,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     }
 
                                     /** @type { string[] } 要下载的文件 */
-                                    //var files = localVersion == data.oldversion ? data.updateFiles : data.allFiles;
-                                    var files = data.updateFiles;
+                                    var files = localVersion == data.oldversion ? data.updateFiles : data.allFiles;
                                     downloadList(files);
                                 }
 
@@ -1552,8 +1551,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     }
 
                                     /** @type { string[] } 要下载的文件 */
-                                    //var files = localVersion == data.oldversion ? data.updateFiles : data.allFiles;
-                                    var files = data.updateFiles;
+                                    var files = localVersion == data.oldversion ? data.updateFiles : data.allFiles;
                                     downloadList(files);
                                 }
 
