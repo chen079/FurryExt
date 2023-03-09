@@ -242,10 +242,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             'step 0'
                             if(trigger.delay===false) game.delay();
                             var cards = trigger.getl(player).cards2.filterInD('d')
-                            player.storage.kamijia_sx_unuse.source.chooseCardButton('获得'+get.translation(player)+'弃置的牌中至多'+get.cnNumber(player.storage.kamijia_sx_unuse.gain)+'张牌',[1,player.storage.kamijia_sx_unuse.gain],cards)
-                            .set('ai',function(button){
-                                get.useful(button.link);
-                            })
+                            if(Math.floor(player.storage.kamijia_sx_unuse.gain/2)!=0&&cards.length){
+                                player.storage.kamijia_sx_unuse.source.chooseCardButton('获得'+get.translation(player)+'弃置的牌中至多'+get.cnNumber(Math.min(cards.length,5,Math.floor(player.storage.kamijia_sx_unuse.gain/2)))+'张牌',[1,Math.min(cards.length,5,Math.floor(player.storage.kamijia_sx_unuse.gain/2))],cards)
+                                .set('ai',function(button){
+                                    get.useful(button.link);
+                                })
+                            }else{
+                                event.finish()
+                            }
                             'step 1'
                             if(result.bool){
                                 player.storage.kamijia_sx_unuse.source.gain(result.links,'gain2')
@@ -14421,7 +14425,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'kamijia_dr':'夺刃',
             'kamijia_dr_info':'锁定技，当你受到伤害结算完毕后，你可以摸X张牌（X为此次伤害值），然后你可以声明一种颜色并进行判定，若判定牌与你声明的颜色相同，你回复等同于此次伤害值的体力。',
             'kamijia_sx':'随行',
-            'kamijia_sx_info':'出牌阶段限一次，你可以将你的所有手牌交给一名其他角色（至少一张）并结束此回合，然后该角色获得以下效果直到回合结束：<li>①使用牌无距离限制，<li>②出牌阶段，可以额外使用一张【杀】，<li>③只能对自己与你指定的另一名角色使用牌。</li>你获得该角色于弃牌阶段弃置的至多X张牌（X为你交给该角色的牌数）。',
+            'kamijia_sx_info':'出牌阶段限一次，你可以将你的所有手牌交给一名其他角色（至少一张）并结束此回合，然后该角色获得以下效果直到其回合结束：<li>①使用牌无距离限制，<li>②出牌阶段，可以额外使用一张【杀】，<li>③只能对自己与你指定的另一名角色使用牌。</li>你获得该角色于弃牌阶段弃置的至多X张牌（X为你交给该角色的牌数的一半并向下取整且至多为五）。',
             'shark_yz':"易珠",
             'shark_yz_info':'游戏开始时，你获得随机四个武将上的至多三个技能，出牌阶段限一次，你可以失去一个你由本技能获得的技能，然后得随机四个武将上的至多一个技能（限定技，觉醒技，使命技等特殊技能除外）。',
             'tiger_kf':"狂放",

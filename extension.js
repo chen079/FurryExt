@@ -1338,8 +1338,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     game.saveConfig('extension_十周年UI_outcropSkin', item);
                 },
             },
-            'others_title': {
-                "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qitazaxiang.png></b>",
+            'puchongs_title': {
+                "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/gongnengbuchong.png></b>",
                 "clear": true,
                 "nopointer": true,
             },
@@ -1347,6 +1347,33 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 name: '手牌上限',
                 init: false,
                 intro: '将游戏内显示的手牌数改为显示手牌数与手牌上限。(例：2/3，代表拥有2张牌，手牌上限为3)',
+            },
+            "selectDrama": {
+                "name": "剧情选择",
+                "intro": "选择播放的剧情",
+                "init": "1",
+                "item": {
+                    '1': '酒馆一隅',
+                    '2': '纪念',
+                },
+                onclick: function (item) {
+                    window.furry_drama(item, ui.create.div());
+                },
+            },
+            "openlib": {
+                "name": "打开群像<div>&gt;</div>",
+                "clear": true,
+                onclick: function () {
+                    game.saveConfig('mode', 'furry_lib');
+                    localStorage.setItem(lib.configprefix + 'directstart', true);
+                    game.reload();
+                },
+            },
+            //参考仙家之魂扩展            
+            'others_title': {
+                "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qitazaxiang.png></b>",
+                "clear": true,
+                "nopointer": true,
             },
             "furry_onlineUpdate": {
                 //检查游戏更新
@@ -1395,27 +1422,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                  * @param { string } v2 要更新的版本
                                  * @returns { boolean | 'equal' } v1比v2小就返回true
                                  */
-                                function compareVersion(v1 = '', v2 = '') {
-                                    // 相等版本
-                                    if (v1 === v2) return 'equal';
-                                    let version_1 = v1.split('.').map(item => Number(item) || 0);
-                                    let version_2 = v2.split('.').map(item => Number(item) || 0);
-                                    // 现有版本: 无
-                                    if (version_1.length == 1 && version_1[0] == 0) {
-                                        // 要更新的版本不是 无
-                                        if (version_2.length > 1 || version_2[0] > 0) return true;
-                                    } else if (version_2.length == 1 && version_2[0] == 0) {
-                                        // 要更新的版本是 无
-                                        return true;
-                                    } else {
-                                        for (let i = 0; i < version_1.length && i < version_2.length; i++) {
-                                            version_1[i] = version_1[i] || 0;
-                                            version_2[i] = version_2[i] || 0;
-                                            if (version_2[i] > version_1[i]) return true;
-                                            if (version_1[i] > version_2[i]) return false;
-                                        }
-                                    }
-                                };
 
                                 console.log(localVersion, data.version)
                                 //if (!compareVersion(localVersion, data.version)) return;
@@ -1551,27 +1557,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "onclick": function () {
                     ui.create.iframe(lib.assetURL + 'extension/福瑞拓展/acknowledgments/Acknowledgments.html')
                 }
-            },
-            "selectDrama": {
-                "name": "剧情选择",
-                "intro": "选择播放的剧情",
-                "init": "1",
-                "item": {
-                    '1': '酒馆一隅',
-                    '2': '纪念',
-                },
-                onclick: function (item) {
-                    window.furry_drama(item, ui.create.div());
-                },
-            },
-            "openlib": {
-                "name": "打开群像<div>&gt;</div>",
-                "clear": true,
-                onclick: function () {
-                    game.saveConfig('mode', 'furry_lib');
-                    localStorage.setItem(lib.configprefix + 'directstart', true);
-                    game.reload();
-                },
             },
             "group_egg": {
                 "name": "交流群号:556343851",
