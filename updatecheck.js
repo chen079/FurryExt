@@ -29,6 +29,11 @@
 	// 本次更新的所有文件(不包括文件夹)
 	updateFiles: [
 		"extension.js",
+        "extension.css",
+        "asset/cards.js",
+        "asset/character.js",
+        "asset/drama.js",
+        "asset/furrymode.js"
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [],
