@@ -45,8 +45,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             });
         },
     };
-	if (typeof game.shijianCreateProgress != 'function') {
-		game.shijianCreateProgress = (title, max, fileName, value) => {
+    //此处来自诗笺
+	if (typeof game.furryCreateProgress != 'function') {
+		game.furryCreateProgress = (title, max, fileName, value) => {
 			const parent = ui.create.div(ui.window, {
 				textAlign: 'center',
 				width: '300px',
@@ -128,16 +129,28 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     'step 1'
                     //更新告示
                     var Furry_update = [
+                        '/Character/',
                         '1.修正 林&炎 的一些bug',
                         '2.希尔新增技能【驱狼】，避免永动机的bug',
-                        '3.修复移动版开启鸣谢清单后无法返回的bug',
-                        '4.请在打开福瑞牌堆之前打开牌堆补充，避免因锦囊牌过多导致的过度稀释。',
-                        '5.区分buff内容与其他内容说明'
+                        '3.修复雷恩斯的bug',
+                        '4.为大部分技能的提示做了修改',
+                        '5.修复移动版开启鸣谢清单后无法返回的bug',
+                        '6.请在打开福瑞牌堆之前打开牌堆补充，避免因锦囊牌过多导致的过度稀释。',
+                        '7.修改哈尔斯的一部分bug',
+                        '8.修改lens的一部分bug',
+                        '9.修改hynea的永动机并增加各属性的杀',
+                        '10.修正sier的永动机，并修改大部分技能',
+                        '11.修正aroncy的缴武的显示错误',
+                       ' 12.修改borg水月的错误',
+                       ' 13.修改普鲁维亚技能',
+                       ' 14.修复山的bug',
+                       ' 15.新武将 沙克、卡米加、泰格尔',
+                       ' 16.增加 -在线更新',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_linyan', 'fr_horn'];
+                    var Furry_players = ['fr_shark', 'fr_kamijia','fr_tiger'];
                     //更新卡牌
-                    var Furry_cards = ['fr_card_zfxd', 'fr_card_cmhc'];
+                    var Furry_cards = [];
                     //加载
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
                     for (var i = 0; i < Furry_update.length; i++) {
@@ -291,6 +304,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 next.setContent('claimSkill');
                 return next
             }
+            lib.element.player.hasJie=function(){
+                if(this.countCards('hs','Jie')) return true;
+                if(this.hasSkillTag('respondJie',true,null,true)) return true;
+                return false;
+            },
+            lib.element.player.mayHaveJie=function(){
+                return this.hasJie();
+            },
             lib.element.content.claimSkill = function (bool) {
                 "step 0"
                 ui.clear();
@@ -599,7 +620,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     function downloadList(files) {
                                         if (!Array.isArray(files) || files.length == 0) return;
                                         var i = 0;
-                                        var progress = game.shijianCreateProgress('更新福瑞拓展', files.length, files[0], i);
+                                        var progress = game.furryCreateProgress('更新福瑞拓展', files.length, files[0], i);
                                         var success = skip => {
                                             // 下载完了就结束
                                             if (!files[++i]) {
@@ -1499,7 +1520,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     function downloadList(files) {
                                         if (!Array.isArray(files) || files.length == 0) return;
                                         var i = 0;
-                                        var progress = game.shijianCreateProgress('更新福瑞拓展', files.length, files[0], i);
+                                        var progress = game.furryCreateProgress('更新福瑞拓展', files.length, files[0], i);
                                         var success = skip => {
                                             // 下载完了就结束
                                             if (!files[++i]) {
@@ -1586,7 +1607,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.0.7",
+            version: "2.0.8",
         }, files: {}
     }
 })
