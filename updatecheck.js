@@ -29,7 +29,6 @@
 	// 本次更新的所有文件(不包括文件夹)
 	updateFiles: [
 		"extension.js",
-        "image/background/classroom.webp"
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [],
