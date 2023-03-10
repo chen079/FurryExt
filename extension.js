@@ -45,7 +45,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             });
         },
     };
-    //------------------此处来自诗笺----------------
+    //------------------此处来自诗笺----------------//
 	if (typeof game.furryCreateProgress != 'function') {
 		game.furryCreateProgress = (title, max, fileName, value) => {
 			const parent = ui.create.div(ui.window, {
