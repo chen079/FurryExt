@@ -17,7 +17,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         furryCardFileConfig: function () {
             var progressBG = ui.create.div(".progressBG", ui.window);
             var progressBar = ui.create.div(progressBG);
-
             var path = "extension/福瑞拓展/image/card/pretty";
             var decade = "extension/十周年UI/image/card";
             var count = 0;
@@ -46,66 +45,66 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         },
     };
     //------------------此处来自诗笺----------------//
-	if (typeof game.furryCreateProgress != 'function') {
-		game.furryCreateProgress = (title, max, fileName, value) => {
-			const parent = ui.create.div(ui.window, {
-				textAlign: 'center',
-				width: '300px',
-				height: '150px',
-				left: 'calc(50% - 150px)',
-				top: 'auto',
-				bottom: 'calc(50% - 75px)',
-				zIndex: '10',
-				boxShadow: 'rgb(0 0 0 / 40 %) 0 0 0 1px, rgb(0 0 0 / 20 %) 0 3px 10px',
-				backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4))',
-				borderRadius: '8px'
-			});
-			// 可拖动
-			parent.className = 'dialog';
-			const container = ui.create.div(parent, {
-				position: 'absolute',
-				top: '0',
-				left: '0',
-				width: '100%',
-				height: '100%'
-			});
-			container.ontouchstart = ui.click.dialogtouchStart;
-			container.ontouchmove = ui.click.touchScroll;
-			container.style.WebkitOverflowScrolling = 'touch';
-			parent.ontouchstart = ui.click.dragtouchdialog;
-			const caption = ui.create.div(container, '', title, {
-				position: 'relative',
-				paddingTop: '8px',
-				fontSize: '20px'
-			});
-			ui.create.node('br', container);
-			const tip = ui.create.div(container, {
-				position: 'relative',
-				paddingTop: '8px',
-				fontSize: '20px',
-				width: '100%'
-			});
-			const file = ui.create.node('span', tip, '', fileName);
-			file.style.width = file.style.maxWidth = '100%';
-			ui.create.node('br', tip);
-			const index = ui.create.node('span', tip, '', String(value || '0'));
-			ui.create.node('span', tip, '', '/');
-			const maxSpan = ui.create.node('span', tip, '', String(max || '未知'));
-			ui.create.node('br', container);
-			const progress = ui.create.node('progress.zxgxProgress', container);
-			progress.setAttribute('value', value || '0');
-			progress.setAttribute('max', max);
-			parent.getTitle = () => caption.innerText;
-			parent.setTitle = (title) => caption.innerText = title;
-			parent.getFileName = () => file.innerText;
-			parent.setFileName = (name) => file.innerText = name;
-			parent.getProgressValue = () => progress.value;
-			parent.setProgressValue = (value) => progress.value = index.innerText = value;
-			parent.getProgressMax = () => progress.max;
-			parent.setProgressMax = (max) => progress.max = maxSpan.innerText = max;
-			return parent;
-		};
-	}
+    if (typeof game.furryCreateProgress != 'function') {
+        game.furryCreateProgress = (title, max, fileName, value) => {
+            const parent = ui.create.div(ui.window, {
+                textAlign: 'center',
+                width: '300px',
+                height: '150px',
+                left: 'calc(50% - 150px)',
+                top: 'auto',
+                bottom: 'calc(50% - 75px)',
+                zIndex: '10',
+                boxShadow: 'rgb(0 0 0 / 40 %) 0 0 0 1px, rgb(0 0 0 / 20 %) 0 3px 10px',
+                backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4))',
+                borderRadius: '8px'
+            });
+            // 可拖动
+            parent.className = 'dialog';
+            const container = ui.create.div(parent, {
+                position: 'absolute',
+                top: '0',
+                left: '0',
+                width: '100%',
+                height: '100%'
+            });
+            container.ontouchstart = ui.click.dialogtouchStart;
+            container.ontouchmove = ui.click.touchScroll;
+            container.style.WebkitOverflowScrolling = 'touch';
+            parent.ontouchstart = ui.click.dragtouchdialog;
+            const caption = ui.create.div(container, '', title, {
+                position: 'relative',
+                paddingTop: '8px',
+                fontSize: '20px'
+            });
+            ui.create.node('br', container);
+            const tip = ui.create.div(container, {
+                position: 'relative',
+                paddingTop: '8px',
+                fontSize: '20px',
+                width: '100%'
+            });
+            const file = ui.create.node('span', tip, '', fileName);
+            file.style.width = file.style.maxWidth = '100%';
+            ui.create.node('br', tip);
+            const index = ui.create.node('span', tip, '', String(value || '0'));
+            ui.create.node('span', tip, '', '/');
+            const maxSpan = ui.create.node('span', tip, '', String(max || '未知'));
+            ui.create.node('br', container);
+            const progress = ui.create.node('progress.zxgxProgress', container);
+            progress.setAttribute('value', value || '0');
+            progress.setAttribute('max', max);
+            parent.getTitle = () => caption.innerText;
+            parent.setTitle = (title) => caption.innerText = title;
+            parent.getFileName = () => file.innerText;
+            parent.setFileName = (name) => file.innerText = name;
+            parent.getProgressValue = () => progress.value;
+            parent.setProgressValue = (value) => progress.value = index.innerText = value;
+            parent.getProgressMax = () => progress.max;
+            parent.setProgressMax = (max) => progress.max = maxSpan.innerText = max;
+            return parent;
+        };
+    }
     return {
         name: "福瑞拓展",
         editable: false, content: function (config, pack) {
@@ -141,17 +140,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '9.修改hynea的永动机并增加各属性的杀',
                         '10.修正sier的永动机，并修改大部分技能',
                         '11.修正aroncy的缴武的显示错误',
-                       ' 12.修改borg水月的错误',
-                       ' 13.修改普鲁维亚技能',
-                       ' 14.修复山的bug',
-                       ' 15.新武将 沙克、卡米加、泰格尔',
-                       ' 16.增加 -在线更新',
+                        ' 12.修改borg水月的错误',
+                        ' 13.修改普鲁维亚技能',
+                        ' 14.修复山的bug',
+                        ' 15.新武将 沙克、卡米加、泰格尔',
+                        ' 16.增加 -在线更新',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_shark', 'fr_kamijia','fr_tiger'];
+                    var Furry_players = ['fr_shark', 'fr_kmjia', 'fr_tiger'];
                     //更新卡牌
                     var Furry_cards = [];
-                    //加载
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
                     for (var i = 0; i < Furry_update.length; i++) {
                         if (Furry_update[i] == '/Character/') {
@@ -304,160 +302,160 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 next.setContent('claimSkill');
                 return next
             }
-            lib.element.player.hasJie=function(){
-                if(this.countCards('hs','Jie')) return true;
-                if(this.hasSkillTag('respondJie',true,null,true)) return true;
+            lib.element.player.hasJie = function () {
+                if (this.countCards('hs', 'Jie')) return true;
+                if (this.hasSkillTag('respondJie', true, null, true)) return true;
                 return false;
             },
-            lib.element.player.mayHaveJie=function(){
-                return this.hasJie();
-            },
-            lib.element.content.claimSkill = function (bool) {
-                "step 0"
-                ui.clear();
-                if (event.created) return;
-                event.created = true;
-                if (event.isMine()) {
-                    var node = ui.create.div('.add_skill');
-                    event.node = node;
-                    event.node.style.zIndex = "9999";
-                    event.node.style.background = 'black';
-                    event.node.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=50)";
-                    event.node.style.opacity = "0.7"
-                    event.node.style.width = '400px';
-                    event.node.style.height = '30px';
-                    event.node.style.lineHeight = '30px';
-                    event.node.style.fontFamily = 'xinwei';
-                    event.node.style.fontSize = '30px';
-                    event.node.style.padding = '10px';
-                    event.node.style.left = 'calc(50% - 200px)';
-                    event.node.style.top = 'calc(50% - 20px)';
-                    event.node.style.whiteSpace = 'nowrap';
-                    event.node.innerHTML = '请在此输入技能名称';
-                    event.node.contentEditable = true;
-                    event.node.style.webkitUserSelect = 'text';
-                    event.node.style.textAlign = 'center';
-                    var skillName = function (e) {
+                lib.element.player.mayHaveJie = function () {
+                    return this.hasJie();
+                },
+                lib.element.content.claimSkill = function (bool) {
+                    "step 0"
+                    ui.clear();
+                    if (event.created) return;
+                    event.created = true;
+                    if (event.isMine()) {
+                        var node = ui.create.div('.add_skill');
+                        event.node = node;
+                        event.node.style.zIndex = "9999";
+                        event.node.style.background = 'black';
+                        event.node.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=50)";
+                        event.node.style.opacity = "0.7"
+                        event.node.style.width = '400px';
+                        event.node.style.height = '30px';
+                        event.node.style.lineHeight = '30px';
+                        event.node.style.fontFamily = 'xinwei';
+                        event.node.style.fontSize = '30px';
+                        event.node.style.padding = '10px';
+                        event.node.style.left = 'calc(50% - 200px)';
+                        event.node.style.top = 'calc(50% - 20px)';
+                        event.node.style.whiteSpace = 'nowrap';
+                        event.node.innerHTML = '请在此输入技能名称';
+                        event.node.contentEditable = true;
+                        event.node.style.webkitUserSelect = 'text';
+                        event.node.style.textAlign = 'center';
+                        var skillName = function (e) {
+                            var skills = [];
+                            for (var i in lib.character) {
+                                for (var j = 0; j < lib.character[i][3].length; j++) {
+                                    if (player.hasSkill(lib.character[i][3][j])) continue;
+                                    var info = lib.skill[lib.character[i][3][j]];
+                                    if (info) {
+                                        var name = event.node.innerText;
+                                        if (num) {
+                                            if (get.translation(lib.character[i][3][j]) != name) continue;
+                                            skills.add(lib.character[i][3][j]);
+                                        } else {
+                                            if (get.translation(lib.character[i][3][j]) != name || (info.fixed || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable))) continue;
+                                            skills.add(lib.character[i][3][j]);
+                                        }
+                                    }
+                                }
+                            }
+                            if (skills.length) {
+                                ui.window.removeChild(event.node);
+                                ui.window.removeChild(text);
+                                ui.window.removeChild(button);
+                                event.node.innerHTML = '';
+                                event.skills = skills
+                                game.resume();
+                                return
+                            }
+                            else {
+                                var name = event.node.innerText;
+                                alert(((name.length == 0 || name == '请在此输入技能名称') ? '请先输入技能名称' : name + '不是一个可用的技能，请重新输入'));
+                                //ui.clear();
+                                event.node.innerHTML = '';
+                                return;
+                            }
+                        };
+                        ui.window.appendChild(event.node);
+                        event.node.onfocus = function () {
+                            event.node.innerHTML = '';
+                        };
+                        event.node.onkeydown = function (e) {
+                            e.stopPropagation();
+                            if (e.keyCode == 13) {
+                                skillName();
+                                setTimeout(function () {
+                                    event.node.innerHTML = '';
+                                }, 10);
+                            };
+                        };
+                        var text = ui.create.div();
+                        text.style.zIndex = "9999"
+                        text.style.width = '400px';
+                        text.style.height = '30px';
+                        text.style.lineHeight = '30px';
+                        text.style.fontFamily = '黑体';
+                        text.style.fontSize = '20px';
+                        text.style.padding = '10px';
+                        text.style.left = 'calc(50% - 200px)';
+                        text.style.top = 'calc(50% - 80px)';
+                        text.innerText = '请声明一个技能名称';
+                        text.style.color = "white"
+                        text.style.textAlign = 'center';
+                        ui.window.appendChild(text);
+                        var button = ui.create.div('.menubutton.highlight.large', '确定', function () {
+                            skillName()
+                        });
+                        button.style.width = '70px';
+                        button.style.left = 'calc(50% - 35px)';
+                        button.style.top = 'calc(50% + 60px)';
+                        ui.window.appendChild(button);
+                        for (var i in lib.element.event) {
+                            event.parent[i] = lib.element.event[i];
+                        }
+                        event.parent.custom = {
+                            add: {},
+                            replace: {}
+                        }
+                        game.pause();
+                    } else {
                         var skills = [];
                         for (var i in lib.character) {
                             for (var j = 0; j < lib.character[i][3].length; j++) {
                                 if (player.hasSkill(lib.character[i][3][j])) continue;
                                 var info = lib.skill[lib.character[i][3][j]];
-                                if (info) {
-                                    var name = event.node.innerText;
-                                    if (num) {
-                                        if (get.translation(lib.character[i][3][j]) != name) continue;
+                                if (num) {
+                                    if (info && (info.forced || info.mod || info.locked)) {
                                         skills.add(lib.character[i][3][j]);
-                                    } else {
-                                        if (get.translation(lib.character[i][3][j]) != name || (info.fixed || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable))) continue;
+                                    }
+                                } else {
+                                    if (info && (info.forced || info.mod || info.locked) && !(info.fixed || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable))) {
                                         skills.add(lib.character[i][3][j]);
                                     }
                                 }
                             }
                         }
-                        if (skills.length) {
-                            ui.window.removeChild(event.node);
-                            ui.window.removeChild(text);
-                            ui.window.removeChild(button);
-                            event.node.innerHTML = '';
-                            event.skills = skills
-                            game.resume();
-                            return
-                        }
-                        else {
-                            var name = event.node.innerText;
-                            alert(((name.length == 0 || name == '请在此输入技能名称') ? '请先输入技能名称' : name + '不是一个可用的技能，请重新输入'));
-                            //ui.clear();
-                            event.node.innerHTML = '';
-                            return;
-                        }
-                    };
-                    ui.window.appendChild(event.node);
-                    event.node.onfocus = function () {
-                        event.node.innerHTML = '';
-                    };
-                    event.node.onkeydown = function (e) {
-                        e.stopPropagation();
-                        if (e.keyCode == 13) {
-                            skillName();
-                            setTimeout(function () {
-                                event.node.innerHTML = '';
-                            }, 10);
-                        };
-                    };
-                    var text = ui.create.div();
-                    text.style.zIndex = "9999"
-                    text.style.width = '400px';
-                    text.style.height = '30px';
-                    text.style.lineHeight = '30px';
-                    text.style.fontFamily = '黑体';
-                    text.style.fontSize = '20px';
-                    text.style.padding = '10px';
-                    text.style.left = 'calc(50% - 200px)';
-                    text.style.top = 'calc(50% - 80px)';
-                    text.innerText = '请声明一个技能名称';
-                    text.style.color = "white"
-                    text.style.textAlign = 'center';
-                    ui.window.appendChild(text);
-                    var button = ui.create.div('.menubutton.highlight.large', '确定', function () {
-                        skillName()
-                    });
-                    button.style.width = '70px';
-                    button.style.left = 'calc(50% - 35px)';
-                    button.style.top = 'calc(50% + 60px)';
-                    ui.window.appendChild(button);
-                    for (var i in lib.element.event) {
-                        event.parent[i] = lib.element.event[i];
+                        var skills2 = skills.randomGet();
+                        player.addTempSkill(skills2);
+                        player.popup(skills2);
+                        game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
+                        event.finish()
                     }
-                    event.parent.custom = {
-                        add: {},
-                        replace: {}
-                    }
-                    game.pause();
-                } else {
-                    var skills = [];
-                    for (var i in lib.character) {
-                        for (var j = 0; j < lib.character[i][3].length; j++) {
-                            if (player.hasSkill(lib.character[i][3][j])) continue;
-                            var info = lib.skill[lib.character[i][3][j]];
-                            if (num) {
-                                if (info && (info.forced || info.mod || info.locked)) {
-                                    skills.add(lib.character[i][3][j]);
-                                }
-                            } else {
-                                if (info && (info.forced || info.mod || info.locked) && !(info.fixed || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable))) {
-                                    skills.add(lib.character[i][3][j]);
-                                }
-                            }
+                    "step 1"
+                    if (event.skills.length == 1) {
+                        var skills2 = event.skills[0]
+                        player.addTempSkill(skills2);
+                        player.popup(skills2);
+                        game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
+                        event.finish()
+                    } else {
+                        var list = []
+                        var skills = event.skills
+                        for (var i = 0; i < skills.length; i++) {
+                            list.push(get.translation(skills[i] + '_info'))
                         }
+                        player.chooseControl().set('choiceList', list).set('prompt', '选择〖' + get.translation(skills[0]) + '〗的版本')
                     }
-                    var skills2 = skills.randomGet();
+                    "step 2"
+                    var skills2 = event.skills[result.index]
                     player.addTempSkill(skills2);
                     player.popup(skills2);
                     game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-                    event.finish()
                 }
-                "step 1"
-                if (event.skills.length == 1) {
-                    var skills2 = event.skills[0]
-                    player.addTempSkill(skills2);
-                    player.popup(skills2);
-                    game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-                    event.finish()
-                } else {
-                    var list = []
-                    var skills = event.skills
-                    for (var i = 0; i < skills.length; i++) {
-                        list.push(get.translation(skills[i] + '_info'))
-                    }
-                    player.chooseControl().set('choiceList', list).set('prompt', '选择〖' + get.translation(skills[0]) + '〗的版本')
-                }
-                "step 2"
-                var skills2 = event.skills[result.index]
-                player.addTempSkill(skills2);
-                player.popup(skills2);
-                game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-            }
             //---------------------------------------定义新属性伤害------------------------------------------//
             lib.translate.mad = '<font color=#d17367>狂</font>';
             lib.nature.add('mad');
@@ -523,30 +521,30 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
-			if(config.furry_onlineUpdate2){
-                if(game.getExtensionConfig('福瑞拓展', 'update_link')=='GitHub Proxy'){
-                    var url='https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/'
-                }else{
-                    var url='https://gitee.com/Chen079/FurryExt/raw/master/'
+            if (config.furry_onlineUpdate2) {
+                if (game.getExtensionConfig('福瑞拓展', 'update_link') == 'GitHub Proxy') {
+                    var url = 'https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/'
+                } else {
+                    var url = 'https://gitee.com/Chen079/FurryExt/raw/master/'
                 }
-                fetch(url+'updatecheck.js',{
+                fetch(url + 'updatecheck.js', {
                     method: 'GET',
-                    mode:'cors',// 允许发送跨域请求
+                    mode: 'cors',// 允许发送跨域请求
                     credentials: 'include',
                     headers: {
                         'Cache-Control': 'no-cache'//不缓存
                     }
                 })
-                .then(response => {
-                    if (!response.ok) throw response;
+                    .then(response => {
+                        if (!response.ok) throw response;
                         return response.text();
                     })
                     .then(text => {
                         var data = eval(text);
                         console.log(data);
-                        if(data.updateAuto==false) return;
+                        if (data.updateAuto == false) return;
                         var localVersion = lib.extensionPack.福瑞拓展.version || '0';
-                            
+
                         /** 
                         * 判断版本
                         * @param { string } v1 现有版本
@@ -555,7 +553,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         */
                         console.log(localVersion, data.version)
                         //if (!compareVersion(localVersion, data.version)) return;
-                        
+
                         function myConfirm(message, callback) {
                             if (navigator.notification && navigator.notification.confirm) {
                                 navigator.notification.confirm(message, index => {
@@ -592,119 +590,119 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                             }, downloadFile);
                                         }, downloadFile);
                                 } else {
-                                            fetch(`${address + url}?date=${(new Date()).getTime()}`)
-                                                .then(response => response.arrayBuffer())
-                                                .then(arrayBuffer => {
-                                                    // 先创建指定文件夹
-                                                    game.ensureDirectory(path, () => {
-                                                        var fs = require('fs');
-                                                        var p = require('path');
-                                                        var filePath = p.join(__dirname, path, url);
-                                                        // 如果是个文件夹，就退出
-                                                        if (fs.existsSync(filePath)) {
-                                                            var stat = fs.statSync(filePath);
-                                                            if (stat.isDirectory()) {
-                                                                console.error(`${path + '/' + url}是个文件夹`);
-                                                                return success(true);
-                                                            }
-                                                        }
-                                                        fs.writeFile(filePath, Buffer.from(arrayBuffer), null, e => {
-                                                            if (e) error(e);
-                                                            else success();
-                                                        });
-                                                    });
-                                                })
-                                                .catch(response => error(new Error(response.statusText)));
-                                        }
-                                    }
-
-                                    /**
-                                     * 下载文件列表
-                                     * @param { string[] } files 
-                                     */
-                                    function downloadList(files) {
-                                        if (!Array.isArray(files) || files.length == 0) return;
-                                        var i = 0;
-                                        var progress = game.furryCreateProgress('更新福瑞拓展', files.length, files[0], i);
-                                        var success = skip => {
-                                            // 下载完了就结束
-                                            if (!files[++i]) {
-                                                progress.setProgressValue(files.length);
-                                                progress.setFileName('下载完成');
-                                                setTimeout(() => {
-                                                    // 移除进度条
-                                                    progress.remove();
-                                                    // 延时提示
-                                                    setTimeout(() => {
-                                                        alert('福瑞拓展更新完成，将自动重启');
-                                                        game.reload();
-                                                    }, 100);
-                                                }, 200);
-                                                return;
-                                            }
-                                            // 下载成功，更新进度
-                                            progress.setProgressValue(i);
-                                            progress.setFileName(files[i]);
-                                            download(files[i], success, error);
-                                        };
-                                        var error = errorText => {
-                                            console.log('下载失败', errorText);
-                                            progress.setFileName('重新下载: ' + files[i]);
-                                            download(files[i], success, error);
-                                        };
-
-                                        download(files[i], success, error);
-                                    }
-
-                                    /** @type { string[] } 要下载的文件 */
-                                    //var files = localVersion == data.oldversion ? data.updateFiles : data.allFiles;
-                                    var files = data.updateFiles;
-                                    downloadList(files);
+                                    fetch(`${address + url}?date=${(new Date()).getTime()}`)
+                                        .then(response => response.arrayBuffer())
+                                        .then(arrayBuffer => {
+                                            // 先创建指定文件夹
+                                            game.ensureDirectory(path, () => {
+                                                var fs = require('fs');
+                                                var p = require('path');
+                                                var filePath = p.join(__dirname, path, url);
+                                                // 如果是个文件夹，就退出
+                                                if (fs.existsSync(filePath)) {
+                                                    var stat = fs.statSync(filePath);
+                                                    if (stat.isDirectory()) {
+                                                        console.error(`${path + '/' + url}是个文件夹`);
+                                                        return success(true);
+                                                    }
+                                                }
+                                                fs.writeFile(filePath, Buffer.from(arrayBuffer), null, e => {
+                                                    if (e) error(e);
+                                                    else success();
+                                                });
+                                            });
+                                        })
+                                        .catch(response => error(new Error(response.statusText)));
                                 }
+                            }
 
-                                if (data.version<= localVersion) return;
-                                else myConfirm(`福瑞拓展检测到更新(v${data.version}), 是否更新?\n${data.changeLog}`, furryUpdating);
-                            })
-                            .catch(e => {
-                                alert(typeof e == 'string' ? '网络请求错误' : e.message);
-                            });
-			
-			};
+                            /**
+                             * 下载文件列表
+                             * @param { string[] } files 
+                             */
+                            function downloadList(files) {
+                                if (!Array.isArray(files) || files.length == 0) return;
+                                var i = 0;
+                                var progress = game.furryCreateProgress('更新福瑞拓展', files.length, files[0], i);
+                                var success = skip => {
+                                    // 下载完了就结束
+                                    if (!files[++i]) {
+                                        progress.setProgressValue(files.length);
+                                        progress.setFileName('下载完成');
+                                        setTimeout(() => {
+                                            // 移除进度条
+                                            progress.remove();
+                                            // 延时提示
+                                            setTimeout(() => {
+                                                alert('福瑞拓展更新完成，将自动重启');
+                                                game.reload();
+                                            }, 100);
+                                        }, 200);
+                                        return;
+                                    }
+                                    // 下载成功，更新进度
+                                    progress.setProgressValue(i);
+                                    progress.setFileName(files[i]);
+                                    download(files[i], success, error);
+                                };
+                                var error = errorText => {
+                                    console.log('下载失败', errorText);
+                                    progress.setFileName('重新下载: ' + files[i]);
+                                    download(files[i], success, error);
+                                };
+
+                                download(files[i], success, error);
+                            }
+
+                            /** @type { string[] } 要下载的文件 */
+                            //var files = localVersion == data.oldversion ? data.updateFiles : data.allFiles;
+                            var files = data.updateFiles;
+                            downloadList(files);
+                        }
+
+                        if (data.version <= localVersion) return;
+                        else myConfirm(`福瑞拓展检测到更新(v${data.version}), 是否更新?\n${data.changeLog}`, furryUpdating);
+                    })
+                    .catch(e => {
+                        alert(typeof e == 'string' ? '网络请求错误' : e.message);
+                    });
+
+            };
             //检测无名杀版本
-			get.myCompareVersion=function(a,b){
-				if(!a)a="0.0.0";
-				if(!b)b="0.0.0";
-				var arr1=a.split(".");
-				var arr2=b.split(".");
-				for(var i=0;i<Math.min(arr1.length,arr2.length);i++){
-					var num1=parseInt(arr1[i]);
-					var num2=parseInt(arr2[i]);
-					if(num1<num2) return -1;
-					if(num1>num2) return 1;
-				}
-				if(arr1.length>arr2.length){
-					return 1;
-				}
-				else if(arr1.length<arr2.length){
-					return -1;
-				}
-				return 0;
-			};
-			var noname_versionx="1.9.119";
-			if(lib.version&&!lib.config.furryNotMetionNonameVersion){
-				if(get.myCompareVersion(lib.version,noname_versionx)<0){
-					var ret=confirm("当前无名杀版本"+lib.version+"落后于【福瑞拓展】最低支持版本1.9.119，请尽快更新，点击确定关闭本扩展");
-					if(!ret){
-						alert("请确认你明白点击此选项导致的后果");
-						alert("由游戏版本过低导致任何问题本扩展均不负责");
-						//game.saveConfig('furryNotMetionNonameVersion',true);
-					}
-					else{
-						game.saveConfig('extension_福瑞拓展_enable',false);
-						game.reload();
-					}
-				}
-			}
+            get.myCompareVersion = function (a, b) {
+                if (!a) a = "0.0.0";
+                if (!b) b = "0.0.0";
+                var arr1 = a.split(".");
+                var arr2 = b.split(".");
+                for (var i = 0; i < Math.min(arr1.length, arr2.length); i++) {
+                    var num1 = parseInt(arr1[i]);
+                    var num2 = parseInt(arr2[i]);
+                    if (num1 < num2) return -1;
+                    if (num1 > num2) return 1;
+                }
+                if (arr1.length > arr2.length) {
+                    return 1;
+                }
+                else if (arr1.length < arr2.length) {
+                    return -1;
+                }
+                return 0;
+            };
+            var noname_versionx = "1.9.119";
+            if (lib.version && !lib.config.furryNotMetionNonameVersion) {
+                if (get.myCompareVersion(lib.version, noname_versionx) < 0) {
+                    var ret = confirm("当前无名杀版本" + lib.version + "落后于【福瑞拓展】最低支持版本1.9.119，请尽快更新，点击确定关闭本扩展");
+                    if (!ret) {
+                        alert("请确认你明白点击此选项导致的后果");
+                        alert("由游戏版本过低导致任何问题本扩展均不负责");
+                        //game.saveConfig('furryNotMetionNonameVersion',true);
+                    }
+                    else {
+                        game.saveConfig('extension_福瑞拓展_enable', false);
+                        game.reload();
+                    }
+                }
+            }
             //------------------------------------------转韵------------------------------------------//
             lib.element.player.changeYun = function (skill) {
                 if (this[skill] && this[skill] == '平') {
@@ -1040,10 +1038,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         }, precontent: function (furryPack) {
             if (!game.getExtensionConfig('福瑞拓展', 'update_link')) {
                 game.saveConfig('update_link', item);
-				game.saveExtensionConfig('福瑞拓展', 'update_link', 'GitHub Proxy');
-			} else {
-				game.saveConfig('update_link', game.getExtensionConfig('福瑞拓展', 'update_link'));
-			}
+                game.saveExtensionConfig('福瑞拓展', 'update_link', 'GitHub Proxy');
+            } else {
+                game.saveConfig('update_link', game.getExtensionConfig('福瑞拓展', 'update_link'));
+            }
             if (furryPack.enable) {
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/furrymode.js', null);
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
@@ -1408,19 +1406,19 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "nopointer": true,
             },
             'update_link': {
-				name: '更新地址',
-				//init: (lib.updateURL == lib.updateURLS['coding'] ? 'coding' : 'fastgit'),
-				init: 'GitHub Proxy',
-				item: {
-					github: 'GitHub Proxy',
-					gitee: 'Gitee',
-				},
-				onclick: function (item) {
-					if (item != game.getExtensionConfig('福瑞拓展', 'update_link')) {
-						game.saveExtensionConfig('福瑞拓展', 'update_link', item);
-					}
-				},
-			},
+                name: '更新地址',
+                //init: (lib.updateURL == lib.updateURLS['coding'] ? 'coding' : 'fastgit'),
+                init: 'GitHub Proxy',
+                item: {
+                    github: 'GitHub Proxy',
+                    gitee: 'Gitee',
+                },
+                onclick: function (item) {
+                    if (item != game.getExtensionConfig('福瑞拓展', 'update_link')) {
+                        game.saveExtensionConfig('福瑞拓展', 'update_link', item);
+                    }
+                },
+            },
             "furry_onlineUpdate": {
                 //检查游戏更新
                 clear: true,
@@ -1436,10 +1434,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                     let parentNode = button.parentNode;
                     if (button.innerText != '检查扩展更新') return;
-                    if(game.getExtensionConfig('福瑞拓展', 'update_link')=='GitHub Proxy'){
-                        var url='https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/'
-                    }else{
-                        var url='https://gitee.com/Chen079/FurryExt/raw/master/'
+                    if (game.getExtensionConfig('福瑞拓展', 'update_link') == 'GitHub Proxy') {
+                        var url = 'https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/'
+                    } else {
+                        var url = 'https://gitee.com/Chen079/FurryExt/raw/master/'
                     }
                     const address = url;
                     if (button.disabled) {
@@ -1447,13 +1445,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     } else {
                         button.innerHTML = '正在检查更新';
                         button.disabled = true;
-                        fetch(address + 'updatecheck.js',{
+                        fetch(address + 'updatecheck.js', {
                             method: 'GET',
-                            mode:'cors',// 允许发送跨域请求
+                            mode: 'cors',// 允许发送跨域请求
                             credentials: 'include',
                             headers: {
                                 'Cache-Control': 'no-cache'//不缓存
-                            }})
+                            }
+                        })
                             .then(response => {
                                 if (!response.ok) throw response;
                                 return response.text();
@@ -1461,7 +1460,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             .then(text => {
                                 var data = eval(text);
                                 console.log(data);
-                                if(data.updateAuto==false){
+                                if (data.updateAuto == false) {
                                     alert('作者正在更新云端文件，请耐心等待片刻');
                                     return;
                                 };
@@ -1591,11 +1590,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 },
             },
-            "furry_onlineUpdate2":{
-				"name":"自动更新",
-				"intro":"游戏开始后会自动检查福瑞拓展是否为最新版",
-				"init":false,
-			},
+            "furry_onlineUpdate2": {
+                "name": "自动更新",
+                "intro": "游戏开始后会自动检查福瑞拓展是否为最新版",
+                "init": false,
+            },
             "acknowledgments": {
                 "name": "鸣谢清单",
                 "clear": true,
