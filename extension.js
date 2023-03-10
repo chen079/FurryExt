@@ -145,6 +145,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         ' 14.修复山的bug',
                         ' 15.新武将 沙克、卡米加、泰格尔',
                         ' 16.增加 -在线更新',
+                        '17. 修复lens错误',
+                        '18.hars重做回归'
                     ];
                     //更新武将
                     var Furry_players = ['fr_shark', 'fr_kmjia', 'fr_tiger'];
@@ -302,14 +304,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 next.setContent('claimSkill');
                 return next
             }
-            lib.element.player.hasJie = function () {
-                if (this.countCards('hs', 'Jie')) return true;
-                if (this.hasSkillTag('respondJie', true, null, true)) return true;
-                return false;
-            },
-                lib.element.player.mayHaveJie = function () {
-                    return this.hasJie();
-                },
                 lib.element.content.claimSkill = function (bool) {
                     "step 0"
                     ui.clear();
