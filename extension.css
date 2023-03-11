@@ -1,0 +1,111 @@
+.furry-dialog {
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 530px;
+    height: 393px;
+    text-align: center;
+    background-size: 100% 100%;
+    background-image: url('image/others/furry_pic_bigdialog.png');
+    transform: translate(-50%, -50%);
+    z-index: 22;
+}
+
+.furry-dialog>.furry-dialog-text {
+    position: absolute;
+    text-align: left;
+    top: calc(27.94%);
+    left: calc(19.64%);
+    width: calc(65.45%);
+    height: calc(65.35%);
+    font-family: 'xingkai';
+    overflow: scroll;
+    font-size: 18px;
+    color: black !important;
+    text-shadow: 0 1px 1px white;
+}
+
+.furry-dialog>.furry-dialog-title {
+    position: relative;
+    top: calc(8.2%);
+    margin: auto;
+    width: calc(83.27%);
+    height: calc(6.27%);
+    font-family: 'xingkai';
+    font-size: 21px;
+    color: white !important;
+}
+
+.furry-dialog>.furry-dialog-close {
+    position: absolute;
+    margin: 5px;
+    right: -6px;
+    top: 17px;
+    height: 30px;
+    width: 30px;
+    background-size: 100% 100%;
+    background-image: url('image/others/furry_pic_close.png');
+}
+
+.furry-dialog>.furry-dialog-icon {
+    position: absolute;
+    top: calc(22.94%);
+    left: calc(9.70%);
+    width: calc(10.91%);
+    height: calc(14.85%);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    box-shadow: 0 0 5px black;
+}
+
+.progressBG {
+    width: 597px;
+    height: 47px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url("image/others/progress_bg.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    z-index: 20;
+    opacity: 1;
+}
+
+.progressBG>div {
+    width: 571px;
+    height: 21px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url("image/others/progress_bar.png");
+    background-size: 0;
+    background-repeat: no-repeat;
+}
+
+.Fr-frtips {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 8;
+}
+
+.Fr-skilltip {
+    width: 20%;
+    min-height: 5%;
+    left: 50%;
+    top: 50%;
+    font-size: 18px;
+    color: #bca979;
+    font-family: 'shousha';
+    background-color: #241b1bd9;
+    border: #4f493f 3px solid;
+    border-radius: 10px;
+    position: absolute;
+    display: block;
+    padding: 8px;
+    transform: translate(-50%, -50%);
+    transition: none;
+}
