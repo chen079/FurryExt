@@ -984,12 +984,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             },
                 lib.rank.rarity.junk.addArray(["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala']);
             lib.rank.rarity.rare.addArray(["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_jiejie"
-                , "fr_sayisu", "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea"]);
+                , "fr_sayisu", "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea",'fr_linyan','fr_shark']);
             lib.rank.rarity.epic.addArray(["fr_hars", "fr_muyada", "fr_marxya", "fr_muli", "fr_alas", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_hynea",
                 "fr_aroncy", "fr_berg", "fr_markn", "fr_morly", "fr_dog", "fr_muen", "fr_glit", "fr_edmon", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam"]);
+                , "fr_slen", "fr_paers", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam",'fr_horn','fr_tiger,','fr_kmjia']);
             lib.rank.rarity.legend.addArray(["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "yas_klin", "fr_bofeng", "fr_xiaomo",
-                "fr_ciyu", "fr_delta", "peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu"]);
+                "fr_ciyu", "fr_delta", "peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu",'fr_qima']);
             //------------------------------------------国战武将------------------------------------------//
             if (lib.characterPack.mode_guozhan) {
                 if (config.heroes) {

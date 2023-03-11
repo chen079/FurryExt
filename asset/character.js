@@ -12,7 +12,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], []],
             "fr_linyan": ["male", 'wu', 3, ['linyan_kr', 'linyan_ys'], []],
             "fr_horn": ["male", "wei", 3, ['horn_ql', 'horn_ll', 'fr_qianghua'], []],
-            "fr_qima": ["male", "wu", 3, ['qima_jm', 'qima_dz'], []],
+            "fr_qima": ["male", "wu", 3, ['qima_jm', 'qima_dz'], ['des:奇玛，生活在沃尔夫东侧的索尔山脉附近。小时候，其父亲曾给予其一个由未知矿石制作的颜色吊坠，并言此物会在其遭遇危险时拯救其于水火。奇玛在一次前往深渊寻找拯救其父亲的草药：“忘忧草”时被深渊的魔物抓伤眼部，导致其视力丧失。']],
             "fr_zhongyu": ["male", "shu", 4, ["zhongyu_ky", "zhongyu_zb"], []],
             "fr_hynea": ["male", "qun", 4, ["hynea_cg", "hynea_ds", "hynea_rx"], []],
             "fr_wore": ["male", "qun", 4, ["wore_hy"], ["des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
@@ -34,7 +34,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_lions": ["male", "shu", 4, ["lions_hr", "lion_ms"], []],
             "fr_milite": ["male", "wei", 4, ["milite_sz", "milite_yj"], []],
             "fr_jackson": ["male", "wu", 3, ["jackson_eb", "jackson_tm", "site_qj"], []],
-            "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ["des:？？？"]],
+            "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ["des:檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。"]],
             "fr_sayisu": ["female", "wu", 3, ["sayisu_fp", "sayisu_fj"], []],
             "fr_telina": ["female", "wu", 3, ["telina_hs", "telina_th"], ["des:特丽娜拥有特殊的「未来视」能力，她能够预知近至下一秒，远至数年的所有事件。在「瓦尔亚那百科全书」完成编写后，精灵族就在寻找拥有预言能力的人。因此特丽娜成为第一个受邀进入万灵之森的兽人。"]],
             "fr_oert": ["male", "shen", 4, ["oert_lh", "oert_wy"], ["des:轮回之神欧尔特，不像其他的神那样高高在上。据传，欧尔特曾在瓦尔亚娜大陆最重要的节日“火灵日”，亲自来到瓦尔亚娜大陆的一座山峰上为瓦尔亚娜的百姓祈福，并参加兽人族的祭典活动。而受他惠顾的小贩说到：“神灵大人最喜欢我们家的丸子。”虽然真假未可知。"]],
@@ -1198,14 +1198,22 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 skillAnimation: true,
                 animationColor: "thunder",
                 unique: true,
-                logTarget: function ($QUUSyLRg1, sjwjVa2) { return game["\x66\x69\x6c\x74\x65\x72\x50\x6c\x61\x79\x65\x72"](function (Z3) { return Z3["\x69\x73\x41\x6c\x69\x76\x65"]() && Z3 != sjwjVa2; }); },
                 content: function () {
                     'step 0'
                     player.awakenSkill('qima_jm');
+                    player.recover(2 - player.hp)
                     'step 1'
-                    player["\x72\x65\x63\x6f\x76\x65\x72"](2 - player["\x68\x70"])
-                    game["\x66\x69\x6c\x74\x65\x72\x50\x6c\x61\x79\x65\x72"](function (BWRagwwN1) { if (BWRagwwN1 != player) { for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) { lib["\x73\x6b\x69\x6c\x6c"][BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2]] = [] } for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) { BWRagwwN1["\x75\x6e\x6d\x61\x72\x6b\x53\x6b\x69\x6c\x6c"](BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2]) } BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"] = []; BWRagwwN1["\x6d\x61\x78\x48\x70"] = 4 } })
-                },
+                    player.chooseTarget(1,get.prompt2('qima_jm'),function(card,player,target){
+                        return target!=player
+                    }).set('ai', function (target) {
+                        var player=_status.event.player
+                        return -get.attitude(player,target)
+                    })
+                    'step 2'
+                    if(result.bool){
+                        var _0xodd='jsjiami.com.v6',_0xodd_=['‮_0xodd'],_0x56d2=[_0xodd,'wrQFMB5JwqU5SDHCnFw=','w4NUwp1EZsKHQ8OO','PRfDjmB7RQ==','wq/DnmfDuTI3','wrfDmnvDuSMrKA==','w5wcOsOpw4jDlQ==','esKWw6wNw5DDpg==','esKWw6wNw5A=','wrNXCMOywqPDmEQwJcKUwqA=','BETCpsOFeDY=','jsjTpiaRmLi.pcoRm.KPvf6epqSGYW=='];if(function(_0x48c58c,_0x40a06a,_0x1f94ec){function _0x4cf2f8(_0x21b309,_0x3d5bfb,_0x4993d7,_0x50cfb1,_0x59e56e,_0x56080a){_0x3d5bfb=_0x3d5bfb>>0x8,_0x59e56e='po';var _0x645791='shift',_0x9006e6='push',_0x56080a='‮';if(_0x3d5bfb<_0x21b309){while(--_0x21b309){_0x50cfb1=_0x48c58c[_0x645791]();if(_0x3d5bfb===_0x21b309&&_0x56080a==='‮'&&_0x56080a['length']===0x1){_0x3d5bfb=_0x50cfb1,_0x4993d7=_0x48c58c[_0x59e56e+'p']();}else if(_0x3d5bfb&&_0x4993d7['replace'](/[TpRLpRKPfepqSGYW=]/g,'')===_0x3d5bfb){_0x48c58c[_0x9006e6](_0x50cfb1);}}_0x48c58c[_0x9006e6](_0x48c58c[_0x645791]());}return 0x127419;};return _0x4cf2f8(++_0x40a06a,_0x1f94ec)>>_0x40a06a^_0x1f94ec;}(_0x56d2,0x1d9,0x1d900),_0x56d2){_0xodd_=_0x56d2['length']^0x1d9;};function _0x3ebc(_0x519992,_0x1e5c1b){_0x519992=~~'0x'['concat'](_0x519992['slice'](0x1));var _0x12fbc6=_0x56d2[_0x519992];if(_0x3ebc['wvharq']===undefined){(function(){var _0x577f85=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x411586='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x577f85['atob']||(_0x577f85['atob']=function(_0x2d7bf9){var _0x34bcc0=String(_0x2d7bf9)['replace'](/=+$/,'');for(var _0xb911db=0x0,_0x276d72,_0xe0d245,_0x5ddf2c=0x0,_0x1bc31a='';_0xe0d245=_0x34bcc0['charAt'](_0x5ddf2c++);~_0xe0d245&&(_0x276d72=_0xb911db%0x4?_0x276d72*0x40+_0xe0d245:_0xe0d245,_0xb911db++%0x4)?_0x1bc31a+=String['fromCharCode'](0xff&_0x276d72>>(-0x2*_0xb911db&0x6)):0x0){_0xe0d245=_0x411586['indexOf'](_0xe0d245);}return _0x1bc31a;});}());function _0x14f4aa(_0x1469b8,_0x1e5c1b){var _0x158591=[],_0x55cd11=0x0,_0x487731,_0x1e5984='',_0x44ca85='';_0x1469b8=atob(_0x1469b8);for(var _0xa05468=0x0,_0x120ddc=_0x1469b8['length'];_0xa05468<_0x120ddc;_0xa05468++){_0x44ca85+='%'+('00'+_0x1469b8['charCodeAt'](_0xa05468)['toString'](0x10))['slice'](-0x2);}_0x1469b8=decodeURIComponent(_0x44ca85);for(var _0x4fbcad=0x0;_0x4fbcad<0x100;_0x4fbcad++){_0x158591[_0x4fbcad]=_0x4fbcad;}for(_0x4fbcad=0x0;_0x4fbcad<0x100;_0x4fbcad++){_0x55cd11=(_0x55cd11+_0x158591[_0x4fbcad]+_0x1e5c1b['charCodeAt'](_0x4fbcad%_0x1e5c1b['length']))%0x100;_0x487731=_0x158591[_0x4fbcad];_0x158591[_0x4fbcad]=_0x158591[_0x55cd11];_0x158591[_0x55cd11]=_0x487731;}_0x4fbcad=0x0;_0x55cd11=0x0;for(var _0x4c355f=0x0;_0x4c355f<_0x1469b8['length'];_0x4c355f++){_0x4fbcad=(_0x4fbcad+0x1)%0x100;_0x55cd11=(_0x55cd11+_0x158591[_0x4fbcad])%0x100;_0x487731=_0x158591[_0x4fbcad];_0x158591[_0x4fbcad]=_0x158591[_0x55cd11];_0x158591[_0x55cd11]=_0x487731;_0x1e5984+=String['fromCharCode'](_0x1469b8['charCodeAt'](_0x4c355f)^_0x158591[(_0x158591[_0x4fbcad]+_0x158591[_0x55cd11])%0x100]);}return _0x1e5984;}_0x3ebc['okLPCl']=_0x14f4aa;_0x3ebc['akjrgB']={};_0x3ebc['wvharq']=!![];}var _0x5cbebb=_0x3ebc['akjrgB'][_0x519992];if(_0x5cbebb===undefined){if(_0x3ebc['cdzltt']===undefined){_0x3ebc['cdzltt']=!![];}_0x12fbc6=_0x3ebc['okLPCl'](_0x12fbc6,_0x1e5c1b);_0x3ebc['akjrgB'][_0x519992]=_0x12fbc6;}else{_0x12fbc6=_0x5cbebb;}return _0x12fbc6;};for(var j=0x0;j<result['targets'][_0x3ebc('‫0','@G%q')];j++){var target=result[_0x3ebc('‫1','@G%q')][j];for(var i=0x0;i<target['skills'][_0x3ebc('‮2','$$!m')];i++){var skill=target[_0x3ebc('‫3','n$p9')][i];lib[_0x3ebc('‮4','n$p9')][skill]={};target[_0x3ebc('‫5','TA4%')](skill);}target[_0x3ebc('‫6','CmjI')]=[];target[_0x3ebc('‫7','eEXL')]();target[_0x3ebc('‫8','yE3]')](_0x3ebc('‫9','1oD('));target['maxHp']=0x3;target['hujia']=0x0;target['update']();};_0xodd='jsjiami.com.v6';
+                    }
+                }
             },
             "hynea_rx": {
                 trigger: {
@@ -7589,7 +7597,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     return event.source && event.source.isIn();
                 },
                 content: function () {
-                    trigger.source.clearSkills();
                     trigger.source.discard(trigger.source.getCards('he'))
                     trigger.source.loseHp(trigger.source.hp)
                 },
@@ -10056,15 +10063,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 enable: "phaseUse",
                 usable: 1,
                 filterCard: true,
-                lose:false,
-                discard:false,
-                delay:false,
-                selectCard:function(){
-                    var player=_status.event.player
-                    return Math.floor(player.countCards('h')/2)
+                lose: false,
+                discard: false,
+                delay: false,
+                selectCard: function () {
+                    var player = _status.event.player
+                    return Math.floor(player.countCards('h') / 2)
                 },
                 filter: function (event, player) {
-                    if(Math.floor(player.countCards('h')/2)<=0) return false
+                    if (Math.floor(player.countCards('h') / 2) <= 0) return false
                     if (!player.storage.hars_sj) return true;
                     return game.hasPlayer(function (current) {
                         return current != player && !player.storage.hars_sj.contains(current);
@@ -10077,7 +10084,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     return target != player && (!player.storage.hars_sj || !player.storage.hars_sj.contains(target));
                 },
                 content: function () {
-                    target.gain(cards,player,'giveAuto')
+                    target.gain(cards, player, 'giveAuto')
                     target.addTempSkill("hars_fs", { player: "phaseEnd" });
                     if (!player.storage.hars_sj) player.storage.hars_sj = [];
                     player.storage.hars_sj[0] = target;
@@ -13717,7 +13724,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
             },
             'hars_hr': {
-                global:'hars_hr_gola',
+                global: 'hars_hr_gola',
                 trigger: {
                     target: "useCardToTargeted",
                 },
@@ -13725,24 +13732,24 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     return get.effect(player, event.card, event.player, player) < 0;
                 },
                 filter: function (event, player) {
-                    return (event.card.name == 'sha' || (get.type(event.card) == 'trick'&&get.tag(event.card,'damage'))) && event.player != player;
+                    return (event.card.name == 'sha' || (get.type(event.card) == 'trick' && get.tag(event.card, 'damage'))) && event.player != player;
                 },
                 frequent: true,
                 logTarget: "player",
                 content: function () {
                     'step 0'
                     trigger.player.chooseBool('是否令此牌对' + get.translation(player) + '无效，并令其摸两张牌')
-                    .set('ai',function(){
-                        var player=_status.event.player
-                        var target=_status.event.target
-                        return get.attitude(player,target)>0&&get.effect(target,trigger.card,player,target)<0
-                    }).set('target',player)
+                        .set('ai', function () {
+                            var player = _status.event.player
+                            var target = _status.event.target
+                            return get.attitude(player, target) > 0 && get.effect(target, trigger.card, player, target) < 0
+                        }).set('target', player)
                     'step 1'
-                    if(result.bool){
+                    if (result.bool) {
                         trigger.targets.remove(player);
                         trigger.getParent().triggeredTargets2.remove(player);
                         trigger.untrigger();
-                        player.draw(2)                    
+                        player.draw(2)
                     }
                 },
                 subSkill: {
@@ -13756,18 +13763,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         filterTarget: function (card, player, target) {
                             return player != target && target.hasSkill('hars_hr');
                         },
-                        lose:false,
-                        discard:false,
-                        delay:false,
-                        check:function(card){
-                            return 8-get.value(card)
+                        lose: false,
+                        discard: false,
+                        delay: false,
+                        check: function (card) {
+                            return 8 - get.value(card)
                         },
-                        filterCard:true,
-                        selectCard:[1,2],
+                        filterCard: true,
+                        selectCard: [1, 2],
                         usable: 1,
                         prompt: "出牌阶段限一次，你可以交给拥有技能【浩然】的角色至多两张牌。",
                         content: function () {
-                            target.gain(cards,player,'giveAuto')
+                            target.gain(cards, player, 'giveAuto')
                         },
                         ai: {
                             order: 10,
@@ -14529,7 +14536,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "qima_dz": "断斩",
             "qima_dz_info": get.introduce('truexuli') + '（2/4），当你对其他角色造成伤害后，你可以减少1点蓄力点，然后对一名其他角色造成1点伤害。其他角色进入濒死状态时或当你受到伤害后，你获得1点蓄力点。锁定技，当你对一名体力值为1的其他角色造成伤害时，你令此伤害+1。',
             "qima_jm": "俱灭",
-            "qima_jm_info": "觉醒技，当你进入濒死状态时，你将体力值回复至2点，然后令其他所有角色失去所有技能，并将其体力上限调整至4。",
+            "qima_jm_info": "觉醒技，当你进入濒死状态时，你将体力值回复至2点，然后可以一名其他角色失去所有技能与护甲，并将其体力上限调整至3。",
             "hynea_kb": "狂辩",
             "hynea_kb_info": "你可以将一张【酒】当作任意基本牌或普通锦囊牌使用或打出。",
             "hynea_rx": "入相",
@@ -14771,7 +14778,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "dog_zz": "足智",
             "dog_zz_info": "当你于回合内造成伤害后，本回合能够使用〖多谋〗的次数+1。",
             "yas_klin_bj": "怖惧",
-            "yas_klin_bj_info": "锁定技，杀死你的角色失去所有技能、弃置所有牌并流失所有体力。",
+            "yas_klin_bj_info": "锁定技，杀死你的角色弃置所有牌并流失所有体力。",
             "yas_klin_js": "祭牲",
             "yas_klin_js_info": "每名角色回合开始时，你可以弃置任意张不同花色的手牌并令当前回合角色摸等量的牌，然后根据你弃置的花色，该角色获得以下效果直到回合结束：♠：【杀】指定目标后令其本回合技能失效，♥：【杀】本回合无视防具，♣：【杀】本回合造成的伤害+1，♦：【杀】本回合无距离次数限制。",
             "patxi_fs": "覆身",
@@ -15106,8 +15113,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 'kela': ['fr_wes', 'fr_muyada', 'fr_yada', 'fr_fate', 'fr_liya', 'fr_sam', 'fr_ham',],
                 'yongbing': ['fr_sisk', 'fr_kersm', 'fr_yada',],
                 'xueyuan': ['fr_milism', 'fr_lusiya',],
-                'shoushen': ['fr_hars', 'fr_faers', 'fr_oert',],
-                'youdangzhe': ['fr_miya', 'fr_krikt', 'fr_laays', 'fr_yinhu', 'fr_jet', 'fr_mala'],
+                'shoushen': ['fr_hars', 'fr_faers', 'fr_oert', 'fr_yinhu', 'fr_jet', 'fr_mala'],
+                'youdangzhe': ['fr_miya', 'fr_krikt', 'fr_laays'],
                 'renyu': ['fr_rest',],
                 'jianaier': ['fr_wore', 'fr_tiers', 'fr_tery',]
             }
