@@ -518,8 +518,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             if (config.furry_onlineUpdate2) {
                 if (game.getExtensionConfig('福瑞拓展', 'update_link') == 'GitHub Proxy') {
                     var url = 'https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/'
-                } else {
+                } else if(game.getExtensionConfig('福瑞拓展', 'update_link') == 'Gitee'){
                     var url = 'https://gitee.com/Chen079/FurryExt/raw/master/'
+                }else{
+                    var url = 'https://raw.githubusercontent.com/chen079/FurryExt/master/'
                 }
                 fetch(url + 'updatecheck.js', {
                     method: 'GET',
@@ -1404,8 +1406,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 //init: (lib.updateURL == lib.updateURLS['coding'] ? 'coding' : 'fastgit'),
                 init: 'GitHub Proxy',
                 item: {
-                    github: 'GitHub Proxy',
+                    gitp: 'GitHub Proxy',
                     gitee: 'Gitee',
+                    github:'GitHub'
                 },
                 onclick: function (item) {
                     if (item != game.getExtensionConfig('福瑞拓展', 'update_link')) {
@@ -1430,8 +1433,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (button.innerText != '检查扩展更新') return;
                     if (game.getExtensionConfig('福瑞拓展', 'update_link') == 'GitHub Proxy') {
                         var url = 'https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/'
-                    } else {
+                    } else if(game.getExtensionConfig('福瑞拓展', 'update_link') == 'Gitee'){
                         var url = 'https://gitee.com/Chen079/FurryExt/raw/master/'
+                    }else{
+                        var url = 'https://raw.githubusercontent.com/chen079/FurryExt/master/'
                     }
                     const address = url;
                     if (button.disabled) {
