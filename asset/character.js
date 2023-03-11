@@ -602,7 +602,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         var targets = [player].addArray(event.targets).sortBySeat(player);
                         targets.remove(result.winner);
                         for (var i = 0; i < targets.length; i++) {
-                            if (!result.winner.canUse({ name: 'sha', nature: 'fire', isCard: true }, targets[i], false)|| !lib.filter.targetEnabled2({ name: 'sha', nature: 'fire', isCard: true }, result.winner, targets[i])) {
+                            if (!result.winner.canUse({ name: 'sha', nature: 'fire', isCard: true }, targets[i], false) || !lib.filter.targetEnabled2({ name: 'sha', nature: 'fire', isCard: true }, result.winner, targets[i])) {
                                 targets.remove(targets[i])
                             }
                         }
@@ -1203,15 +1203,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.awakenSkill('qima_jm');
                     player.recover(2 - player.hp)
                     'step 1'
-                    player.chooseTarget(1,get.prompt2('qima_jm'),function(card,player,target){
-                        return target!=player
+                    player.chooseTarget(1, get.prompt2('qima_jm'), function (card, player, target) {
+                        return target != player
                     }).set('ai', function (target) {
-                        var player=_status.event.player
-                        return -get.attitude(player,target)
+                        var player = _status.event.player
+                        return -get.attitude(player, target)
                     })
                     'step 2'
-                    if(result.bool){
-                        var _0xodd='jsjiami.com.v6',_0xodd_=['‮_0xodd'],_0x56d2=[_0xodd,'wrQFMB5JwqU5SDHCnFw=','w4NUwp1EZsKHQ8OO','PRfDjmB7RQ==','wq/DnmfDuTI3','wrfDmnvDuSMrKA==','w5wcOsOpw4jDlQ==','esKWw6wNw5DDpg==','esKWw6wNw5A=','wrNXCMOywqPDmEQwJcKUwqA=','BETCpsOFeDY=','jsjTpiaRmLi.pcoRm.KPvf6epqSGYW=='];if(function(_0x48c58c,_0x40a06a,_0x1f94ec){function _0x4cf2f8(_0x21b309,_0x3d5bfb,_0x4993d7,_0x50cfb1,_0x59e56e,_0x56080a){_0x3d5bfb=_0x3d5bfb>>0x8,_0x59e56e='po';var _0x645791='shift',_0x9006e6='push',_0x56080a='‮';if(_0x3d5bfb<_0x21b309){while(--_0x21b309){_0x50cfb1=_0x48c58c[_0x645791]();if(_0x3d5bfb===_0x21b309&&_0x56080a==='‮'&&_0x56080a['length']===0x1){_0x3d5bfb=_0x50cfb1,_0x4993d7=_0x48c58c[_0x59e56e+'p']();}else if(_0x3d5bfb&&_0x4993d7['replace'](/[TpRLpRKPfepqSGYW=]/g,'')===_0x3d5bfb){_0x48c58c[_0x9006e6](_0x50cfb1);}}_0x48c58c[_0x9006e6](_0x48c58c[_0x645791]());}return 0x127419;};return _0x4cf2f8(++_0x40a06a,_0x1f94ec)>>_0x40a06a^_0x1f94ec;}(_0x56d2,0x1d9,0x1d900),_0x56d2){_0xodd_=_0x56d2['length']^0x1d9;};function _0x3ebc(_0x519992,_0x1e5c1b){_0x519992=~~'0x'['concat'](_0x519992['slice'](0x1));var _0x12fbc6=_0x56d2[_0x519992];if(_0x3ebc['wvharq']===undefined){(function(){var _0x577f85=typeof window!=='undefined'?window:typeof process==='object'&&typeof require==='function'&&typeof global==='object'?global:this;var _0x411586='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';_0x577f85['atob']||(_0x577f85['atob']=function(_0x2d7bf9){var _0x34bcc0=String(_0x2d7bf9)['replace'](/=+$/,'');for(var _0xb911db=0x0,_0x276d72,_0xe0d245,_0x5ddf2c=0x0,_0x1bc31a='';_0xe0d245=_0x34bcc0['charAt'](_0x5ddf2c++);~_0xe0d245&&(_0x276d72=_0xb911db%0x4?_0x276d72*0x40+_0xe0d245:_0xe0d245,_0xb911db++%0x4)?_0x1bc31a+=String['fromCharCode'](0xff&_0x276d72>>(-0x2*_0xb911db&0x6)):0x0){_0xe0d245=_0x411586['indexOf'](_0xe0d245);}return _0x1bc31a;});}());function _0x14f4aa(_0x1469b8,_0x1e5c1b){var _0x158591=[],_0x55cd11=0x0,_0x487731,_0x1e5984='',_0x44ca85='';_0x1469b8=atob(_0x1469b8);for(var _0xa05468=0x0,_0x120ddc=_0x1469b8['length'];_0xa05468<_0x120ddc;_0xa05468++){_0x44ca85+='%'+('00'+_0x1469b8['charCodeAt'](_0xa05468)['toString'](0x10))['slice'](-0x2);}_0x1469b8=decodeURIComponent(_0x44ca85);for(var _0x4fbcad=0x0;_0x4fbcad<0x100;_0x4fbcad++){_0x158591[_0x4fbcad]=_0x4fbcad;}for(_0x4fbcad=0x0;_0x4fbcad<0x100;_0x4fbcad++){_0x55cd11=(_0x55cd11+_0x158591[_0x4fbcad]+_0x1e5c1b['charCodeAt'](_0x4fbcad%_0x1e5c1b['length']))%0x100;_0x487731=_0x158591[_0x4fbcad];_0x158591[_0x4fbcad]=_0x158591[_0x55cd11];_0x158591[_0x55cd11]=_0x487731;}_0x4fbcad=0x0;_0x55cd11=0x0;for(var _0x4c355f=0x0;_0x4c355f<_0x1469b8['length'];_0x4c355f++){_0x4fbcad=(_0x4fbcad+0x1)%0x100;_0x55cd11=(_0x55cd11+_0x158591[_0x4fbcad])%0x100;_0x487731=_0x158591[_0x4fbcad];_0x158591[_0x4fbcad]=_0x158591[_0x55cd11];_0x158591[_0x55cd11]=_0x487731;_0x1e5984+=String['fromCharCode'](_0x1469b8['charCodeAt'](_0x4c355f)^_0x158591[(_0x158591[_0x4fbcad]+_0x158591[_0x55cd11])%0x100]);}return _0x1e5984;}_0x3ebc['okLPCl']=_0x14f4aa;_0x3ebc['akjrgB']={};_0x3ebc['wvharq']=!![];}var _0x5cbebb=_0x3ebc['akjrgB'][_0x519992];if(_0x5cbebb===undefined){if(_0x3ebc['cdzltt']===undefined){_0x3ebc['cdzltt']=!![];}_0x12fbc6=_0x3ebc['okLPCl'](_0x12fbc6,_0x1e5c1b);_0x3ebc['akjrgB'][_0x519992]=_0x12fbc6;}else{_0x12fbc6=_0x5cbebb;}return _0x12fbc6;};for(var j=0x0;j<result['targets'][_0x3ebc('‫0','@G%q')];j++){var target=result[_0x3ebc('‫1','@G%q')][j];for(var i=0x0;i<target['skills'][_0x3ebc('‮2','$$!m')];i++){var skill=target[_0x3ebc('‫3','n$p9')][i];lib[_0x3ebc('‮4','n$p9')][skill]={};target[_0x3ebc('‫5','TA4%')](skill);}target[_0x3ebc('‫6','CmjI')]=[];target[_0x3ebc('‫7','eEXL')]();target[_0x3ebc('‫8','yE3]')](_0x3ebc('‫9','1oD('));target['maxHp']=0x3;target['hujia']=0x0;target['update']();};_0xodd='jsjiami.com.v6';
+                    if (result.bool) {
+                        var _0xodd = 'jsjiami.com.v6', _0xodd_ = ['‮_0xodd'], _0x56d2 = [_0xodd, 'wrQFMB5JwqU5SDHCnFw=', 'w4NUwp1EZsKHQ8OO', 'PRfDjmB7RQ==', 'wq/DnmfDuTI3', 'wrfDmnvDuSMrKA==', 'w5wcOsOpw4jDlQ==', 'esKWw6wNw5DDpg==', 'esKWw6wNw5A=', 'wrNXCMOywqPDmEQwJcKUwqA=', 'BETCpsOFeDY=', 'jsjTpiaRmLi.pcoRm.KPvf6epqSGYW==']; if (function (_0x48c58c, _0x40a06a, _0x1f94ec) { function _0x4cf2f8(_0x21b309, _0x3d5bfb, _0x4993d7, _0x50cfb1, _0x59e56e, _0x56080a) { _0x3d5bfb = _0x3d5bfb >> 0x8, _0x59e56e = 'po'; var _0x645791 = 'shift', _0x9006e6 = 'push', _0x56080a = '‮'; if (_0x3d5bfb < _0x21b309) { while (--_0x21b309) { _0x50cfb1 = _0x48c58c[_0x645791](); if (_0x3d5bfb === _0x21b309 && _0x56080a === '‮' && _0x56080a['length'] === 0x1) { _0x3d5bfb = _0x50cfb1, _0x4993d7 = _0x48c58c[_0x59e56e + 'p'](); } else if (_0x3d5bfb && _0x4993d7['replace'](/[TpRLpRKPfepqSGYW=]/g, '') === _0x3d5bfb) { _0x48c58c[_0x9006e6](_0x50cfb1); } } _0x48c58c[_0x9006e6](_0x48c58c[_0x645791]()); } return 0x127419; }; return _0x4cf2f8(++_0x40a06a, _0x1f94ec) >> _0x40a06a ^ _0x1f94ec; }(_0x56d2, 0x1d9, 0x1d900), _0x56d2) { _0xodd_ = _0x56d2['length'] ^ 0x1d9; }; function _0x3ebc(_0x519992, _0x1e5c1b) { _0x519992 = ~~'0x'['concat'](_0x519992['slice'](0x1)); var _0x12fbc6 = _0x56d2[_0x519992]; if (_0x3ebc['wvharq'] === undefined) { (function () { var _0x577f85 = typeof window !== 'undefined' ? window : typeof process === 'object' && typeof require === 'function' && typeof global === 'object' ? global : this; var _0x411586 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='; _0x577f85['atob'] || (_0x577f85['atob'] = function (_0x2d7bf9) { var _0x34bcc0 = String(_0x2d7bf9)['replace'](/=+$/, ''); for (var _0xb911db = 0x0, _0x276d72, _0xe0d245, _0x5ddf2c = 0x0, _0x1bc31a = ''; _0xe0d245 = _0x34bcc0['charAt'](_0x5ddf2c++); ~_0xe0d245 && (_0x276d72 = _0xb911db % 0x4 ? _0x276d72 * 0x40 + _0xe0d245 : _0xe0d245, _0xb911db++ % 0x4) ? _0x1bc31a += String['fromCharCode'](0xff & _0x276d72 >> (-0x2 * _0xb911db & 0x6)) : 0x0) { _0xe0d245 = _0x411586['indexOf'](_0xe0d245); } return _0x1bc31a; }); }()); function _0x14f4aa(_0x1469b8, _0x1e5c1b) { var _0x158591 = [], _0x55cd11 = 0x0, _0x487731, _0x1e5984 = '', _0x44ca85 = ''; _0x1469b8 = atob(_0x1469b8); for (var _0xa05468 = 0x0, _0x120ddc = _0x1469b8['length']; _0xa05468 < _0x120ddc; _0xa05468++) { _0x44ca85 += '%' + ('00' + _0x1469b8['charCodeAt'](_0xa05468)['toString'](0x10))['slice'](-0x2); } _0x1469b8 = decodeURIComponent(_0x44ca85); for (var _0x4fbcad = 0x0; _0x4fbcad < 0x100; _0x4fbcad++) { _0x158591[_0x4fbcad] = _0x4fbcad; } for (_0x4fbcad = 0x0; _0x4fbcad < 0x100; _0x4fbcad++) { _0x55cd11 = (_0x55cd11 + _0x158591[_0x4fbcad] + _0x1e5c1b['charCodeAt'](_0x4fbcad % _0x1e5c1b['length'])) % 0x100; _0x487731 = _0x158591[_0x4fbcad]; _0x158591[_0x4fbcad] = _0x158591[_0x55cd11]; _0x158591[_0x55cd11] = _0x487731; } _0x4fbcad = 0x0; _0x55cd11 = 0x0; for (var _0x4c355f = 0x0; _0x4c355f < _0x1469b8['length']; _0x4c355f++) { _0x4fbcad = (_0x4fbcad + 0x1) % 0x100; _0x55cd11 = (_0x55cd11 + _0x158591[_0x4fbcad]) % 0x100; _0x487731 = _0x158591[_0x4fbcad]; _0x158591[_0x4fbcad] = _0x158591[_0x55cd11]; _0x158591[_0x55cd11] = _0x487731; _0x1e5984 += String['fromCharCode'](_0x1469b8['charCodeAt'](_0x4c355f) ^ _0x158591[(_0x158591[_0x4fbcad] + _0x158591[_0x55cd11]) % 0x100]); } return _0x1e5984; } _0x3ebc['okLPCl'] = _0x14f4aa; _0x3ebc['akjrgB'] = {}; _0x3ebc['wvharq'] = !![]; } var _0x5cbebb = _0x3ebc['akjrgB'][_0x519992]; if (_0x5cbebb === undefined) { if (_0x3ebc['cdzltt'] === undefined) { _0x3ebc['cdzltt'] = !![]; } _0x12fbc6 = _0x3ebc['okLPCl'](_0x12fbc6, _0x1e5c1b); _0x3ebc['akjrgB'][_0x519992] = _0x12fbc6; } else { _0x12fbc6 = _0x5cbebb; } return _0x12fbc6; }; for (var j = 0x0; j < result['targets'][_0x3ebc('‫0', '@G%q')]; j++) { var target = result[_0x3ebc('‫1', '@G%q')][j]; for (var i = 0x0; i < target['skills'][_0x3ebc('‮2', '$$!m')]; i++) { var skill = target[_0x3ebc('‫3', 'n$p9')][i]; lib[_0x3ebc('‮4', 'n$p9')][skill] = {}; target[_0x3ebc('‫5', 'TA4%')](skill); } target[_0x3ebc('‫6', 'CmjI')] = []; target[_0x3ebc('‫7', 'eEXL')](); target[_0x3ebc('‫8', 'yE3]')](_0x3ebc('‫9', '1oD(')); target['maxHp'] = 0x3; target['hujia'] = 0x0; target['update'](); }; _0xodd = 'jsjiami.com.v6';
                     }
                 }
             },
@@ -1805,7 +1805,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: "phaseBegin",
                 },
-                unique:true,
+                unique: true,
                 filter: function (event, player) {
                     return player.getSubPlayers('wore_hy_get').length > 0 && !player.hasSkill('subplayer');
                 },
@@ -7498,8 +7498,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: "useCard",
                 },
-                init:function(player){
-                    if(!player.storage.dog_zz_num) player.storage.dog_zz_num=1
+                init: function (player) {
+                    if (!player.storage.dog_zz_num) player.storage.dog_zz_num = 1
                 },
                 direct: true,
                 filter: function (event, player) {
@@ -7645,7 +7645,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             if (get.suit(ui.selected.cards[i]) == suit) return false;
                         }
                         return true;
-                    }).set('complexCard',true)
+                    }).set('complexCard', true)
                     next.ai = function (card) {
                         if (save) {
                             if (trigger.player == player) return 9 - get.value(card)
