@@ -1318,6 +1318,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 },
             },
+            
             'new_inpile_title': {
                 "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/youxitiaozheng.png></b>",
                 "clear": true,
