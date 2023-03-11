@@ -1805,6 +1805,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: "phaseBegin",
                 },
+                unique:true,
                 filter: function (event, player) {
                     return player.getSubPlayers('wore_hy_get').length > 0 && !player.hasSkill('subplayer');
                 },
@@ -7134,7 +7135,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             return player.countCards('h') > 1
                         },
                         content: function () {
-                            player.chooseToDiscard(player.countCards('h') - 1, 'he', true)
+                            player.chooseToDiscard(player.countCards('h') - 1, 'h', true)
                         },
                         sub: true,
                     },
@@ -7496,6 +7497,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "dog_dm": {
                 trigger: {
                     player: "useCard",
+                },
+                init:function(player){
+                    if(!player.storage.dog_zz_num) player.storage.dog_zz_num=1
                 },
                 direct: true,
                 filter: function (event, player) {

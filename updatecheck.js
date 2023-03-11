@@ -36,16 +36,6 @@
 		'asset/character.js.bak',
 		'asset/drama.js',
 		'asset/furrymode.js',
-		'asset/skin.js',
-		'image/character/fr_kmjia.jpg',
-		'image/character/fr_shark.jpg',
-		'image/character/fr_tiger.jpg',
-		'image/lutou/fr_kmjia.jpg',
-		'image/lutou/fr_shark.jpg',
-		'image/lutou/fr_tiger.jpg',
-		'image/others/gongnengbuchong.png',
-		'skin/lutou/fr_tiger/林中潜影.png',
-		'skin/standard/fr_tiger/林中潜影.jpg',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
