@@ -602,7 +602,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         var targets = [player].addArray(event.targets).sortBySeat(player);
                         targets.remove(result.winner);
                         for (var i = 0; i < targets.length; i++) {
-                            if (!result.winner.canUse({ name: 'sha', nature: 'fire', isCard: true }, targets[i], false)||!lib.filter.targetEnabled2({ name: 'sha', nature: 'fire', isCard: true }, result.winner, targets[i])) {
+                            if (!result.winner.canUse({ name: 'sha', nature: 'fire', isCard: true }, targets[i], false)) {
                                 targets.remove(targets[i])
                             }
                         }
@@ -3435,21 +3435,21 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     player.chooseControl(list, 'cancel2').set('choiceList', choiceList).set('ai', function () {
                         var att = get.attitude(player, target)
-                        if (player.countCards('h') > 2&& att < 0) {
+                        if (player.countCards('h') > 2 && att < 0) {
                             return '出杀'
                         } else {
                             return '免疫'
                         }
                     }).set('target', trigger.player)
                     'step 1'
-                    if (result.control == '出杀') {
+                    if (result.control == 'cancel2') {
+                        event.finish()
+                    } else if (result.control == '出杀') {
                         player.chooseCard(1, 'h', true).set('ai', function (card) {
                             return 100 - get.value(card)
                         })
-                    } else if(result.control=='免疫'){
+                    } else {
                         player.addTempSkill('ham_nb_1', { global: "phaseEnd" })
-                        event.finish()
-                    }else{
                         event.finish()
                     }
                     'step 2'
