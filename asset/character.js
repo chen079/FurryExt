@@ -787,7 +787,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 8'
                     game.broadcastAll(ui.clear);
                     'step 9'
-                    event.cards.add(event.card1);
+                    event.cards.add(event.card1);``
                 },
                 ai: {
                     order: 1,
@@ -795,8 +795,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         target: function (card, player, target) {
                             var player = _status.event.player
                             var num = 0, card = { name: 'sha', nature: 'fire', isCard: true };
-                            if (target.hasSkill('twlvren')) num += 2 * (ui.selected.targets.length + 1);
-                            if (target.hasSkill('twchuanshu_effect')) num += 3;
                             var hs = player.getCards('h').sort((a, b) => get.number(b) - get.number(a));
                             var ts = target.getCards('h').sort((a, b) => get.number(b) - get.number(a));
                             if (get.number(hs[0]) <= Math.min(13, get.number(ts[0]) + num)) {
