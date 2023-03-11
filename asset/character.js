@@ -7645,7 +7645,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             if (get.suit(ui.selected.cards[i]) == suit) return false;
                         }
                         return true;
-                    })
+                    }).set('complexCard',true)
                     next.ai = function (card) {
                         if (save) {
                             if (trigger.player == player) return 9 - get.value(card)
