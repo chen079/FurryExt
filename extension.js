@@ -146,7 +146,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         ' 15.新武将 沙克、卡米加、泰格尔',
                         ' 16.增加 -在线更新',
                         '17. 修复lens错误',
-                        '18.hars重做回归'
+                        '18.hars重做回归。',
+                        '19.修复lint的技能错误',
+                        '20.修复多谋的错误',
+                        '21.特别提示：由于弈法、沙克、沃尔的特殊机制，这三名角色出现永动机或无关紧要的bug无需反馈。'
                     ];
                     //更新武将
                     var Furry_players = ['fr_shark', 'fr_kmjia', 'fr_tiger'];
