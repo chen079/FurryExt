@@ -602,7 +602,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         var targets = [player].addArray(event.targets).sortBySeat(player);
                         targets.remove(result.winner);
                         for (var i = 0; i < targets.length; i++) {
-                            if (!result.winner.canUse({ name: 'sha', nature: 'fire', isCard: true }, targets[i], false)) {
+                            if (!result.winner.canUse({ name: 'sha', nature: 'fire', isCard: true }, targets[i], false)|| !lib.filter.targetEnabled2({ name: 'sha', nature: 'fire', isCard: true }, result.winner, targets[i])) {
                                 targets.remove(targets[i])
                             }
                         }
