@@ -3440,14 +3440,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         }
                     }).set('target', trigger.player)
                     'step 1'
-                    if (result.control == 'cancel2') {
-                        event.finish()
-                    } else if (result.control == '出杀') {
+                    if (result.control == '出杀') {
                         player.chooseCard(1, 'h', true).set('ai', function (card) {
                             return 100 - get.value(card)
                         })
-                    } else {
+                    } else if(result.control=='免疫'){
                         player.addTempSkill('ham_nb_1', { global: "phaseEnd" })
+                        event.finish()
+                    }else{
                         event.finish()
                     }
                     'step 2'

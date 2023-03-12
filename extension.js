@@ -695,7 +695,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
-            //------------------------------------------转韵------------------------------------------//
+            //------------------------------------------转韵-----------------
             lib.element.player.changeYun = function (skill) {
                 if (this[skill] && this[skill] == '平') {
                     this[skill] = '仄'
