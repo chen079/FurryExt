@@ -129,6 +129,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //更新告示
                     var Furry_update = [
                         '/Character/',
+                        '/redoCharacter/',
                         '1.修正 林&炎 的一些bug',
                         '2.希尔新增技能【驱狼】，避免永动机的bug',
                         '3.修复雷恩斯的bug',
@@ -153,6 +154,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     ];
                     //更新武将
                     var Furry_players = ['fr_shark', 'fr_kmjia', 'fr_tiger'];
+                    var Furry_redoplayers = ['fr_hars','fr_lens','fr_sier','fr_pluvia'];
                     //更新卡牌
                     var Furry_cards = [];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
@@ -160,6 +162,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         if (Furry_update[i] == '/Character/') {
                             dialog.addText('更新武将：');
                             dialog.addSmall([Furry_players, 'character']);
+                        }else if (Furry_update[i] == '/redoCharacter/') {
+                            dialog.addText('更改武将：');
+                            dialog.addSmall([Furry_redoplayers, 'character']);
                         }
                         else if (Furry_update[i] == '/Card/') {
                             var cards = Furry_cards.slice(0);
