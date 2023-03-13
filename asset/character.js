@@ -28,7 +28,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_klif": ["male", "jin", 3, ["krif_zl", "krif_lj"], []],
             "fr_milis": ["male", "wei", 3, ["mislee_jx", "mislee_tj", "mislee_zr"], []],
             "fr_alas": ["male", "shu", 4, ["olas_fh", "olas_bx"], []],
-            "fr_kesaya": ["male", "wu", 2, ["kesaya_xs", "kesaya_zw"], ["des:隐匿者"]],
+            "fr_kesaya": ["male", "wu", 2, ["kesaya_xs", "kesaya_zw","kesaya_wy","kesaya_ax"], ["des:隐匿者"]],
             "fr_ken": ["male", "wei", 4, ["ken_jj", "ken_yn", "ken_pb"], []],
             "fr_west": ["male", "qun", 3, ["west_pz", "west_sx", "west_jh"], []],
             "fr_lions": ["male", "shu", 4, ["lions_hr", "lion_ms"], []],
@@ -4361,23 +4361,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
             },
             "kesaya_xs": {
-                forced: true,
-                trigger: {
-                    global: ["gameDrawEnd"],
-                    player: ["changeHp", "phaseBegin", "phaseEnd", "loseMaxHp", "gainMaxHp"],
+                init: function (player, skill) {
+                    player.addSkillBlocker(skill);
                 },
-                popup: false,
-                unique: true,
-                content: function () {
-                    if (player.isDamaged()) {
-                        player.addSkill("kesaya_ax");
-                        player.removeSkill("kesaya_wy")
-                    } else if (player.isHealthy()) {
-                        player.removeSkill("kesaya_ax");
-                        player.addSkill("kesaya_wy")
-                    }
+                onremove: function (player, skill) {
+                    player.removeSkillBlocker(skill);
+                    player.removeSkill('kesaya_wy')
+                    player.removeSkill('kesaya_ax')
                 },
-                derivation: ["kesaya_ax", "kesaya_wy"],
+                locked: true,
+                skillBlocker: function (skill, player) {
+                    return (player.isHealthy()&&skill == 'kesaya_ax')||(!player.isHealthy()&&skill=='kesaya_wy')
+                },
             },
             "kesaya_ax": {
                 audio: "ext:福瑞拓展:2",

@@ -1028,12 +1028,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             lib.perfectPair.fr_wore = ['fr_tiers']
             lib.perfectPair.fr_miya = ['db_fr_krikt']
         }, precontent: function (furryPack) {
-            if (!game.getExtensionConfig('福瑞拓展', 'update_link')) {
-                game.saveConfig('update_link', item);
-                game.saveExtensionConfig('福瑞拓展', 'update_link', 'GitHub Proxy');
-            } else {
-                game.saveConfig('update_link', game.getExtensionConfig('福瑞拓展', 'update_link'));
-            }
             if (furryPack.enable) {
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/furrymode.js', null);
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
