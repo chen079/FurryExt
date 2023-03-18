@@ -35,6 +35,10 @@
 		'asset/character.js',
 		'asset/drama.js',
 		'asset/furrymode.js',
+		'image/lutou/fr_nanci.jpg',
+		'image/lutou/fr_nanci2.jpg',
+		'image/character/fr_nanci.jpg',
+		'image/character/fr_nanci2.jpg'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

@@ -8,6 +8,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
             //"fr_ala":["male",'shu',3,[],[]],
             //"fr_liona":["male",'wei',3,[],[]],
+            'fr_nanci': ['female', 'qun', 3, ['nanci_tq', 'nanci_tx', 'nanci_tm','nanci_tj'], []],
             "fr_shark": ["male", 'wei', 4, ['shark_yz'], []],
             "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], []],
             "fr_linyan": ["male", 'wu', 3, ['linyan_kr', 'linyan_ys'], []],
@@ -28,7 +29,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_klif": ["male", "jin", 3, ["krif_zl", "krif_lj"], []],
             "fr_milis": ["male", "wei", 3, ["mislee_jx", "mislee_tj", "mislee_zr"], []],
             "fr_alas": ["male", "shu", 4, ["olas_fh", "olas_bx"], []],
-            "fr_kesaya": ["male", "wu", 2, ["kesaya_xs", "kesaya_zw","kesaya_wy","kesaya_ax"], ["des:隐匿者"]],
+            "fr_kesaya": ["male", "wu", 2, ["kesaya_xs", "kesaya_zw"], ["des:隐匿者"]],
             "fr_ken": ["male", "wei", 4, ["ken_jj", "ken_yn", "ken_pb"], []],
             "fr_west": ["male", "qun", 3, ["west_pz", "west_sx", "west_jh"], []],
             "fr_lions": ["male", "shu", 4, ["lions_hr", "lion_ms"], []],
@@ -109,6 +110,260 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "qun", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'nanci_tqg': {
+                trigger: {
+                    global: 'phaseBegin'
+                },
+                frequent: true,
+                content: function () {
+                    'step 0'
+                    var cards = get.cards(2);
+                    player.chooseButton(['天启：选择获得一张红色牌，或从牌堆底摸一张牌。', cards.slice(0)], 1).set('ai', function (button) {
+                        return get.value(button.link, _status.event.player);
+                    }).set('filterButton',function(button){
+                        return get.color(button.link)=='red'
+                    });
+                    while (cards.length) {
+                        ui.cardPile.insertBefore(cards.pop(), ui.cardPile.firstChild);
+                    }
+                    'step 1'
+                    if (result.bool) {
+                        player.gain(result.links, 'gain2');
+                    }else{
+                        player.draw('bottom')
+                    }
+                }
+            },
+            'nanci_tmg':{
+                enable:'phaseUse',
+                usable:1,
+                filterTarget:function(card,player,target){
+                    return target!=player
+                },
+                direct:true,
+                content:function(){
+                    'step 0'
+                    target.chooseToDiscard('天灭：弃置一张【闪】，否则'+get.translation(player)+'对你造成1点伤害。',function(card){
+                        return get.name(card)=='shan';
+                    }).set('ai',function(card){
+                        return 10-get.value(card)
+                    })
+                    'step 1'
+                    if(!result.bool){
+                        target.damage(player,'fire')
+                    }
+                },
+                ai:{
+                    order:7,
+                    fireAttack:true,
+                    result:{
+                        target:function(player,target){
+                            if(target.hasSkillTag('nofire')) return 0;
+                            if(lib.config.mode=='versus') return -1;
+                            if(player.hasUnknown()) return 0;
+                            return get.damageEffect(target,player)-target.countCards('e');
+                        },
+                    },
+                },
+            },
+            'nanci_tj': {
+                juexingji: true,
+                mark: true,
+                forced: true,
+                intro: {
+                    content: "limited",
+                },
+                trigger:{
+                    player:'phaseEnd'
+                },
+                filter:function(event,player){
+                    var cards=player.storage.nanci_tq
+                    return cards.length==2&&get.suit(cards[0])==get.suit(cards[1])
+                },
+                animationColor: "thunder",
+                skillAnimation: "epic",
+                content: function () {
+                    player.awakenSkill('nanci_tj')
+                    if(player.name1=='fr_nanci'){
+                        if(lib.config.frLutou){
+                            game.broadcastAll()+player.node.avatar.setBackgroundImage('extension/福瑞拓展/image/lutou/fr_nanci2.jpg'); 
+                        }else{
+                            game.broadcastAll()+player.node.avatar.setBackgroundImage('extension/福瑞拓展/image/character/fr_nanci2.jpg'); 
+                        }
+                    }
+                    if(player.name2=='fr_nanci'){
+                        if(lib.config.frLutou){
+                            game.broadcastAll()+player.node.avatar2.setBackgroundImage('extension/福瑞拓展/image/lutou/fr_nanci2.jpg'); 
+                        }else{
+                            game.broadcastAll()+player.node.avatar2.setBackgroundImage('extension/福瑞拓展/image/character/fr_nanci2.jpg'); 
+                        }
+                    }
+                    player.removeSkill('nanci_tq')
+                    player.removeSkill('nanci_tm')
+                    player.addSkill('nanci_tmg')
+                    player.addSkill('nanci_tqg')
+                }
+            },
+            'nanci_tq': {
+                forced: true,
+                trigger: {
+                    player: 'phaseJieshuBegin'
+                },
+                init:function(player){
+                    if(!player.storage.nanci_tq) player.storage.nanci_tq=[]
+                },
+                content: function () {
+                    var list = [];
+                    game.getGlobalHistory('cardMove', function (evt) {
+                        if (evt.name == 'lose') {
+                            if (evt.position == ui.discardPile) {
+                                for (var i of evt.cards) {
+                                    if (get.color(i) == 'black') list.add(i);
+                                }
+                            }
+                        }
+                        else {
+                            if (evt.name == 'cardsDiscard') {
+                                for (var i of evt.cards) {
+                                    if (get.color(i) == 'black') list.add(i);
+                                }
+                            }
+                        }
+                    });
+                    var cards=list.slice(0, 2)
+                    player.gain(cards, 'gain2')
+                    player.storage.nanci_tq=cards
+                }
+            },
+            'nanci_tm': {
+                enable: 'phaseUse',
+                usable: 1,
+                filterTarget: true,
+                content: function () {
+                    var card1 = get.cardPile2(function (card) {
+                        return get.name(card, false) == 'shan';
+                    });
+                    target.gain(card1, 'gain2')
+                    target.chooseToDiscard(2, 'he', true)
+                },
+                ai: {
+                    order: 7,
+                    result: {
+                        target: function (player, target) {
+                            if (target.countCards('he') == 1) return -2
+                            if (target.countCards('he') == 2) return -1
+                            if (target.countCards('he') >= 3 && target.countCards('hs', 'shan') == 0) return 0.5
+                            if (target == player) return 1
+                            return -1
+                        },
+                    },
+                    threaten: 1,
+                }
+            },
+            'nanci_tx': {
+                enable: 'phaseUse',
+                filterCard: function (card) {
+                    if (ui.selected.cards.length) {
+                        return get.color(card) != get.color(ui.selected.cards[0]) && get.number(card) == get.number(ui.selected.cards[0])
+                    } else {
+                        return true
+                    }
+                },
+                limited: true,
+                mark: true,
+                intro: {
+                    content: "limited",
+                },
+                animationColor: "thunder",
+                skillAnimation: "epic",
+                complexCard: true,
+                selectCard: 2,
+                check: function (card) {
+                    return 7 - get.value(card)
+                },
+                filter: function (event, player) {
+                    var list = [];
+                    for (var i = 0; i < game.dead.length; i++) {
+                        if (game.dead[i].maxHp != 0) {
+                            list.push(game.dead[i].name);
+                        }
+                    }
+                    return list.length > 0;
+                },
+                content: function () {
+                    "step 0"
+                    player.awakenSkill('nanci_tx')
+                    var list = [];
+                    for (var i = 0; i < game.dead.length; i++) {
+                        if (game.dead[i].maxHp != 0) {
+                            list.push(game.dead[i].name);
+                        }
+                    }
+                    player.chooseButton(ui.create.dialog('选择一名已死亡的角色令其复活', [list, 'character']), function (button) {
+                        var player = _status.event.player
+                        for (var i = 0; i < game.dead.length; i++) {
+                            if (game.dead[i].name == button.link) {
+                                var dead = game.dead[i];
+                                return get.attitude(player, dead)
+                            }
+                        }
+                    });
+                    'step 1'
+                    if (result.bool) {
+                        for (var i = 0; i < game.dead.length && game.dead[i].name != result.buttons[0].link; i++);
+                        var dead = game.dead[i];
+                        dead.revive(1);
+                        dead.changeHujia(1);
+                        player.changeHujia(1)
+                        var skills = dead.getSkills();
+                        for (var j = 0; j < skills.length; j++) {
+                            dead.markSkill(skills[j])
+                        }
+                        dead.checkMarks()
+                        dead.addTempSkill('nanci_tx_gain')
+                        dead.storage.nanci_tx_gain = player
+                    }
+                },
+                subSkill: {
+                    gain: {
+                        mark: true,
+                        trigger: {
+                            global: "phaseEnd"
+                        },
+                        intro: {
+                            mark: function (dialog, storage, player) {
+                                dialog.addText('回合结束时，将手牌摸至与' + get.translation(player.storage.iknos_gz_gain) + '相同')
+                            }
+                        },
+                        filter: function (event, player) {
+                            return event.player == player.storage.nanci_tx_gain
+                        },
+                        content: function (player) {
+                            var num = player.storage.nanci_tx_gain.countCards('h') - player.countCards('h')
+                            if (num > 0) {
+                                player.draw(num)
+                            }
+                            delete player.storage.nanci_tx_gain
+                        }
+                    }
+                },
+                ai: {
+                    order: 3,
+                    result: {
+                        player: function (card, player) {
+                            var list = [];
+                            for (var i = 0; i < game.dead.length; i++) {
+                                if (game.dead[i].maxHp != 0) {
+                                    list.push(game.dead[i].name);
+                                }
+                            }
+                            for (var i in list) {
+                                if (get.attitude(player, i) > 0) return 1
+                            }
+                        }
+                    }
+                }
+            },
             'kamijia_dr': {
                 trigger: {
                     player: 'damageAfter'
@@ -787,7 +1042,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 8'
                     game.broadcastAll(ui.clear);
                     'step 9'
-                    event.cards.add(event.card1);``
+                    event.cards.add(event.card1); ``
                 },
                 ai: {
                     order: 1,
@@ -3444,10 +3699,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         player.chooseCard(1, 'h', true).set('ai', function (card) {
                             return 100 - get.value(card)
                         })
-                    } else if(result.control=='免疫'){
+                    } else if (result.control == '免疫') {
                         player.addTempSkill('ham_nb_1', { global: "phaseEnd" })
                         event.finish()
-                    }else{
+                    } else {
                         event.finish()
                     }
                     'step 2'
@@ -3505,7 +3760,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     content: "本回合已对$发动过本技能"
                 },
                 filter: function (event, player) {
-                    return event.source != player && event.source && get.distance(player, event.player) <= 1 && event.player.isIn() && !player.storage.sam_wl.contains(event.player)
+                    return event.cards && event.source != player && event.source && get.distance(player, event.player) <= 1 && event.player.isIn() && !player.storage.sam_wl.contains(event.player)
                 },
                 content: function () {
                     'step 0'
@@ -3539,7 +3794,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     source: "damageBegin4",
                 },
                 filter: function (event, player) {
-                    return event.player != player && event.num > 0
+                    return event.player != player && event.num > 0 && !event.player.hasSkill('sam_fz_1')
                 },
                 check: function (event, player) {
                     var att = get.attitude(player, event.player)
@@ -3559,13 +3814,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 content: function (event, player) {
                     trigger.player.addTempSkill('sam_fz_1', { player: "phaseBegin" })
-                    trigger.player.storage.sam_fz = player
-                    player.storage.sam_fz = trigger.player
+                    trigger.player.storage.sam_fz = [player]
+                    if (!player.storage.sam_fz) player.storage.sam_fz = []
+                    player.storage.sam_fz.push(trigger.player)
                     trigger.player.addTempSkill('sam_fz_disable')
                     player.addTempSkill('sam_fz_disable')
                 },
                 subSkill: {
                     1: {
+                        mark: true,
+                        intro: {
+                            content: '你的红色牌均视为【闪】，黑色牌均视为【无懈可击】，直到其下个回合开始。'
+                        },
                         mod: {
                             cardname: function (card, player) {
                                 if (get.color(card) == 'red') return 'shan';
@@ -3574,9 +3834,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         }
                     },
                     disable: {
+                        onremove: function (player) {
+                            delete player.storage.sam_fz
+                        },
+                        mark: true,
+                        intro: {
+                            mark: function (dialog, storage, player) {
+                                dialog.addText('你本回合只能对' + get.translation(player.storage.sam_fz) + '使用牌')
+                            }
+                        },
                         mod: {
                             playerEnabled: function (card, player, target, now) {
-                                if (player.storage.sam_fz != target) return false;
+                                if (!player.storage.sam_fz.contains(target)) return false;
                             },
                         }
                     },
@@ -4363,15 +4632,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "kesaya_xs": {
                 init: function (player, skill) {
                     player.addSkillBlocker(skill);
+                    player.addSkill('kesaya_wy')
+                    player.addSkill('kesaya_ax')
                 },
                 onremove: function (player, skill) {
                     player.removeSkillBlocker(skill);
                     player.removeSkill('kesaya_wy')
                     player.removeSkill('kesaya_ax')
                 },
+                derivation: ['kesaya_wy', 'kesaya_ax'],
                 locked: true,
                 skillBlocker: function (skill, player) {
-                    return (player.isHealthy()&&skill == 'kesaya_ax')||(!player.isHealthy()&&skill=='kesaya_wy')
+                    return (player.isHealthy() && skill == 'kesaya_ax') || (!player.isHealthy() && skill == 'kesaya_wy')
                 },
             },
             "kesaya_ax": {
@@ -13695,7 +13967,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     "step 3"
                     if (result.bool) {
                         player.line(result.targets, 'green');
-                        result.targets[0].gain(result.cards, player);
+                        result.targets[0].gain(result.cards, player,'giveAuto');
                         for (var i = 0; i < result.cards.length; i++) {
                             event.cards.remove(result.cards[i]);
                         }
@@ -14506,6 +14778,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'nanci_tq': '天祈',
+            'nanci_tq_info': '锁定技，结束阶段，你获得本回合进入弃牌堆的前两张黑色牌',
+            'nanci_tqg': '天启',
+            'nanci_tqg_info': '每名角色的回合开始时，你观看牌堆顶的两张牌并选择一项： <li>1.若其中有红色牌，你获得其中一张红色牌。<li>2.从牌堆底摸一张牌。',
+            'nanci_tmg': '天灭',
+            'nanci_tmg_info': '出牌阶段限一次，你可以令一名其他角色弃置一张【闪】，否则其受到你1点火焰伤害。',
+            'nanci_tj': "天劫",
+            'nanci_tj_info': '回合结束时，若你本回合因〖天祈〗获得两张花色相同的牌，你修改〖天祈〗为〖天启〗，修改〖天蔑〗为〖天灭〗。',
+            'nanci_tm': "天蔑",
+            'nanci_tm_info': '出牌阶段限一次，你可以选择一名角色，令其获得一张【闪】并弃置两张牌。',
+            'nanci_tx': '天选',
+            'nanci_tx_info': '限定技，出牌阶段，你可以弃置两张颜色不同且点数相同的牌并选择一名已死亡的角色，将其复活至1点体力并获得1点护甲。回合结束时，该角色将手牌摸至与你相同。',
             'hars_hr': '浩然',
             'hars_hr_info': '当你成为其他角色【杀】或伤害类锦囊牌的目标时，其可以令此牌对你无效并令你摸两张牌。其他角色的出牌阶段限一次，其可以交给你至多两张牌。',
             'kamijia_dr': '夺刃',
@@ -14533,7 +14817,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "qima_dz": "断斩",
             "qima_dz_info": get.introduce('truexuli') + '（2/4），当你对其他角色造成伤害后，你可以减少1点蓄力点，然后对一名其他角色造成1点伤害。其他角色进入濒死状态时或当你受到伤害后，你获得1点蓄力点。锁定技，当你对一名体力值为1的其他角色造成伤害时，你令此伤害+1。',
             "qima_jm": "俱灭",
-            "qima_jm_info": "觉醒技，当你进入濒死状态时，你将体力值回复至2点，然后可以一名其他角色失去所有技能与护甲，并将其体力上限调整至3。",
+            "qima_jm_info": "觉醒技，当你进入濒死状态时，你将体力值回复至2点，然后可以令一名其他角色失去所有技能与护甲，并将其体力上限调整至3。",
             "hynea_kb": "狂辩",
             "hynea_kb_info": "你可以将一张【酒】当作任意基本牌或普通锦囊牌使用或打出。",
             "hynea_rx": "入相",
@@ -14990,6 +15274,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "shisan_tx_info": "你未使用过牌的回合结束时，你可以视为使用一张无距离限制的【推心置腹】。然后目标需要对你指定的另一名角色选择一项：<li>1.使用一张无距离限制的【杀】；<li>2.交给其两张手牌（不足则全交）。",
 
             //武将
+            'fr_nanci': '南辞',
             'fr_shark': '沙克',
             "fr_kmjia": "卡米加",
             "fr_liona": "里欧纳",
