@@ -238,7 +238,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'nanci_tm': {
                 enable: 'phaseUse',
                 usable: 1,
-                filterTarget: true,
+                filterTarget: function(card,player,target){
+                    return target!=player
+                },
                 content: function () {
                     var card1 = get.cardPile2(function (card) {
                         return get.name(card, false) == 'shan';
@@ -14787,7 +14789,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'nanci_tj': "天劫",
             'nanci_tj_info': '回合结束时，若你本回合因〖天祈〗获得两张花色相同的牌，你修改〖天祈〗为〖天启〗，修改〖天蔑〗为〖天灭〗。',
             'nanci_tm': "天蔑",
-            'nanci_tm_info': '出牌阶段限一次，你可以选择一名角色，令其获得一张【闪】并弃置两张牌。',
+            'nanci_tm_info': '出牌阶段限一次，你可以令一名其他角色获得一张【闪】并弃置两张牌。',
             'nanci_tx': '天选',
             'nanci_tx_info': '限定技，出牌阶段，你可以弃置两张颜色不同且点数相同的牌并选择一名已死亡的角色，将其复活至1点体力并获得1点护甲。回合结束时，该角色将手牌摸至与你相同。',
             'hars_hr': '浩然',
