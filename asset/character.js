@@ -132,6 +132,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                 }
             },
+            'francium_sx':{
+
+            },
             'nanci_tqg': {
                 trigger: {
                     global: 'phaseBegin'
