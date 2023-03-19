@@ -5,11 +5,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore'],
         connect: true,//该武将包是否可以联机（必填）
         character: {
-            'fr_francium':["male",'shen',3,['francium_ch'],[]],
+            'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx','francium_mm'], []],
             "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
-            "fr_ala":["male",'shu',4,[],[]],
-            "fr_liona":["male",'shen',4,[],[]],
-            'fr_nanci': ['female', 'qun', 3, ['nanci_tq', 'nanci_tx', 'nanci_tm','nanci_tj'], []],
+            "fr_ala": ["male", 'shu', 4, [], []],
+            "fr_liona": ["male", 'shen', 4, [], []],
+            'fr_nanci': ['female', 'qun', 3, ['nanci_tq', 'nanci_tx', 'nanci_tm', 'nanci_tj'], []],
             "fr_shark": ["male", 'wei', 4, ['shark_yz'], []],
             "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], []],
             "fr_linyan": ["male", 'wu', 3, ['linyan_kr', 'linyan_ys'], []],
@@ -111,29 +111,155 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "qun", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
-            'francium_ch':{
-                trigger:{
-                    player:'phaseBegin'
-                },
+            'francium_mm':{
+                unique:true,
+                enable:"chooseToUse",
+                mark:true,
+                skillAnimation:true,
+                limited:true,
+                animationColor:"orange",
                 init:function(player){
-                    player.markSkill('hubian')
-                    game.broadcastAll(function(player){
-                        player.$changeHubian();
-                    },player);
+                    player.storage.oldniepan=false;
                 },
-                forced:true,
+                filter:function(event,player){
+                    if(player.storage.francium_mm) return false;
+                    if(event.type=='dying'){
+                        if(player!=event.dying) return false;
+                        return true;
+                    }
+                    return false;
+                },
                 content:function(){
                     'step 0'
+                    player.awakenSkill('francium_mm');
+                    'step 1'
+                    if(player.hp<2){
+                        player.recover(2-player.hp);
+                    }
+                    player.removeSkill('francium_ch')
+                },
+                ai:{
+                    order:1,
+                    skillTagFilter:function(player,arg,target){
+                        if(player!=target||player.storage.francium_mm) return false;
+                    },
+                    save:true,
+                    result:{
+                        player:function(player){
+                            if(player.hp<=0) return 10;
+                            if(player.hp<=2&&player.countCards('he')<=1) return 10;
+                            return 0;
+                        },
+                    },
+                    threaten:function(player,target){
+                        if(!target.storage.francium_mm) return 0.6;
+                    },
+                },
+                intro:{
+                    content:"limited",
+                },
+            },
+            'francium_ch': {
+                trigger: {
+                    player: 'phaseBegin'
+                },
+                init: function (player) {
+                    player.markSkill('hubian')
+                    game.broadcastAll(function (player) {
+                        player.$changeHubian();
+                    }, player);
+                },
+                forced: true,
+                content: function () {
+                    'step 0'
                     player.changeHubian()
-                    if(!player.storage.hubian){
-                        player.setfrAvatar(player.name,player.name)
-                    }else{
-                        player.setfrAvatar(player.name,player.name+'2')
+                    if (!player.storage.hubian) {
+                        player.setfrAvatar(player.name, player.name)
+                    } else {
+                        player.setfrAvatar(player.name, player.name + '2')
                     }
                 }
             },
-            'francium_sx':{
-
+            'francium_sx': {
+                enable: 'phaseUse',
+                hubian: true,
+                multitarget: true,
+                complexTarget: true,
+                delay: false,
+                lose: false,
+                multiline:true,
+                discard: false,
+                usable: 1,
+                filterTarget: function (card, player, target) {
+                    if (player.storage.hubian) {
+                        return target.countCards('h') > 0
+                    } else {
+                        return player.canUse({ name: 'sha'}, target, false)
+                    }
+                },
+                usable: 1,
+                selectTarget: function () {
+                    var player = _status.event.player
+                    if (player.storage.hubian) {
+                        return 2
+                    } else {
+                        return 1
+                    }
+                },
+                filterCard: true,
+                filter: function (event, player) {
+                    if (player.storage.hubian) {
+                        return true
+                    } else {
+                        return player.countCards('h') > 0
+                    }
+                },
+                selectCard: function () {
+                    var player = _status.event.player
+                    if (player.storage.hubian) {
+                        return 0
+                    } else {
+                        return -1
+                    }
+                },
+                content: function () {
+                    'step 0'
+                    if (player.storage.hubian) {
+                        targets[0].swapHandcards(targets[1]);
+                        player.draw()
+                        player.recover()
+                        event.finish()
+                    } else {
+                        event.card = player.useCard(cards,{name: 'sha'}, targets[0], false).card;
+                    }
+                    'step 1'
+                    if (player.getHistory('sourceDamage', function (evt) {
+                        return event.card == evt.card;
+                    }).length) {
+                        player.draw(targets[0].maxHp)
+                    }
+                },
+                ai: {
+                    threaten: 4.5,
+                    pretao: true,
+                    nokeep: true,
+                    order: 6,
+                    expose: 0.2,
+                    result: {
+                        target: function (player, target) {
+                            if (player.storage.hubian) {
+                                if (!ui.selected.targets.length) return -Math.sqrt(target.countCards('h'));
+                                var h1 = ui.selected.targets[0].getCards('h'), h2 = target.getCards('h');
+                                if (h2.length > h1.length) return 0;
+                                var delval = get.value(h2, target) - get.value(h1, ui.selected.targets[0]);
+                                if (delval >= 0) return 0;
+                                return -delval * (h1.length - h2.length);
+                            }else{
+                                return -2
+                            }
+                        },
+                    },
+                },
             },
             'nanci_tqg': {
                 trigger: {
@@ -145,8 +271,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     var cards = get.cards(2);
                     player.chooseButton(['天启：选择获得一张红色牌，或从牌堆底摸一张牌。', cards.slice(0)], 1).set('ai', function (button) {
                         return get.value(button.link, _status.event.player);
-                    }).set('filterButton',function(button){
-                        return get.color(button.link)=='red'
+                    }).set('filterButton', function (button) {
+                        return get.color(button.link) == 'red'
                     });
                     while (cards.length) {
                         ui.cardPile.insertBefore(cards.pop(), ui.cardPile.firstChild);
@@ -154,39 +280,39 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 1'
                     if (result.bool) {
                         player.gain(result.links, 'gain2');
-                    }else{
+                    } else {
                         player.draw('bottom')
                     }
                 }
             },
-            'nanci_tmg':{
-                enable:'phaseUse',
-                usable:1,
-                filterTarget:function(card,player,target){
-                    return target!=player
+            'nanci_tmg': {
+                enable: 'phaseUse',
+                usable: 1,
+                filterTarget: function (card, player, target) {
+                    return target != player
                 },
-                direct:true,
-                content:function(){
+                direct: true,
+                content: function () {
                     'step 0'
-                    target.chooseToDiscard('天灭：弃置一张【闪】，否则'+get.translation(player)+'对你造成1点伤害。',function(card){
-                        return get.name(card)=='shan';
-                    }).set('ai',function(card){
-                        return 10-get.value(card)
+                    target.chooseToDiscard('天灭：弃置一张【闪】，否则' + get.translation(player) + '对你造成1点伤害。', function (card) {
+                        return get.name(card) == 'shan';
+                    }).set('ai', function (card) {
+                        return 10 - get.value(card)
                     })
                     'step 1'
-                    if(!result.bool){
-                        target.damage(player,'fire')
+                    if (!result.bool) {
+                        target.damage(player, 'fire')
                     }
                 },
-                ai:{
-                    order:7,
-                    fireAttack:true,
-                    result:{
-                        target:function(player,target){
-                            if(target.hasSkillTag('nofire')) return 0;
-                            if(lib.config.mode=='versus') return -1;
-                            if(player.hasUnknown()) return 0;
-                            return get.damageEffect(target,player)-target.countCards('e');
+                ai: {
+                    order: 7,
+                    fireAttack: true,
+                    result: {
+                        target: function (player, target) {
+                            if (target.hasSkillTag('nofire')) return 0;
+                            if (lib.config.mode == 'versus') return -1;
+                            if (player.hasUnknown()) return 0;
+                            return get.damageEffect(target, player) - target.countCards('e');
                         },
                     },
                 },
@@ -198,18 +324,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 intro: {
                     content: "limited",
                 },
-                trigger:{
-                    player:'phaseEnd'
+                trigger: {
+                    player: 'phaseEnd'
                 },
-                filter:function(event,player){
-                    var cards=player.storage.nanci_tq
-                    return cards.length==2&&get.suit(cards[0])==get.suit(cards[1])
+                filter: function (event, player) {
+                    var cards = player.storage.nanci_tq
+                    return cards.length == 2 && get.suit(cards[0]) == get.suit(cards[1])
                 },
                 animationColor: "thunder",
                 skillAnimation: "epic",
                 content: function () {
                     player.awakenSkill('nanci_tj')
-                    player.setfrAvatar('fr_nanci','fr_nanci2')
+                    player.setfrAvatar('fr_nanci', 'fr_nanci2')
                     player.removeSkill('nanci_tq')
                     player.removeSkill('nanci_tm')
                     player.addSkill('nanci_tmg')
@@ -221,8 +347,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: 'phaseJieshuBegin'
                 },
-                init:function(player){
-                    if(!player.storage.nanci_tq) player.storage.nanci_tq=[]
+                init: function (player) {
+                    if (!player.storage.nanci_tq) player.storage.nanci_tq = []
                 },
                 content: function () {
                     var list = [];
@@ -242,16 +368,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
-                    var cards=list.slice(0, 2)
+                    var cards = list.slice(0, 2)
                     player.gain(cards, 'gain2')
-                    player.storage.nanci_tq=cards
+                    player.storage.nanci_tq = cards
                 }
             },
             'nanci_tm': {
                 enable: 'phaseUse',
                 usable: 1,
-                filterTarget: function(card,player,target){
-                    return target!=player
+                filterTarget: function (card, player, target) {
+                    return target != player
                 },
                 content: function () {
                     var card1 = get.cardPile2(function (card) {
@@ -546,7 +672,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 init: function (player) {
                     player.storage.shark_yz = []
                 },
-                unique:true,
+                unique: true,
                 initList: function (player) {
                     var list;
                     if (_status.characterlist) {
@@ -572,7 +698,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         list.remove(players[i].name1);
                         list.remove(players[i].name2);
                     }
-                    var banlist=['fr_shark','fr_wore','fr_yifa']
+                    var banlist = ['fr_shark', 'fr_wore', 'fr_yifa']
                     list.remove(banlist);
                     player.storage.shark_lib = list
                 },
@@ -13983,7 +14109,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     "step 3"
                     if (result.bool) {
                         player.line(result.targets, 'green');
-                        result.targets[0].gain(result.cards, player,'giveAuto');
+                        result.targets[0].gain(result.cards, player, 'giveAuto');
                         for (var i = 0; i < result.cards.length; i++) {
                             event.cards.remove(result.cards[i]);
                         }
@@ -14794,10 +14920,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
-            'francium_ch':'晨昏',
-            'francium_ch_info':'锁定技，回合开始时，你改变你的'+get.introduce('hubian')+'状态',
-            'francium_mm':'明灭',
-            'francium_mm_info':'互变技，出牌阶段限一次，圣咏：你可以令一名角色将手牌数摸至与场上手牌数最多的角色相同，然后回复1点体力。暗涌：你可以令一名角色将手牌数弃至与场上手牌数最少的角色相同，然后流失1点体力。',
+            'francium_ch': '晨昏',
+            'francium_ch_info': '锁定技，回合开始时，你改变你的' + get.introduce('hubian') + '状态',
+            'francium_sx': '生息',
+            'francium_sx_info': '互变技，出牌阶段限一次，圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为其体力上限）。',
+            'francium_yl': '盈亏',
+            'francium_yl_info': '互变技，圣咏：每回合限三次，你的回合内，当你使用一张牌后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；暗涌：每回合限三次，当一名其他角色进入濒死状态时，你可以将一张手牌当杀对其使用。',
+            'francium_mm': '明灭',
+            'francium_mm_info': '限定技，当你进入濒死状态时，你将体力值回复至2点并失去技能【晨昏】。',
             'nanci_tq': '天祈',
             'nanci_tq_info': '锁定技，结束阶段，你获得本回合进入弃牌堆的前两张黑色牌。',
             'nanci_tqg': '天启',
@@ -14815,7 +14945,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'kamijia_dr': '夺刃',
             'kamijia_dr_info': '锁定技，当你受到伤害结算完毕后，你可以摸X张牌（X为此次伤害值），然后你可以声明一种颜色并进行判定，若判定牌与你声明的颜色相同，你回复等同于此次伤害值的体力。',
             'kamijia_sx': '随行',
-            'kamijia_sx_info': '出牌阶段限一次，你可以将你的所有手牌交给一名其他角色（至少一张）并结束此回合，然后该角色获得以下效果直到其回合结束：<li>①使用牌无距离限制，<li>②出牌阶段，可以额外使用一张【杀】，<li>③只能对自己与你指定的另一名角色使用牌。</li>你获得该角色于弃牌阶段弃置的至多X张牌（X为你交给该角色的牌数的一半并向下取整且至多为五）。',
+            'kamijia_sx_info': '出牌阶段限一次，你可以将你的所有手牌交给一名其他角色（至少一张）并结束此回合，然后该角色获得以下效果直到其回合结束：<li>①使用牌无距离限制，<li>②出牌阶段，可以额外使用一张【杀】，<li>③只能对自己与你指定的另一名角色使用牌。</li>你获得该角色于弃牌阶段弃置的至多X张牌（X为你交给该角色的牌数的一半并向下取整且至多为五）。</li>',
             'shark_yz': "易珠",
             'shark_yz_info': '游戏开始时，你获得随机四个武将上的至多三个技能，出牌阶段限一次，你可以失去一个你由本技能获得的技能，然后得随机四个武将上的至多一个技能（限定技，觉醒技，使命技等特殊技能除外）。',
             'tiger_kf': "狂放",
@@ -14857,7 +14987,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "tiers_qp": "强破",
             "tiers_qp_info": get.introduce('xuli') + "，每回合限一次，当你使用【杀】指定目标后，你可以流失<font color=#ffff7a>1</font>点体力，令此【杀】伤害+<font color=#eb6e3a>1</font>且无视防具。",
             "tiers_kh": "狂花",
-            "tiers_kh_info": "当于你的回合内流失体力后，若此次流失体力的值不小于2点，你于出牌阶段结束后摸两张牌并执行一个额外的出牌阶段，且你获得以下效果直到你的下个回合开始：<li>当你造成伤害后，你回复1点体力。",
+            "tiers_kh_info": "当于你的回合内流失体力后，若此次流失体力的值不小于2点，你于出牌阶段结束后摸两张牌并执行一个额外的出牌阶段，且你获得以下效果直到你的下个回合开始：<li>当你造成伤害后，你回复1点体力。</li>",
             "sam_wl": "巍立",
             "sam_wl_info": "每回合每名角色限一次，当与你距离不大于1的角色受到其他角色造成的伤害后，你可以令伤害来源获得造成伤害的牌，然后视为对伤害来源使用一张无距离限制的【杀】；若此【杀】造成了伤害，你令受伤角色回复X点体力（X为伤害来源此次造成的伤害值）。",
             "sam_fz": "峰峙",
@@ -14865,7 +14995,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "ham_cy": "潮涌",
             'ham_cy_info': "转换技，阳：出牌阶段开始时，你可以展示其他角色的一张手牌，然后你可以将与展示牌不同花色的一张手牌当作【出其不意】对该角色使用（每种花色限一次），若【出其不意】未造成伤害，你结束本回合，否则你可以重复此流程。阴：出牌阶段结束时，你可以摸X张牌（X为你本回合造成的伤害数），直到你的下个回合开始：当你成为其他角色【杀】或伤害类锦囊牌的目标时，若此牌目标数大于1，你取消之；否则，你弃置该角色一张牌。",
             "ham_nb": "匿波",
-            "ham_nb_info": "每名角色的回合结束时，你可以选择一项：<li>1.将一张手牌当作【杀】对该角色使用。<li>2.下一名角色的回合内，你不能成为手牌数大于你的角色使用牌的目标。</li>当你受到伤害后，此技能失效直到你的结束阶段。",
+            "ham_nb_info": "每名角色的回合结束时，你可以选择一项：<li>1.将一张手牌当作【杀】对该角色使用。<li>2.下一名角色的回合内，你不能成为手牌数大于你的角色使用牌的目标。</li>当你受到伤害后，此技能失效直到你的结束阶段。</li>",
             "faers_hc": "恒常",
             "faers_hc_info": "锁定技，你跳过你的摸牌阶段和判定阶段；你的手牌数始终等于你的体力值。",
             "faers_sb": "嬗变",
@@ -15294,7 +15424,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "shisan_tx_info": "你未使用过牌的回合结束时，你可以视为使用一张无距离限制的【推心置腹】。然后目标需要对你指定的另一名角色选择一项：<li>1.使用一张无距离限制的【杀】；<li>2.交给其两张手牌（不足则全交）。",
 
             //武将
-            'fr_francium':'弗兰西亚',
+            'fr_francium': '弗兰西亚',
             'fr_nanci': '南辞',
             'fr_shark': '沙克',
             "fr_kmjia": "卡米加",

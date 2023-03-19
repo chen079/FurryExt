@@ -716,7 +716,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }else{
                         var url = 'extension/福瑞拓展/image/character/'
                     }
-                    node.setBackgroundImage(lib.assetURL + url + name2 +'.jpg')
+                    node.setBackgroundImage(url + name2 +'.jpg')
                     if(this==game.me&&ui.fakeme&&fakeme!==false){
                         ui.fakeme.style.backgroundImage=node.style.backgroundImage
                     }
@@ -731,34 +731,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //互变
             lib.skill.hubian = {
                 init: function (player) {
-                    if(!player.storage.hubian) player.storage.hubian=false
-                },
-                trigger:{
-                    global:'gameStart'
+                    player.storage.hubian = false
                 },
                 charlotte: true,
                 forced: true,
                 onremove: true,
                 onunmark: true,
                 marktext: "互变",
-                filter: function (event, player) {
-                    var skills = player.skills
-                    var bool = false
-                    for (var i = 0; i < skills.length; i++) {
-                        if (lib.skill[skills[i]].hubian) {
-                            bool = true
-                            break
-                        }
-                    }
-                    return bool&&!player.hasSkill('hubian')  
-                },
-                content:function(){
-                    player.addSkill('hubian')
-                    player.markSkill('hubian')
-                    game.broadcastAll(function(player){
-                        player.$changeHubian();
-                    },player);
-                },
                 intro: {
                     name: "互变",
                     mark:function(dialog,storage,player){
