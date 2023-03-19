@@ -700,6 +700,69 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
+            lib.element.player.setfrAvatar = function(name,name2,video,fakeme){
+                var node
+                if(this.name2==name){
+                    node=this.node.avatar2
+                    this.smoothAvatar(true,video)
+                }
+                else if(this.name==name){
+                    node=this.node.avatar
+                    this.smoothAvatar(false,video)
+                }
+                if(node){
+                    if(lib.config.frLutou){
+                        var url= 'extension/福瑞拓展/image/lutou/'
+                    }else{
+                        var url = 'extension/福瑞拓展/image/character/'
+                    }
+                    node.setBackgroundImage(lib.assetURL + url + name2 +'.jpg')
+                    if(this==game.me&&ui.fakeme&&fakeme!==false){
+                        ui.fakeme.style.backgroundImage=node.style.backgroundImage
+                    }
+                    if(video!=false){
+                        game.addVideo('setfrAvatar',this,[name,name2])
+                    }
+                    game.broadcast(function(player,name,name2){
+                        player.setfrAvatar(name,name2,false)
+                    },this, name, name2)
+                }
+            }
+            //互变
+            lib.skill.hubian = {
+                init: function (player) {
+                    if(!player.storage.hubian) player.storage.hubian=false
+                },
+                charlotte: true,
+                forced: true,
+                onremove: true,
+                onunmark: true,
+                marktext: "互变",
+                intro: {
+                    name: "互变",
+                    mark:function(dialog,storage,player){
+                        dialog.addText('当前你处于'+(player.storage.hubian?'圣咏':'暗涌')+'状态')
+                    }
+                },
+            };
+            lib.element.player.changeHubian = function(){
+                if (!this.hasSkill('hubian')) this.addSkill('hubian');
+                this.storage.hubian=!this.storage.hubian;
+                this.markSkill('hubian');
+                game.broadcastAll(function(player){
+                    player.$changeHubian();
+                },this);
+            },
+            lib.element.player.$changeHubian = function(){
+                var mark=this.marks.hubian,player=this
+                if(mark){
+                    if(!player.storage.hubian){
+                        mark.firstChild.innerHTML = "暗涌"
+                    }else{
+                        mark.firstChild.innerHTML = "圣咏"
+                    }
+                }
+            },
             //------------------------------------------转韵-----------------
             lib.element.player.changeYun = function (skill) {
                 if (this[skill] && this[skill] == '平') {
@@ -708,8 +771,24 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     this[skill] = '平'
                 }
                 if (this.getStat('skill')[skill]) delete this.getStat('skill')[skill];
+                game.broadcastAll(function(player,skill){
+                    player.$changeYun(skill);
+                },player,skill);
                 game.log(this, '#g【', '#g' + get.translation(skill), '#g】', '的韵律转为' + this[skill]);
             };
+            lib.element.player.$changeYun = function(skill){
+                var mark=this.marks[skill];
+                if(mark){
+                    if(mark.firstChild.reversed){
+                        mark.firstChild.reversed=false;
+                        mark.firstChild.style.transform='none';
+                    }
+                    else{
+                        mark.firstChild.reversed=true;
+                        mark.firstChild.style.transform='rotate(180deg)';
+                    }
+                }
+            },
             //自定义：发掘
             lib.element.player.digCard = function (num1, num2) {
                 var next = game.createEvent('digCard');
@@ -1200,6 +1279,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
             //------------------------------------------说明------------------------------------------//
             var introduce = {
+                "hubian":{
+                    name:'互变',
+                    info:'<li>游戏开始时，角色处于暗涌状态。<li>当你改变互变状态时，角色由暗涌/圣咏状态变为圣咏/暗涌状态。<li>所有具有“互变技”标签的技能改为执行对应状态的选项。'
+                },
                 "kamidamage": {
                     name: "神圣伤害",
                     info: "<li>神圣伤害：当一名角色受到神圣伤害时，不会触发任何与伤害有关的技能。"

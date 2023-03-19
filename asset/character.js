@@ -5,9 +5,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore'],
         connect: true,//该武将包是否可以联机（必填）
         character: {
+            'fr_francium':["male",'shen',3,['francium_ch'],[]],
             "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
-            //"fr_ala":["male",'shu',3,[],[]],
-            //"fr_liona":["male",'wei',3,[],[]],
+            "fr_ala":["male",'shu',4,[],[]],
+            "fr_liona":["male",'shen',4,[],[]],
             'fr_nanci': ['female', 'qun', 3, ['nanci_tq', 'nanci_tx', 'nanci_tm','nanci_tj'], []],
             "fr_shark": ["male", 'wei', 4, ['shark_yz'], []],
             "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], []],
@@ -110,6 +111,27 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "qun", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'francium_ch':{
+                trigger:{
+                    player:'phaseBegin'
+                },
+                init:function(player){
+                    player.markSkill('hubian')
+                    game.broadcastAll(function(player){
+                        player.$changeHubian();
+                    },player);
+                },
+                forced:true,
+                content:function(){
+                    'step 0'
+                    player.changeHubian()
+                    if(!player.storage.hubian){
+                        player.setfrAvatar(player.name,player.name)
+                    }else{
+                        player.setfrAvatar(player.name,player.name+'2')
+                    }
+                }
+            },
             'nanci_tqg': {
                 trigger: {
                     global: 'phaseBegin'
@@ -184,20 +206,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 skillAnimation: "epic",
                 content: function () {
                     player.awakenSkill('nanci_tj')
-                    if(player.name1=='fr_nanci'){
-                        if(lib.config.frLutou){
-                            game.broadcastAll()+player.node.avatar.setBackgroundImage('extension/福瑞拓展/image/lutou/fr_nanci2.jpg'); 
-                        }else{
-                            game.broadcastAll()+player.node.avatar.setBackgroundImage('extension/福瑞拓展/image/character/fr_nanci2.jpg'); 
-                        }
-                    }
-                    if(player.name2=='fr_nanci'){
-                        if(lib.config.frLutou){
-                            game.broadcastAll()+player.node.avatar2.setBackgroundImage('extension/福瑞拓展/image/lutou/fr_nanci2.jpg'); 
-                        }else{
-                            game.broadcastAll()+player.node.avatar2.setBackgroundImage('extension/福瑞拓展/image/character/fr_nanci2.jpg'); 
-                        }
-                    }
+                    player.setfrAvatar('fr_nanci','fr_nanci2')
                     player.removeSkill('nanci_tq')
                     player.removeSkill('nanci_tm')
                     player.addSkill('nanci_tmg')
@@ -534,6 +543,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 init: function (player) {
                     player.storage.shark_yz = []
                 },
+                unique:true,
                 initList: function (player) {
                     var list;
                     if (_status.characterlist) {
@@ -559,7 +569,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         list.remove(players[i].name1);
                         list.remove(players[i].name2);
                     }
-                    list.remove('fr_shark');
+                    var banlist=['fr_shark','fr_wore','fr_yifa']
+                    list.remove(banlist);
                     player.storage.shark_lib = list
                 },
                 filter: function (event, player) {
@@ -14780,8 +14791,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'francium_ch':'晨昏',
+            'francium_ch_info':'锁定技，回合开始时，你改变你的'+get.introduce('hubian')+'状态',
+            'francium_mm':'明灭',
+            'francium_mm_info':'互变技，出牌阶段限一次，圣咏：你可以令一名角色将手牌数摸至与场上手牌数最多的角色相同，然后回复1点体力。暗涌：你可以令一名角色将手牌数弃至与场上手牌数最少的角色相同，然后流失1点体力。',
             'nanci_tq': '天祈',
-            'nanci_tq_info': '锁定技，结束阶段，你获得本回合进入弃牌堆的前两张黑色牌',
+            'nanci_tq_info': '锁定技，结束阶段，你获得本回合进入弃牌堆的前两张黑色牌。',
             'nanci_tqg': '天启',
             'nanci_tqg_info': '每名角色的回合开始时，你观看牌堆顶的两张牌并选择一项： <li>1.若其中有红色牌，你获得其中一张红色牌。<li>2.从牌堆底摸一张牌。',
             'nanci_tmg': '天灭',
@@ -14829,7 +14844,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "zhongyu_zb": "业烬",
             "zhongyu_zb_info": "摸牌阶段开始时/出牌阶段开始时/弃牌阶段开始时/当你造成伤害时，你可以移除任意名角色的所有“<a style='color:#FF0000' href=\"javascript:window.furryIntroduce('mad_buff');\">疯狂</a>”层数，然后令你本回合的摸牌数/出【杀】次数/手牌上限/本次造成伤害+X（X为你移去的“疯狂”层数）。",
             "zhongyu_ky": "狂焰",
-            "zhongyu_ky_info": "出牌阶段限一次，你可以弃置至多X+1张牌并对等量的角色造成1点" + get.introduce('mad') + "伤害（X为你的已损体力值）；当你对其他角色造成无属性伤害后，你可以视为对自己造成过等量的狂属性伤害。",
+            "zhongyu_ky_info": "出牌阶段限一次，你可以弃置至多X+1张牌并对等量的角色造成1点" + get.introduce('mad') + "伤害（X为你的已损体力值）；当你对其他角色造成无属性伤害后，你可以视为对其造成过等量的狂属性伤害。",
             "hynea_ds": "登险",
             "hynea_ds_info": "出牌阶段限一次，你可以令〖蹴功〗中[]内的数字-1（至少为0），然后对一名其他角色造成1点伤害。",
             "hynea_cg": "蹴功",
@@ -15087,7 +15102,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "delta_sy": "算演",
             "delta_sy_info": "出牌阶段限一次，你可以观看牌堆顶的四张牌并进行一次“" + get.introduce('caclu') + "”，若成功：你获得这四张牌，你通过〖算演〗获得的牌不计入当前回合的手牌上限，然后本回合内你的【杀】无距离次数限制且无视防具，否则，你将这些牌置入弃牌堆。",
             "faers_yl": "命论",
-            "faers_yl_info": "锁定技，当你弃置【桃】后，你回复一点体力。",
+            "faers_yl_info": "锁定技，当你弃置你的【桃】后，你回复一点体力。",
             "site_qj": "权解",
             "site_qj_info": "当你受到伤害时，你可以改为失去X点体力上限，然后摸X张牌（X为此次伤害值）。",
             "edmond_jz": "激战",
@@ -15276,11 +15291,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "shisan_tx_info": "你未使用过牌的回合结束时，你可以视为使用一张无距离限制的【推心置腹】。然后目标需要对你指定的另一名角色选择一项：<li>1.使用一张无距离限制的【杀】；<li>2.交给其两张手牌（不足则全交）。",
 
             //武将
+            'fr_francium':'弗兰西亚',
             'fr_nanci': '南辞',
             'fr_shark': '沙克',
             "fr_kmjia": "卡米加",
             "fr_liona": "里欧纳",
-            "fr_ala": "奥拉",
+            "fr_ala": "阿拉安",
             "fr_tiger": "泰格尔",
             'fr_linyan': "林&炎",
             "fr_bossfaers": "恒神法斯",
