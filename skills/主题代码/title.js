@@ -1,0 +1,14 @@
+characterTitle={
+    "fr_yifeng":"执月之手",
+    "fr_hars":"全知之神",
+    "fr_telina":"预见之眼",
+    "fr_oert":"轮回使者",
+    "fr_krikt":"两仪剑使",
+    "fr_miya":"连破剑圣",
+    "fr_lusiya":"天慧之才",
+    "fr_lust":"兽族王者",
+    "fr_tery":"千变万化",
+    "fr_lens":"元素法师",
+    "fr_yifa":"言灵圣者",
+    "fr_faers":"永世恒常",
+}

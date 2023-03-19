@@ -1,0 +1,19 @@
+skill={
+    forced:true,
+    trigger:{
+        global:["gameDrawEnd"],
+        player:["changeHp","phaseBegin","phaseEnd","loseMaxHp","gainMaxHp"]
+    },
+    popup:false,
+    unique:true,
+    content:function(){
+        if(player.isDamaged()){
+            player.addSkill("kesaya_ax");
+            player.removeSkill("kesaya_wy")
+        }else if(player.isHealthy()){
+            player.removeSkill("kesaya_ax");
+            player.addSkill("kesaya_wy")
+        }
+    },
+    derivation:["kesaya_ax","kesaya_wy"],
+}

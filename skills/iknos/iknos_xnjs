@@ -1,0 +1,29 @@
+skill={
+    enable:'phaseUse',
+    usable:1,
+    filterTarget:true,
+    content:function(){
+        var card1 = get.cardPile2(function (card) {
+            return get.color(card, false) == 'red';
+        });
+        target.gain(card1,'gain2')
+        if(target==player){
+            target.chooseToDiscard(1,'he')
+        }else{
+            target.chooseToDiscard(2,'he')
+        }
+    },
+    ai:{
+        order:7,
+        result:{
+            target:function(card,player,target){
+                if(target.countCards('he')==1) return -2
+                if(target.countCards('he')==2) return -1
+                if(target.countCards('he')>=3&&target.countCards('hs','shan')==0) return 0.5
+                if(target==player) return 1
+                return -1
+            },
+            player:1,
+        }
+    }
+}

@@ -1,0 +1,29 @@
+skill={
+    forced:true,
+    trigger:{
+        source:"damageAfter",
+    },
+    content:function(){
+        player.recover(trigger.num)
+    },
+    group:"sisk_dm_1",
+    subSkill:{
+        "1":{
+            trigger:{
+                player:"useCard1",
+            },
+            forced:true,
+            filter:function(event,player){
+                return !event.audioed&&event.card.name=='sha'&&player.countUsed('sha',true)>1&&event.getParent().type=='phase';
+            },
+            content:function(){
+                trigger.audioed=true;
+            },
+            mod:{
+                cardUsable:function(card,player,num){
+                    if(card.name=='sha') return Infinity;
+                },
+            },
+        }
+    }
+}

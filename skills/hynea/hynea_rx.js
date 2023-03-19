@@ -1,0 +1,49 @@
+skill={
+    trigger:{
+        player:"phaseDrawBegin1"
+    },
+    dutySkill:true,
+    forced:true,
+    content:function(event,player){
+        trigger.num+=player.storage.hynea_cg
+    },
+    subSkill:{
+        achieve:{
+            trigger:{
+                player:"phaseZhunbeiBegin"
+            },
+            filter:function(event,player){
+                return player.storage.hynea_cg==0
+            },
+            forced:true,
+            skillAnimation:true,
+            animationColor:"fire",
+            content:function(event,player){
+                game.log(player,'成功完成使命');
+                player.awakenSkill('hynea_rx');
+                player.shixiaoSkill('hynea_rx');
+                player.removeSkill('hynea_ds')
+                player.removeSkill('hynea_jiu')
+                player.addSkillLog('hynea_kb')
+            },
+        },
+        fail:{
+            trigger:{
+                player:"dying",
+            },
+            forced:true,
+            content:function(){
+                'step 0'
+                game.log(player,'使命失败');
+                player.awakenSkill('hynea_rx');
+                player.failSkill('hynea_rx');
+                player.shixiaoSkill('hynea_rx');
+                player.recover(3-player.hp)
+                'step 1'
+                player.draw(3)
+                player.loseMaxHp();
+             },
+            sub:true,
+        },
+    },
+}

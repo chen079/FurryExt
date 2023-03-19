@@ -1,0 +1,11 @@
+skill={
+    enable:"phaseUse",
+    init:function(player){
+        player.changeMaxXvlizhi(5)
+        player.changeXvlizhi(1)
+    },
+    content:function(){
+        player.changeXvlizhi(2)
+        player.changeMaxXvlizhi(2)
+    }
+}

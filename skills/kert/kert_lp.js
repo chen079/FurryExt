@@ -1,0 +1,20 @@
+skill={
+    trigger:{
+        player:"phaseAfter",
+    },
+    limited:true,
+    frequent:false,
+    content:function(){
+        player.addTempSkill("kert_ql",{player:"phaseEnd"});
+        player.addTempSkill("kert_dp",{player:"phaseEnd"})
+        player.removeSkill("kert_lp")
+    },
+    mark:true,
+    intro:{
+        content:"limited",
+    },
+    skillAnimation:true,
+    init:function(player,skill){
+        player.storage[skill]=false;
+    },
+}

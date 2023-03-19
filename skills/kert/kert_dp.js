@@ -1,0 +1,39 @@
+skill={
+    mod:{
+        targetInRange:function(card,player){
+            if(card.name=='sha'&&get.color(card)=='black') return true;
+        },
+        cardUsable:function(card){
+            if(card.name=='sha') return Infinity;
+        },
+        selectTarget:function(card,player,range){
+            if(card.name=='sha'&&range[1]!=-1&&get.color(card)=='black'){
+                range[1]++;
+            }
+        },
+    },
+    trigger:{
+        source:"damageBegin",
+    },
+    forced:true,
+    filter:function(event,player){
+        return !get.is.altered('kert_dp')&&event.card&&event.card.name=='sha'&&get.color(event.card)=='red'&&event.notLink();
+    },
+    content:function(){
+        trigger.num+=2;
+    },
+    group:"kert_dp_1",
+    subSkill:{
+        "1":{
+            trigger:{
+                source:"dying",
+            },
+            forced:true,
+            content:function(){
+                player.loseMaxHp();
+                player.removeSkill('kert_dp');
+            },
+            sub:true,
+        },
+    },
+}

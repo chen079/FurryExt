@@ -1,0 +1,13 @@
+skill={
+    trigger:{
+        player:"phaseDrawBegin1",
+    },
+    forced:true,
+    content:function(){
+        if(player.isMinHandcard()){
+            trigger.num+=2
+        }else{
+            trigger.num+=1
+        }
+    },
+}
