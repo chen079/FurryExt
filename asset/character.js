@@ -174,7 +174,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         return 5-get.value(card)
                     })
                     'step 4'
-                    player.useCard(result.cards, { name: 'sha' }, trigger.player, false).viewAs = true;
+                    if(result.bool){
+                        player.useCard(result.cards, { name: 'sha' }, trigger.player, false).viewAs = true;
+                    }
                 },
             },
             'francium_mm': {
