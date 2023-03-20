@@ -906,6 +906,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 equipSkill: true,
                 direct: true,
                 mark: true,
+                firstDo:true,
                 marktext: "忘弦",
                 intro: {
                     name: '忘弦琵琶',

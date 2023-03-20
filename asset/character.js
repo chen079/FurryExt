@@ -114,7 +114,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'francium_yl': {
                 trigger: {
                     player: ["useCardAfter"],
-                    global: "dying"
+                    global: "dyingBefore"
                 },
                 usable:3,
                 filter: function (event, player, name) {
@@ -123,7 +123,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         if (event.cards.filterInD().length <= 0) return false;
                         if(_status.currentPhase!=player) return false
                         return true
-                    } else if(name == 'dying'&&!player.storage.hubian){
+                    } else if(name == 'dyingBefore'&&!player.storage.hubian){
                         if(_status.currentPhase==player) return false
                         return player.countCards('h') > 0&&event.player!=player
                     }else{
@@ -170,13 +170,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.draw('bottom');
                     event.finish()
                     'step 3'
-                    player.chooseCard(1,'h').set('ai',function(card){
+                    player.chooseCard(1,'h',true).set('ai',function(card){
                         return 5-get.value(card)
                     })
                     'step 4'
-                    if(result.bool){
-                        player.useCard(result.cards, { name: 'sha' }, trigger.player, false).viewAs = true;
-                    }
+                    player.useCard(result.cards, { name: 'sha' }, trigger.player, false).viewAs = true;
                 },
             },
             'francium_mm': {
@@ -598,6 +596,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             global: "phaseEnd"
                         },
+                        forced:true,
                         intro: {
                             mark: function (dialog, storage, player) {
                                 dialog.addText('回合结束时，将手牌摸至与' + get.translation(player.storage.iknos_gz_gain) + '相同')
@@ -14541,73 +14540,159 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 }
             },
             "molis_hs": {
-                trigger: {
-                    player: "dying",
+                group:"molis_hs_record",
+                skillAnimation:true,
+                animationColor:"gray",
+                unique:true,
+                limited:true,
+                mark:true,
+                intro:{
+                    content:"limited",
                 },
-                mark: false,
-                skillAnimation: true,
-                animationColor: "metal",
-                init: function (player, storage) {
-                    if (!player.storage.molis_hs) player.storage.molis_hs = [0, 0, 0, 0, 0]
+                trigger:{
+                    player:"dying",
                 },
-                unique: true,
-                limited: true,
-                notemp: true,
-                content: function () {
+                video:function (player, data) {
+                    for (var i in data) {
+                        var current = game.playerMap[i];
+                        current.node.handcards1.innerHTML = '';
+                        current.node.handcards2.innerHTML = '';
+                        current.node.equips.innerHTML = '';
+                        current.node.judges.innerHTML = '';
+                        current.directgain(get.infoCards(data[i].h));
+                        current.directequip(get.infoCards(data[i].e));
+                    }
+                },
+                getinfo:function (player) {
+                    var js = player.getCards("j");
+                    var js2 = [];
+                    for (var k = 0; k < js.length; k++) {
+                        var name = js[k].viewAs || js[k].name;
+                        js2.push(name);
+                    }
+                    var isDisabled = [];
+                    for (var j = 1; j < 7; j++) {
+                        isDisabled.push(player.isDisabled(j));
+                    }
+                    var storage = {
+                        player: player,
+                        hs: player.getCards("h"),
+                        es: player.getCards("e"),
+                        isDisabled: isDisabled,
+                        hp: player.hp,
+                        maxHp: player.maxHp,
+                        _disableJudge: player.storage._disableJudge,
+                        isTurnedOver: player.isTurnedOver(),
+                        isLinked: player.isLinked(),
+                        js: js,
+                        js2: js2,
+                    };
+                    return storage;
+                },
+                content:function () {
                     'step 0'
-                    player.awakenSkill('molis_hs')
-                    var cards = player.getCards('hej')
-                    player.discard(cards)
-                    if (player.storage.molis_hs[0] > player.MaxHp) {
-                        player.gainMaxHp(player.storage.molis_hs[0] - player.MaxHp)
-                    } else if (player.storage.molis_hs[0] < player.MaxHp) {
-                        player.loseMaxHp(player.MaxHp - player.storage.molis_hs[0])
+                    player.awakenSkill('molis_hs');
+                    event.storage = player.storage.molis_hs_save.slice(0);
+                    'step 1'
+                    event.doing = event.storage.shift();
+                    event.target = event.doing.player;
+                    'step 2'
+                    if (target.isDead()) target.revive(1);
+                    'step 3'
+                    var hp = event.doing.hp;
+                    target.hp = hp;
+                    var hs = target.getCards('he');
+                    if (hs.length) target.lose(hs)._triggered = null;
+                    'step 4'
+                    var hs = event.doing.hs;
+                    var hs2 = [];
+                    for (var i = 0; i < hs.length; i++) {
+                        var card = get.cardPile(function (cardx) {
+                            return cardx == hs[i];
+                        });
+                        if (!card) {
+                            card = game.createCard(hs[i]);
+                        }
+                        hs2.push(card);
                     }
-                    player.recover(player.storage.molis_hs[1] - player.hp)
-                    player.gain(player.storage.molis_hs[2], 'log');
-                    player.$gain2(player.storage.molis_hs[2]);
-                    for (var i = 0; i < player.storage.molis_hs[3].length; i++) {
-                        player.equip(player.storage.molis_hs[3][i]);
-                        player.$gain2(player.storage.molis_hs[3][i]);
-                        game.delayx();
+                    if (hs2.length) target.directgain(hs2);
+                    'step 5'
+                    var isDisabled = event.doing.isDisabled;
+                    for (var i = 0; i < isDisabled.length; i++) {
+                        if (isDisabled[i] == false && target.isDisabled(i + 1)) target.enableEquip(i + 1)._triggered = null;
+                        if (isDisabled[i] == true && !target.isDisabled(i + 1)) target.disableEquip(i + 1)._triggered = null;
                     }
-                    "step 1"
-                    if (player.storage.molis_hs[4]) {
-                        player.gain(player.storage.molis_hs[4], 'log');
-                        player.$gain2(player.storage.molis_hs[4])
-                        player.loseToSpecial(player.storage.molis_hs[4], 'muniu');
+                    'step 6'
+                    var es = event.doing.es;
+                    var es2 = [];
+                    for (var i = 0; i < es.length; i++) {
+                        var card = get.cardPile(function (cardx) {
+                            return cardx == es[i];
+                        });
+                        if (!card) {
+                            card = game.createCard(es[i]);
+                        }
+                        es2.push(card);
                     }
-                    var evt = _status.event.getParent('phaseUse');
-                    if (evt && evt.name == 'phaseUse') {
-                        evt.skipped = true;
-                    }
-                    var evt = _status.event.getParent('phase');
-                    if (evt && evt.name == 'phase') {
-                        evt.finish();
-                    }
-                    player.insertPhase();
-                },
-                group: "molis_hs_recode",
-                subSkill: {
-                    recode: {
-                        trigger: {
-                            global: "phaseBegin"
-                        },
-                        unique: true,
-                        popup: false,
-                        forced: true,
-                        charlotte: true,
-                        fixed: true,
-                        content: function () {
-                            'step 0'
-                            player.storage.molis_hs[0] = player.MaxHp
-                            player.storage.molis_hs[1] = player.hp
-                            player.storage.molis_hs[2] = player.getCards('h')
-                            player.storage.molis_hs[3] = player.getCards('e')
-                            player.storage.molis_hs[4] = player.getCards('s')
+                    if (es2.length) target.directequip(es2);
+                    'step 7'
+                    target.update();
+                    'step 8'
+                    if (event.storage.length) event.goto(1);
+                    'step 9'
+                    game.animate.window(1);
+                    var data = {};
+                    for (var i = 0; i < game.players.length; i++) {
+                        data[game.players[i].dataset.position] = {
+                            h: get.cardsInfo(game.players[i].getCards('h')),
+                            e: get.cardsInfo(game.players[i].getCards('e')),
+                            j: get.cardsInfo(game.players[i].getCards('j'))
                         }
                     }
-                }
+                    game.addVideo('skill', player, ['molis_hs', data]);
+                    game.animate.window(2);
+                    ui.updatehl();
+                    'step 10'
+                    var cards = get.cards(ui.cardPile.childElementCount + 1);
+                    for (var i = 0; i < cards.length; i++) {
+                        ui.cardPile.insertBefore(cards[i], ui.cardPile.childNodes[get.rand(ui.cardPile.childElementCount)]);
+                    }
+                    game.updateRoundNumber();
+                },
+                ai:{
+                    save:true,
+                    skillTagFilter:function (player, arg, target) {
+                        return player == target && player.storage.molis_hs != true;
+                    },
+                    result:{
+                        player:10,
+                    },
+                    threaten:function (player, target) {
+                        if (!target.storage.molis_hs) return 0.9;
+                    },
+                },
+                subSkill:{
+                    record:{
+                        trigger:{
+                            global:"roundStart",
+                        },
+                        firstDo:true,
+                        forced:true,
+                        filter:function (event, player) {
+                            if (player.storage.molis_hs) return false;
+                            return true;
+                        },
+                        content:function () {
+                            var storage = [];
+                            var players = game.filterPlayer();
+                            for (i = 0; i < players.length; i++) {
+                                storage.push(lib.skill.molis_hs.getinfo(players[i]));
+                            }
+                            player.storage.molis_hs_save = storage;
+                        },
+                        sub:true,
+                    },
+                },
             },
             "marcia_ql": {
                 trigger: {
@@ -15041,8 +15126,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 return get.introduce('hubianji')+'出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li><span class="bluetext">暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。</span>'
             },
             francium_yl:function(player){
-                if(player.storage.hubian) return get.introduce('hubianji')+'，每回合限三次，<li><span class="bluetext">圣咏：你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；</span><li>暗涌：当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。'
-                return get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li><span class="bluetext">暗涌：当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。</span>'
+                if(player.storage.hubian) return get.introduce('hubianji')+'，每回合限三次，<li><span class="bluetext">圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；</span><li>暗涌：当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。'
+                return get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li><span class="bluetext">暗涌：当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。</span>'
             },
             zenia_yy: function (player) {
                 if (player.zenia_yy && player.zenia_yy == '仄') return get.introduce('yunlvji') + '。出牌阶段限一次，<li>平：你可以令一名角色摸X张牌，然后弃置Y张手牌。<li><span class="bluetext">仄：你可以令一名角色弃置X张手牌，然后摸Y张牌（X为你的体力上限，Y为你的体力值）</span>。<li>转韵：你发动〖韵生〗结算完毕后。';
@@ -15064,9 +15149,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'francium_sx': '生息',
             'francium_sx_info': get.introduce('hubianji')+'，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。',
             'francium_yl': '盈亏',
-            'francium_yl_info': get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li>暗涌：你的回合外，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。',
+            'francium_yl_info': get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li>暗涌：你的回合外，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。',
             'francium_mm': '明灭',
-            'francium_mm_info': '限定技，当你进入濒死状态时，你将体力值回复至2点并失去技能〖晨昏〗。',
+            'francium_mm_info': '限定技，当你进入濒死状态时，你可以将体力值回复至2点并失去技能〖晨昏〗。',
             'nanci_tq': '天祈',
             'nanci_tq_info': '锁定技，结束阶段，你获得本回合进入弃牌堆的前两张红色牌。',
             'nanci_tqg': '天启',
@@ -15550,7 +15635,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fox_hm": "幻梦",
             "fox_hm_info": "锁定技，当你不因〖幻梦〗使用有目标的基本牌或普通锦囊牌结算完毕后，若此牌非转化且对应的实体牌数为1，你将此牌置于你的武将牌上，称为“幻”；结束阶段，若你有“幻”，你依次对所有“幻”的原目标使用这些“幻”，并弃置无法使用的“幻”。",
             "molis_hs": "回溯",
-            "molis_hs_info": "限定技，当你进入濒死状态时，你可以弃置你区域内的所有牌并将你的体力上限、体力值、装备区、手牌区复原到本回合开始时的状态，然后你终止本回合并执行一个额外的回合。",
+            "molis_hs_info": "限定技，当你进入濒死状态时，你可以将场上的卡牌复原到本轮开始时的状态（包括武将牌和体力牌）。",
             "molis_gzhs": "回溯",
             "molis_gzhs_info": "限定技，当你进入濒死状态时，你可以弃置你区域内的所有牌并将你的体力上限、体力值、装备区、手牌区复原到本回合开始时的状态，然后你终止本回合并执行一个额外的回合，且你可以变更副将。",
             "marcia_ql": "潜掠",
