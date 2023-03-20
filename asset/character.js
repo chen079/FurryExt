@@ -9,7 +9,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
             "fr_ala": ["male", 'shu', 4, [], []],
             "fr_liona": ["male", 'shen', 4, [], []],
-            'fr_nanci': ['female', 'qun', 3, ['nanci_tq', 'nanci_tx', 'nanci_tm', 'nanci_tj'], []],
+            'fr_nanci': ['female', 'qun', 3, ['nanci_tx', 'nanci_tj'], []],
             "fr_shark": ["male", 'wei', 4, ['shark_yz'], []],
             "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], []],
             "fr_linyan": ["male", 'wu', 3, ['linyan_kr', 'linyan_ys'], []],
@@ -384,29 +384,64 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
             },
             'nanci_tj': {
-                juexingji: true,
-                mark: true,
                 forced: true,
-                intro: {
-                    content: "limited",
-                },
                 trigger: {
-                    player: 'phaseEnd'
+                    player: ['phaseEnd','damageEnd'],
+                    source: ['damageEnd'],
                 },
-                filter: function (event, player) {
-                    var cards = player.storage.nanci_tq
-                    return cards.length == 2 && get.suit(cards[0]) == get.suit(cards[1])
+                unique:true,
+                marktext:'狐火',
+                mark:true,
+                intro:{
+                    content:'当前拥有$个“狐火”标记'
                 },
-                animationColor: "thunder",
-                skillAnimation: "epic",
-                content: function () {
-                    player.awakenSkill('nanci_tj')
-                    player.setfrAvatar('fr_nanci', 'fr_nanci2')
-                    player.removeSkill('nanci_tq')
-                    player.removeSkill('nanci_tm')
-                    player.addSkill('nanci_tmg')
+                init:function(player,skill){
+                    player.addSkill('nanci_tq')
                     player.addSkill('nanci_tqg')
-                }
+                    player.addSkill('nanci_tm')
+                    player.addSkill('nanci_tmg')
+                    player.addMark('nanci_tj',2)
+                    player.addSkillBlocker(skill);
+                },
+                onremove:function(player,skill){
+                    player.removeSkillBlocker(skill);
+                    player.removeSkill('nanci_tq')
+                    player.removeSkill('nanci_tqg')
+                    player.removeSkill('nanci_tm')
+                    player.removeSkill('nanci_tmg')
+                },
+                skillBlocker:function(skill,player){
+                    if(player.countMark('nanci_tj')==0){
+                        return skill=='nanci_tm'||skill=='nanci_tmg'||skill=='nanci_tqg'||skill=='nanci_tq'
+                    }else if(player.countMark('nanci_tj')==1){
+                        return skill=='nanci_tm'||skill=='nanci_tmg'||skill=='nanci_tqg'
+                    }else if(player.countMark('nanci_tj')>=2&&player.countMark('nanci_tj')<=3){
+                        return skill=='nanci_tmg'||skill=='nanci_tqg'
+                    }else if(player.countMark('nanci_tj')>=4){
+                        return skill=='nanci_tq'||skill=='nanci_tm'
+                    }
+                },
+                derivation:["nanci_tq","nanci_tm","nanci_tqg","nanci_tmg"],
+                content: function () {
+                    if(trigger.name=='damage'){
+                        if(trigger.player==player){
+                            if(player.countMark('nanci_tj')>0) player.removeMark('nanci_tj',1)
+                            if(player.countMark('nanci_tj')<4){
+                                player.setfrAvatar('fr_nanci','fr_nanci')
+                            }
+                        }else{
+                            if(player.countMark('nanci_tj')<5) player.addMark('nanci_tj',1)
+                            if(player.countMark('nanci_tj')>=4){
+                                player.setfrAvatar('fr_nanci','fr_nanci2')
+                            }
+                        }
+                    }else{
+                        if(player.countMark('nanci_tj')<5) player.addMark('nanci_tj',1)
+                        if(player.countMark('nanci_tj')>=4){
+                            player.setfrAvatar('fr_nanci','fr_nanci2')
+                        }
+                    }
+                },
             },
             'nanci_tq': {
                 forced: true,
@@ -422,14 +457,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         if (evt.name == 'lose') {
                             if (evt.position == ui.discardPile) {
                                 for (var i of evt.cards) {
-                                    if (get.color(i) == 'black') list.add(i);
+                                    if (get.color(i) == 'red') list.add(i);
                                 }
                             }
                         }
                         else {
                             if (evt.name == 'cardsDiscard') {
                                 for (var i of evt.cards) {
-                                    if (get.color(i) == 'black') list.add(i);
+                                    if (get.color(i) == 'red') list.add(i);
                                 }
                             }
                         }
@@ -784,7 +819,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         for (var i of list) {
                             skills.addArray((lib.character[i][3] || []).filter(function (skill) {
                                 var info = get.info(skill);
-                                return info && !info.zhuSkill && !info.limited && !info.juexingji && !info.hiddenSkill && !info.charlotte && !info.dutySkill;
+                                return info && !info.zhuSkill && !info.limited && !info.juexingji && !info.hiddenSkill && !info.charlotte && !info.dutySkill && !info.unique;
                             }));
                         }
                         if (!list.length || !skills.length) { event.finish(); return; }
@@ -909,7 +944,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             for (var i of list) {
                                 skills.addArray((lib.character[i][3] || []).filter(function (skill) {
                                     var info = get.info(skill);
-                                    return info && !info.zhuSkill && !info.limited && !info.juexingji && !info.hiddenSkill && !info.charlotte && !info.dutySkill;
+                                    return info && !info.zhuSkill && !info.limited && !info.juexingji && !info.hiddenSkill && !info.charlotte && !info.dutySkill&& !info.unique;
                                 }));
                             }
                             if (!list.length || !skills.length) { event.finish(); return; }
@@ -15003,13 +15038,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'francium_mm': '明灭',
             'francium_mm_info': '限定技，当你进入濒死状态时，你将体力值回复至2点并失去技能〖晨昏〗。',
             'nanci_tq': '天祈',
-            'nanci_tq_info': '锁定技，结束阶段，你获得本回合进入弃牌堆的前两张黑色牌。',
+            'nanci_tq_info': '锁定技，结束阶段，你获得本回合进入弃牌堆的前两张红色牌。',
             'nanci_tqg': '天启',
             'nanci_tqg_info': '每名角色的回合开始时，你观看牌堆顶的两张牌并选择一项： <li>1.若其中有红色牌，你获得其中一张红色牌。<li>2.从牌堆底摸一张牌。',
             'nanci_tmg': '天灭',
             'nanci_tmg_info': '出牌阶段限一次，你可以令一名其他角色弃置一张【闪】，否则其受到你1点火焰伤害。',
             'nanci_tj': "天劫",
-            'nanci_tj_info': '回合结束时，若你本回合因〖天祈〗获得两张花色相同的牌，你修改〖天祈〗为〖天启〗，修改〖天蔑〗为〖天灭〗。',
+            'nanci_tj_info': '游戏开始时，你获得2个“狐火”标记；回合结束或当你造成伤害时，你获得1个“狐火”；当你受到伤害时，你失去1个“狐火”（你至多有5个“狐火”标记）；根据你“狐火”的数量，你获得以下效果：<li>1个及以上：视为拥有技能〖天祈〗<li>2个及以上：视为拥有技能〖天蔑〗<li>4个及以上：将〖天祈】视为〖天启〗，将〖天蔑〗视为〖天灭〗。',
             'nanci_tm': "天蔑",
             'nanci_tm_info': '出牌阶段限一次，你可以令一名其他角色获得一张【闪】并弃置两张牌。',
             'nanci_tx': '天选',

@@ -37,8 +37,8 @@
 		'image/lutou/fr_ala.jpg',
 		'skin/lutou/fr_liona/战死不屈.png',
 		'skin/lutou/fr_liona/沉默护卫.png',
-		'skin/standard/fr_liona/战死不屈.png',
-		'skin/standard/fr_liona/沉默护卫.png',
+		'skin/standard/fr_liona/战死不屈.jpg',
+		'skin/standard/fr_liona/沉默护卫.jpg',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
