@@ -114,19 +114,20 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'francium_yl': {
                 trigger: {
                     player: ["useCardAfter"],
-                    global: 'dying'
+                    global: "dying"
                 },
+                usable:3,
                 filter: function (event, player, name) {
                     if (player.storage.hubian&&name == 'useCardAfter') {
                         if (['equip', 'delay'].contains(get.type(event.card))) return false;
                         if (event.cards.filterInD().length <= 0) return false;
                         if(_status.currentPhase!=player) return false
-                        return (player.getStat('skill').francium_yl || 0) < 3
+                        return true
                     } else if(name == 'dying'&&!player.storage.hubian){
                         if(_status.currentPhase==player) return false
                         return player.countCards('h') > 0&&event.player!=player
                     }else{
-                        return (player.getStat('skill').francium_yl || 0) < 1
+                        return false
                     }
                 },
                 check: function (event, player) {
@@ -14975,8 +14976,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 return get.introduce('hubianji')+'出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li><span class="bluetext">暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。</span>'
             },
             francium_yl:function(player){
-                if(player.storage.hubian) return get.introduce('hubianji')+'，<li><span class="bluetext">圣咏：每回合限三次，你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；</span><li>暗涌：每回合限三次，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。'
-                return get.introduce('hubianji')+'，<li>圣咏：每回合限三次，你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li><span class="bluetext">暗涌：每回合限三次，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。</span>'
+                if(player.storage.hubian) return get.introduce('hubianji')+'，每回合限三次，<li><span class="bluetext">圣咏：你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；</span><li>暗涌：当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。'
+                return get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li><span class="bluetext">暗涌：当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。</span>'
             },
             zenia_yy: function (player) {
                 if (player.zenia_yy && player.zenia_yy == '仄') return get.introduce('yunlvji') + '。出牌阶段限一次，<li>平：你可以令一名角色摸X张牌，然后弃置Y张手牌。<li><span class="bluetext">仄：你可以令一名角色弃置X张手牌，然后摸Y张牌（X为你的体力上限，Y为你的体力值）</span>。<li>转韵：你发动〖韵生〗结算完毕后。';
@@ -14998,7 +14999,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'francium_sx': '生息',
             'francium_sx_info': get.introduce('hubianji')+'，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。',
             'francium_yl': '盈亏',
-            'francium_yl_info': get.introduce('hubianji')+'，<li>圣咏：每回合限三次，你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li>暗涌：每回合限一次，你的回合外，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。',
+            'francium_yl_info': get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li>暗涌：你的回合外，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。',
             'francium_mm': '明灭',
             'francium_mm_info': '限定技，当你进入濒死状态时，你将体力值回复至2点并失去技能〖晨昏〗。',
             'nanci_tq': '天祈',
