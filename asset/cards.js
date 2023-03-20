@@ -262,7 +262,9 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 audio: true,
                 type: "trick",
                 enable: true,
-                filterTarget: true,
+                filterTarget: function(card,player,target){
+                    return !target.hasSkill('card_sx')
+                },
                 selectTarget: 1,
                 content: function () {
                     target.addTempSkill('card_sx', { player: "phaseAfter" })

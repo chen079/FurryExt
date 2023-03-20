@@ -5,7 +5,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore'],
         connect: true,//该武将包是否可以联机（必填）
         character: {
-            'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx','francium_mm'], []],
+            'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
             "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
             "fr_ala": ["male", 'shu', 4, [], []],
             "fr_liona": ["male", 'shen', 4, [], []],
@@ -111,52 +111,117 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "qun", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
-            'francium_mm':{
-                unique:true,
-                enable:"chooseToUse",
-                mark:true,
-                skillAnimation:true,
-                limited:true,
-                animationColor:"orange",
-                init:function(player){
-                    player.storage.oldniepan=false;
+            'francium_yl': {
+                trigger: {
+                    player: ["useCardAfter"],
+                    global: 'dying'
                 },
-                filter:function(event,player){
-                    if(player.storage.francium_mm) return false;
-                    if(event.type=='dying'){
-                        if(player!=event.dying) return false;
+                filter: function (event, player, name) {
+                    if (player.storage.hubian&&name == 'useCardAfter') {
+                        if (['equip', 'delay'].contains(get.type(event.card))) return false;
+                        if (event.cards.filterInD().length <= 0) return false;
+                        if(_status.currentPhase!=player) return false
+                        return (player.getStat('skill').francium_yl || 0) < 3
+                    } else if(name == 'dying'&&!player.storage.hubian){
+                        if(_status.currentPhase==player) return false
+                        return player.countCards('h') > 0&&event.player!=player
+                    }else{
+                        return (player.getStat('skill').francium_yl || 0) < 1
+                    }
+                },
+                check: function (event, player) {
+                    if (player.storage.hubian) {
+                        return true;
+                    } else {
+                        return get.attitude(player, event.player) < 0
+                    }
+                },
+                content: function () {
+                    "step 0"
+                    if (!player.storage.hubian) {
+                        event.goto(3)
+                    }
+                    'step 1'
+                    event.cards = trigger.cards.filterInD();
+                    if (event.cards.length > 1) {
+                        var next = player.chooseToMove('盈亏：将牌按顺序置于牌堆顶');
+                        next.set('list', [['牌堆顶', event.cards]]);
+                        next.set('reverse', ((_status.currentPhase && _status.currentPhase.next) ? get.attitude(player, _status.currentPhase.next) > 0 : false));
+                        next.set('processAI', function (list) {
+                            var cards = list[0][1].slice(0);
+                            cards.sort(function (a, b) {
+                                return (_status.event.reverse ? 1 : -1) * (get.value(b) - get.value(a));
+                            });
+                            return [cards];
+                        });
+                    }
+                    "step 2"
+                    if (result.bool && result.moved && result.moved[0].length) var cards = result.moved[0].slice(0);
+                    while (cards.length) {
+                        var card = cards.pop();
+                        if (get.position(card, true) == 'o') {
+                            card.fix();
+                            ui.cardPile.insertBefore(card, ui.cardPile.firstChild);
+                            game.log(player, '将', card, '置于牌堆顶');
+                        }
+                    }
+                    game.updateRoundNumber();
+                    player.draw('bottom');
+                    event.finish()
+                    'step 3'
+                    player.chooseCard(1,'h').set('ai',function(card){
+                        return 5-get.value(card)
+                    })
+                    'step 4'
+                    player.useCard(result.cards, { name: 'sha' }, trigger.player, false).viewAs = true;
+                },
+            },
+            'francium_mm': {
+                unique: true,
+                enable: "chooseToUse",
+                mark: true,
+                skillAnimation: true,
+                limited: true,
+                animationColor: "orange",
+                init: function (player) {
+                    player.storage.oldniepan = false;
+                },
+                filter: function (event, player) {
+                    if (player.storage.francium_mm) return false;
+                    if (event.type == 'dying') {
+                        if (player != event.dying) return false;
                         return true;
                     }
                     return false;
                 },
-                content:function(){
+                content: function () {
                     'step 0'
                     player.awakenSkill('francium_mm');
                     'step 1'
-                    if(player.hp<2){
-                        player.recover(2-player.hp);
+                    if (player.hp < 2) {
+                        player.recover(2 - player.hp);
                     }
                     player.removeSkill('francium_ch')
                 },
-                ai:{
-                    order:1,
-                    skillTagFilter:function(player,arg,target){
-                        if(player!=target||player.storage.francium_mm) return false;
+                ai: {
+                    order: 1,
+                    skillTagFilter: function (player, arg, target) {
+                        if (player != target || player.storage.francium_mm) return false;
                     },
-                    save:true,
-                    result:{
-                        player:function(player){
-                            if(player.hp<=0) return 10;
-                            if(player.hp<=2&&player.countCards('he')<=1) return 10;
+                    save: true,
+                    result: {
+                        player: function (player) {
+                            if (player.hp <= 0) return 10;
+                            if (player.hp <= 2 && player.countCards('he') <= 1) return 10;
                             return 0;
                         },
                     },
-                    threaten:function(player,target){
-                        if(!target.storage.francium_mm) return 0.6;
+                    threaten: function (player, target) {
+                        if (!target.storage.francium_mm) return 0.6;
                     },
                 },
-                intro:{
-                    content:"limited",
+                intro: {
+                    content: "limited",
                 },
             },
             'francium_ch': {
@@ -187,14 +252,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 complexTarget: true,
                 delay: false,
                 lose: false,
-                multiline:true,
+                multiline: true,
                 discard: false,
                 usable: 1,
                 filterTarget: function (card, player, target) {
                     if (player.storage.hubian) {
                         return target.countCards('h') > 0
                     } else {
-                        return player.canUse({ name: 'sha'}, target, false)
+                        return player.canUse({ name: 'sha' }, target, false)
                     }
                 },
                 usable: 1,
@@ -226,11 +291,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 0'
                     if (player.storage.hubian) {
                         targets[0].swapHandcards(targets[1]);
-                        player.draw()
+                        player.draw(2)
                         player.recover()
                         event.finish()
                     } else {
-                        event.card = player.useCard(cards,{name: 'sha'}, targets[0], false).card;
+                        event.card = player.useCard(cards, { name: 'sha' }, targets[0], false).card;
                     }
                     'step 1'
                     if (player.getHistory('sourceDamage', function (evt) {
@@ -254,7 +319,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                 var delval = get.value(h2, target) - get.value(h1, ui.selected.targets[0]);
                                 if (delval >= 0) return 0;
                                 return -delval * (h1.length - h2.length);
-                            }else{
+                            } else {
                                 return -2
                             }
                         },
@@ -14905,13 +14970,21 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             },
         },
         dynamicTranslate: {
+            francium_sx:function(player){
+                if(player.storage.hubian) return get.introduce('hubianji')+'出牌阶段限一次，<li><span class="bluetext">圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；</span><li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。'
+                return get.introduce('hubianji')+'出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li><span class="bluetext">暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。</span>'
+            },
+            francium_yl:function(player){
+                if(player.storage.hubian) return get.introduce('hubianji')+'，<li><span class="bluetext">圣咏：每回合限三次，你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；</span><li>暗涌：每回合限三次，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。'
+                return get.introduce('hubianji')+'，<li>圣咏：每回合限三次，你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li><span class="bluetext">暗涌：每回合限三次，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。</span>'
+            },
             zenia_yy: function (player) {
                 if (player.zenia_yy && player.zenia_yy == '仄') return get.introduce('yunlvji') + '。出牌阶段限一次，<li>平：你可以令一名角色摸X张牌，然后弃置Y张手牌。<li><span class="bluetext">仄：你可以令一名角色弃置X张手牌，然后摸Y张牌（X为你的体力上限，Y为你的体力值）</span>。<li>转韵：你发动〖韵生〗结算完毕后。';
-                return get.introduce('yunlvji') + '。出牌阶段限一次，<li><span class="bluetext">平：你可以令一名角色摸X张牌，然后弃置Y张手牌。</span><li>仄：你可以令一名角色弃置X张手牌，然后摸Y张牌（X为你的体力上限，Y为你的体力值）。<li>转韵：你发动〖韵生〗结算完毕后。'
+                return get.introduce('yunlvji') + '。出牌阶段限一次，<li><span class="bluetext">平：你可以令一名角色摸X张牌，然后弃置Y张手牌。</span><li>仄：你可以令一名角色弃置X张手牌，然后摸Y张牌（X为你的体力上限，Y为你的体力值）。<li>转韵：你发动〖韵生〗结算完毕后。</li>'
             },
             pluvia_xs: function (player) {
                 if (player.pluvia_xs && player.pluvia_xs == '仄') return get.introduce('yunlvji') + '。出牌阶段限一次，<li>平：你可以弃置一张【闪】，令一名角色回复1点体力。<li><span class="bluetext">仄：你可以弃置一张【杀】，对一名其他角色造成1点伤害。</span><li>转韵：你发动〖视新〗结算完毕后。';
-                return get.introduce('yunlvji') + '。出牌阶段限一次，<li><span class="bluetext">平：你可以弃置一张【桃】，令一名角色回复1点体力。</span><li>仄：你可以弃置一张【杀】，对一名其他角色造成1点伤害。<li>转韵：你发动〖视新〗结算完毕后。';
+                return get.introduce('yunlvji') + '。出牌阶段限一次，<li><span class="bluetext">平：你可以弃置一张【桃】，令一名角色回复1点体力。</span><li>仄：你可以弃置一张【杀】，对一名其他角色造成1点伤害。<li>转韵：你发动〖视新〗结算完毕后。</li>';
             },
             adward_yt: function (player) {
                 if (player.pluvia_xs && player.pluvia_xs == true) return '转换技。出牌阶段限一次，<li>阳：你可以令一名体力值最少的角色将体力值回复至与体力值最多的角色相等。<li><span class="bluetext">阴：你可以令一名体力值最多的角色将体力值流失至与体力值最少的角色相等。</span></li>（最多回复/流失3点体力）';
@@ -14923,11 +14996,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'francium_ch': '晨昏',
             'francium_ch_info': '锁定技，回合开始时，你改变你的' + get.introduce('hubian') + '状态',
             'francium_sx': '生息',
-            'francium_sx_info': '互变技，出牌阶段限一次，圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为其体力上限）。',
+            'francium_sx_info': get.introduce('hubianji')+'，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。',
             'francium_yl': '盈亏',
-            'francium_yl_info': '互变技，圣咏：每回合限三次，你的回合内，当你使用一张牌后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；暗涌：每回合限三次，当一名其他角色进入濒死状态时，你可以将一张手牌当杀对其使用。',
+            'francium_yl_info': get.introduce('hubianji')+'，<li>圣咏：每回合限三次，你的回合内，当你使用一张牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li>暗涌：每回合限一次，你的回合外，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。',
             'francium_mm': '明灭',
-            'francium_mm_info': '限定技，当你进入濒死状态时，你将体力值回复至2点并失去技能【晨昏】。',
+            'francium_mm_info': '限定技，当你进入濒死状态时，你将体力值回复至2点并失去技能〖晨昏〗。',
             'nanci_tq': '天祈',
             'nanci_tq_info': '锁定技，结束阶段，你获得本回合进入弃牌堆的前两张黑色牌。',
             'nanci_tqg': '天启',

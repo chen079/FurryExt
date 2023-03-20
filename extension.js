@@ -752,6 +752,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 game.broadcastAll(function(player){
                     player.$changeHubian();
                 },this);
+                game.log(this,'改变了其互变状态，当前状态为：','#g'+(this.storage.hubian?'圣咏':'暗涌'))
             },
             lib.element.player.$changeHubian = function(){
                 var mark=this.marks.hubian,player=this
@@ -1281,7 +1282,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             var introduce = {
                 "hubian":{
                     name:'互变',
-                    info:'<li>游戏开始时，角色处于暗涌状态。<li>当你改变互变状态时，角色由暗涌/圣咏状态变为圣咏/暗涌状态。<li>所有具有“互变技”标签的技能改为执行对应状态的选项。'
+                    info:'<li>角色共有两种状态，分别为“圣咏”和“暗涌”。<li>游戏开始时，角色处于暗涌状态。<li>当你改变互变状态时，角色由暗涌/圣咏状态变为圣咏/暗涌状态。'
+                },
+                "hubianji":{
+                    name:'互变技',
+                    info:'<li>互变技是一种特殊的技能标签。<li>根据角色互变状态的不同，互变技执行不同的效果。<li>所有具有“互变技”标签的技能改为执行对应状态的选项。'
                 },
                 "kamidamage": {
                     name: "神圣伤害",
