@@ -244,6 +244,31 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     } else {
                         player.setfrAvatar(player.name, player.name + '2')
                     }
+                },
+                group:'francium_ch_def',
+                subSkill:{
+                    def:{
+                        trigger:{
+                            player:'damageBegin4'
+                        },
+                        filter:function(event,player){
+                            return event.source&&event.source.countCards('h')>player.countCards('h')
+                        },
+                        forced:true,
+                        content:function(){
+                            trigger.num-=1
+                        },
+                        ai:{
+                            effect:{
+                                target:function(card,player,target){
+                                    if(get.tag(card,'damage')&&target.countCards('h')<player.countCards('h')){
+                                        if(player.hasSkillTag('jueqing',false,target)) return;
+                                        return 0.1;
+                                    }
+                                },
+                            },
+                        },
+                    }
                 }
             },
             'francium_sx': {
@@ -7186,6 +7211,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (event.num <= 0) return false;
                     var cards = player.getExpansions('markn_yz')
                     return player.countCards('h', { color: "red" }) && cards.length < 5
+                },
+                check:function(event,player){
+                    return get.attitude(player,event.player)>0&& player.countCards('h')>2
                 },
                 content: function () {
                     "step 0"
@@ -15030,7 +15058,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         translate: {
             //技能
             'francium_ch': '晨昏',
-            'francium_ch_info': '锁定技，回合开始时，你改变你的' + get.introduce('hubian') + '状态',
+            'francium_ch_info': '锁定技，回合开始时，你改变你的' + get.introduce('hubian') + '状态；当你受到伤害时，若你的手牌数小于伤害来源，你令此伤害-1。',
             'francium_sx': '生息',
             'francium_sx_info': get.introduce('hubianji')+'，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。',
             'francium_yl': '盈亏',
