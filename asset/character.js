@@ -327,7 +327,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (player.getHistory('sourceDamage', function (evt) {
                         return event.card == evt.card;
                     }).length) {
-                        player.draw(targets[0].maxHp)
+                        player.draw(Math.min(6,targets[0].maxHp))
                     }
                 },
                 ai: {
@@ -599,11 +599,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         forced:true,
                         intro: {
                             mark: function (dialog, storage, player) {
-                                dialog.addText('回合结束时，将手牌摸至与' + get.translation(player.storage.iknos_gz_gain) + '相同')
+                                dialog.addText('回合结束时，将手牌摸至与' + get.translation(player.storage.nanci_tx_gain) + '相同')
                             }
                         },
                         filter: function (event, player) {
-                            return event.player == player.storage.nanci_tx_gain
+                            return event.player == player.storage.nanci_tx_gain&&player.storage.nanci_tx_gain.isIn()
                         },
                         content: function (player) {
                             var num = player.storage.nanci_tx_gain.countCards('h') - player.countCards('h')
@@ -2336,9 +2336,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 0'
                     player.callSubPlayer()
                     'step 1'
-                    player.update();
+                    if(lib.config.frLutou){
+                        var url= 'extension/福瑞拓展/image/lutou/'
+                    }else{
+                        var url = 'extension/福瑞拓展/image/character/'
+                    }
+                    if(player.name1.indexOf('subplayer_fr_hyperner')!=-1){
+                        player.node.avatar.setBackgroundImage(url + 'fr_hyperner.jpg')
+                    }else if(player.name2.indexOf('subplayer_fr_hyperner')!=-1){
+                        player.node.avatar2.setBackgroundImage(url + 'fr_hyperner.jpg')
+                    }
                 },
-                group: ["wore_hy_get", "wore_hy_getbegin"],
+                group: ["wore_hy_get"],
                 ai: {
                     order: 1,
                     result: {
@@ -2351,28 +2360,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                 },
                 subSkill: {
-                    getbegin: {
-                        trigger: {
-                            global: "roundStart",
-                        },
-                        filter: function (event, player) {
-                            return game.roundNumber == 1
-                        },
-                        direct: true,
-                        unique: true,
-                        content: function () {
-                            var next = game.createEvent('wore_hy_get', false);
-                            next.player = player;
-                            next.setContent(lib.skill.wore_hy_get.content);
-                        }
-                    },
                     get: {
                         trigger: {
                             player: "damageEnd",
+                            global: "roundStart",
                         },
                         forced: true,
                         filter: function (event, player) {
-                            return event.num > 0
+                            if(event.name=='damage'){
+                                return event.num > 0
+                            }else{
+                                return game.roundNumber == 1
+                            }
                         },
                         content: function () {
                             'step 0'
@@ -2392,7 +2391,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             'step 1'
                             var skills = lib.character[result.links[0]][3].slice(0);
                             player.addSubPlayer({
-                                name: result.links[0],
+                                name: 'fr_hyperner',
                                 skills: skills,
                                 hp: 1,
                                 maxHp: 1,
@@ -2401,6 +2400,17 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             });
                             'step 2'
                             player.callSubPlayer()
+                            'step 3'
+                            if(lib.config.frLutou){
+                                var url= 'extension/福瑞拓展/image/lutou/'
+                            }else{
+                                var url = 'extension/福瑞拓展/image/character/'
+                            }
+                            if(player.name1.indexOf('subplayer_fr_hyperner')!=-1){
+                                player.node.avatar.setBackgroundImage(url + 'fr_hyperner.jpg')
+                            }else if(player.name2.indexOf('subplayer_fr_hyperner')!=-1){
+                                player.node.avatar2.setBackgroundImage(url + 'fr_hyperner.jpg')
+                            }
                         },
                         sub: true,
                     },
@@ -2473,12 +2483,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         if (5 - player.storage.kaye_shouhu == 0) {
                             return
                         } else {
-                            return "你免除接下来受到的" + get.cnNumber(3 - player.storage.kaye_shouhu) + '次伤害'
+                            return "直到你的下个回合结束，你免除接下来受到的" + get.cnNumber(3 - player.storage.kaye_shouhu) + '次伤害'
                         }
                     }
                 },
                 mark: true,
                 content: function () {
+                    player.storage.kaye_shouhu+=1
                     trigger.cancel()
                 },
                 ai: {
@@ -2537,31 +2548,28 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         forced: true,
                         trigger: {
                             source: "damageBefore",
+                            player:'damageBegin4'
                         },
-                        init: function (player, skill) {
-                            player.addSkillBlocker(skill);
-                            player.storage.kaye_yj_one = 0
-                        },
-                        onremove: function (player, skill) {
-                            player.removeSkillBlocker(skill);
-                            delete player.storage.kaye_yj_one
-                        },
-                        skillBlocker: function (skill, player) {
-                            return skill == 'kaye_yj_one' && player.storage.kaye_yj_one >= 5
+                        filter:function(event,player){
+                            if(event.player!=player){
+                                return player.storage.kaye_yj_one<4
+                            }else{
+                                return true
+                            }
                         },
                         intro: {
                             content: function (storage, player, skill) {
-                                if (5 - player.storage.kaye_yj_one == 0) {
-                                    return
-                                } else {
-                                    return "你取消接下来造成的" + get.cnNumber(5 - player.storage.kaye_yj_one) + '次伤害'
-                                }
+                                return "直到你的下个回合结束，你取消接下来造成的" + get.cnNumber(5 - player.storage.kaye_yj_one) + '次伤害，且受到的伤害+1。'
                             }
                         },
                         mark: true,
                         content: function () {
-                            player.storage.kaye_yj_one += 1
-                            trigger.cancel()
+                            if(trigger.player!=player){
+                                player.storage.kaye_yj_one += 1
+                                trigger.cancel()
+                            }else{
+                                trigger.num+=1
+                            }
                         },
                         sub: true,
                     },
@@ -11864,7 +11872,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 forced: true,
                 filter: function (event, player) {
-                    return _status.currentPhase != player
+                    return _status.currentPhase != player && _status.currentPhase.countGainableCards('he')>0
                 },
                 content: function () {
                     var target = _status.currentPhase;
@@ -12921,7 +12929,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                     clean: {
                         trigger: {
-                            global: ["phaseBegin", "phaseEnd"],
+                            global: "phaseAfter",
                         },
                         firstDo: true,
                         popup: false,
@@ -15122,12 +15130,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         dynamicTranslate: {
             francium_sx:function(player){
-                if(player.storage.hubian) return get.introduce('hubianji')+'出牌阶段限一次，<li><span class="bluetext">圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；</span><li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。'
-                return get.introduce('hubianji')+'出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li><span class="bluetext">暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。</span>'
+                if(player.storage.hubian) return get.introduce('hubianji')+'出牌阶段限一次，<li><span class="bluetext">圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；</span><li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。'
+                return get.introduce('hubianji')+'出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li><span class="bluetext">暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。</span>'
             },
             francium_yl:function(player){
-                if(player.storage.hubian) return get.introduce('hubianji')+'，每回合限三次，<li><span class="bluetext">圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；</span><li>暗涌：当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。'
-                return get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li><span class="bluetext">暗涌：当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。</span>'
+                if(player.storage.hubian) return get.introduce('hubianji')+'，每回合限三次，<li><span class="bluetext">圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；</span><li>暗涌：你的回合外，当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。'
+                return get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li><span class="bluetext">暗涌：你的回合外，当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。</span>'
             },
             zenia_yy: function (player) {
                 if (player.zenia_yy && player.zenia_yy == '仄') return get.introduce('yunlvji') + '。出牌阶段限一次，<li>平：你可以令一名角色摸X张牌，然后弃置Y张手牌。<li><span class="bluetext">仄：你可以令一名角色弃置X张手牌，然后摸Y张牌（X为你的体力上限，Y为你的体力值）</span>。<li>转韵：你发动〖韵生〗结算完毕后。';
@@ -15147,7 +15155,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'francium_ch': '晨昏',
             'francium_ch_info': '锁定技，回合开始时，你改变你的' + get.introduce('hubian') + '状态；当你受到伤害时，若你的手牌数小于伤害来源，你令此伤害-1。',
             'francium_sx': '生息',
-            'francium_sx_info': get.introduce('hubianji')+'，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限）。',
+            'francium_sx_info': get.introduce('hubianji')+'，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。',
             'francium_yl': '盈亏',
             'francium_yl_info': get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li>暗涌：你的回合外，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。',
             'francium_mm': '明灭',
@@ -15237,7 +15245,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "kaye_shouhu": "守护",
             "kaye_shouhu_info": "锁定技，你即将受到的接下来3次伤害无效。",
             "kaye_yj": "压制",
-            "kaye_yj_info": "出牌阶段，你可以选择一名其他角色，若如此做，该角色即将造成的接下来5次伤害无效直到其回合结束，每名角色限一次。",
+            "kaye_yj_info": "出牌阶段，你可以选择一名其他角色，若如此做，直到其下个回合结束，该角色即将造成的接下来5次伤害无效且受到的伤害+1，每名角色限一次。",
             "kert_jl": "积虑",
             "kert_jl_info": "锁定技，你的黑色杀不计入手牌上限，且你可以多使用一张杀。",
             "kert_lp": "掳魄",

@@ -47,27 +47,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
     //------------------此处来自诗笺----------------//
     if (typeof game.furryCreateProgress != 'function') {
         game.furryCreateProgress = (title, max, fileName, value) => {
-            const parent = ui.create.div(ui.window, {
-                textAlign: 'center',
-                width: '300px',
-                height: '150px',
-                left: 'calc(50% - 150px)',
-                top: 'auto',
-                bottom: 'calc(50% - 75px)',
-                zIndex: '10',
-                boxShadow: 'rgb(0 0 0 / 40 %) 0 0 0 1px, rgb(0 0 0 / 20 %) 0 3px 10px',
-                backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4))',
-                borderRadius: '8px'
-            });
+            const parent = ui.create.div(".update",ui.window);
             // 可拖动
             parent.className = 'dialog';
-            const container = ui.create.div(parent, {
-                position: 'absolute',
-                top: '0',
-                left: '0',
-                width: '100%',
-                height: '100%'
-            });
+            const container = ui.create.div(".updateContain",parent);
             container.ontouchstart = ui.click.dialogtouchStart;
             container.ontouchmove = ui.click.touchScroll;
             container.style.WebkitOverflowScrolling = 'touch';
@@ -78,12 +61,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 fontSize: '20px'
             });
             ui.create.node('br', container);
-            const tip = ui.create.div(container, {
-                position: 'relative',
-                paddingTop: '8px',
-                fontSize: '20px',
-                width: '100%'
-            });
+            const tip = ui.create.div(".updateContain2",container);
             const file = ui.create.node('span', tip, '', fileName);
             file.style.width = file.style.maxWidth = '100%';
             ui.create.node('br', tip);
