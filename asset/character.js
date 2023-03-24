@@ -235,6 +235,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player: ["phaseDiscardSkipped", "phaseJudgeSkipped", "phaseDrawSkipped", "phaseUseSkipped", "phaseZhunbeiSkipped", "phaseJieshuSkipped", "phaseSkipped"],
                 },
                 forced: true,
+                charlotte: true,
+                priority:Infinity,
                 content: function () {
                     trigger.cancel();
                 },
@@ -261,8 +263,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             'step 1'
                             if (player.countMark('wore_bossty') < 1) {
                                 player.addMark('wore_bossty', 1)
+                                player.markSkill('wore_bossty')
                             } else {
-                                trigger.untrigger()
                                 trigger.cancel()
                             }
                         },
@@ -277,6 +279,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         content: function () {
                             var m = player.countMark("wore_bossty_mark");
                             player.removeMark("wore_bossty_mark", m);
+                            player.unmarkSkill('wore_bossty')
                         },
                         sub: true,
                     },
@@ -2496,13 +2499,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             },
             "wore_bosshy": {
                 trigger: {
-                    player: "phaseBegin",
+                    player: "phaseBefore"
                 },
                 charlotte: true,
                 Supercharlotte: true,
                 unique: true,
                 filter: function (event, player) {
-                    return player.getSubPlayers('wore_hy_get').length > 0 && !player.hasSkill('subplayer');
+                    return player.getSubPlayers('wore_hy_get').length > 0
                 },
                 locked: true,
                 content: function () {
