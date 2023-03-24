@@ -1280,6 +1280,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
             //------------------------------------------说明------------------------------------------//
             var introduce = {
+                "baonue":{
+                    name:"暴虐值",
+                    info:"<li>当你造成或受到伤害后，你获得等量的暴虐值。<li>暴虐值的上限为5。"
+                },
                 "hubian":{
                     name:'互变',
                     info:'<li>角色共有两种状态，分别为“圣咏”和“暗涌”。<li>游戏开始时，角色处于暗涌状态。<li>当你改变互变状态时，角色由暗涌/圣咏状态变为圣咏/暗涌状态。'
@@ -1290,7 +1294,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
                 "kamidamage": {
                     name: "神圣伤害",
-                    info: "<li>神圣伤害：当一名角色受到神圣伤害时，不会触发任何与伤害有关的技能。"
+                    info: "<li>神圣伤害：当一名角色受到神圣伤害时，不会触发任何与伤害有关的技能与机制。"
                 },
                 "qianghua_buff": {
                     name: "强化",
@@ -1465,6 +1469,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "item": {
                     '1': '酒馆一隅',
                     '2': '纪念',
+                    '3': '再叙酒馆',
                 },
                 onclick: function (item) {
                     window.furry_drama(item, ui.create.div());

@@ -12,6 +12,15 @@
 	2.更新新角色 弗兰西亚 -感谢我自己提供的创意与支持
 	3.更新新角色 安拉阿
 	4.更新新角色 里欧那
+	5.更新 莫利斯 身份场技能 回溯
+	6.修复 科亚 的守护标记显示bug
+	7.修复 遗留的各种bug
+	8.注意 攫取 技能可能有未知的bug，暂时无法定位，等待修复
+	9.修复 吉冈本彦 的技能无法回血的bug
+	10.亚瑟克林全面加强
+	11.修复忠与描述错误
+	12.新增挑战boss 沃尔
+	13.新增一段过渡剧情，再叙酒馆
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
@@ -28,6 +37,8 @@
 		'image/lutou/fr_francium.jpg',
 		'image/lutou/fr_francium2.jpg',
 		'image/character/fr_francium.jpg',
+		'image/lutou/fr_bosswore.jpg',
+		'image/character/fr_bosswore.jpg',
 		'image/character/fr_francium2.jpg',
 		'image/character/fr_nanci.jpg',
 		'image/character/fr_nanci2.jpg',

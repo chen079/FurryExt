@@ -5,10 +5,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore'],
         connect: true,//该武将包是否可以联机（必填）
         character: {
+            "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
             "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
-            "fr_ala": ["male", 'shu', 4, [], []],
-            "fr_liona": ["male", 'shen', 4, [], []],
+            "fr_ala": ["male", 'shu', 4, ['ala_dy','ala_gm'], []],
+            "fr_liona": ["male", 'wei', '4/5', ['liona_hz', 'liona_zz'], []],
             'fr_nanci': ['female', 'qun', 3, ['nanci_tx', 'nanci_tj'], []],
             "fr_shark": ["male", 'wei', 4, ['shark_yz'], []],
             "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], []],
@@ -62,7 +63,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_markn": ["male", "wu", 3, ["markn_cy", "markn_yz", "markn_yc"], []],
             "fr_morly": ["male", "shu", 4, ["morly_ld", "morly_xd", "morly_qy"], []],
             "fr_marxya": ["male", "shu", 3, ["marcia_us", "marcia_jz", "marcia_ql"], []],
-            "fr_yas_klin": ["male", "jin", 3, ["yas_klin_bj", "yas_klin_js"], ["des:图片来自微博@藤宫Lily"]],
+            "fr_yas_klin": ["male", "jin", 4, ["yas_klin_bj", "yas_klin_js"], ["des:图片来自微博@藤宫Lily"]],
             "fr_dog": ["male", "shu", 3, ["dog_dm", "dog_zz"], []],
             "fr_muen": ["male", "shu", 3, ["muen_tx", "muen_jb"], []],
             "fr_patxi": ["male", "wu", 4, ["patxi_fs", "patxi_yw"], []],
@@ -97,7 +98,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_xiaomo": ["male", "wu", 3, ["xiaomo_sj", "xiaomo_ld"], []],
             "fr_adward": ["male", "wei", 4, ["adward_qm", "adward_yt"], ["des:安德华是来自地狱的无上法术的咏唱者（自称），他做过的坏事数不胜数，包括但不限于：赶走偷吃鸡的黄鼠狼，杀死袭击村民的强盗，强迫受保护费的官兵学狗叫之类，因此其深受百姓憎恶（自称）。他致力于成为整个兽人王国最邪恶的黑魔法师，并为此努力着。《瓦尔亚那百科》中曾预言安德华有着黑暗生物的血统与两幅面孔，但似乎其本身并不知情。"]],
             "fr_fate": ["male", "wu", 3, ["fate_tm", "fate_ss"], ["des:法特，生于兽人王国“克拉”南部的贫民窟中，幼年时其父母因卷入债务纠纷而死，其一人独自生活。法特十二岁时，曾尝试寻找杀死父母的仇人，未果，后在游历各处的剑术大师米亚的帮助下终于成功。法特有着天生的赌博天赋，纵横各大赌场且百战百胜，被各大赌场称为“命运之手”。"]],
-            "fr_liya": ["female", "wei", 3, ["liya_sz", "liya_sj"], ["des:莉亚生于兽人王国中部的商业中心，是兽人王国国王卢森特的独女。作为贵族女子的她，自小时候便被灌输各种各样的贵族礼仪，但她的生性不羁，时时让自己的父其紧张。她在16岁时，曾受到过卢森特赠送的重装机车，是她最喜欢的生日礼物。"]],
+            "fr_liya": ["female", "wei", 3, ["liya_sz", "liya_sj", 'liya_yy'], ["des:莉亚生于兽人王国中部的商业中心，是兽人王国国王卢森特的独女。作为贵族女子的她，自小时候便被灌输各种各样的贵族礼仪，但她的生性不羁，时时让自己的父其紧张。她在16岁时，曾受到过卢森特赠送的重装机车，是她最喜欢的生日礼物。"]],
             "fr_laays": ["male", "qun", 4, ["laays_cs"], ["des:“像这样四处游荡，又过了多久呢？”拉亚斯的话语回荡在旷野上。自从那场人类与精灵的大战以人类的完全胜利为结局，拉亚斯也不知道自己游荡多久了。他是当年参加过此次战争的兽人族战士，后牺牲于战火之中。也许是生命树被毁的缘故，拉亚斯重新得到肉体复活。"]],
             "fr_sam": ["male", "jin", 4, ["sam_wl", "sam_fz"], ["des:山，生于兽人王国“克拉”南部的贫民窟中，是海的哥哥。在兽人王国最重要的巡游——“火灵日大典”被国王卢森特相中，与海一同进入王宫成为侍卫。山的能力就如其名：“不动如山，动如雷震”，更加擅长防御与保护。在某次刺杀中因保护国王有功，被提拔为贴身侍卫，但是遭海嫉妒，二人反目。"]],
             "fr_ham": ["male", "jin", 4, ["ham_cy", "ham_nb"], ["des:海，生于兽人王国“克拉”南部的贫民窟中，从小与山相依为命。在“火灵日大典”被国王卢森特相中，与山一同进入王宫成为侍卫，后因嫉妒山的能力，与其反目。海与山不同，更擅长狂暴而快速的攻击，世人谓之：“一剑斩不摧,双刃去如来”，又赞曰：“势如涛浪汹涌，形如雨打秋风”。"]],
@@ -111,22 +112,192 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "qun", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            "ala_dy": {
+                trigger: {
+                    player: ["damageBegin"]
+                },
+                locked:true,
+                frequent:true,
+                filter:function(event,player){
+                    return event.source&&event.num>0&&event.source!=player
+                },
+                content: function () {
+                    'step 0'
+                    player.line(trigger.source, 'green');
+                    player.chooseToDuiben(trigger.source);
+                    dcdAnim.loadSpine(nom.chengchi.name, "skel")
+                    'step 1'
+                    if (result.bool) {
+                        trigger.cancel()
+                        player.line(trigger.source)
+                        trigger.source.damage(trigger.num,player,trigger.nature)
+                        nom.chengchi.action='play';
+                        dcdAnim.playSpine(nom.chengchi);
+                    } else {
+                        nom.chengchi.action = 'play2';
+                        dcdAnim.playSpine(nom.chengchi);
+                    }
+                }
+            },
+            "ala_gm":{
+                trigger:{
+                    global:"damageBefore"
+                },
+                forced:true,
+                filter:function(event,player){
+                    return event.source&&event.source!=player&&event.player!=player&&event.player!=event.source
+                },
+                content:function(){
+                    'step 0'
+                    trigger.player.chooseCard(2,'h','是否交给'+get.translation(player)+'两张手牌，然后将此伤害转移给该角色').set('ai',function(card){
+                        var player=_status.event.player
+                        var target=_status.event.target
+                        var att=get.attitude(player,target)
+                        if(trigger.num>1||(player.hp==1&&player.countCards('hs','tao')==0)){
+                            return 9-get.value(card)
+                        }
+                        if(att>0&&player.countCards('hs','tao')==0){
+                            return 9-get.value(card)
+                        }else if(att>0&&player.countCards('hs','tao')>0){
+                            return 7-get.value(card)
+                        }else{
+                            return 4-get.value(card)
+                        }
+                    }).set('target',player)
+                    'step 1'
+                    if(result.bool){
+                        player.gain(result.cards,trigger.player,'giveAuto')
+                        trigger.player=player
+                    }
+                }
+            },
+            "liona_hz": {
+                trigger: {
+                    global: "roundStart",
+                },
+                init: function (player) { lib.skill.baonvezhi.change(player, 0) },
+                direct: true,
+                derivation: ["liona_zz"],
+                group: "liona_hz_extra",
+                filter: function (event, player) {
+                    return game.hasPlayer(function (current) {
+                        return !current.hasSkill('liona_zz');
+                    }) && player.storage.baonvezhi > 0;
+                },
+                content: function () {
+                    'step 0'
+                    player.chooseTarget([1, player.storage.baonvezhi], get.prompt('liona_hz'), '令至多X名角色获得〖整战〗直到回合结束。', (card, player, target) => {
+                        return !target.hasSkill('liona_zz');
+                    }).set('ai', target => get.attitude(player, target) - 2);
+                    'step 1'
+                    if (result.bool) {
+                        lib.skill.baonvezhi.change(player, -result.targets.length)
+                        for (var i = 0; i < result.targets.length; i++) {
+                            var target = result.targets[i]
+                            target.addTempSkill('liona_zz', 'roundStart');
+                        }
+                    }
+                },
+                subSkill: {
+                    extra: {
+                        audio: 2,
+                        trigger: {
+                            global: "damageSource",
+                        },
+                        forced: true,
+                        locked: false,
+                        filter: function (event, player) {
+                            return event.source && event.source.hasSkill('liona_zz') && event.source != player;
+                        },
+                        logTarget: "source",
+                        content: function () {
+                            lib.skill.baonvezhi.change(player, trigger.num);
+                        },
+                        sub: true,
+                    },
+                },
+            },
+            "liona_zz": {
+                init: function (player) { lib.skill.baonvezhi.change(player, 0) },
+                trigger: {
+                    source: "damageAfter",
+                },
+                usable: 5,
+                forced: true,
+                content: function () {
+                    var targets = game.filterPlayer(current => current.hasSkill('liona_zz')).sortBySeat();
+                    player.line(targets, 'green');
+                    game.asyncDraw(targets);
+                },
+            },
+            "wore_bossty": {
+                trigger: {
+                    player: ["phaseDiscardSkipped", "phaseJudgeSkipped", "phaseDrawSkipped", "phaseUseSkipped", "phaseZhunbeiSkipped", "phaseJieshuSkipped", "phaseSkipped"],
+                },
+                forced: true,
+                content: function () {
+                    trigger.cancel();
+                },
+                group: ["wore_bossty_mark", "wore_bossty_remove"],
+                subSkill: {
+                    mark: {
+                        trigger: {
+                            player: ["damageBegin4", "loseHpBegin", "loseMaxHpBegin"]
+                        },
+                        priority: -Infinity,
+                        lastDo: true,
+                        charlotte: true,
+                        marktext: "天佑",
+                        intro: {
+                            name: "天佑",
+                            content: "本回合已受到过伤害或流失过体力或失去过体力上限。",
+                        },
+                        filter: function (event, player) {
+                            return event.num > 0;
+                        },
+                        content: function () {
+                            'step 0'
+                            trigger.num = 1
+                            'step 1'
+                            if (player.countMark('wore_bossty') < 1) {
+                                player.addMark('wore_bossty', 1)
+                            } else {
+                                trigger.untrigger()
+                                trigger.cancel()
+                            }
+                        },
+                        sub: true,
+                    },
+                    remove: {
+                        trigger: {
+                            global: "phaseEnd",
+                        },
+                        popup: false,
+                        charlotte: true,
+                        content: function () {
+                            var m = player.countMark("wore_bossty_mark");
+                            player.removeMark("wore_bossty_mark", m);
+                        },
+                        sub: true,
+                    },
+                },
+            },
             'francium_yl': {
                 trigger: {
                     player: ["useCardAfter"],
                     global: "dyingBefore"
                 },
-                usable:3,
+                usable: 3,
                 filter: function (event, player, name) {
-                    if (player.storage.hubian&&name == 'useCardAfter') {
+                    if (player.storage.hubian && name == 'useCardAfter') {
                         if (['equip', 'delay'].contains(get.type(event.card))) return false;
                         if (event.cards.filterInD().length <= 0) return false;
-                        if(_status.currentPhase!=player) return false
+                        if (_status.currentPhase != player) return false
                         return true
-                    } else if(name == 'dyingBefore'&&!player.storage.hubian){
-                        if(_status.currentPhase==player) return false
-                        return player.countCards('h') > 0&&event.player!=player
-                    }else{
+                    } else if (name == 'dyingBefore' && !player.storage.hubian) {
+                        if (_status.currentPhase == player) return false
+                        return player.countCards('h') > 0 && event.player != player
+                    } else {
                         return false
                     }
                 },
@@ -170,8 +341,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.draw('bottom');
                     event.finish()
                     'step 3'
-                    player.chooseCard(1,'h',true).set('ai',function(card){
-                        return 5-get.value(card)
+                    player.chooseCard(1, 'h', true).set('ai', function (card) {
+                        return 5 - get.value(card)
                     })
                     'step 4'
                     player.useCard(result.cards, { name: 'sha' }, trigger.player, false).viewAs = true;
@@ -245,24 +416,24 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         player.setfrAvatar(player.name, player.name + '2')
                     }
                 },
-                group:'francium_ch_def',
-                subSkill:{
-                    def:{
-                        trigger:{
-                            player:'damageBegin4'
+                group: 'francium_ch_def',
+                subSkill: {
+                    def: {
+                        trigger: {
+                            player: 'damageBegin4'
                         },
-                        filter:function(event,player){
-                            return event.source&&event.source.countCards('h')>player.countCards('h')
+                        filter: function (event, player) {
+                            return event.source && event.source.countCards('h') > player.countCards('h')
                         },
-                        forced:true,
-                        content:function(){
-                            trigger.num-=1
+                        forced: true,
+                        content: function () {
+                            trigger.num -= 1
                         },
-                        ai:{
-                            effect:{
-                                target:function(card,player,target){
-                                    if(get.tag(card,'damage')&&target.countCards('h')<player.countCards('h')){
-                                        if(player.hasSkillTag('jueqing',false,target)) return;
+                        ai: {
+                            effect: {
+                                target: function (card, player, target) {
+                                    if (get.tag(card, 'damage') && target.countCards('h') < player.countCards('h')) {
+                                        if (player.hasSkillTag('jueqing', false, target)) return;
                                         return 0.1;
                                     }
                                 },
@@ -327,7 +498,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (player.getHistory('sourceDamage', function (evt) {
                         return event.card == evt.card;
                     }).length) {
-                        player.draw(Math.min(6,targets[0].maxHp))
+                        player.draw(Math.min(6, targets[0].maxHp))
                     }
                 },
                 ai: {
@@ -411,59 +582,59 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'nanci_tj': {
                 forced: true,
                 trigger: {
-                    player: ['phaseEnd','damageEnd'],
+                    player: ['phaseEnd', 'damageEnd'],
                     source: ['damageEnd'],
                 },
-                unique:true,
-                marktext:'狐火',
-                mark:true,
-                intro:{
-                    content:'当前拥有$个“狐火”标记'
+                unique: true,
+                marktext: '狐火',
+                mark: true,
+                intro: {
+                    content: '当前拥有$个“狐火”标记'
                 },
-                init:function(player,skill){
+                init: function (player, skill) {
                     player.addSkill('nanci_tq')
                     player.addSkill('nanci_tqg')
                     player.addSkill('nanci_tm')
                     player.addSkill('nanci_tmg')
-                    player.addMark('nanci_tj',2)
+                    player.addMark('nanci_tj', 2)
                     player.addSkillBlocker(skill);
                 },
-                onremove:function(player,skill){
+                onremove: function (player, skill) {
                     player.removeSkillBlocker(skill);
                     player.removeSkill('nanci_tq')
                     player.removeSkill('nanci_tqg')
                     player.removeSkill('nanci_tm')
                     player.removeSkill('nanci_tmg')
                 },
-                skillBlocker:function(skill,player){
-                    if(player.countMark('nanci_tj')==0){
-                        return skill=='nanci_tm'||skill=='nanci_tmg'||skill=='nanci_tqg'||skill=='nanci_tq'
-                    }else if(player.countMark('nanci_tj')==1){
-                        return skill=='nanci_tm'||skill=='nanci_tmg'||skill=='nanci_tqg'
-                    }else if(player.countMark('nanci_tj')>=2&&player.countMark('nanci_tj')<=3){
-                        return skill=='nanci_tmg'||skill=='nanci_tqg'
-                    }else if(player.countMark('nanci_tj')>=4){
-                        return skill=='nanci_tq'||skill=='nanci_tm'
+                skillBlocker: function (skill, player) {
+                    if (player.countMark('nanci_tj') == 0) {
+                        return skill == 'nanci_tm' || skill == 'nanci_tmg' || skill == 'nanci_tqg' || skill == 'nanci_tq'
+                    } else if (player.countMark('nanci_tj') == 1) {
+                        return skill == 'nanci_tm' || skill == 'nanci_tmg' || skill == 'nanci_tqg'
+                    } else if (player.countMark('nanci_tj') >= 2 && player.countMark('nanci_tj') <= 3) {
+                        return skill == 'nanci_tmg' || skill == 'nanci_tqg'
+                    } else if (player.countMark('nanci_tj') >= 4) {
+                        return skill == 'nanci_tq' || skill == 'nanci_tm'
                     }
                 },
-                derivation:["nanci_tq","nanci_tm","nanci_tqg","nanci_tmg"],
+                derivation: ["nanci_tq", "nanci_tm", "nanci_tqg", "nanci_tmg"],
                 content: function () {
-                    if(trigger.name=='damage'){
-                        if(trigger.player==player){
-                            if(player.countMark('nanci_tj')>0) player.removeMark('nanci_tj',1)
-                            if(player.countMark('nanci_tj')<4){
-                                player.setfrAvatar('fr_nanci','fr_nanci')
+                    if (trigger.name == 'damage') {
+                        if (trigger.player == player) {
+                            if (player.countMark('nanci_tj') > 0) player.removeMark('nanci_tj', 1)
+                            if (player.countMark('nanci_tj') < 4) {
+                                player.setfrAvatar('fr_nanci', 'fr_nanci')
                             }
-                        }else{
-                            if(player.countMark('nanci_tj')<5) player.addMark('nanci_tj',1)
-                            if(player.countMark('nanci_tj')>=4){
-                                player.setfrAvatar('fr_nanci','fr_nanci2')
+                        } else {
+                            if (player.countMark('nanci_tj') < 5) player.addMark('nanci_tj', 1)
+                            if (player.countMark('nanci_tj') >= 4) {
+                                player.setfrAvatar('fr_nanci', 'fr_nanci2')
                             }
                         }
-                    }else{
-                        if(player.countMark('nanci_tj')<5) player.addMark('nanci_tj',1)
-                        if(player.countMark('nanci_tj')>=4){
-                            player.setfrAvatar('fr_nanci','fr_nanci2')
+                    } else {
+                        if (player.countMark('nanci_tj') < 5) player.addMark('nanci_tj', 1)
+                        if (player.countMark('nanci_tj') >= 4) {
+                            player.setfrAvatar('fr_nanci', 'fr_nanci2')
                         }
                     }
                 },
@@ -596,14 +767,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             global: "phaseEnd"
                         },
-                        forced:true,
+                        forced: true,
                         intro: {
                             mark: function (dialog, storage, player) {
                                 dialog.addText('回合结束时，将手牌摸至与' + get.translation(player.storage.nanci_tx_gain) + '相同')
                             }
                         },
                         filter: function (event, player) {
-                            return event.player == player.storage.nanci_tx_gain&&player.storage.nanci_tx_gain.isIn()
+                            return event.player == player.storage.nanci_tx_gain && player.storage.nanci_tx_gain.isIn()
                         },
                         content: function (player) {
                             var num = player.storage.nanci_tx_gain.countCards('h') - player.countCards('h')
@@ -970,7 +1141,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             for (var i of list) {
                                 skills.addArray((lib.character[i][3] || []).filter(function (skill) {
                                     var info = get.info(skill);
-                                    return info && !info.zhuSkill && !info.limited && !info.juexingji && !info.hiddenSkill && !info.charlotte && !info.dutySkill&& !info.unique;
+                                    return info && !info.zhuSkill && !info.limited && !info.juexingji && !info.hiddenSkill && !info.charlotte && !info.dutySkill && !info.unique;
                                 }));
                             }
                             if (!list.length || !skills.length) { event.finish(); return; }
@@ -2323,6 +2494,80 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.storage.wore_gzhy = skills
                 }
             },
+            "wore_bosshy": {
+                trigger: {
+                    player: "phaseBegin",
+                },
+                charlotte: true,
+                Supercharlotte: true,
+                unique: true,
+                filter: function (event, player) {
+                    return player.getSubPlayers('wore_hy_get').length > 0 && !player.hasSkill('subplayer');
+                },
+                locked: true,
+                content: function () {
+                    'step 0'
+                    player.callSubPlayer()
+                },
+                group: ["wore_bosshy_get"],
+                ai: {
+                    order: 1,
+                    result: {
+                        player: function (player, target) {
+                            return 1;
+                            // if(player.hp<=3) return 3;
+                            // if(!player.needsToDiscard(player.hp-1)) return 2;
+                            // return 1;
+                        },
+                    },
+                },
+                subSkill: {
+                    get: {
+                        trigger: {
+                            player: "damageEnd",
+                            global: "roundStart",
+                        },
+                        charlotte: true,
+                        Supercharlotte: true,
+                        forced: true,
+                        filter: function (event, player) {
+                            if (event.name == 'damage') {
+                                return event.num > 0
+                            } else {
+                                return game.roundNumber == 1
+                            }
+                        },
+                        content: function () {
+                            'step 0'
+                            var list = [];
+                            for (var i in lib.character) {
+                                if (!lib.filter.characterDisabled(i) && !lib.filter.characterDisabled2(i)) {
+                                    list.push(i);
+                                }
+                            }
+                            list.remove('fr_wore');
+                            list = list.randomGets(4)
+                            var dialog = ui.create.dialog('请选择随从的技能', 'hidden');
+                            dialog.add([list.randomGets(list.length), 'character']);
+                            player.chooseButton(dialog, true).ai = function (button) {
+                                return get.rank(button.link, true);
+                            };
+                            'step 1'
+                            player.addSubPlayer({
+                                name: result.links[0],
+                                skills: lib.character[result.links[0]][3],
+                                hp: Math.max(5, lib.character[result.links[0]][2]),
+                                maxHp: Math.max(5, lib.character[result.links[0]][2]),
+                                sex: lib.character[result.links[0]][0],
+                                hs: get.cards(5),
+                            });
+                            'step 2'
+                            player.callSubPlayer()
+                        },
+                        sub: true,
+                    },
+                },
+            },
             "wore_hy": {
                 trigger: {
                     player: "phaseBegin",
@@ -2335,17 +2580,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 content: function () {
                     'step 0'
                     player.callSubPlayer()
-                    'step 1'
-                    if(lib.config.frLutou){
-                        var url= 'extension/福瑞拓展/image/lutou/'
-                    }else{
-                        var url = 'extension/福瑞拓展/image/character/'
-                    }
-                    if(player.name1.indexOf('subplayer_fr_hyperner')!=-1){
-                        player.node.avatar.setBackgroundImage(url + 'fr_hyperner.jpg')
-                    }else if(player.name2.indexOf('subplayer_fr_hyperner')!=-1){
-                        player.node.avatar2.setBackgroundImage(url + 'fr_hyperner.jpg')
-                    }
                 },
                 group: ["wore_hy_get"],
                 ai: {
@@ -2367,9 +2601,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         forced: true,
                         filter: function (event, player) {
-                            if(event.name=='damage'){
+                            if (event.name == 'damage') {
                                 return event.num > 0
-                            }else{
+                            } else {
                                 return game.roundNumber == 1
                             }
                         },
@@ -2389,28 +2623,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                 return get.rank(button.link, true);
                             };
                             'step 1'
-                            var skills = lib.character[result.links[0]][3].slice(0);
                             player.addSubPlayer({
-                                name: 'fr_hyperner',
-                                skills: skills,
+                                name: result.links[0],
+                                skills: lib.character[result.links[0]][3],
                                 hp: 1,
                                 maxHp: 1,
-                                sex: "male",
+                                sex: lib.character[result.links[0]][0],
                                 hs: get.cards(4),
                             });
                             'step 2'
                             player.callSubPlayer()
-                            'step 3'
-                            if(lib.config.frLutou){
-                                var url= 'extension/福瑞拓展/image/lutou/'
-                            }else{
-                                var url = 'extension/福瑞拓展/image/character/'
-                            }
-                            if(player.name1.indexOf('subplayer_fr_hyperner')!=-1){
-                                player.node.avatar.setBackgroundImage(url + 'fr_hyperner.jpg')
-                            }else if(player.name2.indexOf('subplayer_fr_hyperner')!=-1){
-                                player.node.avatar2.setBackgroundImage(url + 'fr_hyperner.jpg')
-                            }
                         },
                         sub: true,
                     },
@@ -2489,7 +2711,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 mark: true,
                 content: function () {
-                    player.storage.kaye_shouhu+=1
+                    player.storage.kaye_shouhu += 1
                     trigger.cancel()
                 },
                 ai: {
@@ -2548,12 +2770,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         forced: true,
                         trigger: {
                             source: "damageBefore",
-                            player:'damageBegin4'
+                            player: 'damageBegin4'
                         },
-                        filter:function(event,player){
-                            if(event.player!=player){
-                                return player.storage.kaye_yj_one<4
-                            }else{
+                        filter: function (event, player) {
+                            if (event.player != player) {
+                                return player.storage.kaye_yj_one < 4
+                            } else {
                                 return true
                             }
                         },
@@ -2564,11 +2786,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         mark: true,
                         content: function () {
-                            if(trigger.player!=player){
+                            if (trigger.player != player) {
                                 player.storage.kaye_yj_one += 1
                                 trigger.cancel()
-                            }else{
-                                trigger.num+=1
+                            } else {
+                                trigger.num += 1
                             }
                         },
                         sub: true,
@@ -7221,8 +7443,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     var cards = player.getExpansions('markn_yz')
                     return player.countCards('h', { color: "red" }) && cards.length < 5
                 },
-                check:function(event,player){
-                    return get.attitude(player,event.player)>0&& player.countCards('h')>2
+                check: function (event, player) {
+                    return get.attitude(player, event.player) > 0 && player.countCards('h') > 2
                 },
                 content: function () {
                     "step 0"
@@ -8165,7 +8387,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             },
             "yas_klin_js": {
                 trigger: {
-                    global: "phaseBegin",
+                    global: "phaseUseBegin",
                 },
                 filter: function (event, player) {
                     return player.countCards('h') > 0
@@ -8215,12 +8437,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         event.finish()
                         return;
                     }
-                    "step 2"
                     trigger.player.addTempSkill('yas_klin_js_marks')
                     if (suit.contains('spade')) trigger.player.addTempSkill('yas_klin_js_spade');
                     if (suit.contains('heart')) trigger.player.addTempSkill('yas_klin_js_heart');
                     if (suit.contains('club')) trigger.player.addTempSkill('yas_klin_js_club');
                     if (suit.contains('diamond')) trigger.player.addTempSkill('yas_klin_js_diamond');
+                    if (suit.length == 4) trigger.player.addTempSkill('yas_klin_js_hit');
                 },
                 ai: {
                     result: {
@@ -8243,6 +8465,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                 if (player.hasSkill('yas_klin_js_heart')) str += '<br><li>♥：你的【杀】无视目标防具。';
                                 if (player.hasSkill('yas_klin_js_club')) str += '<br><li>♣：你的【杀】造成的伤害+1。';
                                 if (player.hasSkill('yas_klin_js_diamond')) str += '<br><li>♦：你的【杀】无距离次数限制。';
+                                if (player.hasSkill('yas_klin_js_spade') && player.hasSkill('yas_klin_js_heart') && player.hasSkill('yas_klin_js_club') && player.hasSkill('yas_klin_js_diamond')) str += '<br><li>：你的【杀】不可被响应。'
                                 return str;
                             },
                         },
@@ -8310,6 +8533,25 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             "unequip_ai": true,
                         },
                         sub: true,
+                    },
+                    hit: {
+                        trigger: {
+                            player: "useCardToPlayered",
+                        },
+                        forced: true,
+                        filter: function (event, player) {
+                            return event.card.name == 'sha';
+                        },
+                        logTarget: "target",
+                        content: function () {
+                            trigger.getParent().directHit.add(trigger.target);
+                        },
+                        ai: {
+                            "directHit_ai": true,
+                            skillTagFilter: function (player, tag, arg) {
+                                if (arg.card.name != 'sha') return false;
+                            },
+                        },
                     },
                     club: {
                         trigger: {
@@ -11872,7 +12114,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 forced: true,
                 filter: function (event, player) {
-                    return _status.currentPhase != player && _status.currentPhase.countGainableCards('he')>0
+                    return _status.currentPhase && _status.currentPhase != player && _status.currentPhase.countGainableCards('he') > 0
                 },
                 content: function () {
                     var target = _status.currentPhase;
@@ -13612,6 +13854,58 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                 },
             },
+            "liya_yy": {
+                audio: 2,
+                trigger: {
+                    global: 'gameStart',
+                    player: "phaseZhunbeiBegin",
+                },
+                forced: true,
+                filter: function (event, player) {
+                    if (!lib.inpile.contains('fr_equip5_wxpp')) return true;
+                    return !!get.cardPile(function (card) {
+                        return card.name == 'fr_equip5_wxpp';
+                    });
+                },
+                content: function () {
+                    var card;
+                    if (!lib.inpile.contains('fr_equip5_wxpp')) {
+                        card = game.createCard2('fr_equip5_wxpp', 'diamond', 1);
+                        lib.inpile.push('fr_equip5_wxpp');
+                    }
+                    else card = get.cardPile(function (card) {
+                        return card.name == 'fr_equip5_wxpp';
+                    });
+                    player.chooseUseTarget(card, true, 'nopopup');
+                },
+                group: "liya_yy_damage",
+                subSkill: {
+                    damage: {
+                        trigger: {
+                            player: "damageEnd",
+                        },
+                        forced: true,
+                        filter: function (event, player) {
+                            return !player.getEquip('fr_equip5_wxpp');
+                        },
+                        content: function () {
+                            'step 0'
+                            event.count = trigger.num;
+                            'step 1'
+                            event.count--;
+                            player.draw();
+                            'step 2'
+                            var card = get.cardPile2(function (card) {
+                                return get.subtype(card, false) == 'equip1' && player.canUse(card, player);
+                            });
+                            if (card) player.chooseUseTarget(card, true, 'nopopup');
+                            'step 3'
+                            if (event.count > 0 && !player.getEquip('fr_equip5_wxpp')) event.goto(1);
+                        },
+                        sub: true,
+                    },
+                },
+            },
             "liya_sz": {
                 trigger: {
                     player: "damageEnd",
@@ -13647,6 +13941,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             player.removeSkill('liya_sz_far');
                         },
                         mod: {
+                            cardname: function (card, player, name) {
+                                if (lib.card[card.name].type == 'trick') return 'sha';
+                            },
                             attackFrom: function () {
                                 return Infinity;
                             },
@@ -13654,9 +13951,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                 return current + game.countPlayer();
                             },
                         },
+                        ai: {
+                            effect: {
+                                target: function (card, player, target, current) {
+                                    if (get.tag(card, 'respondSha') && current < 0) return 0.6
+                                },
+                            },
+                            respondSha: true,
+                        },
+                        sub: true,
                         mark: true,
                         intro: {
-                            content: "攻击范围为0，计算与其他角色的距离+X",
+                            content: "攻击范围为0，计算与其他角色的距离+X，且你普通锦囊牌均视为【杀】",
                         },
                         sub: true,
                     },
@@ -13668,8 +13974,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 forced: true,
                 content: function () {
-                    trigger.cancel()
-                    trigger.player.damage(trigger.num, player, trigger.cards, trigger.nature, "notrigger")
+                    trigger._triggered = null;
+                    trigger.notrigger = true;
                 }
             },
             "laays_fs": {
@@ -14548,19 +14854,19 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 }
             },
             "molis_hs": {
-                group:"molis_hs_record",
-                skillAnimation:true,
-                animationColor:"gray",
-                unique:true,
-                limited:true,
-                mark:true,
-                intro:{
-                    content:"limited",
+                group: "molis_hs_record",
+                skillAnimation: true,
+                animationColor: "gray",
+                unique: true,
+                limited: true,
+                mark: true,
+                intro: {
+                    content: "limited",
                 },
-                trigger:{
-                    player:"dying",
+                trigger: {
+                    player: "dying",
                 },
-                video:function (player, data) {
+                video: function (player, data) {
                     for (var i in data) {
                         var current = game.playerMap[i];
                         current.node.handcards1.innerHTML = '';
@@ -14571,7 +14877,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         current.directequip(get.infoCards(data[i].e));
                     }
                 },
-                getinfo:function (player) {
+                getinfo: function (player) {
                     var js = player.getCards("j");
                     var js2 = [];
                     for (var k = 0; k < js.length; k++) {
@@ -14597,7 +14903,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     };
                     return storage;
                 },
-                content:function () {
+                content: function () {
                     'step 0'
                     player.awakenSkill('molis_hs');
                     event.storage = player.storage.molis_hs_save.slice(0);
@@ -14665,32 +14971,49 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     for (var i = 0; i < cards.length; i++) {
                         ui.cardPile.insertBefore(cards[i], ui.cardPile.childNodes[get.rand(ui.cardPile.childElementCount)]);
                     }
+                    player.addSkill('molis_hs_lock')
                     game.updateRoundNumber();
                 },
-                ai:{
-                    save:true,
-                    skillTagFilter:function (player, arg, target) {
+                ai: {
+                    save: true,
+                    skillTagFilter: function (player, arg, target) {
                         return player == target && player.storage.molis_hs != true;
                     },
-                    result:{
-                        player:10,
+                    result: {
+                        player: 10,
                     },
-                    threaten:function (player, target) {
+                    threaten: function (player, target) {
                         if (!target.storage.molis_hs) return 0.9;
                     },
                 },
-                subSkill:{
-                    record:{
-                        trigger:{
-                            global:"roundStart",
+                subSkill: {
+                    lock: {
+                        trigger: {
+                            global: "roundStart",
                         },
-                        firstDo:true,
-                        forced:true,
-                        filter:function (event, player) {
+                        forced: true,
+                        popup: false,
+                        silent: true,
+                        firstDo: true,
+                        content: function () {
+                            game.roundNumber -= 1;
+                            game.updateRoundNumber();
+                        },
+                        sub: true,
+                    },
+                    record: {
+                        trigger: {
+                            global: "roundStart",
+                        },
+                        popup: false,
+                        silent: true,
+                        firstDo: true,
+                        forced: true,
+                        filter: function (event, player) {
                             if (player.storage.molis_hs) return false;
                             return true;
                         },
-                        content:function () {
+                        content: function () {
                             var storage = [];
                             var players = game.filterPlayer();
                             for (i = 0; i < players.length; i++) {
@@ -14698,7 +15021,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             }
                             player.storage.molis_hs_save = storage;
                         },
-                        sub:true,
+                        sub: true,
                     },
                 },
             },
@@ -15129,13 +15452,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             },
         },
         dynamicTranslate: {
-            francium_sx:function(player){
-                if(player.storage.hubian) return get.introduce('hubianji')+'出牌阶段限一次，<li><span class="bluetext">圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；</span><li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。'
-                return get.introduce('hubianji')+'出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li><span class="bluetext">暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。</span>'
+            francium_sx: function (player) {
+                if (player.storage.hubian) return get.introduce('hubianji') + '出牌阶段限一次，<li><span class="bluetext">圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；</span><li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。'
+                return get.introduce('hubianji') + '出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li><span class="bluetext">暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。</span>'
             },
-            francium_yl:function(player){
-                if(player.storage.hubian) return get.introduce('hubianji')+'，每回合限三次，<li><span class="bluetext">圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；</span><li>暗涌：你的回合外，当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。'
-                return get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li><span class="bluetext">暗涌：你的回合外，当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。</span>'
+            francium_yl: function (player) {
+                if (player.storage.hubian) return get.introduce('hubianji') + '，每回合限三次，<li><span class="bluetext">圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；</span><li>暗涌：你的回合外，当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。'
+                return get.introduce('hubianji') + '，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li><span class="bluetext">暗涌：你的回合外，当一名其他角色进入濒死状态前，你可以将一张手牌当【杀】对其使用。</span>'
             },
             zenia_yy: function (player) {
                 if (player.zenia_yy && player.zenia_yy == '仄') return get.introduce('yunlvji') + '。出牌阶段限一次，<li>平：你可以令一名角色摸X张牌，然后弃置Y张手牌。<li><span class="bluetext">仄：你可以令一名角色弃置X张手牌，然后摸Y张牌（X为你的体力上限，Y为你的体力值）</span>。<li>转韵：你发动〖韵生〗结算完毕后。';
@@ -15152,12 +15475,22 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'ala_dy':"对弈",
+            'ala_dy_info':"锁定技，当你受到其他角色造成的伤害时，你可以与伤害来源进行一次【对策】，若你赢，你取消此次伤害，然后你对伤害来源造成等量同属性伤害。",
+            'ala_gm':'讨雠',
+            'ala_gm_info':"锁定技，一名其他角色受到另一名其他角色的伤害前，该角色可以交给你两张牌，然后将此伤害转移给你。",
+            'liona_hz': "挥军",
+            'liona_hz_info': "①每轮开始时，你可以令至多X名角色获得技能〖整战〗直到本轮结束（X为你的" + get.introduce('baonue') + "），然后你失去等量的暴虐值；②当其他角色造成伤害后，若其有〖整战〗，你获得等同于此次伤害值的暴虐值。",
+            "liona_zz": "整战",
+            "liona_zz_info": "锁定技，每回合限五次，当拥有〖整战〗的角色造成伤害后，所有拥有〖整战〗的角色摸一张牌。",
+            'liya_yy': '乐音',
+            'liya_yy_info': '锁定技，游戏开始或回合开始时，若【忘弦琵琶】未加入游戏或在牌堆/弃牌堆内，则你使用之；当你受到1点伤害后，若你的装备区里没有【忘弦琵琶】，则你摸一张牌并使用牌堆中的一张随机武器牌。',
             'francium_ch': '晨昏',
             'francium_ch_info': '锁定技，回合开始时，你改变你的' + get.introduce('hubian') + '状态；当你受到伤害时，若你的手牌数小于伤害来源，你令此伤害-1。',
             'francium_sx': '生息',
-            'francium_sx_info': get.introduce('hubianji')+'，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。',
+            'francium_sx_info': get.introduce('hubianji') + '，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。',
             'francium_yl': '盈亏',
-            'francium_yl_info': get.introduce('hubianji')+'，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li>暗涌：你的回合外，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。',
+            'francium_yl_info': get.introduce('hubianji') + '，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li>暗涌：你的回合外，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。',
             'francium_mm': '明灭',
             'francium_mm_info': '限定技，当你进入濒死状态时，你可以将体力值回复至2点并失去技能〖晨昏〗。',
             'nanci_tq': '天祈',
@@ -15167,7 +15500,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'nanci_tmg': '天灭',
             'nanci_tmg_info': '出牌阶段限一次，你可以令一名其他角色弃置一张【闪】，否则其受到你1点火焰伤害。',
             'nanci_tj': "天劫",
-            'nanci_tj_info': '游戏开始时，你获得2个“狐火”标记；回合结束或当你造成伤害时，你获得1个“狐火”；当你受到伤害时，你失去1个“狐火”（你至多有5个“狐火”标记）；根据你“狐火”的数量，你获得以下效果：<li>1个及以上：视为拥有技能〖天祈〗<li>2个及以上：视为拥有技能〖天蔑〗<li>4个及以上：将〖天祈】视为〖天启〗，将〖天蔑〗视为〖天灭〗。',
+            'nanci_tj_info': '游戏开始时，你获得2个“狐火”标记；回合结束或当你造成伤害时，你获得1个“狐火”；当你受到伤害时，你失去1个“狐火”（你至多有5个“狐火”标记）；根据你“狐火”的数量，你获得以下效果：<li>1个及以上：视为拥有技能〖天祈〗<li>2个及以上：视为拥有技能〖天蔑〗<li>4个及以上：将〖天祈〗视为〖天启〗，将〖天蔑〗视为〖天灭〗。',
             'nanci_tm': "天蔑",
             'nanci_tm_info': '出牌阶段限一次，你可以令一名其他角色获得一张【闪】并弃置两张牌。',
             'nanci_tx': '天选',
@@ -15214,6 +15547,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "hynea_ds_info": "出牌阶段限一次，你可以令〖蹴功〗中[]内的数字-1（至少为0），然后对一名其他角色造成1点伤害。",
             "hynea_cg": "蹴功",
             "hynea_cg_info": "锁定技。你使用【酒】无次数限制；当你的体力值不小于[4]时，你的【闪】和【桃】均视为【酒】。",
+            "wore_bosshy": "惑言",
+            "wore_bosshy_info": "锁定技能，首轮游戏开始时或当你受到伤害、流失体力、失去体力上限后，你获得并派遣随机一个随机角色作为随从（与原角色体力相同且至少为5，初始手牌数为5）。",
             "wore_hy": "惑言",
             "wore_hy_info": "首轮游戏开始时，你获得并派遣随从“催眠者”（体力上限为1，初始手牌为4，催眠者获得随机一个武将的全部技能）；当你受到伤害后，你获得“催眠者”。",
             "tiers_qp": "强破",
@@ -15443,7 +15778,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "yas_klin_bj": "怖惧",
             "yas_klin_bj_info": "锁定技，杀死你的角色弃置所有牌并流失所有体力。",
             "yas_klin_js": "祭牲",
-            "yas_klin_js_info": "每名角色回合开始时，你可以弃置任意张不同花色的手牌并令当前回合角色摸等量的牌，然后根据你弃置的花色，该角色获得以下效果直到回合结束：♠：【杀】指定目标后令其本回合技能失效，♥：【杀】本回合无视防具，♣：【杀】本回合造成的伤害+1，♦：【杀】本回合无距离次数限制。",
+            "yas_klin_js_info": "每名角色出牌阶段开始时，你可以弃置任意张不同花色的手牌并令当前回合角色摸等量的牌，然后根据你弃置的花色，该角色获得以下效果直到回合结束：<li>♠：【杀】指定目标后令其本回合技能失效，<li>♥：【杀】本回合无视防具，<li>♣：【杀】本回合造成的伤害+1，<li>♦：【杀】本回合无距离次数限制；</li>若你因此弃置了四种不同的花色，你令该角色额外获得以下效果：<li>你的【杀】不可被响应。",
             "patxi_fs": "覆身",
             "patxi_fs_info": "一名角色受到伤害时，你可以弃置一张红色牌令此伤害-1，或弃置一张黑色牌令此伤害+1。",
             "patxi_yw": "勇往",
@@ -15617,7 +15952,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "sayisu_fj": "斧正",
             "sayisu_fj_info": "妄行：准备阶段，你可以将牌堆顶的X张牌置于你的武将牌上，称为“正”，你可以如手牌般使用或打出“正”；回合开始时，你失去所有“正”。",
             "liya_sz": "闪转",
-            "liya_sz_info": "锁定技，你使用牌无距离限制；当你受到伤害后，你可以令伤害来源的攻击距离改为0，其计算与其他角色的距离+X（X为场上角色数），直到其回复体力。",
+            "liya_sz_info": "锁定技，你使用牌无距离限制；当你受到伤害后，你可以令伤害来源的攻击距离改为0，其计算与其他角色的距离+X（X为场上角色数）且其普通锦囊牌均视为【杀】，直到其回复体力。",
             "liya_sj": "速战",
             "liya_sj_info": "锁定技，你造成的伤害均视为" + get.introduce('kamidamage') + "。",
             "laays_fs": "赴死",
@@ -15643,7 +15978,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fox_hm": "幻梦",
             "fox_hm_info": "锁定技，当你不因〖幻梦〗使用有目标的基本牌或普通锦囊牌结算完毕后，若此牌非转化且对应的实体牌数为1，你将此牌置于你的武将牌上，称为“幻”；结束阶段，若你有“幻”，你依次对所有“幻”的原目标使用这些“幻”，并弃置无法使用的“幻”。",
             "molis_hs": "回溯",
-            "molis_hs_info": "限定技，当你进入濒死状态时，你可以将场上的卡牌复原到本轮开始时的状态（包括武将牌和体力牌）。",
+            "molis_hs_info": "限定技，当你进入濒死状态时，你可以将场上的卡牌复原到本轮开始时的状态（包括武将牌和体力牌），然后游戏轮数锁定为当前轮次。",
             "molis_gzhs": "回溯",
             "molis_gzhs_info": "限定技，当你进入濒死状态时，你可以弃置你区域内的所有牌并将你的体力上限、体力值、装备区、手牌区复原到本回合开始时的状态，然后你终止本回合并执行一个额外的回合，且你可以变更副将。",
             "marcia_ql": "潜掠",
@@ -15654,8 +15989,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "shisan_dg_info": "锁定技，当你使用" + get.introduce('jishi') + "结算完毕后，你弃置手牌数不小于你的一名角色的一张牌。",
             "shisan_tx": "推心",
             "shisan_tx_info": "你未使用过牌的回合结束时，你可以视为使用一张无距离限制的【推心置腹】。然后目标需要对你指定的另一名角色选择一项：<li>1.使用一张无距离限制的【杀】；<li>2.交给其两张手牌（不足则全交）。",
+            'wore_bossty': "天佑",
+            "wore_bossty_info": "锁定技，你的阶段不会被跳过，你每回合能受到伤害、流失体力、失去体力上限的总和为1",
 
             //武将
+            "fr_bosswore": "沃尔",
             'fr_francium': '弗兰西亚',
             'fr_nanci': '南辞',
             'fr_shark': '沙克',
