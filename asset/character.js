@@ -131,11 +131,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         trigger.cancel()
                         player.line(trigger.source)
                         trigger.source.damage(trigger.num,player,trigger.nature)
-                        nom.chengchi.action='play';
-                        dcdAnim.playSpine(nom.chengchi);
-                    } else {
-                        nom.chengchi.action = 'play2';
-                        dcdAnim.playSpine(nom.chengchi);
                     }
                 }
             },
