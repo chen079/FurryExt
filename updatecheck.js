@@ -27,6 +27,7 @@
 	updateFiles: [
 		'extension.css',
 		'extension.js',
+		'更新日志.txt',
 		'asset/cards.js',
 		'asset/character.js',
 		'asset/drama.js',
