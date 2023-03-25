@@ -125,7 +125,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 0'
                     player.line(trigger.source, 'green');
                     player.chooseToDuiben(trigger.source);
-                    dcdAnim.loadSpine(nom.chengchi.name, "skel")
                     'step 1'
                     if (result.bool) {
                         trigger.cancel()
