@@ -130,31 +130,23 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     var Furry_update = [
                         '/Character/',
                         '/redoCharacter/',
-                        '1.修正 林&炎 的一些bug',
-                        '2.希尔新增技能【驱狼】，避免永动机的bug',
-                        '3.修复雷恩斯的bug',
-                        '4.为大部分技能的提示做了修改',
-                        '5.修复移动版开启鸣谢清单后无法返回的bug',
-                        '6.请在打开福瑞牌堆之前打开牌堆补充，避免因锦囊牌过多导致的过度稀释。',
-                        '7.修改哈尔斯的一部分bug',
-                        '8.修改lens的一部分bug',
-                        '9.修改hynea的永动机并增加各属性的杀',
-                        '10.修正sier的永动机，并修改大部分技能',
-                        '11.修正aroncy的缴武的显示错误',
-                        ' 12.修改borg水月的错误',
-                        ' 13.修改普鲁维亚技能',
-                        ' 14.修复山的bug',
-                        ' 15.新武将 沙克、卡米加、泰格尔',
-                        ' 16.增加 -在线更新',
-                        '17. 修复lens错误',
-                        '18.hars重做回归。',
-                        '19.修复lint的技能错误',
-                        '20.修复多谋的错误',
-                        '21.特别提示：由于弈法、沙克、沃尔的特殊机制，这三名角色出现永动机或无关紧要的bug无需反馈。'
+                        '1.更新新角色 南辞 -感谢群友南辞提供的创意与支持',
+                        '2.更新新角色 弗兰西亚 -感谢我自己提供的创意与支持',
+                        '3.更新新角色 安拉阿',
+                        '4.更新新角色 里欧那',
+                        '5.更新 莫利斯 身份场技能 回溯',
+                        '6.修复 科亚 的守护标记显示bug',
+                        '7.修复 遗留的各种bug',
+                        '8.技能 攫取 修复',
+                        '9.修复 吉冈本彦 的技能无法回血的bug',
+                        '10.亚瑟克林全面加强',
+                        '11.修复忠与描述错误',
+                        '12.新增挑战boss 沃尔',
+                        '13.新增一段过渡剧情，再叙酒馆'
                     ];
                     //更新武将
-                    var Furry_players = ['fr_shark', 'fr_kmjia', 'fr_tiger'];
-                    var Furry_redoplayers = ['fr_hars','fr_lens','fr_sier','fr_pluvia'];
+                    var Furry_players = ['fr_ala','fr_liona','fr_nanci','fr_francium'];
+                    var Furry_redoplayers = ['fr_yas_klin',"fr_jgby"];
                     //更新卡牌
                     var Furry_cards = [];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
@@ -1070,9 +1062,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 , "fr_sayisu", "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea",'fr_linyan','fr_shark']);
             lib.rank.rarity.epic.addArray(["fr_hars", "fr_muyada", "fr_marxya", "fr_muli", "fr_alas", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_hynea",
                 "fr_aroncy", "fr_berg", "fr_markn", "fr_morly", "fr_dog", "fr_muen", "fr_glit", "fr_edmon", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam",'fr_horn','fr_tiger,','fr_kmjia']);
-            lib.rank.rarity.legend.addArray(["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "yas_klin", "fr_bofeng", "fr_xiaomo",
-                "fr_ciyu", "fr_delta", "peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu",'fr_qima']);
+                , "fr_slen", "fr_paers", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam",'fr_horn','fr_tiger,','fr_kmjia',"fr_liona","fr_ala"]);
+            lib.rank.rarity.legend.addArray(["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo","fr_nanci",
+                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu",'fr_qima','fr_francium']);
             //------------------------------------------国战武将------------------------------------------//
             if (lib.characterPack.mode_guozhan) {
                 if (config.heroes) {
@@ -1087,7 +1079,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     lib.characterPack.mode_guozhan.fr_tiers = ['female', 'qun', 3, ['tiers_qp', 'tiers_kh'], [url + 'fr_tiers.jpg']]
                     lib.characterPack.mode_guozhan.fr_miya = ['male', 'shu', 3, ['miya_gzks', 'miya_gzhz'], [url + 'fr_miya.jpg']]
                     lib.characterPack.mode_guozhan.db_fr_krikt = ['male', 'shu', 3, ['krikt_gzly'], [url + 'fr_krikt.jpg', 'doublegroup:shu:qun']],
-                        lib.characterPack.mode_guozhan.fr_molis = ['female', 'wei', 3, ['molis_gzhs'], [url + 'fr_molis.jpg']]
+                    lib.characterPack.mode_guozhan.fr_molis = ['female', 'wei', 3, ['molis_gzhs'], [url + 'fr_molis.jpg']]
                     lib.characterPack.mode_guozhan.fr_taber = ['male', 'wu', 4, ['taber_sj'], [url + 'fr_taber.jpg']]
                     lib.characterPack.mode_guozhan.fr_verb = ['male', 'wu', 4, ['verb_fs'], [url + 'fr_verb.jpg']]
                     lib.characterPack.mode_guozhan.fr_mika = ['male', 'wei', 4, ['mika_lx'], [url + 'fr_mika.jpg']]
@@ -1103,6 +1095,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     lib.characterPack.mode_guozhan.fr_zhongyu = ['male', 'shu', 3, ['zhongyu_ky'], [url + 'fr_zhongyu.jpg']]
                     lib.characterPack.mode_guozhan.fr_hynea = ['male', 'ye', 3, ['hynea_cg', 'hynea_ds'], [url + 'fr_hynea.jpg']]
                     lib.characterPack.mode_guozhan.fr_horn = ['male', 'wei', 3, ['horn_gzll', 'horn_ql', 'fr_qianghua'], [url + 'fr_horn.jpg']]
+                    lib.characterPack.mode_guozhan.fr_kert = ["male", "shu", 4, ["kert_lp", "kert_jl"], [url + 'fr_kert.jpg']]
+                    lib.characterPack.mode_guozhan.fr_lint = ["male", "shu", 4, ["lint_nd"], [url + 'fr_lint.jpg']]
+                    lib.characterPack.mode_guozhan.fr_liya = ["female", "wei", 3, ["liya_sz", "liya_sj"], [url + 'fr_liya.jpg']]
+                    lib.characterPack.mode_guozhan.fr_yada=["male", "wei", 3, ["yada_by", "yada_fs"], [url + 'fr_yada.jpg']]
+                    lib.characterPack.mode_guozhan.fr_skry =  ["male", "wu", 3, ["skery_gzds", "skery_yj"], [url + 'fr_skry.jpg']]
+                    lib.characterPack.mode_guozhan.fr_muyada=["male", "qun", 3, ["mudaya_bz"], [url+'fr_muyada.jpg']]
+                    lib.characterPack.mode_guozhan.fr_muli= ["male", "qun", 4, ["muli_cm", "muli_yl"], [url+'fr_muli.jpg']]
                 }
             }
             //------------------------------------------珠联璧合------------------------------------------//
@@ -1694,7 +1693,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.0.8",
+            version: "2.0.9",
         }, files: {}
     }
 })

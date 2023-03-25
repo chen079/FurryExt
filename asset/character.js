@@ -218,7 +218,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
             },
             "liona_zz": {
-                init: function (player) { lib.skill.baonvezhi.change(player, 0) },
                 trigger: {
                     source: "damageAfter",
                 },
@@ -1311,13 +1310,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     order: 1,
                     result: {
                         target: function (card, player, target) {
-                            var player = _status.event.player, targets = _status.event.getTrigger().targets;
-                            var num = 0, card = { name: 'sha', nature: 'fire', isCard: true };
-                            if (target.hasSkill('twlvren')) num += 2 * (ui.selected.targets.length + 1);
-                            if (target.hasSkill('twchuanshu_effect')) num += 3;
+                            var player = _status.event.player
                             var hs = player.getCards('h').sort((a, b) => get.number(b) - get.number(a));
                             var ts = target.getCards('h').sort((a, b) => get.number(b) - get.number(a));
-                            if (get.number(hs[0]) <= Math.min(13, get.number(ts[0]) + num)) {
+                            if (get.number(hs[0]) <= Math.min(13, get.number(ts[0]))) {
                                 return -(6 + get.effect(player, card, target, target))
                             }
                             return -(get.effect(target, { name: 'guohe_copy2' }, player, player) / 2 + get.effect(target, card, player, player))
@@ -2977,15 +2973,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                 },
                 intro: {
+                    markcount:()=> undefined,
                     content: "上次已对$发动过〖盟约〗",
                 },
             },
             "kersm_jq": {
                 trigger: {
-                    global: "loseEnd",
+                    global: "loseAfter",
                 },
                 filter: function (event, player) {
-                    return event.type == 'discard' && event.cards.filterInD('d').length > 0 && event.player != player && event.player != player.storage.kersm_my[0];
+                    return event.player!=player&&event.type=='discard' && (!player.storage.kersm_my||event.player != player.storage.kersm_my[0])
                 },
                 direct: true,
                 content: function () {
@@ -2995,7 +2992,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             cards.push(trigger.cards[i]);
                         };
                     }
-                    player.gain(cards, 'gain2', 'log');
+                    if(cards) player.gain(cards, 'gain2', 'log');
                 },
             },
             "luciya_xl": {
@@ -3254,6 +3251,55 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         logTarget: "target",
                         content: function () {
                             trigger.getParent().directHit.add(trigger.target);
+                        },
+                        sub: true,
+                    },
+                },
+            },
+            "skery_gzds": {
+                trigger: {
+                    source: "damageAfter",
+                },
+                filter: function (event, player) {
+                    return event.card;
+                },
+                forced: true,
+                content: function () {
+                    var target = trigger.player;
+                    target.addTempSkill('skery_ds_1', { player: 'phaseAfter' });
+                    target.addTempSkill('skery_ds_2', { player: 'phaseAfter' })
+                    target.addMark('skery_ds_1', trigger.num, false);
+                },
+                subSkill: {
+                    "1": {
+                        forced: true,
+                        popup: false,
+                        trigger: {
+                            player: "phaseEnd",
+                        },
+                        onremove: true,
+                        content: function () {
+                            player.loseHp(player.countMark('skery_ds_1'));
+                            game.log(player, '〖毒杀〗造成的体力流失为' + player.countMark('skery_ds_1'));
+                            player.removeSkill('skery_ds_1');
+                        },
+                        marktext: "毒",
+                        intro: {
+                            content: "回合结束时，〖毒杀〗造成的体力流失为#",
+                        },
+                        sub: true,
+                    },
+                    "2": {
+                        forced: true,
+                        popup: false,
+                        trigger: {
+                            player: "useCard",
+                        },
+                        filter: function (event, player) {
+                            return (event.card.name == 'tao' || event.card.name == 'jiu') && event.player.isPhaseUsing();
+                        },
+                        content: function () {
+                            if (player.countMark('skery_ds_1') != 0) player.removeSkill('skery_ds_1')
                         },
                         sub: true,
                     },
@@ -15601,7 +15647,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "luciya_yc": "英才",
             "luciya_yc_info": "一名角色的判定牌生效后，若其没有被〖雄略〗修改，你获得之。场上的拼点牌结算完毕后，你获得之。",
             "skery_ds": "毒杀",
-            "skery_ds_info": "锁定技，你的黑色【杀】不可被响应。当你造成伤害后，受到伤害的角色获得X点“毒”标记（X为此次伤害值）；若该角色在出牌阶段没有使用过【桃】或【酒】，则其于回合结束时流失Y点体力（Y为该角色“毒”标记的总数）,并移除其所有“毒”标记。",
+            "skery_ds_info": "锁定技，你的黑色【杀】不可被响应。当你造成伤害后，受到伤害的角色获得X点“毒”标记（X为此次伤害值）；若该角色在出牌阶段没有使用过【桃】或【酒】，则其于回合结束时流失Y点体力（Y为该角色“毒”标记的总数），并移除其所有“毒”标记。",
+            "skery_gzds": "毒杀",
+            "skery_gzds_info": "锁定技，当你造成伤害后，受到伤害的角色获得X点“毒”标记（X为此次伤害值）；若该角色在出牌阶段没有使用过【桃】或【酒】，则其于回合结束时流失Y点体力（Y为该角色“毒”标记的总数），并移除其所有“毒”标记。",
             "skery_yj": "饮鸩",
             "skery_yj_info": "其他角色使用【酒】或【桃】生效前，你可以弃置一张手牌并进行判定，若结果为红色，你弃置其两张手牌；若结果为黑色，此牌无效。",
             "miya_hz": "挥斩",

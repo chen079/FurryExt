@@ -1,10 +1,10 @@
 // @ts-check
 (() => ({
 	// 扩展版本
-	version: "2.0.8",
+	version: "2.0.9",
 
 	// 扩展的上一个版本
-	oldversion: "2.0.7",
+	oldversion: "2.0.8",
 
 	// 更新内容汇总
 	changeLog: `
@@ -50,6 +50,7 @@
 		'skin/lutou/fr_liona/沉默护卫.png',
 		'skin/standard/fr_liona/战死不屈.jpg',
 		'skin/standard/fr_liona/沉默护卫.jpg',
+		'image/others/qqgroup.png'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
