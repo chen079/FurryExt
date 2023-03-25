@@ -137,6 +137,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger:{
                     global:"damageBefore"
                 },
+                popup:false,
                 forced:true,
                 filter:function(event,player){
                     return event.source&&event.source!=player&&event.player!=player&&event.player!=event.source
