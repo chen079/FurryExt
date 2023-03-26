@@ -764,6 +764,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     this[skill] = '平'
                 }
                 if (this.getStat('skill')[skill]) delete this.getStat('skill')[skill];
+                var player = this
                 game.broadcastAll(function(player,skill){
                     player.$changeYun(skill);
                 },player,skill);

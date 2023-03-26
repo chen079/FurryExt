@@ -10853,7 +10853,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 mark: true,
                 intro: {
-                    content: "你使用“魂怒”牌：①不可被响应、②无视防具、③不计入使用次数、④不计入手牌上限、⑤不可被其他角色弃置。",
+                    content: "你使用“魂怒”牌：①不可被响应、②无视防具、③不计入使用次数、④不计入手牌上限、⑤不可被其他角色弃置、⑥无距离限制。",
                 },
                 forced: true,
                 content: function () {
@@ -10873,6 +10873,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             ignoredHandcard: function (card, player) {
                                 if (card.hasGaintag('dragon_hn')) {
                                     return true;
+                                }
+                            },
+                            targetInRange:function (card) {
+                                if(!card.cards) return;
+                                for(var i of card.cards){
+                                    if(i.hasGaintag('dragon_hn')) return true;
                                 }
                             },
                             canBeDiscarded: function (card) {
@@ -15510,7 +15516,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             },
             pluvia_xs: function (player) {
                 if (player.pluvia_xs && player.pluvia_xs == '仄') return get.introduce('yunlvji') + '。出牌阶段限一次，<li>平：你可以弃置一张【闪】，令一名角色回复1点体力。<li><span class="bluetext">仄：你可以弃置一张【杀】，对一名其他角色造成1点伤害。</span><li>转韵：你发动〖视新〗结算完毕后。';
-                return get.introduce('yunlvji') + '。出牌阶段限一次，<li><span class="bluetext">平：你可以弃置一张【桃】，令一名角色回复1点体力。</span><li>仄：你可以弃置一张【杀】，对一名其他角色造成1点伤害。<li>转韵：你发动〖视新〗结算完毕后。</li>';
+                return get.introduce('yunlvji') + '。出牌阶段限一次，<li><span class="bluetext">平：你可以弃置一张【闪】，令一名角色回复1点体力。</span><li>仄：你可以弃置一张【杀】，对一名其他角色造成1点伤害。<li>转韵：你发动〖视新〗结算完毕后。</li>';
             },
             adward_yt: function (player) {
                 if (player.pluvia_xs && player.pluvia_xs == true) return '转换技。出牌阶段限一次，<li>阳：你可以令一名体力值最少的角色将体力值回复至与体力值最多的角色相等。<li><span class="bluetext">阴：你可以令一名体力值最多的角色将体力值流失至与体力值最少的角色相等。</span></li>（最多回复/流失3点体力）';
@@ -15904,7 +15910,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "dragon_ly": "龙裔",
             "dragon_ly_info": "锁定技，当你受到属性伤害时，你取消之；当你受到伤害后，你从牌堆获得X张伤害类的牌并标记为“魂怒”（X为此次伤害值）。",
             "dragon_hn": "魂怒",
-            "dragon_hn_info": "你使用“魂怒”牌：①不可被响应、②无视防具、③不计入使用次数、④不计入手牌上限、⑤不可被其他角色弃置。",
+            "dragon_hn_info": "你使用“魂怒”牌：①不可被响应、②无视防具、③不计入使用次数、④不计入手牌上限、⑤不可被其他角色弃置、⑥无距离限制。",
             "hars_sj": "神降",
             "hars_sj_info": "出牌阶段限一次，你可以交给一名其他角色一半的手牌（至少一张且向下取整），若如此做，该角色回合开始时，改为你操控（你不能连续选择同一角色）。",
             "hars_fs": "附身",
