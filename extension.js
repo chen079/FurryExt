@@ -559,6 +559,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                              */
                             function download(url, success, error) {
                                 var path = 'extension/福瑞拓展';
+                                const address = 'https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/';
                                 if (window.FileTransfer) {
                                     // 判断是不是文件夹，不是才下载
                                     function downloadFile() {
