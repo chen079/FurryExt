@@ -8,14 +8,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             //"fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
             "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
-            "fr_ala": ["male", 'shu', 4, ['ala_dy','ala_gm'], []],
+            "fr_ala": ["male", 'shu', 4, ['ala_dy', 'ala_gm'], []],
             "fr_liona": ["male", 'wei', '4/5', ['liona_hz', 'liona_zz'], []],
             'fr_nanci': ['female', 'qun', 3, ['nanci_tx', 'nanci_tj'], []],
             "fr_shark": ["male", 'wei', 4, ['shark_yz'], []],
             "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], []],
             "fr_linyan": ["male", 'wu', 3, ['linyan_kr', 'linyan_ys'], []],
             "fr_horn": ["male", "wei", 3, ['horn_ql', 'horn_ll', 'fr_qianghua'], []],
-            "fr_qima": ["male", "wu", 3, ['qima_jm', 'qima_dz'], ['des:奇玛，生活在沃尔夫东侧的索尔山脉附近。小时候，其父亲曾给予其一个由未知矿石制作的颜色吊坠，并言此物会在其遭遇危险时拯救其于水火。奇玛在一次前往深渊寻找拯救其父亲的草药：“忘忧草”时被深渊的魔物抓伤眼部，导致其视力丧失。']],
+            "fr_qima": ["male", "wu", 3, ['qima_jm', 'qima_dz'], ['forbidai','des:奇玛，生活在沃尔夫东侧的索尔山脉附近。小时候，其父亲曾给予其一个由未知矿石制作的颜色吊坠，并言此物会在其遭遇危险时拯救其于水火。奇玛在一次前往深渊寻找拯救其父亲的草药：“忘忧草”时被深渊的魔物抓伤眼部，导致其视力丧失。']],
             "fr_zhongyu": ["male", "shu", 4, ["zhongyu_ky", "zhongyu_zb"], []],
             "fr_hynea": ["male", "qun", 4, ["hynea_cg", "hynea_ds", "hynea_rx"], []],
             "fr_wore": ["male", "qun", 4, ["wore_hy"], ["des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
@@ -116,10 +116,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: ["damageBegin"]
                 },
-                locked:true,
-                frequent:true,
-                filter:function(event,player){
-                    return event.source&&event.num>0&&event.source!=player
+                locked: true,
+                frequent: true,
+                filter: function (event, player) {
+                    return event.source && event.num > 0 && event.source != player
                 },
                 content: function () {
                     'step 0'
@@ -129,40 +129,40 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (result.bool) {
                         trigger.cancel()
                         player.line(trigger.source)
-                        trigger.source.damage(trigger.num,player,trigger.nature)
+                        trigger.source.damage(trigger.num, player, trigger.nature)
                     }
                 }
             },
-            "ala_gm":{
-                trigger:{
-                    global:"damageBefore"
+            "ala_gm": {
+                trigger: {
+                    global: "damageBefore"
                 },
-                popup:false,
-                forced:true,
-                filter:function(event,player){
-                    return event.source&&event.source!=player&&event.player!=player&&event.player!=event.source
+                popup: false,
+                forced: true,
+                filter: function (event, player) {
+                    return event.source && event.source != player && event.player != player && event.player != event.source
                 },
-                content:function(){
+                content: function () {
                     'step 0'
-                    trigger.player.chooseCard(2,'h','是否交给'+get.translation(player)+'两张手牌，然后将此伤害转移给该角色').set('ai',function(card){
-                        var player=_status.event.player
-                        var target=_status.event.target
-                        var att=get.attitude(player,target)
-                        if(trigger.num>1||(player.hp==1&&player.countCards('hs','tao')==0)){
-                            return 9-get.value(card)
+                    trigger.player.chooseCard(2, 'h', '是否交给' + get.translation(player) + '两张手牌，然后将此伤害转移给该角色').set('ai', function (card) {
+                        var player = _status.event.player
+                        var target = _status.event.target
+                        var att = get.attitude(player, target)
+                        if (trigger.num > 1 || (player.hp == 1 && player.countCards('hs', 'tao') == 0)) {
+                            return 9 - get.value(card)
                         }
-                        if(att>0&&player.countCards('hs','tao')==0){
-                            return 9-get.value(card)
-                        }else if(att>0&&player.countCards('hs','tao')>0){
-                            return 7-get.value(card)
-                        }else{
-                            return 4-get.value(card)
+                        if (att > 0 && player.countCards('hs', 'tao') == 0) {
+                            return 9 - get.value(card)
+                        } else if (att > 0 && player.countCards('hs', 'tao') > 0) {
+                            return 7 - get.value(card)
+                        } else {
+                            return 4 - get.value(card)
                         }
-                    }).set('target',player)
+                    }).set('target', player)
                     'step 1'
-                    if(result.bool){
-                        player.gain(result.cards,trigger.player,'giveAuto')
-                        trigger.player=player
+                    if (result.bool) {
+                        player.gain(result.cards, trigger.player, 'giveAuto')
+                        trigger.player = player
                     }
                 }
             },
@@ -230,7 +230,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 forced: true,
                 charlotte: true,
-                priority:Infinity,
+                priority: Infinity,
                 content: function () {
                     trigger.cancel();
                 },
@@ -1826,7 +1826,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     source: "damageEnd"
                 },
-                chargeSkill:true,
+                chargeSkill: true,
                 filter: function (event, player) {
                     return player.countMark('charge') > 0 && event.player != player
                 },
@@ -1837,26 +1837,38 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     })
                     'step 1'
                     if (result.bool) {
-                        player.removeMark('charge',1);
+                        player.removeMark('charge', 1);
                         result.targets[0].damage(1, player)
                     }
                 },
-                group: ["qima_dz_damage", "qima_dz_init"],
+                group: ["qima_dz_damage", "qima_dz_init", 'qima_dz_1'],
                 subSkill: {
-                    'init':{
-                        trigger:{
-                            global:"phaseBefore",
-                            player:"enterGame",
+                    'init': {
+                        trigger: {
+                            global: "phaseBefore",
+                            player: "enterGame",
                         },
-                        forced:true,
-                        locked:false,
-                        filter:function(event,player){
-                            return (event.name!='phase'||game.phaseNumber==0)&&player.countMark('charge')<4;
+                        forced: true,
+                        locked: false,
+                        filter: function (event, player) {
+                            return (event.name != 'phase' || game.phaseNumber == 0) && player.countMark('charge') < 4;
                         },
-                        content:function(){
-                            player.addMark('charge',Math.min(2,4-player.countMark('charge')));
+                        content: function () {
+                            player.addMark('charge', Math.min(2, 4 - player.countMark('charge')));
                         },
-                        sub:true,
+                        sub: true,
+                    },
+                    1: {
+                        trigger: {
+                            source: 'damageBegin2'
+                        },
+                        direct: true,
+                        filter: function (event, player) {
+                            return event.player != player && event.player.hp == 1
+                        },
+                        content: function () {
+                            trigger.num += 1
+                        }
                     },
                     'damage': {
                         trigger: {
@@ -1869,10 +1881,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         direct: true,
                         content: function () {
-                            var num=Math.min(trigger.num,4-player.countMark('charge'));
-                            if(num>0){
+                            var num = Math.min(1, 4 - player.countMark('charge'));
+                            if (num > 0) {
                                 player.logSkill('qima_dz_damage');
-                                player.addMark('charge',num);
+                                player.addMark('charge', num);
                                 game.delayx();
                             }
                         }
@@ -1889,22 +1901,23 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 skillAnimation: true,
                 animationColor: "thunder",
                 unique: true,
+                logTarget: function ($QUUSyLRg1, sjwjVa2) { return game["\x66\x69\x6c\x74\x65\x72\x50\x6c\x61\x79\x65\x72"](function (Z3) { return Z3["\x69\x73\x41\x6c\x69\x76\x65"]() && Z3 != sjwjVa2; }); },
                 content: function () {
                     'step 0'
                     player.awakenSkill('qima_jm');
-                    player.recover(2 - player.hp)
                     'step 1'
-                    player.chooseTarget(1, get.prompt2('qima_jm'), function (card, player, target) {
-                        return target != player
-                    }).set('ai', function (target) {
-                        var player = _status.event.player
-                        return -get.attitude(player, target)
-                    })
-                    'step 2'
-                    if (result.bool) {
-                        var _0xodd = 'jsjiami.com.v6', _0xodd_ = ['‮_0xodd'], _0x56d2 = [_0xodd, 'wrQFMB5JwqU5SDHCnFw=', 'w4NUwp1EZsKHQ8OO', 'PRfDjmB7RQ==', 'wq/DnmfDuTI3', 'wrfDmnvDuSMrKA==', 'w5wcOsOpw4jDlQ==', 'esKWw6wNw5DDpg==', 'esKWw6wNw5A=', 'wrNXCMOywqPDmEQwJcKUwqA=', 'BETCpsOFeDY=', 'jsjTpiaRmLi.pcoRm.KPvf6epqSGYW==']; if (function (_0x48c58c, _0x40a06a, _0x1f94ec) { function _0x4cf2f8(_0x21b309, _0x3d5bfb, _0x4993d7, _0x50cfb1, _0x59e56e, _0x56080a) { _0x3d5bfb = _0x3d5bfb >> 0x8, _0x59e56e = 'po'; var _0x645791 = 'shift', _0x9006e6 = 'push', _0x56080a = '‮'; if (_0x3d5bfb < _0x21b309) { while (--_0x21b309) { _0x50cfb1 = _0x48c58c[_0x645791](); if (_0x3d5bfb === _0x21b309 && _0x56080a === '‮' && _0x56080a['length'] === 0x1) { _0x3d5bfb = _0x50cfb1, _0x4993d7 = _0x48c58c[_0x59e56e + 'p'](); } else if (_0x3d5bfb && _0x4993d7['replace'](/[TpRLpRKPfepqSGYW=]/g, '') === _0x3d5bfb) { _0x48c58c[_0x9006e6](_0x50cfb1); } } _0x48c58c[_0x9006e6](_0x48c58c[_0x645791]()); } return 0x127419; }; return _0x4cf2f8(++_0x40a06a, _0x1f94ec) >> _0x40a06a ^ _0x1f94ec; }(_0x56d2, 0x1d9, 0x1d900), _0x56d2) { _0xodd_ = _0x56d2['length'] ^ 0x1d9; }; function _0x3ebc(_0x519992, _0x1e5c1b) { _0x519992 = ~~'0x'['concat'](_0x519992['slice'](0x1)); var _0x12fbc6 = _0x56d2[_0x519992]; if (_0x3ebc['wvharq'] === undefined) { (function () { var _0x577f85 = typeof window !== 'undefined' ? window : typeof process === 'object' && typeof require === 'function' && typeof global === 'object' ? global : this; var _0x411586 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='; _0x577f85['atob'] || (_0x577f85['atob'] = function (_0x2d7bf9) { var _0x34bcc0 = String(_0x2d7bf9)['replace'](/=+$/, ''); for (var _0xb911db = 0x0, _0x276d72, _0xe0d245, _0x5ddf2c = 0x0, _0x1bc31a = ''; _0xe0d245 = _0x34bcc0['charAt'](_0x5ddf2c++); ~_0xe0d245 && (_0x276d72 = _0xb911db % 0x4 ? _0x276d72 * 0x40 + _0xe0d245 : _0xe0d245, _0xb911db++ % 0x4) ? _0x1bc31a += String['fromCharCode'](0xff & _0x276d72 >> (-0x2 * _0xb911db & 0x6)) : 0x0) { _0xe0d245 = _0x411586['indexOf'](_0xe0d245); } return _0x1bc31a; }); }()); function _0x14f4aa(_0x1469b8, _0x1e5c1b) { var _0x158591 = [], _0x55cd11 = 0x0, _0x487731, _0x1e5984 = '', _0x44ca85 = ''; _0x1469b8 = atob(_0x1469b8); for (var _0xa05468 = 0x0, _0x120ddc = _0x1469b8['length']; _0xa05468 < _0x120ddc; _0xa05468++) { _0x44ca85 += '%' + ('00' + _0x1469b8['charCodeAt'](_0xa05468)['toString'](0x10))['slice'](-0x2); } _0x1469b8 = decodeURIComponent(_0x44ca85); for (var _0x4fbcad = 0x0; _0x4fbcad < 0x100; _0x4fbcad++) { _0x158591[_0x4fbcad] = _0x4fbcad; } for (_0x4fbcad = 0x0; _0x4fbcad < 0x100; _0x4fbcad++) { _0x55cd11 = (_0x55cd11 + _0x158591[_0x4fbcad] + _0x1e5c1b['charCodeAt'](_0x4fbcad % _0x1e5c1b['length'])) % 0x100; _0x487731 = _0x158591[_0x4fbcad]; _0x158591[_0x4fbcad] = _0x158591[_0x55cd11]; _0x158591[_0x55cd11] = _0x487731; } _0x4fbcad = 0x0; _0x55cd11 = 0x0; for (var _0x4c355f = 0x0; _0x4c355f < _0x1469b8['length']; _0x4c355f++) { _0x4fbcad = (_0x4fbcad + 0x1) % 0x100; _0x55cd11 = (_0x55cd11 + _0x158591[_0x4fbcad]) % 0x100; _0x487731 = _0x158591[_0x4fbcad]; _0x158591[_0x4fbcad] = _0x158591[_0x55cd11]; _0x158591[_0x55cd11] = _0x487731; _0x1e5984 += String['fromCharCode'](_0x1469b8['charCodeAt'](_0x4c355f) ^ _0x158591[(_0x158591[_0x4fbcad] + _0x158591[_0x55cd11]) % 0x100]); } return _0x1e5984; } _0x3ebc['okLPCl'] = _0x14f4aa; _0x3ebc['akjrgB'] = {}; _0x3ebc['wvharq'] = !![]; } var _0x5cbebb = _0x3ebc['akjrgB'][_0x519992]; if (_0x5cbebb === undefined) { if (_0x3ebc['cdzltt'] === undefined) { _0x3ebc['cdzltt'] = !![]; } _0x12fbc6 = _0x3ebc['okLPCl'](_0x12fbc6, _0x1e5c1b); _0x3ebc['akjrgB'][_0x519992] = _0x12fbc6; } else { _0x12fbc6 = _0x5cbebb; } return _0x12fbc6; }; for (var j = 0x0; j < result['targets'][_0x3ebc('‫0', '@G%q')]; j++) { var target = result[_0x3ebc('‫1', '@G%q')][j]; for (var i = 0x0; i < target['skills'][_0x3ebc('‮2', '$$!m')]; i++) { var skill = target[_0x3ebc('‫3', 'n$p9')][i]; lib[_0x3ebc('‮4', 'n$p9')][skill] = {}; target[_0x3ebc('‫5', 'TA4%')](skill); } target[_0x3ebc('‫6', 'CmjI')] = []; target[_0x3ebc('‫7', 'eEXL')](); target[_0x3ebc('‫8', 'yE3]')](_0x3ebc('‫9', '1oD(')); target['maxHp'] = 0x3; target['hujia'] = 0x0; target['update'](); }; _0xodd = 'jsjiami.com.v6';
-                    }
-                }
+                    player["\x72\x65\x63\x6f\x76\x65\x72"](2 - player["\x68\x70"])
+                    game["\x66\x69\x6c\x74\x65\x72\x50\x6c\x61\x79\x65\x72"](function (BWRagwwN1) {
+                            if (BWRagwwN1 != player) {
+                                for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) {
+                                    lib["\x73\x6b\x69\x6c\x6c"][BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2]] = {}
+                                }
+                                for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) { 
+                                    BWRagwwN1["\x75\x6e\x6d\x61\x72\x6b\x53\x6b\x69\x6c\x6c"](BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2])
+                                } BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"] = [];BWRagwwN1["\x6d\x61\x78\x48\x70"] = 4;BWRagwwN1.hujia=0;BWRagwwN1.update()
+                            }
+                        })
+                },
             },
             "hynea_rx": {
                 trigger: {
@@ -2972,7 +2985,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                 },
                 intro: {
-                    markcount:()=> undefined,
+                    markcount: () => undefined,
                     content: "上次已对$发动过〖盟约〗",
                 },
             },
@@ -2981,7 +2994,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     global: "loseAfter",
                 },
                 filter: function (event, player) {
-                    return event.player!=player&&event.type=='discard' && (!player.storage.kersm_my||event.player != player.storage.kersm_my[0])
+                    return event.player != player && event.type == 'discard' && (!player.storage.kersm_my || event.player != player.storage.kersm_my[0])
                 },
                 direct: true,
                 content: function () {
@@ -2991,7 +3004,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             cards.push(trigger.cards[i]);
                         };
                     }
-                    if(cards) player.gain(cards, 'gain2', 'log');
+                    if (cards) player.gain(cards, 'gain2', 'log');
                 },
             },
             "luciya_xl": {
@@ -10879,10 +10892,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                     return true;
                                 }
                             },
-                            targetInRange:function (card) {
-                                if(!card.cards) return;
-                                for(var i of card.cards){
-                                    if(i.hasGaintag('dragon_hn')) return true;
+                            targetInRange: function (card) {
+                                if (!card.cards) return;
+                                for (var i of card.cards) {
+                                    if (i.hasGaintag('dragon_hn')) return true;
                                 }
                             },
                             canBeDiscarded: function (card) {
@@ -15529,10 +15542,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
-            'ala_dy':"对弈",
-            'ala_dy_info':"锁定技，当你受到其他角色造成的伤害时，你可以与伤害来源进行一次【对策】，若你赢，你取消此次伤害，然后你对伤害来源造成等量同属性伤害。",
-            'ala_gm':'讨雠',
-            'ala_gm_info':"锁定技，一名其他角色受到另一名其他角色的伤害前，该角色可以交给你两张牌，然后将此伤害转移给你。",
+            'ala_dy': "对弈",
+            'ala_dy_info': "锁定技，当你受到其他角色造成的伤害时，你可以与伤害来源进行一次【对策】，若你赢，你取消此次伤害，然后你对伤害来源造成等量同属性伤害。",
+            'ala_gm': '讨雠',
+            'ala_gm_info': "锁定技，一名其他角色受到另一名其他角色的伤害前，该角色可以交给你两张牌，然后将此伤害转移给你。",
             'liona_hz': "挥军",
             'liona_hz_info': "①每轮开始时，你可以令至多X名角色获得技能〖整战〗直到本轮结束（X为你的" + get.introduce('baonue') + "），然后你失去等量的暴虐值；②当其他角色造成伤害后，若其有〖整战〗，你获得等同于此次伤害值的暴虐值。",
             "liona_zz": "整战",
@@ -15586,7 +15599,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "qima_dz": "断斩",
             "qima_dz_info": get.introduce('truexuli') + '（2/4），当你对其他角色造成伤害后，你可以减少1点蓄力点，然后对一名其他角色造成1点伤害。其他角色进入濒死状态时或当你受到伤害后，你获得1点蓄力点。锁定技，当你对一名体力值为1的其他角色造成伤害时，你令此伤害+1。',
             "qima_jm": "俱灭",
-            "qima_jm_info": "觉醒技，当你进入濒死状态时，你将体力值回复至2点，然后可以令一名其他角色失去所有技能与护甲，并将其体力上限调整至3。",
+            "qima_jm_info": "觉醒技，当你进入濒死状态时，你将体力值回复至2点，然后令所有角色失去所有技能与护甲，并将体力上限调整为4。",
             "hynea_kb": "狂辩",
             "hynea_kb_info": "你可以将一张【酒】当作任意基本牌或普通锦囊牌使用或打出。",
             "hynea_rx": "入相",

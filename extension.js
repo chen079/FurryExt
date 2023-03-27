@@ -128,25 +128,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     'step 1'
                     //更新告示
                     var Furry_update = [
-                        '/Character/',
                         '/redoCharacter/',
-                        '1.更新新角色 南辞 -感谢群友南辞提供的创意与支持',
-                        '2.更新新角色 弗兰西亚 -感谢我自己提供的创意与支持',
-                        '3.更新新角色 安拉阿',
-                        '4.更新新角色 里欧那',
-                        '5.更新 莫利斯 身份场技能 回溯',
-                        '6.修复 科亚 的守护标记显示bug',
-                        '7.修复 遗留的各种bug',
-                        '8.技能 攫取 修复',
-                        '9.修复 吉冈本彦 的技能无法回血的bug',
-                        '10.亚瑟克林全面加强',
-                        '11.修复忠与描述错误',
-                        '12.新增挑战boss 沃尔',
-                        '13.新增一段过渡剧情，再叙酒馆'
+                        '1.紧急修复 韵律技 bug',
+                        '2.修复 普鲁维亚 描述错误',
+                        '3.修复自动更新内容的错误'
                     ];
                     //更新武将
                     var Furry_players = ['fr_ala', 'fr_liona', 'fr_nanci', 'fr_francium'];
-                    var Furry_redoplayers = ['fr_yas_klin', "fr_jgby"];
+                    var Furry_redoplayers = ['fr_qima'];
                     //更新卡牌
                     var Furry_cards = [];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
@@ -212,244 +201,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     },
                 };
             };
-            //获得一张牌
-            lib.element.player.callCard = function () {
-                var next = game.createEvent('callCard');
-                next.player = this
-                next.setContent('callCard');
-                return next
-            }
-            lib.element.content.callCard = function () {
-                'step 0'
-                var list = lib.config.all.cards
-                event.list = list
-                if (get.mode() != 'guozhan') {
-                    event.list.remove('zhenfa')
-                    event.list.remove('guozhan')
-                }
-                var choiceList = []
-                for (var i = 0; i < list.length; i++) {
-                    choiceList.push(get.translation(list[i] + '_card_config'))
-                }
-                if (event.isMine()) {
-                    var dialog = ui.create.dialog('forcebutton');
-                    dialog.add('选择一个卡牌包');
-                    var clickItem = function () {
-                        _status.event._result = this.link;
-                        dialog.close();
-                        game.resume();
-                    };
-                    for (var i = 0; i < choiceList.length; i++) {
-                        var item = dialog.add('<div class="popup pointerdiv" style="width:100%;display:inline-block"><div class="skill">【' + choiceList[i] + '】</div><div style="text-align:right">点击选择>>>      </div></div>');
-                        item.firstChild.addEventListener('click', clickItem);
-                        item.firstChild.link = event.list[i];
-                    }
-                    dialog.add(ui.create.div('.placeholder'));
-                    event.switchToAuto = function () {
-                        event._result = list.randomGet()
-                        dialog.close();
-                        game.resume();
-                    };
-                    _status.imchoosing = true;
-                    game.pause();
-                } else {
-                    event._result = list.randomGet();
-                }
-                'step 1'
-                _status.imchoosing = false;
-                var choice = result
-                var list = lib.cardPack[choice];
-                if (choice == 'furryCard') {
-                    for (var i in list) {
-                        if (list[i] == 'fr_card_zh') {
-                            list.remove(list[i])
-                        }
-                    }
-                }
-                game.log(player, '选择了', get.translation(choice + '_card_config'))
-                player.chooseButton([[list, 'vcard']]).set('ai', function (button) {
-                    return Math.random();
-                }).set('prompt', '选择所需的卡牌');
-
-                'step 2'
-                var name = result.links[0][2];
-                event.nature = result.links[0][3];
-                event.cardname = name;
-                var list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
-                player.chooseControl(list).set('ai', function () {
-                    return list.randomGet();
-                }).set('prompt', '选择此牌的点数');
-                'step 3'
-                event.number = result.control;
-                var list = ['diamond', 'spade', 'heart', 'club']
-                player.chooseControl(list).set('ai', function () {
-                    return list.randomGet();
-                }).set('prompt', '选择此牌的花色');
-                'step 4'
-                event.suit = result.control;
-                var fakecard = game.createCard(event.cardname, event.suit, event.number, event.nature);
-                player.showCards(fakecard)
-                player.gain(fakecard, 'gain1', 'log');
-            }
-            //宣誓新技能
-            lib.element.player.claimSkill = function (bool) {
-                var next = game.createEvent('claimSkill');
-                next.player = this
-                if (bool == undefined) {
-                    bool = false
-                } else {
-                    bool = true
-                }
-                next.num = bool
-                next.setContent('claimSkill');
-                return next
-            }
-            lib.element.content.claimSkill = function (bool) {
-                "step 0"
-                ui.clear();
-                if (event.created) return;
-                event.created = true;
-                if (event.isMine()) {
-                    var node = ui.create.div('.add_skill');
-                    event.node = node;
-                    event.node.style.zIndex = "9999";
-                    event.node.style.background = 'black';
-                    event.node.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=50)";
-                    event.node.style.opacity = "0.7"
-                    event.node.style.width = '400px';
-                    event.node.style.height = '30px';
-                    event.node.style.lineHeight = '30px';
-                    event.node.style.fontFamily = 'xinwei';
-                    event.node.style.fontSize = '30px';
-                    event.node.style.padding = '10px';
-                    event.node.style.left = 'calc(50% - 200px)';
-                    event.node.style.top = 'calc(50% - 20px)';
-                    event.node.style.whiteSpace = 'nowrap';
-                    event.node.innerHTML = '请在此输入技能名称';
-                    event.node.contentEditable = true;
-                    event.node.style.webkitUserSelect = 'text';
-                    event.node.style.textAlign = 'center';
-                    var skillName = function (e) {
-                        var skills = [];
-                        for (var i in lib.character) {
-                            for (var j = 0; j < lib.character[i][3].length; j++) {
-                                if (player.hasSkill(lib.character[i][3][j])) continue;
-                                var info = lib.skill[lib.character[i][3][j]];
-                                if (info) {
-                                    var name = event.node.innerText;
-                                    if (num) {
-                                        if (get.translation(lib.character[i][3][j]) != name) continue;
-                                        skills.add(lib.character[i][3][j]);
-                                    } else {
-                                        if (get.translation(lib.character[i][3][j]) != name || (info.fixed || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable))) continue;
-                                        skills.add(lib.character[i][3][j]);
-                                    }
-                                }
-                            }
-                        }
-                        if (skills.length) {
-                            ui.window.removeChild(event.node);
-                            ui.window.removeChild(text);
-                            ui.window.removeChild(button);
-                            event.node.innerHTML = '';
-                            event.skills = skills
-                            game.resume();
-                            return
-                        }
-                        else {
-                            var name = event.node.innerText;
-                            alert(((name.length == 0 || name == '请在此输入技能名称') ? '请先输入技能名称' : name + '不是一个可用的技能，请重新输入'));
-                            //ui.clear();
-                            event.node.innerHTML = '';
-                            return;
-                        }
-                    };
-                    ui.window.appendChild(event.node);
-                    event.node.onfocus = function () {
-                        event.node.innerHTML = '';
-                    };
-                    event.node.onkeydown = function (e) {
-                        e.stopPropagation();
-                        if (e.keyCode == 13) {
-                            skillName();
-                            setTimeout(function () {
-                                event.node.innerHTML = '';
-                            }, 10);
-                        };
-                    };
-                    var text = ui.create.div();
-                    text.style.zIndex = "9999"
-                    text.style.width = '400px';
-                    text.style.height = '30px';
-                    text.style.lineHeight = '30px';
-                    text.style.fontFamily = '黑体';
-                    text.style.fontSize = '20px';
-                    text.style.padding = '10px';
-                    text.style.left = 'calc(50% - 200px)';
-                    text.style.top = 'calc(50% - 80px)';
-                    text.innerText = '请声明一个技能名称';
-                    text.style.color = "white"
-                    text.style.textAlign = 'center';
-                    ui.window.appendChild(text);
-                    var button = ui.create.div('.menubutton.highlight.large', '确定', function () {
-                        skillName()
-                    });
-                    button.style.width = '70px';
-                    button.style.left = 'calc(50% - 35px)';
-                    button.style.top = 'calc(50% + 60px)';
-                    ui.window.appendChild(button);
-                    for (var i in lib.element.event) {
-                        event.parent[i] = lib.element.event[i];
-                    }
-                    event.parent.custom = {
-                        add: {},
-                        replace: {}
-                    }
-                    game.pause();
-                } else {
-                    var skills = [];
-                    for (var i in lib.character) {
-                        for (var j = 0; j < lib.character[i][3].length; j++) {
-                            if (player.hasSkill(lib.character[i][3][j])) continue;
-                            var info = lib.skill[lib.character[i][3][j]];
-                            if (num) {
-                                if (info && (info.forced || info.mod || info.locked)) {
-                                    skills.add(lib.character[i][3][j]);
-                                }
-                            } else {
-                                if (info && (info.forced || info.mod || info.locked) && !(info.fixed || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable))) {
-                                    skills.add(lib.character[i][3][j]);
-                                }
-                            }
-                        }
-                    }
-                    var skills2 = skills.randomGet();
-                    player.addTempSkill(skills2);
-                    player.popup(skills2);
-                    game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-                    event.finish()
-                }
-                "step 1"
-                if (event.skills.length == 1) {
-                    var skills2 = event.skills[0]
-                    player.addTempSkill(skills2);
-                    player.popup(skills2);
-                    game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-                    event.finish()
-                } else {
-                    var list = []
-                    var skills = event.skills
-                    for (var i = 0; i < skills.length; i++) {
-                        list.push(get.translation(skills[i] + '_info'))
-                    }
-                    player.chooseControl().set('choiceList', list).set('prompt', '选择〖' + get.translation(skills[0]) + '〗的版本')
-                }
-                "step 2"
-                var skills2 = event.skills[result.index]
-                player.addTempSkill(skills2);
-                player.popup(skills2);
-                game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-            }
             //---------------------------------------定义新属性伤害------------------------------------------//
             lib.translate.mad = '<font color=#d17367>狂</font>';
             lib.nature.add('mad');
@@ -678,10 +429,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 return 0;
             };
-            var noname_versionx = "1.9.119";
+            var noname_versionx = "1.9.120";
             if (lib.version && !lib.config.furryNotMetionNonameVersion) {
                 if (get.myCompareVersion(lib.version, noname_versionx) < 0) {
-                    var ret = confirm("当前无名杀版本" + lib.version + "落后于【福瑞拓展】最低支持版本1.9.119，请尽快更新，点击确定关闭本扩展");
+                    var ret = confirm("当前无名杀版本" + lib.version + "落后于【福瑞拓展】最低支持版本1.9.120，请尽快更新，点击确定关闭本扩展");
                     if (!ret) {
                         alert("请确认你明白点击此选项导致的后果");
                         alert("由游戏版本过低导致任何问题本扩展均不负责");
@@ -783,68 +534,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         mark.firstChild.style.transform = 'rotate(180deg)';
                     }
                 }
-            },
-                //自定义：发掘
-                lib.element.player.digCard = function (num1, num2) {
-                    var next = game.createEvent('digCard');
-                    next.player = this
-                    if (num1 == undefined) num1 = 3
-                    if (num2 == undefined) num2 = 1
-                    if (num1 > num2) {
-                        var num = [num1, num2]
-                    } else {
-                        var num = [num2, num1]
-                    }
-                    next.num = num
-                    next.setContent('digCard');
-                    return next
-                }
-            lib.element.content.digCard = function () {
-                "step 0"
-                event.forceDie = true
-                'step 1'
-                event.cards = get.cards(num[0]);
-                player.chooseCardButton(num[1], '发掘：获得其中' + get.cnNumber(num[1]) + '张牌', true, event.cards).set('ai', function (button) {
-                    return get.useful(button.link);
-                });
-                'step 2'
-                var cards = result.links;
-                player.gain(cards, 'draw');
-                game.log(player, '发掘了', '#y' + get.translation(cards))
-                event.cards.remove(cards);
-                'step 3'
-                while (event.cards.length) {
-                    ui.cardPile.insertBefore(event.cards.pop(), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)])
-                }
-                "step 4"
-                game.updateRoundNumber()
             }
-            //自定义：刷新技能
-            lib.element.player.refreshSkill = function (num, skills) {
-                var num, skills
-                for (var i = 0; i < arguments.length; i++) {
-                    if (typeof arguments[i] == 'number') {
-                        num = arguments[i]
-                    } else {
-                        if (typeof arguments[i] == "string") {
-                            num = [arguments[i]]
-                        } else {
-                            skills = arguments[i]
-                        }
-                    }
-                }
-                var bool1 = false
-                if (num == undefined) bool1 = true
-                if (skills == undefined) skills = this.skills
-                for (var i = 0; i < skills.length; i++) {
-                    var skill = skills[i]
-                    if (this.getStat('skill')[skill] && this.getStat('skill')[skill] > num && !bool1) {
-                        this.getStat('skill')[skill] -= num
-                    } else {
-                        if (this.getStat('skill')[skill]) delete this.getStat('skill')[skill];
-                    }
-                }
-            };
             //------------------------------------------AI禁将------------------------------------------//
             if (lib.config.ban_ai) {
                 var savedFilter = lib.filter.characterDisabled;
@@ -979,26 +669,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "step 4"
                 if (!event.notrigger) event.trigger('damageSource');
             };
-            //阵亡音效
-            lib.skill._frzwyy = {
-                trigger: {
-                    global: 'dieAfter',
-                },
-                direct: true,
-                priority: 2,
-                forced: true,
-                unique: true,
-                frequent: true,
-                forceDie: true,
-                lastDo: true,
-                filter: function (event, player) {
-                    return !event.player.isAlive();
-                },
-                content: function () {
-                    game.playAudio('..', 'extension', '福瑞拓展/audio', trigger.player.name);
-                },
-            },
-                lib.rank.rarity.junk.addArray(["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala']);
+            lib.rank.rarity.junk.addArray(["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala']);
             lib.rank.rarity.rare.addArray(["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_jiejie"
                 , "fr_sayisu", "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']);
             lib.rank.rarity.epic.addArray(["fr_hars", "fr_muyada", "fr_marxya", "fr_muli", "fr_alas", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_hynea",
@@ -1085,10 +756,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             };
             get.FrskillTips = function (tipname, id) {
                 const frtip = ui.create.div('.Fr-frtips', document.body);
-                frtip.style.zIndex = 16;
+                frtip.style.zIndex = 998;
                 const skilltip = ui.create.div('.Fr-skilltip', frtip);
                 skilltip.innerHTML = tipname;
-                var herf = document.getElementById(id);y
+                var herf = document.getElementById(id);
                 if (herf) {
                     var left = herf.getBoundingClientRect().left;
                     if (game.getPhone()) left += herf.offsetParent.offsetLeft;
@@ -1605,7 +1276,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             "furry_onlineUpdate2": {
                 "name": "自动更新",
                 "intro": "游戏开始后会自动检查福瑞拓展是否为最新版",
-                "init": false,
+                "init": true,
             },
             "acknowledgments": {
                 "name": "鸣谢清单",
@@ -1640,7 +1311,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.0.9.1",
+            version: "2.0.9.2",
         }, files: {}
     }
 })
