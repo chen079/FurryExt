@@ -1826,13 +1826,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     source: "damageEnd"
                 },
-                init: function (player) {
-                    player.changeMaxXvli(4)
-                    player.changeXvli(2)
-                },
-                xvliji: true,
+                chargeSkill:true,
                 filter: function (event, player) {
-                    return player.getXvli() > 0 && event.player != player
+                    return player.countMark('charge') > 0 && event.player != player
                 },
                 content: function () {
                     'step 0'
@@ -1841,13 +1837,28 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     })
                     'step 1'
                     if (result.bool) {
-                        player.changeXvli(-1)
+                        player.removeMark('charge',1);
                         result.targets[0].damage(1, player)
                     }
                 },
-                group: ["qima_dz_1", "qima_dz_2"],
+                group: ["qima_dz_damage", "qima_dz_init"],
                 subSkill: {
-                    1: {
+                    'init':{
+                        trigger:{
+                            global:"phaseBefore",
+                            player:"enterGame",
+                        },
+                        forced:true,
+                        locked:false,
+                        filter:function(event,player){
+                            return (event.name!='phase'||game.phaseNumber==0)&&player.countMark('charge')<4;
+                        },
+                        content:function(){
+                            player.addMark('charge',Math.min(2,4-player.countMark('charge')));
+                        },
+                        sub:true,
+                    },
+                    'damage': {
                         trigger: {
                             global: "dying",
                             player: ["damageEnd"],
@@ -1858,21 +1869,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         direct: true,
                         content: function () {
-                            player.changeXvli()
+                            var num=Math.min(trigger.num,4-player.countMark('charge'));
+                            if(num>0){
+                                player.logSkill('qima_dz_damage');
+                                player.addMark('charge',num);
+                                game.delayx();
+                            }
                         }
                     },
-                    2: {
-                        trigger: {
-                            source: "damageBegin1"
-                        },
-                        filter: function (event, player) {
-                            return event.player != player && event.player.hp == 1
-                        },
-                        forced: true,
-                        content: function () {
-                            trigger.num += 1
-                        }
-                    }
                 }
             },
             "qima_jm": {
