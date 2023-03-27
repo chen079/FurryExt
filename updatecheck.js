@@ -10,13 +10,14 @@
 	changeLog: `
 	1.修复 移动端提示错位的bug
 	2.回调 奇玛 【俱灭】 并设置为ai禁选
+	3.按照官方给出的蓄力技重写奇玛【断斩】
+	4.清除部分冗余代码
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
 	updateFiles: [
 		'extension.css',
 		'extension.js',
-		'更新日志.txt',
 		'asset/cards.js',
 		'asset/character.js',
 		'asset/drama.js',
@@ -46,7 +47,6 @@
 		'binaries.txt',
 		'extension.css',
 		'extension.js',
-		'更新日志.txt',
 		'acknowledgments/Acknowledgments.html',
 		'acknowledgments/css/main.css',
 		'acknowledgments/font/SmileySans-Oblique.otf',
