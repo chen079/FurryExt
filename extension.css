@@ -108,3 +108,16 @@
     transform: translate(-50%, -50%);
     transition: none;
 }
+
+.button.character.newstyle>.identity[data-nature="fr_g_dragon"]{
+	background-image: url('image/group/name2_fr_g_dragon.png') !important;
+	background-size: 100% 100% !important;
+}
+
+.qh-shousha-big-avatar[data-group='fr_g_dragon']>.qh-avatar-label {
+    background-image: url('image/group/detail_fr_g_dragon.png');
+}
+
+.qh-shousha-big-avatar[data-group='fr_g_dragon']>.qh-avatar-label-other {
+    background-image: url('image/group/detail_fr_g_dragon_other.png');
+}

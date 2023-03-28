@@ -58,11 +58,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_faers": ["male", "shen", 4, ["faers_hc", "faers_sb", "faers_yl"], ["zhu", "des:法斯，或名法尔斯，兽人中最主要的神祇之一，代表了永恒与变换，是动与静的同一。法尔斯常以胡狼的形象示人，对任何物种都报以绝对的平衡。守护平衡是他的使命。但是在精灵族的预言集「瓦尔亚娜大百科」中其被预言是毁灭兽人王国的罪魁祸首。"]],
             "fr_aroncy": ["male", "wei", 4, ["aroncy_jw"], []],
             "fr_lint": ["male", "shu", 4, ["lint_nd"], []],
-            "fr_berg": ["male", "qun", 3, ["berg_sy", "berg_jh"], []],
+            "fr_berg": ["male", "fr_g_dragon", 3, ["berg_sy", "berg_jh"], []],
             "fr_xit": ["male", "jin", 3, ["xit_lx", "xit_bs"], []],
             "fr_markn": ["male", "wu", 3, ["markn_cy", "markn_yz", "markn_yc"], []],
             "fr_morly": ["male", "shu", 4, ["morly_ld", "morly_xd", "morly_qy"], []],
-            "fr_marxya": ["male", "shu", 3, ["marcia_us", "marcia_jz", "marcia_ql"], []],
+            "fr_marxya": ["male", "fr_g_dragon", 3, ["marcia_us", "marcia_jz", "marcia_ql"], []],
             "fr_yas_klin": ["male", "jin", 4, ["yas_klin_bj", "yas_klin_js"], ["des:图片来自微博@藤宫Lily"]],
             "fr_dog": ["male", "shu", 3, ["dog_dm", "dog_zz"], []],
             "fr_muen": ["male", "shu", 3, ["muen_tx", "muen_jb"], []],
@@ -81,7 +81,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_verb": ["male", "wu", 3, ["verb_zy", "verb_fs"], []],
             "fr_taber": ["male", "wu", 4, ["taber_jj", "taber_sj"], []],
             "fr_yinhu": ["male", "shen", 3, ["yinhu_xr", "yinhu_zd", "yinhu_sp"], []],
-            "fr_dragon": ["male", "wei", 4, ["dragon_hy", "dragon_ly", "dragon_hn"], []],
+            "fr_dragon": ["male", "fr_g_dragon", 4, ["dragon_hy", "dragon_ly", "dragon_hn"], []],
             "fr_terz": ["male", "wei", 4, ["terz_sp", "terz_fz", "terz_ts"], []],
             "fr_jet": ["male", "shen", 3, ["jet_fy", "jet_ww", "jet_sl", "jet_cl"], ["hiddenSkill"]],
             "fr_slen": ["male", "wei", 3, ["slen_xj", "slen_gc"], []],
@@ -102,11 +102,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_laays": ["male", "qun", 4, ["laays_cs"], ["des:“像这样四处游荡，又过了多久呢？”拉亚斯的话语回荡在旷野上。自从那场人类与精灵的大战以人类的完全胜利为结局，拉亚斯也不知道自己游荡多久了。他是当年参加过此次战争的兽人族战士，后牺牲于战火之中。也许是生命树被毁的缘故，拉亚斯重新得到肉体复活。"]],
             "fr_sam": ["male", "jin", 4, ["sam_wl", "sam_fz"], ["des:山，生于兽人王国“克拉”南部的贫民窟中，是海的哥哥。在兽人王国最重要的巡游——“火灵日大典”被国王卢森特相中，与海一同进入王宫成为侍卫。山的能力就如其名：“不动如山，动如雷震”，更加擅长防御与保护。在某次刺杀中因保护国王有功，被提拔为贴身侍卫，但是遭海嫉妒，二人反目。"]],
             "fr_ham": ["male", "jin", 4, ["ham_cy", "ham_nb"], ["des:海，生于兽人王国“克拉”南部的贫民窟中，从小与山相依为命。在“火灵日大典”被国王卢森特相中，与山一同进入王宫成为侍卫，后因嫉妒山的能力，与其反目。海与山不同，更擅长狂暴而快速的攻击，世人谓之：“一剑斩不摧,双刃去如来”，又赞曰：“势如涛浪汹涌，形如雨打秋风”。"]],
-            "fr_mala": ["male", "jin", 4, ["mala_ly", "mala_ht"], []],
+            "fr_mala": ["male", "fr_g_dragon", 4, ["mala_ly", "mala_ht"], []],
             "fr_bossmala": ["male", "shen", 10, ['mala_ht', 'mala_ly', 'mala_jf', 'mala_hy', 'mala_bc', 'mala_sz'], ['unseen', "boss", "bossallowed"]],
             "fr_bossfaers": ["male", "shen", 7, ["faers_hc", "faers_yl", "miya_ks", "miya_hz"], ['unseen', "boss", "bossallowed"]],
             "fr_bosshars": ["male", "shen", 7, ["hars_sz", "hars_sj", "muen_tx", "muen_jb", "xiaomo_sj", "xiaomo_ld"], ['unseen', "boss", "bossallowed"]],
-            "fr_zeta": ["male", "wu", 4, ["zeta_gz", "zeta_fg"], []],
+            "fr_zeta": ["male", "fr_g_dragon", 4, ["zeta_gz", "zeta_fg"], []],
             "fr_fox": ["male", "shu", 4, ["fox_hm"], []],
             "fr_molis": ["female", "wei", 3, ["molis_hs", "molis_dx", "molis_sy"], []],
             "fr_shisan": ["female", "qun", 3, ["shisan_dg", "shisan_tx"], []],
@@ -3578,7 +3578,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         logTarget: "player",
                         content: function () {
-                            trigger.num = 0;
+                            trigger.cancel();
                             player.damage(trigger.source, trigger.nature)
                         },
                         sub: true,
@@ -5296,7 +5296,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 direct: true,
                 filter: function (event, player) {
                     if (get.itemtype(event.cards) != 'cards') return false;
-                    return player.countCards('he', 'sha') > 0;
+                    return true
                 },
                 content: function () {
                     "step 0"
@@ -9872,33 +9872,24 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         sub: true,
                     },
                     draw: {
-                        trigger: {
-                            global: ["loseAfter", "equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
+                        trigger:{
+                            global:["useCardAfter",'respondAfter']
                         },
                         forced: true,
                         charlotte: true,
                         popup: false,
-                        filter: function (event, player) {
-                            if (event.name == 'gain' && event.player == event.source) return false;
-                            var evt = event.getl(event.player);
-                            if (!evt || !evt.hs || !evt.hs.length) return false;
-                            if (event.name == 'lose') {
-                                for (var i in event.gaintag_map) {
-                                    if (event.gaintag_map[i].contains('dmoa_sx')) return true;
-                                }
-                                return false;
-                            }
-                            return event.player.hasHistory('lose', function (evt) {
-                                if (event != evt.getParent()) return false;
-                                for (var i in evt.gaintag_map) {
-                                    if (evt.gaintag_map[i].contains('dmoa_sx')) return true;
+                        filter:function(event,player){
+                            return event.player.hasHistory('lose',function(evt){
+                                if(evt.getParent()!=event) return false;
+                                for(var i in evt.gaintag_map){
+                                    if(evt.gaintag_map[i].contains('dmoa_sx')) return true;
                                 }
                                 return false;
                             });
                         },
                         logTarget: "player",
                         content: function () {
-                            if (trigger.getParent().name == 'useCard' || trigger.getParent().name == 'respond') player.draw()
+                            player.draw()
                         },
                         sub: true,
                     },
@@ -15599,7 +15590,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "qima_dz": "断斩",
             "qima_dz_info": get.introduce('truexuli') + '（2/4），当你对其他角色造成伤害后，你可以减少1点蓄力点，然后对一名其他角色造成1点伤害。其他角色进入濒死状态时或当你受到伤害后，你获得1点蓄力点。锁定技，当你对一名体力值为1的其他角色造成伤害时，你令此伤害+1。',
             "qima_jm": "俱灭",
-            "qima_jm_info": "觉醒技，当你进入濒死状态时，你将体力值回复至2点，然后令所有角色失去所有技能与护甲，并将这些角色的体力上限调整为4。",
+            "qima_jm_info": "觉醒技，当你进入濒死状态时，你将体力值回复至2点，然后令所有其他角色失去所有技能与护甲，并将这些角色的体力上限调整为4。",
             "hynea_kb": "狂辩",
             "hynea_kb_info": "你可以将一张【酒】当作任意基本牌或普通锦囊牌使用或打出。",
             "hynea_rx": "入相",
