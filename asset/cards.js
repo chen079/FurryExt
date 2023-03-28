@@ -7,22 +7,33 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 image: 'ext:福瑞拓展/image/card/fr_card_scfm.png',
                 audio: true,
                 fullskin: true,
+                "yingbian_prompt": "当你使用此牌选择目标后，你可为此牌减少一个目标",
+                "yingbian_tags": ["remove"],
+                yingbian: function (event) {
+                    event.yingbian_removeTarget = true;
+                },
+                reverseOrder: true,
                 type: "trick",
                 enable: true,
                 cardcolor: "red",
                 selectTarget: -1,
-                filterTarget:true,
+                filterTarget: true,
                 content: function () {
-                    game.asyncDraw(targets);
+                    target.draw()
                 },
-                ai:{
-                    value:[8,1],
-                    useful:[6,1],
-                    result:{
-                        target:1,
-                        player:0.5
+                ai: {
+                    value: [8, 1],
+                    useful: [6, 1],
+                    result: {
+                        target: 1,
+                        player: 0.5
                     },
-                    order:1.2,
+                    order: 1.2,
+                },
+                tag: {
+                    multitarget: 1,
+                    multineg: 1,
+                    draw: 1,
                 },
             },
             'fr_card_djlj': {
@@ -31,28 +42,35 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 fullskin: true,
                 type: "trick",
                 enable: true,
+                "yingbian_prompt": "当你使用此牌选择目标后，你可为此牌减少一个目标",
+                "yingbian_tags": ["remove"],
+                yingbian: function (event) {
+                    event.yingbian_removeTarget = true;
+                },
                 cardcolor: "black",
                 selectTarget: -1,
-                filterTarget: function(card,player,target){
+                filterTarget: function (card, player, target) {
                     return !target.hasSkill('card_djlj')
                 },
-                filter:function(event,player){
-                    return game.hasPlayer(function(current){
+                filter: function (event, player) {
+                    return game.hasPlayer(function (current) {
                         return !current.hasSkill('card_djlj')
                     })
                 },
                 content: function () {
-                    for (var i=0;i<targets.length;i++) {
-                        targets[i].addTempSkill('card_djlj','roundStart')
-                    }
+                    target.addTempSkill('card_djlj', 'roundStart')
                 },
-                ai:{
-                    value:[7.5,1],
-                    useful:[5,1],
-                    result:{
-                        target:-1
+                ai: {
+                    value: [7.5, 1],
+                    useful: [5, 1],
+                    result: {
+                        target: -1
                     },
-                    order:1.2,
+                    order: 1.2,
+                },
+                tag: {
+                    multitarget: 1,
+                    multineg: 1,
                 },
             },
             "fr_card_zfxd": {
@@ -1192,13 +1210,13 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: ["useCardAfter", "phaseDrawBegin"],
                 },
-                mark:true,
-                intro:{
-                    content:'锁定技，①摸牌阶段额定摸牌数-1，②你使用牌结算完毕后，若此牌造成了伤害，摸一张牌。'
+                mark: true,
+                intro: {
+                    content: '锁定技，①摸牌阶段额定摸牌数-1，②你使用牌结算完毕后，若此牌造成了伤害，摸一张牌。'
                 },
-                marktext:'断粮',
+                marktext: '断粮',
                 silent: true,
-                charlotte:true,
+                charlotte: true,
                 filter: function (event, player) {
                     if (event.name == 'phaseDraw') return true;
                     return player.getHistory('sourceDamage', function (evt) {
@@ -1225,8 +1243,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
-            'fr_card_scfm':'水草丰茂',
-            'fr_card_scfm_info':'出牌阶段，对所有角色使用，目标角色摸一张牌。',
+            'fr_card_scfm': '水草丰茂',
+            'fr_card_scfm_info': '出牌阶段，对所有角色使用，目标角色摸一张牌。',
             'fr_card_djlj': '弹尽粮绝',
             'fr_card_djlj_info': '出牌阶段，对所有本轮未被此牌指定过的角色使用，直到本轮结束，目标角色获得以下效果：①摸牌阶段额定摸牌数-1，②使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
             "fr_card_zfxd": '针锋相对',
@@ -1275,11 +1293,9 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             ['heart', '13', "fr_card_ttbl"],
             ['club', '7', "fr_card_xysx"],
             ['club', '4', "fr_card_djlj"],
-            ['club','3',"fr_card_djlj"],
-            ['club', '4', "fr_card_djlj"],
-            ['club','3',"fr_card_djlj"],
+            ['club', '3', "fr_card_djlj"],
             ['heart', '1', "fr_card_scfm"],
-            ['heart','9',"fr_card_scfm"],
+            ['heart', '9', "fr_card_scfm"],
             ['spade', '12', "fr_card_xysx"],
             ['spade', '5', "fr_card_lltj", null, ['gifts']],
             ['heart', '5', "fr_card_lltj", null, ['gifts']],

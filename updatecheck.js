@@ -21,7 +21,22 @@
 		'asset/furrymode.js',
 		'image/lutou/fr_bosswore.jpg',
 		'image/character/fr_bosswore.jpg',
-		'image/others/qqgroup.png'
+		'image/others/qqgroup.png',
+		'image/card/fr_card_djlj.png',
+		'image/card/fr_card_scfm.png',
+		'image/card/pretty/fr_card_djlj.jpg',
+		'image/card/pretty/fr_card_djlj.webp',
+		'image/card/pretty/fr_card_djlj.png',
+		'image/card/pretty/fr_card_scfm.jpg',
+		'image/card/pretty/fr_card_scfm.jpg',
+		'image/card/pretty/fr_card_scfm.jpg',
+		'image/group/border_fr_g_dragon.png',
+		'image/group/detail_fr_g_dragon.png',
+		'image/group/detail_fr_g_dragon_other.png',
+		'image/group/name2_fr_g_dragon.png',
+		'image/equip/fr_equip1_syzg.png',
+		'image/equip/fr_equip5_wxpp.png',
+		'image/border/fr_g_dragon.png',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

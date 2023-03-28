@@ -218,7 +218,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             'fr_card_lyzq.jpg', 'fr_card_lyzq.png', 'fr_card_lyzq.webp', 'fr_card_ttbl.jpg', 'fr_card_ttbl.png', 'fr_card_ttbl.webp', 'fr_card_xysx.jpg',
                             'fr_card_xysx.png', 'fr_card_xysx.webp', 'fr_card_yxys.jpg', 'fr_card_yxys.png', 'fr_card_yxys.webp', 'fr_card_zfxd.jpg',
                             'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp',
-                            'fr_equip1_syzg.jpg', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp',
+                            'fr_equip1_syzg.jpg', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp','fr_card_scfm.png',
+                            'fr_card_scfm.webp','fr_card_scfm.jpg',
                         ];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
