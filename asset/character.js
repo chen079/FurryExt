@@ -5,7 +5,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore', 'fr_francium', 'fr_nanci',],
         connect: true,//该武将包是否可以联机（必填）
         character: {
-            'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb','mala_ly'], []],
+            'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb','dier_ly'], []],
             //"fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
             "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
@@ -14348,6 +14348,53 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                 },
             },
+            "dier_ly": {
+                trigger: {
+                    player: ["damageBegin4",'loseHpBegin']
+                },
+                filter: function (event) {
+                    if(event.name=='damage'){
+                        return event.nature
+                    }else{
+                        return true
+                    }
+                },
+                charlotte: true,
+                unique: true,
+                supercharlotte: true,
+                forced: true,
+                content: function () {
+                    player.draw(trigger.num)
+                },
+                group: ["dier_ly_draw"],
+                subSkill: {
+                    draw: {
+                        trigger: {
+                            player: "phaseDrawBegin2",
+                        },
+                        charlotte: true,
+                        unique: true,
+                        supercharlotte: true,
+                        forced: true,
+                        content: function () {
+                            trigger.num += Math.ceil(player.getDamagedHp() / 2)
+                        },
+                        sub: true,
+                    },
+                },
+                ai: {
+                    nofire: true,
+                    maixie: true,
+                    nothunder: true,
+                    effect: {
+                        target: function (card, player, target, current) {
+                            if (get.tag(card, 'fireDamage')) return 'zerotarget';
+                            if (get.tag(card, 'thunderDamage')) return 'zerotarget';
+                            if (card.name == 'tiesuo') return 'zeroplayertarget';
+                        },
+                    },
+                },
+            },
             "mala_jf": {
                 trigger: {
                     player: "loseMaxHpBegin",
@@ -16051,6 +16098,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "mala_ht_info": "锁定技，你使用牌无距离与次数限制，且你的单体锦囊牌与【杀】可以多指定X个目标（X为你的已损体力值）；准备阶段，你随机失去一张判定区内的牌。",
             "mala_ly": "龙脉",
             "mala_ly_info": "锁定技，当你受到属性伤害或流失体力时，你取消之并摸X张牌（X为此次伤害或流失体力的值）；摸牌阶段，你多摸Y张牌（Y为你已损体力值的一半并向上取整）。",
+            "dier_ly": "龙翼",
+            "dier_ly_info": "锁定技，当你受到属性伤害或流失体力时，你摸X张牌（X为此次伤害或流失体力的值）；摸牌阶段，你多摸Y张牌（Y为你已损体力值的一半并向上取整）。",
             "mala_jf": "解放",
             "mala_jf_info": "锁定技，当你失去体力上限时，你取消之，然后你获得X点体力上限并回复X点体力（X为你当前的体力上限）。",
             "mala_hy": "魂焱",
