@@ -2,7 +2,7 @@
 game.import('character', function (lib, game, ui, get, ai, _status) {
     var furryPack = {
         name: 'furryPack',//武将包命名（必填）
-        connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore'],
+        connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore','fr_francium','fr_nanci',],
         connect: true,//该武将包是否可以联机（必填）
         character: {
             //"fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
@@ -35,7 +35,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_ken": ["male", "wei", 4, ["ken_jj", "ken_yn", "ken_pb"], []],
             "fr_west": ["male", "qun", 3, ["west_pz", "west_sx", "west_jh"], []],
             "fr_lions": ["male", "shu", 4, ["lions_hr", "lion_ms"], []],
-            "fr_milite": ["male", "fr_g_dragon", 4, ["milite_sz", "milite_yj"], []],
+            "fr_milite": ["male", "fr_g_dragon", 7, ["milite_sz", "milite_yj"], []],
             "fr_jackson": ["male", "wu", 3, ["jackson_eb", "jackson_tm", "site_qj"], []],
             "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ["des:檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。"]],
             "fr_sayisu": ["female", "wu", 3, ["sayisu_fp", "sayisu_fj"], []],
@@ -45,7 +45,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_krikt": ["male", "qun", 4, ["krikt_th", "krikt_ly"], ["des:科里科特，「连破」剑法大师米亚之徒。修习其赠与的「两仪」剑法。其剑术诡谲多变，剑术有着极强的爆发性。其剑法之转换，时而如同狂风骤雨般快速无比，时而如同狂涛骇浪般凶猛无匹，时而如同清泉溪涧般缓慢温柔细腻，时而如同秋风扫落叶般冷酷无情。世人皆赞之，有诗云：“霍如羿射九日落，矫如群帝骖龙翔。来如雷霆收震怒，罢如江海凝清光。”"]],
             "fr_tery": ["male", "jin", "3/6", ["tery_hx", "lust_ly"], ["des:特瑞，出生于迦奈尔联邦，其能力极为罕见，虽在大量禁魔矿脉附近，却依然能够释放魔法，其能够从其他人释放的魔法中解析咒文，并快速学习。但其能力仍有限制，其对于不使用魔法或魔法能力过强者无法复制。"]],
             "fr_sisk": ["male", "shu", 4, ["sisk_hz", "sisk_cs", "sisk_dm"], ["des:西斯科，罕见的狮兽人与吸血鬼的后代。拥有极其强力的身体素质与高超的种族天赋。后来被科亚所救，加入了「流亡者」雇佣兵团。其对血液极为敏感，些许的血腥味也会导致其进入狂暴。"]],
-            "fr_lens": ["male", "shu", 3, ["lens_yl", "lens_rj"], ["des:元素法师"]],
+            "fr_lens": ["male", "fr_g_dragon", 3, ["lens_yl", "lens_rj"], ["des:元素法师"]],
             "fr_milism": ["male", "wei", 4, ["milism_ql", "milism_th", "milism_gn"], ["des:米里森，虎兽人与狮兽人的后代，就读于「魔法学院」。尤善水性，拥有水元素魔法天赋。而且能够转移他人的疼痛到自己，被誉为「治愈魔法师」。"]],
             "fr_miya": ["male", "shu", 4, ["miya_hz", "miya_ks"], ["des:米亚，生于兽人王国「克拉」东部的小村落中。幼时便喜好剑术，随父亲学习。无意间得到「连破」与「两仪」两套剑法。成为远近闻名的剑术大师。「连破」剑法大成后，独自前往兽人王国「德恩」东部的兽人王国「奥格」历练。途中遇见科里科特，为其天赋所感。遂收其为徒，赠以「两仪」剑法。"]],
             "fr_skry": ["male", "wu", 3, ["skery_ds", "skery_yj"], ["des:暗杀行者"]],
@@ -16168,7 +16168,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'shoushen': "兽神传说",
             'youdangzhe': '游荡旅行者',
             'renyu': '人鱼之海',
-            'jianaier': '迦奈尔联邦'
+            'jianaier': '迦奈尔联邦',
+            'dragongu':'龙之谷'
+            
         },
         characterSort: {
             furryPack: {
@@ -16176,10 +16178,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 'kela': ['fr_wes', 'fr_muyada', 'fr_yada', 'fr_fate', 'fr_liya', 'fr_sam', 'fr_ham',],
                 'yongbing': ['fr_sisk', 'fr_kersm', 'fr_yada',],
                 'xueyuan': ['fr_milism', 'fr_lusiya',],
-                'shoushen': ['fr_hars', 'fr_faers', 'fr_oert', 'fr_yinhu', 'fr_jet', 'fr_mala'],
+                'shoushen': ['fr_hars', 'fr_faers', 'fr_oert', 'fr_yinhu', 'fr_jet', 'fr_mala','fr_francium'],
                 'youdangzhe': ['fr_miya', 'fr_krikt', 'fr_laays'],
-                'renyu': ['fr_rest',],
-                'jianaier': ['fr_wore', 'fr_tiers', 'fr_tery',]
+                'renyu': ['fr_rest','fr_nanci'],
+                'jianaier': ['fr_wore', 'fr_tiers', 'fr_tery',],
+                'dragongu':['fr_berg','fr_dragon','fr_lens','fr_mala','fr_marxya','fr_zeta']
             }
         },
         characterTitle: {

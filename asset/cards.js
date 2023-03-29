@@ -58,7 +58,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     })
                 },
                 content: function () {
-                    target.addTempSkill('card_djlj', 'roundStart')
+                    target.addTempSkill('card_djlj', {player:'phaseAfter'})
                 },
                 ai: {
                     value: [7.5, 1],
@@ -1246,7 +1246,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             'fr_card_scfm': '水草丰茂',
             'fr_card_scfm_info': '出牌阶段，对所有角色使用，目标角色摸一张牌。',
             'fr_card_djlj': '弹尽粮绝',
-            'fr_card_djlj_info': '出牌阶段，对所有本轮未被此牌指定过的角色使用，直到本轮结束，目标角色获得以下效果：①摸牌阶段额定摸牌数-1，②使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
+            'fr_card_djlj_info': '出牌阶段，对所有未获得此牌效果的角色使用，目标角色获得以下效果直到其回合结束：①摸牌阶段额定摸牌数-1，②使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
             "fr_card_zfxd": '针锋相对',
             'fr_card_zfxd_info': "此牌可被重铸。出牌阶段，对一名角色使用。令其与你指定的另一名在其攻击范围内的角色各声明一张【杀】或【闪】；若二者都声明【杀】，二者各流失一点体力；若二者都声明【闪】，二者各弃置一张牌；否则，声明【杀】的角色摸两张牌并对声明【闪】的角色造成一点伤害。",
             "fr_card_cmhc": "筹谋划策",
