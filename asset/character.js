@@ -14359,9 +14359,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         return true
                     }
                 },
-                charlotte: true,
-                unique: true,
-                supercharlotte: true,
                 forced: true,
                 content: function () {
                     player.draw(trigger.num)
