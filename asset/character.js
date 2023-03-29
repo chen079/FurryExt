@@ -35,7 +35,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_ken": ["male", "wei", 4, ["ken_jj", "ken_yn", "ken_pb"], []],
             "fr_west": ["male", "qun", 3, ["west_pz", "west_sx", "west_jh"], []],
             "fr_lions": ["male", "shu", 4, ["lions_hr", "lion_ms"], []],
-            "fr_milite": ["male", "wei", 4, ["milite_sz", "milite_yj"], []],
+            "fr_milite": ["male", "fr_g_dragon", 4, ["milite_sz", "milite_yj"], []],
             "fr_jackson": ["male", "wu", 3, ["jackson_eb", "jackson_tm", "site_qj"], []],
             "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ["des:檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。"]],
             "fr_sayisu": ["female", "wu", 3, ["sayisu_fp", "sayisu_fj"], []],

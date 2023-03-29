@@ -1,14 +1,16 @@
 // @ts-check
 (() => ({
 	// 扩展版本
-	version: "2.0.9.2",
+	version: "2.0.9.3",
 
 	// 扩展的上一个版本
-	oldversion: "2.0.9.1",
+	oldversion: "2.0.9.2",
 
 	// 更新内容汇总
 	changeLog: `
 	1.修复 多默尔 【笙歌】拼点可能出现的bug
+	2.新增 两张新卡 【弹尽粮绝】、【水草丰茂】
+	3.新增 新势力 龙
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
@@ -37,6 +39,8 @@
 		'image/equip/fr_equip1_syzg.png',
 		'image/equip/fr_equip5_wxpp.png',
 		'image/border/fr_g_dragon.png',
+		'image/group/name_fr_g_dragon.png',
+		'image/group/name_fr_g_dragon.webp'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

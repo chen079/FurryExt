@@ -110,6 +110,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         editable: false, content: function (config, pack) {
             //---------------------------------------更新说明------------------------------------------//
             //更新公告
+            lib.arenaReady.push(function(){
+                if(lib.config.extensions&&lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) lib.groupnature.fr_g_dragon = 'fr_g_dragon'
+            })
             lib.skill._Furry_changeLog = {
                 charlotte: true,
                 ruleSkill: true,
@@ -218,8 +221,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             'fr_card_lyzq.jpg', 'fr_card_lyzq.png', 'fr_card_lyzq.webp', 'fr_card_ttbl.jpg', 'fr_card_ttbl.png', 'fr_card_ttbl.webp', 'fr_card_xysx.jpg',
                             'fr_card_xysx.png', 'fr_card_xysx.webp', 'fr_card_yxys.jpg', 'fr_card_yxys.png', 'fr_card_yxys.webp', 'fr_card_zfxd.jpg',
                             'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp',
-                            'fr_equip1_syzg.jpg', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp','fr_card_scfm.png',
-                            'fr_card_scfm.webp','fr_card_scfm.jpg',
+                            'fr_equip1_syzg.jpg', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp', 'fr_card_scfm.png',
+                            'fr_card_scfm.webp', 'fr_card_scfm.jpg',
                         ];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
@@ -243,8 +246,20 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
+                    game.getFileList('extension/十周年UI/image/decoration', (folders, files) => {
+                        const furryCardFiles = ['name_fr_g_dragon.webp','name_fr_g_dragon.png'];
+                        for (let i = 0; i < furryCardFiles.length; i++) {
+                            if (!files.contains(furryCardFiles[i])) {
+                                if (game.readFile && game.writeFile) {
+                                    game.readFile('extension/福瑞拓展/image/group/' + furryCardFiles[i], (data) => {
+                                        game.writeFile(data, 'extension/十周年UI/image/decoration', furryCardFiles[i], function () { });
+                                    });
+                                }
+                            }
+                        }
+                    });
                     game.getFileList('extension/十周年UI/image/ass', (folders, files) => {
-                        const furryCardFiles = ['fr_equip1_syzg.png','fr_equip5_wxpp.png'];
+                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -284,20 +299,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                 }
-                if (lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
-                    game.getFileList('extension/无名补丁/group', (folders, files) => {
-                        const furryCardFiles = ['name2_fr_g_dragon.png'];
-                        for (let i = 0; i < furryCardFiles.length; i++) {
-                            if (!files.contains(furryCardFiles[i])) {
-                                if (game.readFile && game.writeFile) {
-                                    game.readFile('extension/福瑞拓展/image/group/' + furryCardFiles[i], (data) => {
-                                        game.writeFile(data, 'extension/无名补丁/group', furryCardFiles[i], function () { });
-                                    });
-                                }
-                            }
-                        }
-                    });
-                }
                 if (lib.config.extensions.contains('假装无敌') && lib.config['extension_假装无敌_enable']) {
                     game.getFileList('extension/假装无敌/images', (folders, files) => {
                         const furryCardFiles = ['border_fr_g_dragon.png'];
@@ -316,7 +317,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 //装备区小图标素材
                 if (lib.config.extensions.contains('福瑞拓展') && lib.config['extension_福瑞拓展_enable']) {
                     game.getFileList('extension/../image/card', (folders, files) => {
-                        const furryCardFiles = ['fr_equip1_syzg.png','fr_equip5_wxpp.png'];
+                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -330,7 +331,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 if (lib.config.extensions.contains('EngEX') && lib.config['extension_EngEX_enable']) {
                     game.getFileList('extension/EngEX/images/ass', (folders, files) => {
-                        const furryCardFiles = ['fr_equip1_syzg.png','fr_equip5_wxpp.png'];
+                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -360,8 +361,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 //雷修千幻
                 if (lib.config.extensions.contains('千幻聆音') && lib.config['extension_千幻聆音_enable']) {
-                    game.getFileList('extension/千幻聆音/image/decoration/', (folders, files) => {
-                        const furryCardFiles = ['detail_fr_g_dragon_other.png','detail_fr_g_dragon.png'];
+                    game.getFileList('extension/千幻聆音/theme/shousha/', (folders, files) => {
+                        const furryCardFiles = ['detail_fr_g_dragon_other.png', 'detail_fr_g_dragon.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -670,17 +671,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     player.$changeHubian();
                 }, this);
                 game.log(this, '改变了其互变状态，当前状态为：', '#g' + (this.storage.hubian ? '圣咏' : '暗涌'))
-            },
-                lib.element.player.$changeHubian = function () {
-                    var mark = this.marks.hubian, player = this
-                    if (mark) {
-                        if (!player.storage.hubian) {
-                            mark.firstChild.innerHTML = "暗涌"
-                        } else {
-                            mark.firstChild.innerHTML = "圣咏"
-                        }
+            }
+            lib.element.player.$changeHubian = function () {
+                var mark = this.marks.hubian, player = this
+                if (mark) {
+                    if (!player.storage.hubian) {
+                        mark.firstChild.innerHTML = "暗涌"
+                    } else {
+                        mark.firstChild.innerHTML = "圣咏"
                     }
-                },
+                }
+            },
                 //------------------------------------------转韵-----------------
                 lib.element.player.changeYun = function (skill) {
                     if (this[skill] && this[skill] == '平') {
@@ -901,7 +902,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.group.add('fr_g_dragon');
                 lib.translate.fr_g_dragon = '龙';
                 lib.translate.fr_g_dragon2 = '龙';
-                lib.groupnature.fr_g_dragon = 'fr_g_dragon';
 
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/furrymode.js', null);
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
