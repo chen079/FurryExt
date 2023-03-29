@@ -40,7 +40,9 @@
 		'image/equip/fr_equip5_wxpp.png',
 		'image/border/fr_g_dragon.png',
 		'image/group/name_fr_g_dragon.png',
-		'image/group/name_fr_g_dragon.webp'
+		'image/group/name_fr_g_dragon.webp',
+		'image/lutou/fr_dier.jpg',
+		'image/character/fr_dier.jpg'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

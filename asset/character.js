@@ -2,21 +2,22 @@
 game.import('character', function (lib, game, ui, get, ai, _status) {
     var furryPack = {
         name: 'furryPack',//武将包命名（必填）
-        connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore','fr_francium','fr_nanci',],
+        connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore', 'fr_francium', 'fr_nanci',],
         connect: true,//该武将包是否可以联机（必填）
         character: {
+            'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb','mala_ly'], []],
             //"fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
             "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
-            "fr_ala": ["male", 'shu', 4, ['ala_dy', 'ala_gm'], []],
-            "fr_liona": ["male", 'wei', '4/5', ['liona_hz', 'liona_zz'], []],
-            'fr_nanci': ['female', 'qun', 3, ['nanci_tx', 'nanci_tj'], []],
-            "fr_shark": ["male", 'wei', 4, ['shark_yz'], []],
-            "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], []],
-            "fr_linyan": ["male", 'wu', 3, ['linyan_kr', 'linyan_ys'], []],
-            "fr_horn": ["male", "wei", 3, ['horn_ql', 'horn_ll', 'fr_qianghua'], []],
-            "fr_qima": ["male", "wu", 3, ['qima_jm', 'qima_dz'], ['forbidai','des:奇玛，生活在沃尔夫东侧的索尔山脉附近。小时候，其父亲曾给予其一个由未知矿石制作的颜色吊坠，并言此物会在其遭遇危险时拯救其于水火。奇玛在一次前往深渊寻找拯救其父亲的草药：“忘忧草”时被深渊的魔物抓伤眼部，导致其视力丧失。']],
-            "fr_zhongyu": ["male", "shu", 4, ["zhongyu_ky", "zhongyu_zb"], []],
+            "fr_ala": ["male", 'shu', 4, ['ala_dy', 'ala_gm'], ['des:奥拉，米兰寺的大弟子，在其二十四岁时出师，后四处游历。目前正在矮人之心洞穴附近修行。奥拉类似于林和炎的哥哥的存在，从小对他们多有照顾。']],
+            "fr_liona": ["male", 'wei', '4/5', ['liona_hz', 'liona_zz'], ["zhu", 'des:里欧那，生活于兽人王国克拉的贵族家庭，从小就被作为一位战士培养。二十一岁时，在一次前往坷拉进行战斗的过程中，意外拯救了坷拉的公主，后二人暗生情愫。后来在一次战斗中下落不明。']],
+            'fr_nanci': ['female', 'qun', 3, ['nanci_tx', 'nanci_tj'], ['des:南辞，来自龙之谷外围，是稀少的狐人族后裔，其天生就拥有化形的能力，能够在人类与兽人的形态之间切换。其能够接收天界的能力并作用于自身。']],
+            "fr_shark": ["male", 'wei', 4, ['shark_yz'], ['des:沙克，来自人鱼之海的深部，其拥有一颗宝贵的珍珠，约一桅长，此珍珠能够映射出任意人的样貌，并使得拥有者获得相同的能力，据传其和凌月之球的制作者属于同一人。']],
+            "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], ['des:泰格尔，来自兽人王国坷拉西部的区域，该区域的人们习惯使用剑技。米亚和科里科特曾在修行时与其相遇，米亚与其切磋后指出其弱点并与其成为好友。']],
+            "fr_linyan": ["male", 'wu', 3, ['linyan_kr', 'linyan_ys'], ['des:林和炎是一对双胞胎，自幼时被父母遗弃，后被米兰寺收养。他们从小就生活于龙之谷外围的米兰寺中，与寺庙的主持相依为命。后来霍恩为了夺取寺庙中的宝物，设计毒杀了住持，而林与炎因外出而逃过一劫。']],
+            "fr_horn": ["male", "wei", 3, ['horn_ql', 'horn_ll', 'fr_qianghua'], ['des:霍恩，据传是来自深渊的恶魔，为了夺取米兰寺的珍贵宝物——豁免权杖，设计杀死了米兰寺的住持。霍恩不喜活物，他常常会放出致死的魔法，杀死周围的一切。']],
+            "fr_qima": ["male", "wu", 3, ['qima_jm', 'qima_dz'], ['forbidai', 'des:奇玛，生活在沃尔夫东侧的索尔山脉附近。小时候，其父亲曾给予其一个由未知矿石制作的颜色吊坠，并言此物会在其遭遇危险时拯救其于水火。奇玛在一次前往深渊寻找拯救其父亲的草药：“忘忧草”时被深渊的魔物抓伤眼部，导致其视力丧失。']],
+            "fr_zhongyu": ["male", "shu", 4, ["zhongyu_ky", "zhongyu_zb"], ['des:忠与，没有人知道其来处，但是在克拉的北部多有其传奇事迹，包括杀死了一只冰霜巨龙等等。人们不知道的是，忠与时刻与自己的内心作斗争，其内心有一只恶魔，当完全释放时，将给世界带来疯狂与灾难。']],
             "fr_hynea": ["male", "qun", 4, ["hynea_cg", "hynea_ds", "hynea_rx"], []],
             "fr_wore": ["male", "qun", 4, ["wore_hy"], ["des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             "fr_tiers": ["female", "qun", 3, ["tiers_qp", "tiers_kh"], ["des:缇尔斯，生活在迦奈尔联邦，由于联邦周围大量禁魔矿石的影响，此处无法施展魔法，故此处的主要研究方向为科技。缇尔斯幼时丧父，与母亲相依为命，后进入联邦军队，在服役5年后因在与矮人的战争中负伤，回到家乡科马修养。"]],
@@ -112,6 +113,31 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "qun", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'dier_sb': {
+                trigger:{
+                    target:"useCardToTargeted",
+                },
+                check:function(event,player){
+                    return get.attitude(player,event.player)<0;
+                },
+                filter:function(event,player){
+                    return event.card.name=='sha'&&player.canCompare(event.player);
+                },
+                content: function () {
+                    'step 0'
+                    trigger.getParent().excluded.add(player);
+                    player.draw()
+                    'step 1'
+                    player.chooseToCompare(trigger.player);
+                    'step 2'
+                    if (result.bool) {
+                        trigger.player.loseHp()
+                    } else {
+                        player.loseHp()
+                        player.discardPlayerCard(trigger.player, 'he', true);
+                    }
+                }
+            },
             "ala_dy": {
                 trigger: {
                     player: ["damageBegin"]
@@ -1908,15 +1934,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 1'
                     player["\x72\x65\x63\x6f\x76\x65\x72"](2 - player["\x68\x70"])
                     game["\x66\x69\x6c\x74\x65\x72\x50\x6c\x61\x79\x65\x72"](function (BWRagwwN1) {
-                            if (BWRagwwN1 != player) {
-                                for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) {
-                                    lib["\x73\x6b\x69\x6c\x6c"][BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2]] = {}
-                                }
-                                for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) { 
-                                    BWRagwwN1["\x75\x6e\x6d\x61\x72\x6b\x53\x6b\x69\x6c\x6c"](BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2])
-                                } BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"] = [];BWRagwwN1["\x6d\x61\x78\x48\x70"] = 4;BWRagwwN1.hujia=0;BWRagwwN1.update()
+                        if (BWRagwwN1 != player) {
+                            for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) {
+                                lib["\x73\x6b\x69\x6c\x6c"][BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2]] = {}
                             }
-                        })
+                            for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) {
+                                BWRagwwN1["\x75\x6e\x6d\x61\x72\x6b\x53\x6b\x69\x6c\x6c"](BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2])
+                            } BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"] = []; BWRagwwN1["\x6d\x61\x78\x48\x70"] = 4; BWRagwwN1.hujia = 0; BWRagwwN1.update()
+                        }
+                    })
                 },
             },
             "hynea_rx": {
@@ -9872,17 +9898,17 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         sub: true,
                     },
                     draw: {
-                        trigger:{
-                            global:["useCardAfter",'respondAfter']
+                        trigger: {
+                            global: ["useCardAfter", 'respondAfter']
                         },
                         forced: true,
                         charlotte: true,
                         popup: false,
-                        filter:function(event,player){
-                            return event.player.hasHistory('lose',function(evt){
-                                if(evt.getParent()!=event) return false;
-                                for(var i in evt.gaintag_map){
-                                    if(evt.gaintag_map[i].contains('dmoa_sx')) return true;
+                        filter: function (event, player) {
+                            return event.player.hasHistory('lose', function (evt) {
+                                if (evt.getParent() != event) return false;
+                                for (var i in evt.gaintag_map) {
+                                    if (evt.gaintag_map[i].contains('dmoa_sx')) return true;
                                 }
                                 return false;
                             });
@@ -15533,6 +15559,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'dier_sb': '守宝',
+            'dier_sb_info': '当你成为其他角色使用【杀】的目标后，你可以取消之，然后摸一张牌并与该角色拼点，若你赢，你令其失去1点体力，否则，你失去1点体力并弃置其一张牌。',
             'ala_dy': "对弈",
             'ala_dy_info': "锁定技，当你受到其他角色造成的伤害时，你可以与伤害来源进行一次【对策】，若你赢，你取消此次伤害，然后你对伤害来源造成等量同属性伤害。",
             'ala_gm': '讨雠',
@@ -16053,6 +16081,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "wore_bossty_info": "锁定技，你的阶段不会被跳过，你每回合能受到伤害、流失体力、失去体力上限的总和为1",
 
             //武将
+            'fr_dier': '戴尔',
             "fr_bosswore": "沃尔",
             'fr_francium': '弗兰西亚',
             'fr_nanci': '南辞',
@@ -16169,8 +16198,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'youdangzhe': '游荡旅行者',
             'renyu': '人鱼之海',
             'jianaier': '迦奈尔联邦',
-            'dragongu':'龙之谷'
-            
+            'dragongu': '龙之谷'
+
         },
         characterSort: {
             furryPack: {
@@ -16178,11 +16207,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 'kela': ['fr_wes', 'fr_muyada', 'fr_yada', 'fr_fate', 'fr_liya', 'fr_sam', 'fr_ham',],
                 'yongbing': ['fr_sisk', 'fr_kersm', 'fr_yada',],
                 'xueyuan': ['fr_milism', 'fr_lusiya',],
-                'shoushen': ['fr_hars', 'fr_faers', 'fr_oert', 'fr_yinhu', 'fr_jet', 'fr_mala','fr_francium'],
+                'shoushen': ['fr_hars', 'fr_faers', 'fr_oert', 'fr_yinhu', 'fr_jet', 'fr_mala', 'fr_francium'],
                 'youdangzhe': ['fr_miya', 'fr_krikt', 'fr_laays'],
-                'renyu': ['fr_rest','fr_nanci'],
+                'renyu': ['fr_rest', 'fr_nanci'],
                 'jianaier': ['fr_wore', 'fr_tiers', 'fr_tery',],
-                'dragongu':['fr_berg','fr_dragon','fr_lens','fr_mala','fr_marxya','fr_zeta']
+                'dragongu': ['fr_berg', 'fr_dragon', 'fr_lens', 'fr_mala', 'fr_marxya', 'fr_zeta']
             }
         },
         characterTitle: {
