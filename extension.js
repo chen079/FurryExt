@@ -1,3 +1,4 @@
+/// <reference path="../../typings/index.d.ts"/>
 'use strict';
 game.import("extension", function (lib, game, ui, get, ai, _status) {
     window.furry = {
@@ -110,8 +111,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         editable: false, content: function (config, pack) {
             //---------------------------------------更新说明------------------------------------------//
             //更新公告
-            lib.arenaReady.push(function(){
-                if(lib.config.extensions&&lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) lib.groupnature.fr_g_dragon = 'fr_g_dragon'
+            lib.arenaReady.push(() => {
+                if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
+                    setTimeout(() => {
+                        lib.groupnature.fr_g_dragon = 'fr_g_dragon'
+                    }, 1000)
+                }
             })
             lib.skill._Furry_changeLog = {
                 charlotte: true,
@@ -141,6 +146,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '2.回调 奇玛 【俱灭】 并设置为ai禁选',
                         '3.按照官方给出的蓄力技重写奇玛【断斩】',
                         '4.清除部分冗余代码',
+                        '2.0.9.3',
+                        '1.修复 多默尔 【笙歌】拼点可能出现的bug',
+                        '2.新增 两张新卡 【弹尽粮绝】、【水草丰茂】',
+                        '3.新增 新势力 龙'
                     ];
                     //更新武将
                     var Furry_players = ['fr_ala', 'fr_liona', 'fr_nanci', 'fr_francium'];
@@ -247,7 +256,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                     game.getFileList('extension/十周年UI/image/decoration', (folders, files) => {
-                        const furryCardFiles = ['name_fr_g_dragon.webp','name_fr_g_dragon.png'];
+                        const furryCardFiles = ['name_fr_g_dragon.webp', 'name_fr_g_dragon.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -684,16 +693,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             },
                 //------------------------------------------转韵-----------------
                 lib.element.player.changeYun = function (skill) {
+                    //若导入的player.skill为平，则改为仄
                     if (this[skill] && this[skill] == '平') {
                         this[skill] = '仄'
                     } else {
+                        //否则改为平
                         this[skill] = '平'
                     }
+                    //转韵后刷新skill的技能
                     if (this.getStat('skill')[skill]) delete this.getStat('skill')[skill];
-                    var player = this
-                    game.broadcastAll(function (player, skill) {
-                        player.$changeYun(skill);
-                    }, player, skill);
+                    //发出记录
                     game.log(this, '#g【', '#g' + get.translation(skill), '#g】', '的韵律转为' + this[skill]);
                 };
             lib.element.player.$changeYun = function (skill) {
@@ -1494,7 +1503,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.0.9.3",
+            version: "2.0.9.4",
         }, files: {}
     }
 })
