@@ -6,6 +6,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore', 'fr_francium', 'fr_nanci',],
         connect: true,//该武将包是否可以联机（必填）
         character: {
+            //'fr_zhan':['male','qun',3,[],[]],
+            //'fr_sheep':['female','fr_g_ji',4,[],[]],
+            //'fr_rasali':['male','shen',4,[],[]],
+            //'fr_nashu':['male','shen',4,[],[]],
+            //'fr_derk':['male','jin',4,[],[]],
+            //'fr_crow':['male','wei',4,[],[]],
+            //'fr_bladewolf':['male','fr_g_ji',4,[],[]],
             'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], []],
             "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
@@ -34,7 +41,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_milis": ["male", "wei", 3, ["mislee_jx", "mislee_tj", "mislee_zr"], []],
             "fr_alas": ["male", "shu", 4, ["olas_fh", "olas_bx"], []],
             "fr_kesaya": ["male", "wu", 2, ["kesaya_xs", "kesaya_zw"], ["des:隐匿者"]],
-            "fr_ken": ["male", "wei", 4, ["ken_jj", "ken_yn", "ken_pb"], []],
+            "fr_ken": ["male", "fr_g_ji", 4, ["ken_jj", "ken_yn", "ken_pb"], []],
             "fr_west": ["male", "qun", 3, ["west_pz", "west_sx", "west_jh"], []],
             "fr_lions": ["male", "shu", 4, ["lions_hr", "lion_ms"], []],
             "fr_milite": ["male", "fr_g_dragon", 7, ["milite_sz", "milite_yj"], []],
@@ -12661,7 +12668,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             if (skills.length) {
                                 ui.window.removeChild(event.node);
                                 ui.window.removeChild(text);
-                                ui.window.removeChild(button);
+                                button.close()
                                 event.node.innerHTML = '';
                                 player.storage.yifa_xs = skills
                                 game.resume();
@@ -12701,13 +12708,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         text.innerText = '请声明一个技能名称';
                         text.style.textAlign = 'center';
                         ui.window.appendChild(text);
-                        var button = ui.create.div('.menubutton.highlight.large', '确定', function () {
-                            skillName()
-                        });
-                        button.style.width = '70px';
-                        button.style.left = 'calc(50% - 35px)';
-                        button.style.top = 'calc(50% + 60px)';
-                        ui.window.appendChild(button);
+                        var button = ui.create.control('确定', () => skillName())
                         for (var i in lib.element.event) {
                             event.parent[i] = lib.element.event[i];
                         }
@@ -15624,9 +15625,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         translate: {
             //技能
             'dier_xy': '夕炎',
-            'dier_xy_info': '当你使用【杀】指定目标后，你获得该角色的一张牌。',
+            'dier_xy_info': '锁定技，当你使用【杀】指定目标后，你获得该角色的一张牌。',
             'dier_sb': '守宝',
-            'dier_sb_info': '当你成为其他角色使用【杀】的目标后，你可以你令此牌对你无效并与该角色拼点，若你赢，你摸两张牌，然后令其失去1点体力，否则，你失去一点体力并弃置其一张牌。',
+            'dier_sb_info': '当你成为其他角色使用【杀】的目标后，你可以与该角色拼点并令此牌对你无效，若你赢，你摸两张牌，然后令其失去1点体力，否则，你失去一点体力并弃置其一张牌。',
             'ala_dy': "对弈",
             'ala_dy_info': "锁定技，当你受到其他角色造成的伤害时，你可以与伤害来源进行一次【对策】，若你赢，你取消此次伤害，然后你对伤害来源造成等量同属性伤害。",
             'ala_gm': '讨雠',
@@ -16256,6 +16257,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_fox": "狐克斯",
             "fr_molis": "莫莉斯",
             "fr_shisan": "拾弎",
+            "fr_bladewolf":'刃狼',
+            'fr_crow':'克劳',
+            'fr_derk':'德克',
+            'fr_nashu':'那舒',
+            'fr_rasali':'让萨利',
+            'fr_sheep':'西普',
+            'fr_zhan':'展',
 
             //分类
             'wanling': "万灵之森",

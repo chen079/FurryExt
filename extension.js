@@ -109,15 +109,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
     return {
         name: "福瑞拓展",
         editable: false, content: function (config, pack) {
-            //---------------------------------------更新说明------------------------------------------//
-            //更新公告
-            lib.arenaReady.push(() => {
-                if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
-                    setTimeout(() => {
-                        lib.groupnature.fr_g_dragon = 'fr_g_dragon'
-                    }, 1000)
-                }
-            })
+                        //---------------------------------------更新说明------------------------------------------//
+            //更新公告 参考十周年拓展
             lib.skill._Furry_changeLog = {
                 charlotte: true,
                 ruleSkill: true,
@@ -149,7 +142,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '2.0.9.3',
                         '1.修复 多默尔 【笙歌】拼点可能出现的bug',
                         '2.新增 两张新卡 【弹尽粮绝】、【水草丰茂】',
-                        '3.新增 新势力 龙'
+                        '3.新增 新势力 龙',
+                        '2.0.9.4',
+                        '1.增强 穆里 终策',
+                        '2.新人物 戴尔',
+                        '3.修改部分代码',
+                        '4.新boss 沃尔 ———建议打开弱的武将包',
                     ];
                     //更新武将
                     var Furry_players = ['fr_ala', 'fr_liona', 'fr_nanci', 'fr_francium'];
@@ -198,6 +196,435 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     });
                 },
             };
+            //@author Rintim <rintim@foxmail.com> 拓展采用@copyright BSD-2-Clause协议
+            lib.element.player.chooseNumber = function chooseNumber(min, max, ...options) {
+                let next = game.createEvent("chooseNumber");
+                let begin, prompt, prompt2, transform = {}, forced, filter;
+
+                for (const item of options) {
+                    if (typeof item === "number") {
+                        begin = item;
+                    }
+                    else if (typeof item === "string") {
+                        if (!prompt) prompt = item;
+                        else if (!prompt2) prompt2 = item;
+                    }
+                    else if (typeof item === "object") {
+                        transform = item;
+                    }
+                    else if (typeof item === "boolean") {
+                        forced = item;
+                    }
+                    else if (typeof item === "function") {
+                        filter = item;
+                    }
+                }
+
+                if (!min || !max) return;
+                if (min == max) return;
+                [min, max] = [Math.min(min, max), Math.max(min, max)];
+                if (!begin || begin < min) begin = min;
+                if (begin && begin > max) begin = max;
+
+                next.set("player", this);
+                next.set("min", min);
+                next.set("max", max);
+                next.set("num", begin);
+                next.set("show", transform);
+
+                if (prompt) next.set("prompt", prompt);
+                if (prompt2) next.set("prompt2", prompt2);
+                if (forced) next.set("forced", forced);
+                if (filter) next.set("filter", filter);
+
+                next.setContent("chooseNumber");
+
+                return next;
+            };
+            //@author Rintim <rintim@foxmail.com> 拓展采用@copyright BSD-2-Clause协议
+            lib.element.content.chooseNumber = function chooseNumberContent() {
+                "step 0"
+                if (event.isMine()) {
+                    let isInput = false;
+
+                    event.controls = {
+                        cancel: ui.create.control("取消", () => { }),
+                        min: ui.create.control("最小", () => { }),
+                        minusss: ui.create.control("---", () => { }),
+                        minuss: ui.create.control("--", () => { }),
+                        minus: ui.create.control("-", () => { }),
+                        num: ui.create.control(event.num, () => { }),
+                        plus: ui.create.control("+", () => { }),
+                        pluss: ui.create.control("++", () => { }),
+                        plusss: ui.create.control("+++", () => { }),
+                        max: ui.create.control("最大", () => { }),
+                        clear: ui.create.control("确认", () => {
+                            if (isInput) {
+
+                            }
+                            else {
+                                event.result = { bool: true, choice: event.num };
+                                game.resume();
+                            }
+                        })
+                    };
+
+                    if (event.forced) {
+                        event.controls.cancel.close();
+                        delete event.controls.cancel;
+                    }
+
+                    const difference = event.max - event.min;
+                    if (difference <= 100) {
+                        event.controls.plusss.close();
+                        event.controls.minusss.close();
+                        delete event.controls.plusss;
+                        delete event.controls.minusss;
+                    }
+                    if (difference <= 10) {
+                        event.controls.pluss.close();
+                        event.controls.minuss.close();
+                        delete event.controls.pluss;
+                        delete event.controls.minuss;
+                    }
+
+                    const symbol = {
+                        m: Symbol("minus"),
+                        p: Symbol("plus"),
+                        l: Symbol("limit"),
+                        i: Symbol("input")
+                    }
+
+                    const divsConfig = new Map();
+                    if (event.controls.plus) divsConfig.set(event.controls.plus, [symbol.p, 1]);
+                    if (event.controls.pluss) divsConfig.set(event.controls.pluss, [symbol.p, 10]);
+                    if (event.controls.plusss) divsConfig.set(event.controls.plusss, [symbol.p, 100]);
+
+                    if (event.controls.minus) divsConfig.set(event.controls.minus, [symbol.m, -1]);
+                    if (event.controls.minuss) divsConfig.set(event.controls.minuss, [symbol.m, -10]);
+                    if (event.controls.minusss) divsConfig.set(event.controls.minusss, [symbol.m, -100]);
+
+                    divsConfig.set(event.controls.min, [symbol.l, event.min]);
+                    divsConfig.set(event.controls.max, [symbol.l, event.max]);
+
+                    const doUpdate = (sym) => {
+                        for (const [div, [sym2, num]] of divsConfig) {
+                            switch (sym2) {
+                                case symbol.l:
+                                    if (event.num === num && !div.classList.contains("disabled"))
+                                        div.classList.add("disabled");
+                                    else if (div.classList.contains("disabled"))
+                                        div.classList.remove("disabled");
+
+                                    break;
+                                default:
+                                    switch (sym) {
+                                        case symbol.i:
+                                            switch (sym2) {
+                                                case symbol.p:
+                                                    if (event.num + num <= event.max && div.classList.contains("disabled"))
+                                                        div.classList.remove("disabled");
+                                                    break;
+                                                case symbol.m:
+                                                    if (event.num + num >= event.min && div.classList.contains("disabled"))
+                                                        div.classList.remove("disabled");
+                                                    break;
+                                            }
+                                            break;
+                                        case symbol.l:
+                                            switch (event.num) {
+                                                case event.min:
+                                                    if (sym2 === symbol.p && div.classList.contains("disabled"))
+                                                        div.classList.remove("disabled");
+                                                    if (sym2 === symbol.m && !div.classList.contains("disabled"))
+                                                        div.classList.add("disabled");
+                                                    break;
+                                                case event.max:
+                                                    if (sym2 === symbol.m && div.classList.contains("disabled"))
+                                                        div.classList.remove("disabled");
+                                                    if (sym2 === symbol.p && !div.classList.contains("disabled"))
+                                                        div.classList.add("disabled");
+                                                    break;
+                                            }
+                                            break;
+                                        case symbol.m:
+                                            if (event.num + num <= event.max && div.classList.contains("disabled"))
+                                                div.classList.remove("disabled");
+                                            if (event.num + num < event.min && !div.classList.contains("disabled"))
+                                                div.classList.add("disabled");
+                                            break;
+                                        case symbol.p:
+                                            if (event.num + num >= event.min && div.classList.contains("disabled"))
+                                                div.classList.remove("disabled");
+                                            if (event.num + num > event.max && !div.classList.contains("disabled"))
+                                                div.classList.add("disabled");
+                                            break;
+                                        default:
+                                            if (event.num + num < event.min && !div.classList.contains("disabled"))
+                                                div.classList.add("disabled");
+                                            if (event.num + num > event.max && !div.classList.contains("disabled"))
+                                                div.classList.add("disabled");
+                                            break;
+                                    }
+                                    break;
+                            }
+                        }
+                    };
+
+                    const doFilter = () => {
+                        if (event.filter) {
+                            const result = event.filter(event.num);
+                            if (result && event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.remove("disabled");
+                            else if (!result && !event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.add("disabled");
+                        }
+                    };
+
+                    const doShow = () => {
+                        event.controls.num.textContent = (Reflect.get(event.show, event.num) ?? event.num).toString();
+                        if (event.controls.num.classList.contains("disabled")) event.controls.num.classList.remove("disabled");
+                    };
+
+                    const pressTemplate = (self, sym, num) => () => {
+                        if (!self.classList.contains("disabled")) {
+                            event.num = num + event.num * Number(sym !== symbol.l);
+
+                            doUpdate(sym);
+                            doFilter();
+
+                            doShow();
+                        }
+                    };
+
+                    const pressDownTemplate = (self, sym, num) => ((doMethod => () => {
+                        self._setTimeout = setTimeout(() => {
+                            delete self._setTimeout;
+                            self._setInterval = setInterval(() => {
+                                doMethod();
+                                if (self.classList.contains("disabled")) {
+                                    clearInterval(self._setInterval);
+                                    delete self._setInterval;
+                                }
+                            }, 50);
+                        }, 500);
+                    })(pressTemplate(self, sym, num)));
+
+                    const pressUpTemplate = (self) => () => {
+                        if (self._setTimeout) {
+                            clearTimeout(self._setTimeout);
+                            delete self._setTimeout;
+                        }
+                        if (self._setInterval) {
+                            clearInterval(self._setInterval);
+                            delete self._setInterval;
+                        }
+                    };
+
+                    const itemTemplate = (filter, callback) => () => {
+                        if (isInput) {
+                            const num = parseInt(event._input.value);
+                            if (filter(num)) {
+                                isInput = false;
+                                event._div.removeChild(event._input);
+                                event.controls.dialog.content.removeChild(event._div);
+                                event._div.delete();
+
+                                callback(num);
+
+                                delete event._div;
+                                delete event._input;
+                                if (!event.prompt) event.controls.dialog.hide();
+
+                                doUpdate(symbol.i);
+                                doFilter();
+                                doShow();
+
+                            }
+                            else callback(true);
+                        }
+                        else {
+                            event.result = callback(false);
+                            game.resume();
+                        }
+                    }
+
+                    doUpdate();
+                    doFilter();
+
+                    let numdiv = event.controls.num;
+                    numdiv.addEventListener(lib.config.touchscreen ? "touchend" : "click", _click => {
+                        if (!numdiv.classList.contains("disabled")) {
+                            isInput = true;
+
+                            numdiv.classList.add("disabled");
+                            for (const [div, _item] of divsConfig)
+                                if (!div.classList.contains("disabled"))
+                                    div.classList.add("disabled");
+
+                            if (!event.prompt) event.controls.dialog.show();
+
+                            let div = ui.create.div();
+                            event.controls.dialog.add(div);
+
+                            div.append(`请输入范围内的数字（${event.min}~${event.max}）`);
+
+                            let input = document.createElement("input");
+                            input.type = "number";
+                            input.setAttribute("maxlength", difference.toString().length);
+                            input.addEventListener("keydown", e => e.stopPropagation());
+                            input.addEventListener("keyup", e => e.stopPropagation());
+
+                            div.append(input);
+
+                            event._div = div;
+                            event._input = input;
+                        }
+                    })
+
+                    for (const [div, [sym, num]] of divsConfig) {
+                        div.addEventListener(lib.config.touchscreen ? "touchend" : "click", pressTemplate(div, sym, num));
+                        if (lib.config.button_press) {
+                            div.addEventListener(lib.config.touchscreen ? "touchstart" : "mousedown", pressDownTemplate(div, sym, num));
+                            div.addEventListener(lib.config.touchscreen ? "touchend" : "mouseup", pressUpTemplate(div));
+                        }
+                    }
+
+                    event.controls.cancel.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(_num =>
+                        true, bool => { bool }));
+                    event.controls.clear.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(num =>
+                        num >= event.min && num <= event.max, bool => {
+                            if (typeof bool === "number") {
+                                event.num = bool;
+                            }
+                            else if (bool === true) {
+                                if (event.controls.clear._setTimeout) {
+                                    clearTimeout(event.controls.clear._setTimeout);
+                                    delete event.controls.clear._setTimeout;
+                                }
+                                let text = document.createElement("span");
+                                text.style.color = "#FF3333";
+                                text.style.fontFamily = "12px";
+                                text.textContent = "请输入符合要求的数字！";
+                                event._div.append(text);
+                                event.controls.clear._setTimeout = setTimeout(() => {
+                                    event._div.removeChild(text);
+                                }, 2000);
+                            }
+                            else if (bool === false) return { bool: true, choice: event.num };
+                        }));
+
+                    event.controls.dialog = ui.create.dialog();
+                    event.controls.dialog.hide();
+                    if (event.prompt) {
+                        event.controls.dialog.show();
+                        event.controls.dialog.add(event.prompt);
+                        if (event.prompt2) event.controls.dialog.addText(event.prompt2, event.prompt2.length <= 20 || event.centerprompt2)
+                    }
+
+                    event.configs = divsConfig;
+
+                    game.pause();
+                    game.countChoose();
+                    event.choosing = true;
+                }
+                else if (event.isOnline()) {
+                    event.send();
+                }
+                else {
+                    event.result = "ai";
+                }
+                "step 1"
+                if (event.result === "ai") {
+                    if (event.ai) event.result = event.ai(player, event.filter, event.getParent());
+                    else if (event.goon) event.result = event.goon;
+
+                    if (typeof event.result === "number") {
+                        let result = Math.min(Math.max(event.result, event.min), event.max) + event.min;
+                        while (true) {
+                            if (!event.filter || event.filter(result)) break;
+                            result = Math.floor(Math.random() * (event.max - event.min + 1)) + event.min;
+                        }
+                        event.result = { bool: true, choice: result };
+                    }
+                    else if (event.forced) {
+                        while (true) {
+                            event.result = { bool: true, choice: Math.floor(Math.random() * (event.max - event.min + 1)) + event.min };
+                            if (!event.filter || event.filter(event.result.choice)) break;
+                        }
+                    }
+                    else event.result = { bool: false };
+                }
+
+                event.choosing = false;
+                _status.imchoosing = false;
+                if (event.controls) for (const name in event.controls) event.controls[name].close();
+                if (event.configs) event.configs.clear();
+                if (event.result.bool && event.logSkill) {
+                    if (typeof event.logSkill === "string") {
+                        player.logSkill(event.logSkill);
+                    }
+                    else if (Array.isArray(event.logSkill)) {
+                        player.logSkill.apply(player, event.logSkill);
+                    }
+                }
+                event.resume();
+            };
+            lib.arenaReady.push(() => {
+                if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
+                    setTimeout(() => {
+                        lib.groupnature.fr_g_dragon = 'fr_g_dragon'
+                        lib.groupnature.fr_g_ji = 'fr_g_ji'
+                    }, 1000)
+                }
+            })
+            // ---------------------------------------瞬发技按钮------------------------------------------//
+            //按钮样式来自天牢令拓展    瞬发技参考自时空枢纽拓展
+            lib.element.player.FrShunfajiInit = function (skillname) {
+                if (!this.isUnderControl(true)) {
+                    return;
+                }
+                var info = lib.skill[skillname];
+                if (!info) return;
+                if (info.clickable) {
+                    var button = ui.create.div('.Fr-shunfaanniu-' + config.fr_shunfajiButton, this);
+                    button.innerHTML = get.translation(skillname);
+                    var player = this;
+                    button.listen(function () {
+                        if (player.hasSkill(skillname, true, true, false)) {
+                            var enable = true
+                            if (info.usable && get.skillCount(skillname) >= info.usable) enable = false;
+                            if (info.round && (info.round - (game.roundNumber - player.storage[skillname + '_roundcount']) > 0)) enable = false;
+                            if (info.filter && !info.filter(event, player)) enable = false;
+                            if (info.clickable) {
+                                if (!enable || !player.hasSkill(skillname, false, true, true)) {
+                                    alert("当前不可发动！");
+                                    return;
+                                }
+                                info.clickable(player);
+                                if (typeof info.usable == 'number') {
+                                    player.addSkill('counttrigger');
+                                    if (!player.storage.counttrigger) {
+                                        player.storage.counttrigger = {};
+                                    }
+                                    if (!player.storage.counttrigger[skillname]) {
+                                        player.storage.counttrigger[skillname] = 1;
+                                    }
+                                    else {
+                                        player.storage.counttrigger[skillname]++;
+                                    }
+                                }
+                                if (info.round) {
+                                    var roundname = skillname + '_roundcount';
+                                    player.storage[roundname] = game.roundNumber;
+                                    player.syncStorage(roundname);
+                                    player.markSkill(roundname);
+                                }
+                            }
+                        } else {
+                            button.delete();
+                        }
+                    });
+                }
+            };
             //---------------------------------------显示手牌上限------------------------------------------//
             if (config.ShowmaxHandcard) {
                 lib.skill._ShowmaxHandcard = {
@@ -244,7 +671,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                     game.getFileList('extension/十周年UI/image/decorations', (folders, files) => {
-                        const furryCardFiles = ['name2_fr_g_dragon.png'];
+                        const furryCardFiles = ['name2_fr_g_dragon.png', 'name2_fr_g_ji.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -256,7 +683,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                     game.getFileList('extension/十周年UI/image/decoration', (folders, files) => {
-                        const furryCardFiles = ['name_fr_g_dragon.webp', 'name_fr_g_dragon.png'];
+                        const furryCardFiles = ['name_fr_g_dragon.webp', 'name_fr_g_dragon.png', 'name_fr_g_ji.png', 'name2_fr_g_ji.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -284,7 +711,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 //武将势力边框
                 if (lib.config.extensions.contains('手杀ui') && lib.config['extension_手杀ui_enable']) {
                     game.getFileList('extension/手杀ui/character/images/SSSC', (folders, files) => {
-                        const furryCardFiles = ['name2_fr_g_dragon.png'];
+                        const furryCardFiles = ['name2_fr_g_dragon.png', 'name2_fr_g_ji.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -296,7 +723,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                     game.getFileList('extension/手杀ui/character/images', (folders, files) => {
-                        const furryCardFiles = ['name2_fr_g_dragon.png'];
+                        const furryCardFiles = ['name2_fr_g_dragon.png', 'name2_fr_g_ji.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -310,7 +737,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 if (lib.config.extensions.contains('假装无敌') && lib.config['extension_假装无敌_enable']) {
                     game.getFileList('extension/假装无敌/images', (folders, files) => {
-                        const furryCardFiles = ['border_fr_g_dragon.png'];
+                        const furryCardFiles = ['border_fr_g_dragon.png', 'border_fr_g_ji.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -356,27 +783,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 //动皮弧形边框
                 if (lib.config.extensions.contains('皮肤切换') && lib.config['extension_皮肤切换_enable']) {
                     game.getFileList('extension/皮肤切换/images/border', (folders, files) => {
-                        const furryCardFiles = ['fr_g_dragon.png'];
+                        const furryCardFiles = ['fr_g_dragon.png', 'fr_g_ji.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
                                     game.readFile('extension/福瑞拓展/image/border/' + furryCardFiles[i], (data) => {
                                         game.writeFile(data, 'extension/皮肤切换/images/border', furryCardFiles[i], function () { });
-                                    });
-                                }
-                            }
-                        }
-                    });
-                }
-                //雷修千幻
-                if (lib.config.extensions.contains('千幻聆音') && lib.config['extension_千幻聆音_enable']) {
-                    game.getFileList('extension/千幻聆音/theme/shousha/', (folders, files) => {
-                        const furryCardFiles = ['detail_fr_g_dragon_other.png', 'detail_fr_g_dragon.png'];
-                        for (let i = 0; i < furryCardFiles.length; i++) {
-                            if (!files.contains(furryCardFiles[i])) {
-                                if (game.readFile && game.writeFile) {
-                                    game.readFile('extension/福瑞拓展/image/group/' + furryCardFiles[i], (data) => {
-                                        game.writeFile(data, 'extension/千幻聆音/theme/shousha/', furryCardFiles[i], function () { });
                                     });
                                 }
                             }
@@ -690,21 +1102,21 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         mark.firstChild.innerHTML = "圣咏"
                     }
                 }
-            },
-                //------------------------------------------转韵-----------------
-                lib.element.player.changeYun = function (skill) {
-                    //若导入的player.skill为平，则改为仄
-                    if (this[skill] && this[skill] == '平') {
-                        this[skill] = '仄'
-                    } else {
-                        //否则改为平
-                        this[skill] = '平'
-                    }
-                    //转韵后刷新skill的技能
-                    if (this.getStat('skill')[skill]) delete this.getStat('skill')[skill];
-                    //发出记录
-                    game.log(this, '#g【', '#g' + get.translation(skill), '#g】', '的韵律转为' + this[skill]);
-                };
+            }
+            //------------------------------------------转韵-----------------
+            lib.element.player.changeYun = function (skill) {
+                //若导入的player.skill为平，则改为仄
+                if (this[skill] && this[skill] == '平') {
+                    this[skill] = '仄'
+                } else {
+                    //否则改为平
+                    this[skill] = '平'
+                }
+                //转韵后刷新skill的技能
+                if (this.getStat('skill')[skill]) delete this.getStat('skill')[skill];
+                //发出记录
+                game.log(this, '#g【', '#g' + get.translation(skill), '#g】', '的韵律转为' + this[skill]);
+            };
             lib.element.player.$changeYun = function (skill) {
                 var mark = this.marks[skill];
                 if (mark) {
@@ -908,11 +1320,610 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             lib.perfectPair.fr_miya = ['db_fr_krikt']
         }, precontent: function (furryPack) {
             if (furryPack.enable) {
+                game.addMode('furry_lib', {
+                    game: {
+                        syncMenu: true,
+                        createview: function (node, charalist) {
+                            var player = ui.create.player(null, true);
+                            player.init(charalist[0][0]);
+                            player.style.float = 'left';
+                            player.style.left = '3%';
+                            player.style.top = '1%';
+                            player.style.width = '130px'
+                            player.style.height = '170px'
+                            player.style.cursor = 'pointer';
+                            player.style.position = 'absolute';
+                            player.node.count.remove();
+                            player.node.hp.remove();
+                            if (lib.config.frLutou) {
+                                player.node.avatar.style['height'] = '178px';
+                            } else {
+                                player.node.avatar.style['height'] = '170px';
+                            }
+                            player.style.transition = 'all 0.5s';
+                            node.appendChild(player);
+                            node.appendChild(player);
+                            node.playernode = player;
+
+                            var dialog = ui.create.dialog('hidden');
+                            dialog.style.left = "calc(6%+130px)";
+                            dialog.style.right = "1%"
+                            dialog.style.top = "-1%";
+                            dialog.style.width = "calc(100% - 130px)";
+                            dialog.style.height = "auto";
+                            dialog.noopen = true;
+                            node.appendChild(dialog);
+                            dialog.addText('<div id="Cdetail" style="text-align:left;font-size:16px;width:calc(95% - 60px)">' + charalist[0][2] + '</br><span class="bluetext">角色介绍</span>：' + get.characterIntro(charalist[0][0]) + '</br>' + charalist[0][1]);
+
+                            var dialog1 = ui.create.dialog('hidden');
+                            dialog1.style.left = "0px";
+                            dialog1.style.top = "220px";
+                            dialog1.style.width = "100%";
+                            dialog1.style.height = "50%";
+                            dialog1.noopen = true;
+                            node.appendChild(dialog1);
+                            var tp = [];
+                            for (var i = 0; i < charalist.length; i++) {
+                                tp.push(charalist[i][0]);
+                            }
+                            dialog1.add([tp, 'character']);
+                            for (var i = 0; i < dialog1.buttons.length; i++) {
+                                dialog1.buttons[i].classList.add('noclick');
+                                dialog1.buttons[i].value = i;
+                                dialog1.buttons[i].onclick = function () {
+                                    player.init(charalist[this.value][0]);
+                                    document.getElementById("Cdetail").innerHTML = charalist[this.value][2] + '</br><span class="bluetext">角色介绍</span>：' + get.characterIntro(charalist[this.value][0]) + '</br>' + charalist[this.value][1];
+                                };
+                            }
+                        },
+                    },
+                    start: function () {
+                        ui.auto.hide();
+                        if (!lib.storage.scene) {
+                            lib.storage.scene = {};
+                        }
+                        if (!lib.storage.stage) {
+                            lib.storage.stage = {};
+                        }
+                        if (!_status.extensionmade) {
+                            _status.extensionmade = [];
+                        }
+                        if (_status.extensionscene) {
+                            game.save('scene', lib.storage.scene);
+                        }
+                        if (_status.extensionstage) {
+                            game.save('stage', lib.storage.stage);
+                        }
+                        var dialog = ui.create.dialog('hidden');
+                        dialog.classList.add('fixed');
+                        dialog.classList.add('scroll1');
+                        dialog.classList.add('scroll2');
+                        dialog.classList.add('fullwidth');
+                        dialog.classList.add('fullheight');
+                        dialog.classList.add('noupdate');
+                        dialog.classList.add('character');
+                        dialog.contentContainer.style.overflow = 'visible';
+                        dialog.style.overflow = 'scroll';
+                        dialog.content.style.height = '100%';
+                        dialog.contentContainer.style.transition = 'all 0s';
+                        if (!lib.storage.directStage) dialog.open();
+                        var packnode = ui.create.div('.packnode', dialog);
+                        lib.setScroll(packnode);
+                        ui.background.setBackgroundImage('extension/福瑞拓展/image/background/fire_dance.png');
+                        //背景
+                        var clickCapt = function () {
+                            var active = this.parentNode.querySelector('.active');
+                            if (this.link == 'stage') {
+                                if (get.is.empty(lib.storage.scene)) {
+                                    alert('请创建至少1个场景');
+                                    return;
+                                }
+                            }
+                            if (active) {
+                                if (active == this) return;
+                                for (var i = 0; i < active.nodes.length; i++) {
+                                    active.nodes[i].remove();
+                                    if (active.nodes[i].showcaseinterval) {
+                                        clearInterval(active.nodes[i].showcaseinterval);
+                                        delete active.nodes[i].showcaseinterval;
+                                    }
+                                }
+                                active.classList.remove('active');
+                            }
+                            this.classList.add('active');
+                            for (var i = 0; i < this.nodes.length; i++) {
+                                dialog.content.appendChild(this.nodes[i]);
+                            }
+                            var showcase = this.nodes[this.nodes.length - 1];
+                            showcase.style.height = (dialog.content.offsetHeight - showcase.offsetTop) + 'px';
+                            if (typeof showcase.action == 'function') {
+                                if (showcase.action(showcase._showcased ? false : true) !== false) {
+                                    showcase._showcased = true;
+                                }
+                            }
+                            if (this._nostart) start.style.display = 'none';
+                            else start.style.display = '';
+                            game.save('currentBrawl', 'help');
+                        }
+                        // 应该是这里是制作列表的地方
+                        var createNode = function (name) {
+                            var info = lib.brawl[name];
+                            var node = ui.create.div('.dialogbutton.menubutton.large', info.name, packnode, clickCapt);
+                            node.style.transition = 'all 0s';
+                            var caption = info.name;
+                            var modeinfo = '';
+                            if (info.mode) {
+                                modeinfo = get.translation(info.mode) + '模式';	// 这个是标注哪个模式下使用的
+                            }
+                            if (info.submode) {
+                                if (modeinfo) {
+                                    modeinfo += ' - ';
+                                }
+                                modeinfo += info.submode;
+                            }
+                            var intro;
+                            if (Array.isArray(info.intro)) {
+                                intro = '<ul style="text-align:left;margin-top:10">';
+                                if (modeinfo) {
+                                    intro += '<li>' + modeinfo;
+                                }
+                                for (var i = 0; i < info.intro.length; i++) {
+                                    intro += '<br>' + info.intro[i];
+                                }
+                            }
+                            else {
+                                intro = '';
+                                if (modeinfo) {
+                                    intro += '（' + modeinfo + '）';
+                                }
+                                intro += info.intro;
+                            }
+                            var today = new Date();
+                            var i = ui.create.div('.text center', intro);
+                            i.style.overflow = 'scroll';
+                            i.style.margin = '0px';
+                            i.style.padding = '0px';
+                            var showcase = ui.create.div();
+                            showcase.style.margin = '0px';
+                            showcase.style.padding = '0px';
+                            showcase.style.width = '100%';
+                            showcase.style.display = 'block'
+                            showcase.style.overflow = 'scroll';
+                            showcase.action = info.showcase;
+                            showcase.link = name;
+                            if (info.fullshow) {
+                                node.nodes = [showcase];
+                                showcase.style.height = '100%';
+                            }
+                            else {
+                                node.nodes = [
+                                    i,
+                                    showcase,
+                                ];
+                            }
+                            node.link = name;
+                            node._nostart = info.nostart;
+                            if (lib.storage.currentBrawl == name) {
+                                clickCapt.call(node);
+                            }
+                            return node;
+                        }
+                        // 点那个巨大的“斗”之后
+                        var clickStart = function () {
+                            dialog.delete();
+                            ui.auto.show();
+                            game.switchMode('identity');
+                        };
+                        // 制作那个“斗”的键的。去掉会出bug，不知道为什么
+                        var start = ui.create.div('.menubutton.round.highlight', '←', dialog.content, clickStart);
+                        start.style.position = 'absolute';
+                        start.style.left = '-100px';
+                        start.style.right = 'auto';
+                        start.style.top = 'auto';
+                        start.style.bottom = '10px';
+                        start.style.width = '80px';
+                        start.style.height = '80px';
+                        start.style.lineHeight = '80px';
+                        start.style.margin = '0';
+                        start.style.padding = '5px';
+                        start.style.fontSize = '72px';
+                        start.style.zIndex = 3;
+                        start.style.transition = 'all 0s';
+                        start.hide();
+                        game.addScene = function (name, clear) {
+                            var scene = lib.storage.scene[name];
+                            var brawl = {
+                                name: name,
+                                intro: scene.intro,
+                            };
+                            for (var i in lib.brawl.scene.template) {
+                                brawl[i] = get.copy(lib.brawl.scene.template[i]);
+                            }
+                            if (!scene.gameDraw) {
+                                brawl.content.noGameDraw = true;
+                            }
+                            brawl.content.scene = scene;
+                            lib.brawl['scene_' + name] = brawl;
+                            var node = createNode('scene_' + name);
+                            if (clear) {
+                                game.addSceneClear();
+                                clickCapt.call(node);
+                                _status.sceneChanged = true;
+                            }
+                        };
+                        game.addStage = function (name, clear) {
+                            var stage = lib.storage.stage[name];
+                            var brawl = {
+                                name: name,
+                                intro: stage.intro,
+                                content: {}
+                            };
+                            for (var i in lib.brawl.stage.template) {
+                                brawl[i] = get.copy(lib.brawl.stage.template[i]);
+                            }
+                            brawl.content.stage = stage;
+                            lib.brawl['stage_' + name] = brawl;
+                            var node = createNode('stage_' + name);
+                            if (clear) {
+                                game.addStageClear();
+                                clickCapt.call(node);
+                            }
+                        }
+                        game.removeScene = function (name) {
+                            delete lib.storage.scene[name];
+                            game.save('scene', lib.storage.scene);
+                            _status.sceneChanged = true;
+                            for (var i = 0; i < packnode.childElementCount; i++) {
+                                if (packnode.childNodes[i].link == 'scene_' + name) {
+                                    if (packnode.childNodes[i].classList.contains('active')) {
+                                        for (var j = 0; j < packnode.childElementCount; j++) {
+                                            if (packnode.childNodes[j].link == 'scene') {
+                                                clickCapt.call(packnode.childNodes[j]);
+                                            }
+                                        }
+                                    }
+                                    packnode.childNodes[i].remove();
+                                    break;
+                                }
+                            }
+                        }
+                        game.removeStage = function (name) {
+                            delete lib.storage.stage[name];
+                            game.save('stage', lib.storage.stage);
+                            for (var i = 0; i < packnode.childElementCount; i++) {
+                                if (packnode.childNodes[i].link == 'stage_' + name) {
+                                    if (packnode.childNodes[i].classList.contains('active')) {
+                                        for (var j = 0; j < packnode.childElementCount; j++) {
+                                            if (get.is.empty(lib.storage.scene)) {
+                                                if (packnode.childNodes[j].link == 'scene') {
+                                                    clickCapt.call(packnode.childNodes[j]);
+                                                }
+                                            }
+                                            else {
+                                                if (packnode.childNodes[j].link == 'stage') {
+                                                    clickCapt.call(packnode.childNodes[j]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    packnode.childNodes[i].remove();
+                                    break;
+                                }
+                            }
+                        }
+                        var sceneNode;
+                        for (var i in lib.brawl) {
+                            if (get.config(i) === false) continue;
+                            if (i == 'scene') {
+                                sceneNode = createNode(i);
+                            }
+                            else {
+                                createNode(i);
+                            }
+                        }
+                        if (sceneNode) {
+                            game.switchScene = function () {
+                                clickCapt.call(sceneNode);
+                            }
+                        }
+                        for (var i in lib.storage.scene) {
+                            game.addScene(i);
+                        }
+                        for (var i in lib.storage.stage) {
+                            game.addStage(i);
+                        }
+                        if (!lib.storage.currentBrawl) {
+                            clickCapt.call(packnode.firstChild);
+                        }
+                        game.save('lastStage');
+                        if (lib.storage.directStage) {
+                            var directStage = lib.storage.directStage;
+                            game.save('directStage');
+                            clickStart(directStage);
+                        }
+                        lib.init.onfree();
+                    },
+                    brawl: {
+                        jianaierview: {
+                            name: '迦奈尔',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_wore',
+                                            '</br><span class="bluetext">关联角色</span>：缇尔斯<br><span class="bluetext">角色分析</span>：超级左慈。',
+                                            '进攻：' + game.frStars(2) + ' 爆发：' + game.frStars(3) +
+                                            ' </br>运气：' + game.frStars(5) + ' 生存：' + game.frStars(2) +
+                                            ' </br>控制：' + game.frStars(2) + ' 辅助：' + game.frStars(2) +
+                                            '</br>谋略：' + game.frStars(4) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_tiers',
+                                            '</br><span class="bluetext">关联角色</span>：沃尔<br>',
+                                            '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(6) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(1) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_tery',
+                                            '</br><span class="bluetext">关联角色</span>：无<br>',
+                                            '进攻：' + game.frStars(2) + ' 爆发：' + game.frStars(2) +
+                                            ' </br>运气：' + game.frStars(2) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(2) +
+                                            '</br>谋略：' + game.frStars(5) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        wanlingview: {
+                            name: '万灵之森',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_yifeng',
+                                            '</br><span class="bluetext">关联角色</span>：弈法<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(5) + ' 辅助：' + game.frStars(5) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_yifa',
+                                            '</br><span class="bluetext">关联角色</span>：弈风<br>',
+                                            '进攻：' + game.frStars(4) + ' 爆发：' + game.frStars(4) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(4) +
+                                            ' </br>控制：' + game.frStars(2) + ' 辅助：' + game.frStars(2) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                        ['fr_telina',
+                                            '</br><span class="bluetext">关联角色</span>：无<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(5) + ' 生存：' + game.frStars(2) +
+                                            ' </br>控制：' + game.frStars(2) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        kelaview: {
+                            name: '克拉',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_wes',
+                                            '</br><span class="bluetext">关联角色</span>：米里森<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(5) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(1) + ' 辅助：' + game.frStars(6) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_muyada',
+                                            '</br><span class="bluetext">关联角色</span>：流亡者佣兵团角色<br>',
+                                            '进攻：' + game.frStars(4) + ' 爆发：' + game.frStars(2) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(5) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_yada',
+                                            '</br><span class="bluetext">关联角色</span>：来自坷拉的兽人<br>',
+                                            '进攻：' + game.frStars(2) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(2) +
+                                            ' </br>控制：' + game.frStars(4) + ' 辅助：' + game.frStars(3) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_fate',
+                                            '</br><span class="bluetext">关联角色</span>：米亚<br>',
+                                            '进攻：' + game.frStars(3) + ' 爆发：' + game.frStars(1) +
+                                            ' </br>运气：' + game.frStars(6) + ' 生存：' + game.frStars(4) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(4) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_liya',
+                                            '</br><span class="bluetext">关联角色</span>：卢森特<br>',
+                                            '进攻：' + game.frStars(3) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(4) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_sam',
+                                            '</br><span class="bluetext">关联角色</span>：海<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(6) +
+                                            ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(5) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                        ['fr_ham',
+                                            '</br><span class="bluetext">关联角色</span>：山<br>',
+                                            '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(5) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(2) +
+                                            ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(4) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        yongbingview: {
+                            name: '佣兵团',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_sisk',
+                                            '</br><span class="bluetext">关联角色</span>：流亡者佣兵团角色<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(5) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(1) + ' 辅助：' + game.frStars(6) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_kersm',
+                                            '</br><span class="bluetext">关联角色</span>：流亡者佣兵团角色<br>',
+                                            '进攻：' + game.frStars(4) + ' 爆发：' + game.frStars(2) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(2) +
+                                            ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(4) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_yada',
+                                            '</br><span class="bluetext">关联角色</span>：流亡者佣兵团角色<br>',
+                                            '进攻：' + game.frStars(2) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(2) +
+                                            ' </br>控制：' + game.frStars(4) + ' 辅助：' + game.frStars(3) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        schoolview: {
+                            name: '魔法学院',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_milism',
+                                            '</br><span class="bluetext">关联角色</span>：无<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(5) + ' 辅助：' + game.frStars(5) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_lusiya',
+                                            '</br><span class="bluetext">关联角色</span>：流亡者佣兵团角色<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(3) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(2) + ' 辅助：' + game.frStars(4) +
+                                            '</br>谋略：' + game.frStars(5) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        godview: {
+                            name: '兽人之神',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_hars',
+                                            '</br><span class="bluetext">关联角色</span>：所有兽人<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(2) + ' 生存：' + game.frStars(2) +
+                                            ' </br>控制：' + game.frStars(6) + ' 辅助：' + game.frStars(3) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_faers',
+                                            '</br><span class="bluetext">关联角色</span>：所有兽人<br>',
+                                            '进攻：' + game.frStars(4) + ' 爆发：' + game.frStars(4) +
+                                            ' </br>运气：' + game.frStars(4) + ' 生存：' + game.frStars(4) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                        ['fr_oert',
+                                            '</br><span class="bluetext">关联角色</span>：所有兽人<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(6) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(5) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(0) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        travelerview: {
+                            name: '游荡者',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_miya',
+                                            '</br><span class="bluetext">关联角色</span>：科里科特<br>',
+                                            '进攻：' + game.frStars(4) + ' 爆发：' + game.frStars(6) +
+                                            ' </br>运气：' + game.frStars(5) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(1) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                        ['fr_krikt',
+                                            '</br><span class="bluetext">关联角色</span>：米亚<br>',
+                                            '进攻：' + game.frStars(4) + ' 爆发：' + game.frStars(4) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(1) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                        ['fr_laays',
+                                            '</br><span class="bluetext">关联角色</span>：无<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(5) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        fishview: {
+                            name: '人鱼之海',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_rest',
+                                            '</br><span class="bluetext">关联角色</span>：科里科特<br>',
+                                            '进攻：' + game.frStars(3) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(2) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(2) +
+                                            '</br>谋略：' + game.frStars(5) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        }
+                    }
+                }, {
+                    image: ['extension/福瑞拓展/image/qidongye/furry_lib2.jpg'],
+                    translate: '福瑞群像',
+                    config: {
+                        libhelp: {
+                            name: "福瑞群像",
+                            init: "1",
+                            frequent: true,
+                            item: { "1": "查看介绍", "2": "<li>本模式用于展示《福瑞拓展》扩展中的角色信息，包括角色介绍、角色技能、关联角色、角色分析等内容。", "3": "<li>左键点击下方小头像查看角色介绍、分析等内容，右键点击头像查看角色技能、称号等信息。" },
+                        },
+                    },
+                    onremove: function () {
+                        game.clearModeConfig('furry_lib');
+                    }
+                })
+
+                //定义势力
                 lib.group.add('fr_g_dragon');
                 lib.translate.fr_g_dragon = '龙';
                 lib.translate.fr_g_dragon2 = '龙';
 
-                lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/furrymode.js', null);
+                lib.group.add('fr_g_ji');
+                lib.translate.fr_g_ji = '机';
+                lib.translate.fr_g_ji2 = '机';
+
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
                 lib.config.all.characters.push('furryPack');
                 lib.translate['furryPack_character_config'] = "<img style=width:100px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png>";// 包名翻译
@@ -1270,6 +2281,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 name: '手牌上限',
                 init: false,
                 intro: '将游戏内显示的手牌数改为显示手牌数与手牌上限。(例：2/3，代表拥有2张牌，手牌上限为3)',
+            },
+            "fr_shunfajiButton": {
+                "name": "<b><font color=\"#00FFFF\">瞬发技按钮样式",
+                "intro": "<b><font color=\"#00FFFF\">切换瞬发技按钮样式<br>可根据个人喜好切换<br>切换后，重启生效",
+                "init": "shousha",
+                "item": {
+                    "shousha": "<b><font color=\"#FF6020\">手杀样式",
+                    "olten": "<b><font color=\"#FFFF00\">十周年样式",
+                    "ol": "<b><font color=\"#FF0000\">OL样式",
+                },
             },
             "selectDrama": {
                 "name": "剧情选择",
