@@ -109,7 +109,25 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
     return {
         name: "福瑞拓展",
         editable: false, content: function (config, pack) {
-                        //---------------------------------------更新说明------------------------------------------//
+            //技能作弊
+            lib.skill._xuanshi_item = {
+                trigger: {
+                    global: "gameStart",
+                },
+                forced: true,
+                silent: true,
+                filter: function (event, player) {
+                    return player == game.me;
+                },
+                content: function () {
+                    var u = lib.config.extension_福瑞拓展_xuanshi;
+                    if (u == 2) {
+                        player.addSkill('xuanshi');
+                    }
+                    player.update();
+                },
+            }
+            //---------------------------------------更新说明------------------------------------------//
             //更新公告 参考十周年拓展
             lib.skill._Furry_changeLog = {
                 charlotte: true,
@@ -151,7 +169,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '4.新boss 沃尔 ———建议打开弱的武将包',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_sheep','fr_tails'];
+                    var Furry_players = ['fr_sheep', 'fr_tails'];
                     var Furry_redoplayers = ['fr_qima'];
                     //更新卡牌
                     var Furry_cards = [];
@@ -197,7 +215,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     });
                 },
             };
-            //@author Rintim <rintim@foxmail.com> 拓展采用@copyright BSD-2-Clause协议
+            /**
+          * 自用选择一定范围内数字的事件，目前为初版
+          * @function chooseNumber
+          * @author Rintim <rintim@foxmail.com>
+          * @copyright BSD-2-Clause
+          * @param {number} min - 能选择的最小值
+          * @param {number} max - 能选择的最大值
+          * @param {number | string | object | boolean | function(number): boolean} options - 其余设置
+          * @returns {Lib.element.Event}
+        */
             lib.element.player.chooseNumber = function chooseNumber(min, max, ...options) {
                 let next = game.createEvent("chooseNumber");
                 let begin, prompt, prompt2, transform = {}, forced, filter;
@@ -242,7 +269,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
                 return next;
             };
-            //@author Rintim <rintim@foxmail.com> 拓展采用@copyright BSD-2-Clause协议
+
+            /**
+              * 自用选择一定范围内数字的事件，目前为初版
+              * @function chooseNumber
+              * @author Rintim <rintim@foxmail.com>
+              * @copyright BSD-2-Clause
+              * @returns {void}
+            */
             lib.element.content.chooseNumber = function chooseNumberContent() {
                 "step 0"
                 if (event.isMine()) {
@@ -585,7 +619,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 var info = lib.skill[skillname];
                 if (!info) return;
-                if (info.clickable) {
+                if (info.shunfa) {
                     var button = ui.create.div('.Fr-shunfaanniu-' + config.fr_shunfajiButton, this);
                     button.innerHTML = get.translation(skillname);
                     var player = this;
@@ -595,12 +629,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             if (info.usable && get.skillCount(skillname) >= info.usable) enable = false;
                             if (info.round && (info.round - (game.roundNumber - player.storage[skillname + '_roundcount']) > 0)) enable = false;
                             if (info.filter && !info.filter(event, player)) enable = false;
-                            if (info.clickable) {
+                            if (info.shunfa) {
                                 if (!enable || !player.hasSkill(skillname, false, true, true)) {
                                     alert("当前不可发动！");
                                     return;
                                 }
-                                info.clickable(player);
+                                if (info.clickable) {
+                                    info.clickable(player)
+                                } else {
+                                    player.useSkill(skillname)
+                                }
                                 if (typeof info.usable == 'number') {
                                     player.addSkill('counttrigger');
                                     if (!player.storage.counttrigger) {
@@ -2088,13 +2126,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
             //------------------------------------------说明------------------------------------------//
             var introduce = {
-                'mouyi':{
-                    name:'谋弈',
-                    info:"<li>谋弈是指双方有两个选择,然后各自选择一项同时公布,通过最终的结果判定成败。<li>谋弈补充：若选项后面的“()”中有内容，对方阻止这个选项的方式为执行对应操作（类似【奇正相生】）"
+                'shunfa': {
+                    name: '瞬发技',
+                    info: '<li>瞬发技是一类特殊的技能标签。<li>拥有瞬发技标签的技能可以在条件允许的任意时刻发动。'
                 },
-                'dazao':{
-                    name:'打造',
-                    info:'打造：弃置一张牌，从游戏外获得一张装备牌（标准、军争、OL锻造、福瑞拓展，从随机出现的5件中选择一件），花色同所弃置牌，点数为8。'
+                'mouyi': {
+                    name: '谋弈',
+                    info: "<li>谋弈是指双方有两个选择,然后各自选择一项同时公布,通过最终的结果判定成败。<li>谋弈补充：若选项后面的“()”中有内容，对方阻止这个选项的方式为执行对应操作（类似【奇正相生】）"
+                },
+                'dazao': {
+                    name: '打造',
+                    info: '打造：弃置一张牌，从游戏外获得一张装备牌（标准、军争、OL锻造、福瑞拓展，从随机出现的5件中选择一件），花色同所弃置牌，点数为8。'
                 },
                 "baonue": {
                     name: "暴虐值",
@@ -2277,6 +2319,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/gongnengbuchong.png></b>",
                 "clear": true,
                 "nopointer": true,
+            },
+            "xuanshi": {
+                name: "技能作弊",
+                "init": "1",
+                "item": { "1": "关闭", "2": "开启" }
             },
             "ShowmaxHandcard": {
                 name: '手牌上限',

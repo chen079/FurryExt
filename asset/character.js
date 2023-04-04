@@ -8,12 +8,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         character: {
             'fr_tails': ['male', 'qun', 3, ['tails_jd', 'tails_qx'], []],
             //'fr_zhan':['male','qun',3,[],[]],
-            'fr_sheep':['female','fr_g_ji',3,['sheep_jf'],[]],
+            'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf'], []],
             //'fr_rasali':['male','shen',4,[],[]],
             //'fr_nashu':['male','shen',4,[],[]],
             //'fr_derk':['male','jin',4,[],[]],
             //'fr_crow':['male','wei',4,[],[]],
-            //'fr_bladewolf': ['male', 'fr_g_ji', 4, [], []],
+            'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], []],
             'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], []],
             "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
@@ -132,9 +132,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     var x3 = Math.floor(10 * Math.random() + 1);
                     f = x1 + 'x^2+' + x2 + 'x+' + x3;
                     const A = ((x1 / 3) * (b ** 3) + (x2 / 2) * (b ** 2) + (x3 * b)) - ((x1 / 3) * (a ** 3) + (x2 / 2) * (a ** 2) + (x3 * a));
-                    const error1 = A + ((Math.floor(Math.random() * 11) - 5) / 10) * A;
-                    const error2 = A + ((Math.floor(Math.random() * 21) - 10) / 100) * A;
-                    const error3 = A + ((Math.floor(Math.random() * 51) - 25) / 100) * A;
+                    const error1 = A + ((Math.floor(Math.random() * 11) - 5) / 10) * A + 1;
+                    const error2 = A + ((Math.floor(Math.random() * 21) - 10) / 100) * A + 2;
+                    const error3 = A + ((Math.floor(Math.random() * 51) - 25) / 100) * A + 3;
                     return {
                         f: f,
                         results: [A, error1, error2, error3],
@@ -143,7 +143,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 content: function () {
                     'step 0'
                     event.cards = get.cards(2)
-                    player.gain(event.cards, 'gain2')
+                    player.showCards(event.cards);
+                    player.discard(event.cards)
                     'step 1'
                     var num1 = get.number(event.cards[0]), num2 = get.number(event.cards[1])
                     var cardnum = [num1, num2].sort((a, b) => {
@@ -199,9 +200,126 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         event.finish();
                     }
                     'step 4'
-                    if(result.bool){
-                        var target=result.targets[0];
-                        player.give(result.cards,target);
+                    if (result.bool) {
+                        var target = result.targets[0];
+                        player.give(result.cards, target);
+                    }
+                }
+            },
+            'bladewolf_rh': {
+                trigger: {
+                    player: "dieBegin",
+                },
+                forceDie: true,
+                forced: true,
+                skillAnimation: true,
+                animationColor: "orange",
+                init: function (player) {
+                    if (!player.storage.bladewolf_rh) player.storage.bladewolf_rh = 0
+                },
+                mark: true,
+                intro: {
+                    content: '当前累计受到了$点伤害'
+                },
+                content: function () {
+                    'step 0'
+                    event.num = player.storage.bladewolf_rh
+                    if (event.num <= 0) event.finish()
+                    'step 1'
+                    player.chooseTarget(1, '请选择你要分配伤害的目标，你目前可以分配' + event.num + '点伤害', function (card, player, target) {
+                        return target != player
+                    }).set('ai', function (target) {
+                        var player = _status.event.player
+                        return - get.attitude(player, target)
+                    })
+                    'step 2'
+                    if (result.bool) {
+                        event.target = result.targets[0]
+                        if (event.num > 1) {
+                            player.chooseNumber(1, event.num, event.num)
+                                .set("prompt", get.prompt(event.name))
+                                .set("prompt2", get.translation(`${event.name}_info`))
+                                .set("ai", function (player, _event) {
+                                    return Math.min(event.target.hp - 1, event.num - 1)
+                                })
+                                .set("goon", event.num);
+                        } else {
+                            player.chooseBool(get.prompt2(event.name)).set("ai", (..._args) => true)
+                        }
+                    } else {
+                        event.finish()
+                    }
+                    'step 3'
+                    if (result.bool) {
+                        event.target.damage((result.choice || 1), player, 'fire')
+                        event.num -= result.choice
+                    }
+                    'step 4'
+                    if (event.num > 0) {
+                        event.goto(1)
+                    }
+                },
+                group: 'bladewolf_rh_count',
+                subSkill: {
+                    count: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: 'damageBegin4'
+                        },
+                        content: function () {
+                            player.storage.bladewolf_rh += trigger.num
+                        }
+                    }
+                }
+            },
+            'bladewolf_qp': {
+                shunfa: true,
+                init: function (player) {
+                    player.FrShunfajiInit('bladewolf_qp')
+                },
+                filter: function (event, player) {
+                    return _status.currentPhase && _status.currentPhase != player && !player.storage.bladewolf_qp_ai_roundcount
+                },
+                round: 1,
+                content: function () {
+                    _status.currentPhase.damage(1, player)
+                },
+                group: ['bladewolf_qp_kill', 'bladewolf_qp_ai'],
+                subSkill: {
+                    ai: {
+                        trigger: {
+                            global: ['damageAfter', 'loseHpAfter', 'recoverAfter', 'phaseBegin', 'drawAfter', 'useCardAfter', 'discardAfter']
+                        },
+                        check: function (player, event) {
+                            return get.attitude(player, _status.currentPhase) < 0
+                        },
+                        round: 1,
+                        filter: function (event, player) {
+                            return _status.currentPhase && _status.currentPhase != player &&
+                                _status.currentPhase.hp == 1 && (_status.auto || !player.isUnderControl(true))
+                        },
+                        forced: true,
+                        content: function () {
+                            _status.currentPhase.damage(1, player)
+                        }
+                    },
+                    kill: {
+                        trigger: {
+                            source: "dieAfter",
+                        },
+                        frequent: true,
+                        content: function () {
+                            player.draw()
+                            var roundname = 'bladewolf_qp_roundcount';
+                            delete player.storage[roundname]
+                            delete player.syncStorage(roundname);
+                            player.unmarkSkill(roundname);
+                            var roundname = 'bladewolf_qp_ai_roundcount';
+                            delete player.storage[roundname]
+                            delete player.syncStorage(roundname);
+                            player.unmarkSkill(roundname);
+                        },
                     }
                 }
             },
@@ -243,7 +361,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             choices.push(['equip', 8, namelist[i]])
                         }
                         player.chooseButton(['选择所需的卡牌', [choices, 'vcard']], true).set('ai', function (button) {
-                            return get.useful(button.link)
+                            return Math.random()
                         })
                     } else {
                         event.finish()
@@ -253,7 +371,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     event.cardname = result.links[0][2];
                     player.chooseTarget(1, '令一名角色装备' + get.translation(event.cardname) + "【" + get.translation(event.suit) + "8】", true).set('ai', function (target) {
                         var player = _status.event.player
-                        return get.attitude(player, target) > 0
+                        return get.attitude(player, target)
                     })
                     'step 4'
                     var card1 = game.createCard(event.cardname, event.suit, 8, event.nature);
@@ -274,11 +392,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                 if (player.countCards('h', { suit: i }) > 1) bool1 = true;
                             }
                             var bool2 = false
-                            if (game.countPlayer(function (current) {
-                                return current.countCards('e', function (card) {
-                                    return get.number(card) == 8
-                                }) > 0
-                            }) > 0) bool2 = true
+                            var suits = []
+                            game.hasPlayer(function (current) {
+                                if (current != player) {
+                                    var cards = current.getCards('e', function (card) {
+                                        return get.number(card) == 8
+                                    })
+                                    for (var j = 0; j < cards.length; j++) {
+                                        if (!suits.contains(get.suit(cards[j]))) suits.push(get.suit(cards[j]))
+                                    }
+                                }
+                            })
+                            if (suits.length) bool2 = true
                             return bool1 && player.countCards('he') > 0 && bool2
                         },
                         direct: true,
@@ -288,30 +413,49 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                 if (ui.selected.cards.length) {
                                     return get.suit(card) == get.suit(ui.selected.cards[0]);
                                 }
+                                var suits = []
+                                game.hasPlayer(function (current) {
+                                    if (current != player) {
+                                        var cards = current.getCards('e', function (card) {
+                                            return get.number(card) == 8
+                                        })
+                                        for (var j = 0; j < cards.length; j++) {
+                                            if (!suits.contains(get.suit(cards[j]))) suits.push(get.suit(cards[j]))
+                                        }
+                                    }
+                                })
+                                if (!suits) return false
                                 var cards = player.getCards('hs');
                                 for (var i = 0; i < cards.length; i++) {
                                     if (card != cards[i]) {
-                                        if (get.suit(card) == get.suit(cards[i])) return true;
+                                        if (get.suit(card) == get.suit(cards[i]) && (suits.contains(get.suit(card)))) return true;
                                     }
                                 }
                                 return false;
                             }).set('complexCard', true).set('ai', function (card) {
                                 var player = _status.event.player
-                                return 6 - get.value(card) + game.countPlayer(function (current) {
+                                var num = game.countPlayer(function (current) {
                                     return current != player && get.attitude(player, current) < 0 && current.countCards('e', function (card) {
-                                        return get.number(card) == 8
+                                        return get.number(card) == 8 && get.suit(card) == ui.selected.cards[0]
                                     }) > 0
                                 })
+                                if (num == 0) {
+                                    return -1
+                                } else {
+                                    return 4 - get.value(card) + num
+                                }
                             })
                             'step 1'
                             if (result.bool) {
-                                player.chooseTarget([1, Infinity], '销毁任意角色的任意张点数为8的装备牌，并造成等量火焰伤害', function (card, player, target) {
-                                    return target.countCards('e', function (card) {
-                                        return get.number(card) == 8
-                                    }) > 0
-                                }, true).set('ai', function (target) {
+                                event.suit = get.suit(result.cards[0])
+                                player.chooseTarget([1, Infinity], true).set('ai', function (target) {
                                     var player = _status.event.player
-                                    return get.attitude(player, target) < 0
+                                    return -get.attitude(player, target)
+                                }).set('prompt', '销毁任意角色的任意张点数为8的装备牌，并造成等量火焰伤害').set('filterTarget', function (card, player, target) {
+                                    var suit = _status.event.suit
+                                    return target.countCards('e', function (card) {
+                                        return get.number(card) == 8 && get.suit(card) == event.suit
+                                    }) > 0
                                 })
                             } else {
                                 event.finish()
@@ -320,10 +464,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             event.targets = result.targets
                             'step 3'
                             event.target = event.targets.shift()
+                            if (!event.target.isAlive()) event.goto(3)
                             var cards = event.target.getCards('e', function (card) {
-                                return get.number(card) == 8
+                                return get.number(card) == 8 && get.suit(card) == event.suit
                             })
-                            player.chooseCardButton([1, Infinity], cards, '销毁' + get.translation(event.target) + '的至少一张装备牌', true)
+                            player.chooseCardButton([1, Infinity], cards, '销毁' + get.translation(event.target) + '的至少一张装备牌', true).set('ai', function (button) {
+                                return get.value(button.link, event.target);
+                            })
                             'step 4'
                             var cards = result.links
                             for (var i = 0; i < cards.length; i++) {
@@ -332,7 +479,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             event.target.$throw(cards, 1000);
                             event.target.lose(cards)._triggered = null;
                             game.log(player, '销毁了', cards);
-                            event.target.damage(cards.length, 'fire', player)
+                            if (event.target.isAlive()) event.target.damage(cards.length, 'fire', player)
                             'step 5'
                             if (event.targets.length) {
                                 event.goto(3)
@@ -352,7 +499,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     return true
                 },
                 check: function (event, player) {
-                    return get.attitude(player, event.player) < 0
+                    var target = player == event.player ? event.targets[0] : event.player
+                    return get.attitude(player, target) < 0
                 },
                 content: function (event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result) {
                     'step 0'
@@ -360,10 +508,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.chooseButton(['谋弈：请选择一种策略', [[['', '', 'fr_card_chongci'], ['', '', 'fr_card_zhuanyi']], 'vcard']], true).set('ai', function (button) {
                         var player = _status.event.player;
                         var target = _status.event.target;
-                        if (player.attitudeTo(target) > 0) return (button.link[2] == "fr_card_chongci") ? 1 : 0;
-                        if (target.countGainableCards(player, 'e') < 1 && target.countDiscardableCards(player, 'h') < 2) return (button.link[2] == "fr_card_zhuanyi") ? (1.7 + Math.random()) : (1 + Math.random());
+                        if (player.attitudeTo(target) > 0) return (button.link[2] == "fr_card_zhuanyi") ? 1 : 0;
+                        if (target.countGainableCards(player, 'e') < 1 && target.countDiscardableCards(player, 'h') < 2) return (button.link[2] == "fr_card_chongci") ? (1.7 + Math.random()) : (1 + Math.random());
                         return 1 + Math.random();
-                    }).set('target', target);
+                    }).set('target', event.target);
                     'step 1'
                     event.mes = result.links[0][2];
                     event.target.chooseToRespond(1, 'h', '选择打出一张【杀】或【闪】来响应“谋弈”', function (card) {
@@ -427,8 +575,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             if (cards2.length) {
                                 player.loseToDiscardpile(cards2);
                                 player.draw(cards2.length);
+                                event.target.damage(player)
                             }
-                            event.target.damage(player)
                             event.finish()
                             return
                         }
@@ -13108,6 +13256,149 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     threaten: 6,
                 },
             },
+            "xuanshi": {
+                trigger: {
+                    player: ["phaseZhunbeiBegin"],
+                    global: "roundStart",
+                },
+                forceunique: true,
+                fixed: true,
+                limited: false,
+                charlotte: true,
+                mark: true,
+                supercharlotte: true,
+                content: function () {
+                    "step 0"
+                    ui.clear();
+                    if (event.created) return;
+                    event.created = true;
+                    if (event.isMine()) {
+                        var node = ui.create.div('.add_skill');
+                        event.node = node;
+                        event.node.style.zIndex = "9999";
+                        event.node.style.background = 'black';
+                        event.node.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=50)";
+                        event.node.style.opacity = "0.7"
+                        event.node.style.width = '400px';
+                        event.node.style.height = '30px';
+                        event.node.style.lineHeight = '30px';
+                        event.node.style.fontFamily = 'xinwei';
+                        event.node.style.fontSize = '30px';
+                        event.node.style.padding = '10px';
+                        event.node.style.left = 'calc(50% - 200px)';
+                        event.node.style.top = 'calc(50% - 20px)';
+                        event.node.style.whiteSpace = 'nowrap';
+                        event.node.innerHTML = '请在此输入技能名称';
+                        event.node.contentEditable = true;
+                        event.node.style.webkitUserSelect = 'text';
+                        event.node.style.textAlign = 'center';
+                        var skillName = function (e) {
+                            var skills = [];
+                            for (var i in lib.character) {
+                                for (var j = 0; j < lib.character[i][3].length; j++) {
+                                    if (player.hasSkill(lib.character[i][3][j])) continue;
+                                    var info = lib.skill[lib.character[i][3][j]];
+                                    if (info) {
+                                        var name = event.node.innerText;
+                                        if (get.translation(lib.character[i][3][j]) != name) continue;
+                                        skills.add(lib.character[i][3][j]);
+                                    }
+                                }
+                            }
+                            if (skills.length) {
+                                ui.window.removeChild(event.node);
+                                ui.window.removeChild(text);
+                                button.close()
+                                event.node.innerHTML = '';
+                                player.xuanshi = skills
+                                game.resume();
+                                return
+                            }
+                            else {
+                                var name = event.node.innerText;
+                                alert(((name.length == 0 || name == '请在此输入技能名称') ? '请先输入技能名称' : name + '不是一个可用的技能，请重新输入'));
+                                //ui.clear();
+                                event.node.innerHTML = '';
+                                return;
+                            }
+                        };
+                        ui.window.appendChild(event.node);
+                        event.node.onfocus = function () {
+                            event.node.innerHTML = '';
+                        };
+                        event.node.onkeydown = function (e) {
+                            e.stopPropagation();
+                            if (e.keyCode == 13) {
+                                skillName();
+                                setTimeout(function () {
+                                    event.node.innerHTML = '';
+                                }, 10);
+                            };
+                        };
+                        var text = ui.create.div();
+                        text.style.width = '400px';
+                        text.style.height = '30px';
+                        text.style.zIndex = "9999"
+                        text.style.lineHeight = '30px';
+                        text.style.fontFamily = '黑体';
+                        text.style.fontSize = '20px';
+                        text.style.padding = '10px';
+                        text.style.left = 'calc(50% - 200px)';
+                        text.style.top = 'calc(50% - 80px)';
+                        text.innerText = '请声明一个技能名称';
+                        text.style.textAlign = 'center';
+                        ui.window.appendChild(text);
+                        var button = ui.create.control('确定', () => skillName())
+                        for (var i in lib.element.event) {
+                            event.parent[i] = lib.element.event[i];
+                        }
+                        event.parent.custom = {
+                            add: {},
+                            replace: {}
+                        }
+                        game.pause();
+                    } else {
+                        var skills = [];
+                        for (var i in lib.character) {
+                            for (var j = 0; j < lib.character[i][3].length; j++) {
+                                if (player.hasSkill(lib.character[i][3][j])) continue;
+                                var info = lib.skill[lib.character[i][3][j]];
+                                if (info) {
+                                    skills.add(lib.character[i][3][j]);
+                                }
+                            }
+                        }
+                        var skills2 = skills.randomGet();
+                        player.addTempSkill(skills2, 'roundStart');
+                        player.popup(skills2);
+                        game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
+                        event.finish()
+                    }
+                    "step 1"
+                    if (player.xuanshi.length == 1) {
+                        var skills2 = player.xuanshi[0]
+                        player.addTempSkill(skills2, 'roundStart');
+                        player.popup(skills2);
+                        game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
+                        event.finish()
+                    } else {
+                        var list = []
+                        var skills = player.xuanshi
+                        for (var i = 0; i < skills.length; i++) {
+                            list.push(get.translation(skills[i] + '_info'))
+                        }
+                        player.chooseControl().set('choiceList', list).set('prompt', '选择〖' + get.translation(skills[0]) + '〗的版本')
+                    }
+                    "step 2"
+                    var skills2 = player.xuanshi[result.index]
+                    player.addTempSkill(skills2, 'roundStart');
+                    player.popup(skills2);
+                    game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
+                },
+                ai: {
+                    threaten: 6,
+                },
+            },
             "ventus_yc": {
                 trigger: {
                     player: "useCardToBegin",
@@ -15955,12 +16246,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'bladewolf_rh': '融毁',
+            'bladewolf_rh_info': '锁定技，当你死亡时，你可以分配X点火焰伤害（X为你本局游戏累计受到的伤害值）。',
+            'bladewolf_qp': '潜破',
+            'bladewolf_qp_info': get.introduce('shunfa') + '，每轮限一次，你可以对不为自己的当前回合角色造成1点伤害；当你杀死角色后，你重置此技能。',
             'sheep_jf': '积分',
-            'sheep_jf_info': '出牌阶段限一次，你可以摸两张牌，然后计算一个随机幂函数（最高二次幂）的积分（积分上限为你摸的较大的牌，下限为你摸的较小的牌），若你计算正确：你获得牌堆顶的五张牌，然后，你选择一项：1.交给一名其他角色五张牌。2.弃置五张牌。',
+            'sheep_jf_info': '出牌阶段限一次，你可以展示牌堆顶两张牌并弃置之，然后计算一个随机幂函数（最高二次幂）的积分（积分上限为其中较大的牌，下限为其中较小的牌），若你计算正确：你获得牌堆顶的五张牌，然后，你选择一项：1.交给一名其他角色五张牌。2.弃置五张牌。',
             'tails_qx': '巧械',
-            'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同花色的牌，销毁场上任意张同花色的、点数为8的装备牌，对失去之的角色各造成等量火焰伤害。',
+            'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同花色的牌，销毁场上任意张花色与你弃置牌相同的、点数为8的装备牌，对失去之的角色各造成等量火焰伤害。',
             'tails_jd': '机动',
-            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:你与上家或下家交换座位并将手牌弃至两张，可获得其一张装备区的牌并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸，对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
+            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:你与上家或下家交换座位并将手牌弃至两张，可获得其一张装备区的牌并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
             'dier_xy': '夕炎',
             'dier_xy_info': '锁定技，当你使用【杀】指定目标后，你获得该角色的一张牌。',
             'dier_sb': '守宝',
@@ -16409,6 +16704,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "kasers_cy_info": "当你使用与你使用的上一张牌花色不同的牌时，你可以摸一张牌，否则，你弃置一张手牌。",
             "yifa_xs": "宣誓",
             "yifa_xs_info": "一轮游戏开始时/准备阶段/结束阶段，你可以声明一个技能，然后你拥有此技能直到本轮结束/回合结束/你的下个回合开始（觉醒技，限定技，主公技，隐匿技，使命技等特殊技能除外）。",
+            "xuanshi": "宣誓",
+            "xuanshi_info": "一轮游戏开始时或准备阶段，你可以声明一个技能，然后你拥有此技能直到本轮结束。",
             "ventus_yc": "勇刺",
             "ventus_yc_info": "摸牌阶段，你额外从牌堆中获得一张【杀】；你使用【杀】指定一名其他角色为目标时，该角色流失一点体力。",
             "ventus_nx": "匿形",
