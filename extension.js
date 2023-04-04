@@ -129,6 +129,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     'step 1'
                     //更新告示
                     var Furry_update = [
+                        '/Character/',
                         '/redoCharacter/',
                         '2.0.9.1',
                         '1.紧急修复 韵律技 bug',
@@ -150,7 +151,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '4.新boss 沃尔 ———建议打开弱的武将包',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_ala', 'fr_liona', 'fr_nanci', 'fr_francium'];
+                    var Furry_players = ['fr_sheep','fr_tails'];
                     var Furry_redoplayers = ['fr_qima'];
                     //更新卡牌
                     var Furry_cards = [];
@@ -1943,15 +1944,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 return null;
             };
             lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/skin.js', null);//这一行代码加载扩展中的skin.js文件。   
-            //点击提示 参考自活动武将
-            game.getPhone = function () {
-                //获取浏览器navigator对象的userAgent属性（浏览器用于HTTP请求的用户代理头的值）
-                var info = navigator.userAgent;
-                //通过正则表达式的test方法判断是否包含“Mobile”字符串
-                var isPhone = /mobile|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i.test(info);
-                //如果包含“Mobile”（是手机设备）则返回true
-                return isPhone;
-            };
+            //点击提示的css参考了活动武将
             get.FrskillTips = function (tipname, id) {
                 const frtip = ui.create.div('.Fr-frtips', document.body);
                 frtip.style.zIndex = 998;
@@ -1960,7 +1953,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 var herf = document.getElementById(id);
                 if (herf) {
                     var left = herf.getBoundingClientRect().left;
-                    if (game.getPhone()) left += herf.offsetParent.offsetLeft;
+                    if (/mobile|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i.test(navigator.userAgent)) left += herf.offsetParent.offsetLeft;
                     left += document.body.offsetWidth * 0.15;
                     skilltip.style.left = left + 'px';
                     skilltip.style.top = (herf.getBoundingClientRect().top + 30) + 'px';
@@ -2095,6 +2088,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
             //------------------------------------------说明------------------------------------------//
             var introduce = {
+                'mouyi':{
+                    name:'谋弈',
+                    info:"<li>谋弈是指双方有两个选择,然后各自选择一项同时公布,通过最终的结果判定成败。<li>谋弈补充：若选项后面的“()”中有内容，对方阻止这个选项的方式为执行对应操作（类似【奇正相生】）"
+                },
+                'dazao':{
+                    name:'打造',
+                    info:'打造：弃置一张牌，从游戏外获得一张装备牌（标准、军争、OL锻造、福瑞拓展，从随机出现的5件中选择一件），花色同所弃置牌，点数为8。'
+                },
                 "baonue": {
                     name: "暴虐值",
                     info: "<li>当你造成或受到伤害后，你获得等量的暴虐值。<li>暴虐值的上限为5。"
@@ -2524,7 +2525,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.0.9.4",
+            version: "2.0.9.5",
         }, files: {}
     }
 })

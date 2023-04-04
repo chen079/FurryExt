@@ -3,6 +3,18 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         name: 'furryCard',//卡包命名
         connect: true,//卡包是否可以联机
         card: {
+            'fr_card_chongci':{
+                image: 'ext:福瑞拓展/image/card/fr_card_chongci.png',
+                type:"db_atk",
+                fullimage:true,
+                derivation:"fr_tails",
+            },
+            'fr_card_zhuanyi':{
+                image: 'ext:福瑞拓展/image/card/fr_card_zhuanyi.png',
+                type:"db_atk",
+                fullimage:true,
+                derivation:"fr_tails",
+            },
             'fr_card_scfm': {
                 image: 'ext:福瑞拓展/image/card/fr_card_scfm.png',
                 audio: true,
@@ -1243,6 +1255,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
+            'fr_card_chongci':'冲刺',
+            'fr_card_zhuanyi':'转移',
             'fr_card_scfm': '水草丰茂',
             'fr_card_scfm_info': '出牌阶段，对所有角色使用，目标角色摸一张牌。',
             'fr_card_djlj': '弹尽粮绝',

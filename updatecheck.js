@@ -1,16 +1,18 @@
 // @ts-check
 (() => ({
 	// 扩展版本
-	version: "2.0.9.4",
+	version: "2.0.9.5",
 
 	// 扩展的上一个版本
-	oldversion: "2.0.9.3",
+	oldversion: "2.0.9.4",
 
 	// 更新内容汇总
 	changeLog: `
 	1.增加新势力：机
 	2.将福瑞群像作为游戏模式独立出来
-	3.
+	3.新人物 西普、塔尔斯
+	4.减少bug
+	5.修改科恩的势力为机
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
@@ -69,6 +71,10 @@
 		'image/button/button_shousha.png',
 		'image/qidongye/furry_lib.jpg',
 		'image/qidongye/furry_lib2.png',
+		'image/card/fr_card_chongci.png',
+		'image/card/fr_card_zhuanyi.png',
+		'image/character/fr_tails.jpg',
+		'image/lutou/fr_tails.jpg'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
