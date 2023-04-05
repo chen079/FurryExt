@@ -8,12 +8,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         character: {
             'fr_tails': ['male', 'qun', 3, ['tails_jd', 'tails_qx'], []],
             //'fr_zhan':['male','qun',3,[],[]],
-            'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf'], []],
+            'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['des:西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——奥尔斯拉特，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。']],
             //'fr_rasali':['male','shen',4,[],[]],
             //'fr_nashu':['male','shen',4,[],[]],
             //'fr_derk':['male','jin',4,[],[]],
             //'fr_crow':['male','wei',4,[],[]],
-            'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], []],
+            'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
             'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], []],
             "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
@@ -127,10 +127,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 usable: 1,
                 integrate: function (a, b) {
                     let f = '';
-                    var x1 = Math.floor(10 * Math.random() + 1);
-                    var x2 = Math.floor(10 * Math.random() + 1);
-                    var x3 = Math.floor(10 * Math.random() + 1);
-                    f = x1 + 'x^2+' + x2 + 'x+' + x3;
+                    var x1 = Math.floor(20 * Math.random() - 10);
+                    var x2 = Math.floor(20 * Math.random() - 10);
+                    var x3 = Math.floor(20 * Math.random() - 10);
+                    f = ((x1 == 1 ? '' : x1) == -1 ? '-' : x1) + 'x² ' + (x2 < 0 ? "" : "+") + ((x2 == 1 ? '' : x2) == -1 ? '-' : x2) + 'x ' + (x3 < 0 ? "" : "+") + ((x3 == 1 ? '' : x3) == -1 ? '-' : x3)
                     const A = ((x1 / 3) * (b ** 3) + (x2 / 2) * (b ** 2) + (x3 * b)) - ((x1 / 3) * (a ** 3) + (x2 / 2) * (a ** 2) + (x3 * a));
                     const error1 = A + ((Math.floor(Math.random() * 11) - 5) / 10) * A + 1;
                     const error2 = A + ((Math.floor(Math.random() * 21) - 10) / 100) * A + 2;
@@ -155,7 +155,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.chooseControl()
                         .set('choiceList', event.choices).set('ai', function () {
                             return event.result.results[0]
-                        }).set('prompt', '函数' + event.result.f + ' 积分上限为' + cardnum[1] + '积分下限为' + cardnum[0] + '的积分结果为')
+                        }).set('prompt', '函数' + event.result.f + '在' + '[' + cardnum[0] + ',' + cardnum[1] + ']' + '上的积分结果为')
                     'step 2'
                     if (event.choices[result.index] === event.result.results[0]) {
                         game.log(player, '计算正确')
@@ -206,6 +206,199 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                 }
             },
+            'sheep_rh': {
+                enable: "phaseUse",
+                filter: function (event, player) {
+                    return player.countCards('he', function (card) {
+                        return get.type(card) == 'equip'
+                    }) >= 2
+                },
+                filterCard: function (card) {
+                    if (ui.selected.cards.length && card.name == ui.selected.cards[0].name) return false;
+                    var info = get.info(card);
+                    return info.type == 'equip';
+                },
+                selectCard: 2,
+                position: "he",
+                check: function (card) {
+                    return get.value(card);
+                },
+                content: function () {
+                    var name = cards[0].name + '_' + cards[1].name;
+                    var info1 = get.info(cards[0]), info2 = get.info(cards[1]);
+                    if (!lib.card[name]) {
+                        var info = {
+                            enable: true,
+                            type: 'equip',
+                            subtype: get.subtype(cards[0]),
+                            vanish: true,
+                            cardimage: info1.cardimage || cards[0].name,
+                            filterTarget: function (card, player, target) {
+                                return target == player;
+                            },
+                            selectTarget: -1,
+                            modTarget: true,
+                            content: lib.element.content.equipCard,
+                            legend: true,
+                            source: [cards[0].name, cards[1].name],
+                            onEquip: [],
+                            onLose: [],
+                            skills: [],
+                            distance: {},
+                            ai: {
+                                order: 8.9,
+                                equipValue: 10,
+                                useful: 2.5,
+                                value: function (card, player) {
+                                    var value = 0;
+                                    var info = get.info(card);
+                                    var current = player.getEquip(info.subtype);
+                                    if (current && card != current) {
+                                        value = get.value(current, player);
+                                    }
+                                    var equipValue = info.ai.equipValue || info.ai.basic.equipValue;
+                                    if (typeof equipValue == 'function') return equipValue(card, player) - value;
+                                    return equipValue - value;
+                                },
+                                result: {
+                                    target: function (player, target) {
+                                        return get.equipResult(player, target, name);
+                                    }
+                                }
+                            }
+                        }
+                        for (var i in info1.distance) {
+                            info.distance[i] = info1.distance[i];
+                        }
+                        for (var i in info2.distance) {
+                            if (typeof info.distance[i] == 'number') {
+                                info.distance[i] += info2.distance[i];
+                            }
+                            else {
+                                info.distance[i] = info2.distance[i];
+                            }
+                        }
+                        if (info1.skills) {
+                            info.skills = info.skills.concat(info1.skills);
+                        }
+                        if (info2.skills) {
+                            info.skills = info.skills.concat(info2.skills);
+                        }
+                        if (info1.onEquip) {
+                            if (Array.isArray(info1.onEquip)) {
+                                info.onEquip = info.onEquip.concat(info1.onEquip);
+                            }
+                            else {
+                                info.onEquip.push(info1.onEquip);
+                            }
+                        }
+                        if (info2.onEquip) {
+                            if (Array.isArray(info2.onEquip)) {
+                                info.onEquip = info.onEquip.concat(info2.onEquip);
+                            }
+                            else {
+                                info.onEquip.push(info2.onEquip);
+                            }
+                        }
+                        if (info1.onLose) {
+                            if (Array.isArray(info1.onLose)) {
+                                info.onLose = info.onLose.concat(info1.onLose);
+                            }
+                            else {
+                                info.onLose.push(info1.onLose);
+                            }
+                        }
+                        if (info2.onLose) {
+                            if (Array.isArray(info2.onLose)) {
+                                info.onLose = info.onLose.concat(info2.onLose);
+                            }
+                            else {
+                                info.onLose.push(info2.onLose);
+                            }
+                        }
+                        if (info.onEquip.length == 0) delete info.onEquip;
+                        if (info.onLose.length == 0) delete info.onLose;
+                        lib.card[name] = info;
+                        lib.translate[name] = get.translation(cards[0].name, 'skill') + get.translation(cards[1].name, 'skill');
+                        var str = lib.translate[cards[0].name + '_info'];
+                        if (str[str.length - 1] == '.' || str[str.length - 1] == '。') {
+                            str = str.slice(0, str.length - 1);
+                        }
+                        lib.translate[name + '_info'] = str + '；' + lib.translate[cards[1].name + '_info'];
+                        try {
+                            game.addVideo('newcard', null, {
+                                name: name,
+                                translate: lib.translate[name],
+                                info: lib.translate[name + '_info'],
+                                card: cards[0].name,
+                                legend: true,
+                            });
+                        }
+                        catch (e) {
+                            console.log(e);
+                        }
+                    }
+                    player.gain(game.createCard({ name: name, suit: cards[0].suit, number: cards[0].number }), 'gain2');
+                },
+                ai: {
+                    order: 9.5,
+                    result: {
+                        player: 1,
+                    },
+                },
+                group: 'sheep_rh_recover',
+                subSkill: {
+                    recover: {
+                        prompt: "重铸一张装备牌，然后将体力回复至1点。",
+                        enable: "chooseToUse",
+                        filterCard: function (card) {
+                            return get.type(card) == 'equip';
+                        },
+                        filter: function (event, player) {
+                            if (event.type == 'dying') {
+                                if (player != event.dying) return false;
+                                return player.countCards('he', function (card) {
+                                    return get.type(card) == 'equip';
+                                }) > 0;
+                            }
+                            return false;
+                        },
+                        check: function () {
+                            return 1;
+                        },
+                        position: "he",
+                        discard: false,
+                        loseTo: "discardPile",
+                        prepare: function (cards, player) {
+                            player.$throw(cards, 1000);
+                            game.log(player, '将', cards, '置入了弃牌堆')
+                        },
+                        content: function () {
+                            'step 0'
+                            player.draw();
+                            'step 1'
+                            var num = 1 - player.hp;
+                            if (num) player.recover(num);
+                        },
+                        ai: {
+                            order: 0.5,
+                            skillTagFilter: function (player, arg, target) {
+                                if (player != target) return false;
+                                return player.countCards('he', function (card) {
+                                    if (_status.connectMode && get.position(card) == 'h') return true;
+                                    return get.subtype(card) == 'equip2';
+                                }) > 0;
+                            },
+                            save: true,
+                            result: {
+                                player: function (player) {
+                                    return 10;
+                                },
+                            },
+                        },
+                    }
+                }
+            },
             'bladewolf_rh': {
                 trigger: {
                     player: "dieBegin",
@@ -230,7 +423,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         return target != player
                     }).set('ai', function (target) {
                         var player = _status.event.player
-                        return - get.attitude(player, target)
+                        return get.damageEffect(target, null, player, player, 'fire');
                     })
                     'step 2'
                     if (result.bool) {
@@ -291,13 +484,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             global: ['damageAfter', 'loseHpAfter', 'recoverAfter', 'phaseBegin', 'drawAfter', 'useCardAfter', 'discardAfter']
                         },
-                        check: function (player, event) {
-                            return get.attitude(player, _status.currentPhase) < 0
-                        },
                         round: 1,
                         filter: function (event, player) {
                             return _status.currentPhase && _status.currentPhase != player &&
                                 _status.currentPhase.hp == 1 && (_status.auto || !player.isUnderControl(true))
+                                && get.attitude(player, _status.currentPhase) < 0 && get.damageEffect(_status.currentPhase, null, player, player) > 0;
                         },
                         forced: true,
                         content: function () {
@@ -3014,6 +3205,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     global: "roundStart",
                     player: "enterGame",
                 },
+                preHidden: true,
                 mark: true,
                 init: function (player) {
                     if (!player.storage.wore_gzhy) player.storage.wore_gzhy = []
@@ -15559,8 +15751,31 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 mark: false,
                 skillAnimation: true,
                 animationColor: "metal",
-                init: function (player, storage) {
-                    if (!player.storage.molis_gzhs) player.storage.molis_gzhs = [0, 0, 0, 0, 0]
+                getinfo: function (player) {
+                    var js = player.getCards("j");
+                    var js2 = [];
+                    for (var k = 0; k < js.length; k++) {
+                        var name = js[k].viewAs || js[k].name;
+                        js2.push(name);
+                    }
+                    var isDisabled = [];
+                    for (var j = 1; j < 7; j++) {
+                        isDisabled.push(player.isDisabled(j));
+                    }
+                    var storage = {
+                        player: player,
+                        hs: player.getCards("h"),
+                        es: player.getCards("e"),
+                        isDisabled: isDisabled,
+                        hp: player.hp,
+                        maxHp: player.maxHp,
+                        _disableJudge: player.storage._disableJudge,
+                        isTurnedOver: player.isTurnedOver(),
+                        isLinked: player.isLinked(),
+                        js: js,
+                        js2: js2,
+                    };
+                    return storage;
                 },
                 unique: true,
                 limited: true,
@@ -15568,37 +15783,41 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 content: function () {
                     'step 0'
                     player.awakenSkill('molis_gzhs')
-                    var cards = player.getCards('hej')
-                    player.discard(cards)
-                    if (player.storage.molis_gzhs[0] > player.MaxHp) {
-                        player.gainMaxHp(player.storage.molis_gzhs[0] - player.MaxHp)
-                    } else if (player.storage.molis_gzhs[0] < player.MaxHp) {
-                        player.loseMaxHp(player.MaxHp - player.storage.molis_gzhs[0])
+                    event.doing = player.storage.molis_gzhs
+                    if (player.isDead()) player.revive(1);
+                    'step 1'
+                    player.hp = event.doing.hp
+                    var hs = player.getCards('he');
+                    if (hs.length) player.lose(hs)._triggered = null;
+                    'step 2'
+                    var hs = event.doing.hs
+                    if (hs.length) player.directgain(hs);
+                    'step 3'
+                    var isDisabled = event.doing.isDisabled;
+                    for (var i = 0; i < isDisabled.length; i++) {
+                        if (isDisabled[i] == false && player.isDisabled(i + 1)) player.enableEquip(i + 1)._triggered = null;
+                        if (isDisabled[i] == true && !player.isDisabled(i + 1)) player.disableEquip(i + 1)._triggered = null;
                     }
-                    player.recover(player.storage.molis_gzhs[1] - player.hp)
-                    player.gain(player.storage.molis_gzhs[2], 'log');
-                    player.$gain2(player.storage.molis_gzhs[2]);
-                    for (var i = 0; i < player.storage.molis_gzhs[3].length; i++) {
-                        player.equip(player.storage.molis_gzhs[3][i]);
-                        player.$gain2(player.storage.molis_gzhs[3][i]);
-                        game.delayx();
+                    'step 4'
+                    var es = event.doing.es;
+                    if (es.length) player.directequip(es);
+                    'step 5'
+                    player.update();
+                    'step 6'
+                    game.animate.window(1);
+                    var data = {};
+                    for (var i = 0; i < game.players.length; i++) {
+                        data[game.players[i].dataset.position] = {
+                            h: get.cardsInfo(game.players[i].getCards('h')),
+                            e: get.cardsInfo(game.players[i].getCards('e')),
+                            j: get.cardsInfo(game.players[i].getCards('j'))
+                        }
                     }
-                    "step 1"
-                    if (player.storage.molis_gzhs[4]) {
-                        player.gain(player.storage.molis_gzhs[4], 'log');
-                        player.$gain2(player.storage.molis_gzhs[4])
-                        player.loseToSpecial(player.storage.molis_gzhs[4], 'muniu');
-                    }
-                    var evt = _status.event.getParent('phaseUse');
-                    if (evt && evt.name == 'phaseUse') {
-                        evt.skipped = true;
-                    }
-                    var evt = _status.event.getParent('phase');
-                    if (evt && evt.name == 'phase') {
-                        evt.finish();
-                    }
-                    player.insertPhase();
-                    "step 2"
+                    game.addVideo('skill', player, ['molis_gzhs', data]);
+                    game.animate.window(2);
+                    ui.updatehl();
+                    "step 7"
+                    game.updateRoundNumber();
                     player.mayChangeVice();
                 },
                 group: "molis_gzhs_recode",
@@ -15609,17 +15828,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         unique: true,
                         popup: false,
+                        preHidden: true,
                         silent: true,
                         forced: true,
                         charlotte: true,
                         fixed: true,
                         content: function () {
                             'step 0'
-                            player.storage.molis_gzhs[0] = player.MaxHp
-                            player.storage.molis_gzhs[1] = player.hp
-                            player.storage.molis_gzhs[2] = player.getCards('h')
-                            player.storage.molis_gzhs[3] = player.getCards('e')
-                            player.storage.molis_gzhs[4] = player.getCards('s')
+                            player.storage.molis_gzhs = lib.skill.molis_gzhs.getinfo(player)
                         }
                     }
                 }
@@ -16246,11 +16462,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'sheep_rh': '熔合',
+            'sheep_rh_info': ' 出牌阶段，你可以将两张装备牌“'+get.introduce('hecheng') +'”为一张装备牌；当你处于濒死状态时，你可以重铸一张装备牌，然后将体力回复至1点。',
             'bladewolf_rh': '融毁',
             'bladewolf_rh_info': '锁定技，当你死亡时，你可以分配X点火焰伤害（X为你本局游戏累计受到的伤害值）。',
             'bladewolf_qp': '潜破',
             'bladewolf_qp_info': get.introduce('shunfa') + '，每轮限一次，你可以对不为自己的当前回合角色造成1点伤害；当你杀死角色后，你重置此技能。',
-            'sheep_jf': '积分',
+            'sheep_jf': '机算',
             'sheep_jf_info': '出牌阶段限一次，你可以展示牌堆顶两张牌并弃置之，然后计算一个随机幂函数（最高二次幂）的积分（积分上限为其中较大的牌，下限为其中较小的牌），若你计算正确：你获得牌堆顶的五张牌，然后，你选择一项：1.交给一名其他角色五张牌。2.弃置五张牌。',
             'tails_qx': '巧械',
             'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同花色的牌，销毁场上任意张花色与你弃置牌相同的、点数为8的装备牌，对失去之的角色各造成等量火焰伤害。',
