@@ -1,10 +1,10 @@
 // @ts-check
 (() => ({
 	// 扩展版本
-	version: "2.0.9.5",
+	version: "2.1.0.0",
 
 	// 扩展的上一个版本
-	oldversion: "2.0.9.4",
+	oldversion: "2.0.9.5",
 
 	// 更新内容汇总
 	changeLog: `

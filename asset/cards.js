@@ -1122,14 +1122,16 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         direct: true,
                         content: function () {
                             'step 0'
-                            player.chooseTarget(1, '令一名角色的技能失效直到其回合结束', function (card, player, target) {
+                            player.chooseTarget(1, '是否令一名角色的技能失效直到其回合结束', function (card, player, target) {
                                 return target != player && !target.hasSkill('baiban')
                             }).set('ai', function (target) {
                                 var player = _status.event.player
                                 return -get.attitude(player, target)
                             })
                             'step 1'
-                            result.targets[0].addTempSkill('baiban', { player: "phaseEnd" })
+                            if(result.bool){
+                                result.targets[0].addTempSkill('baiban', { player: "phaseEnd" })
+                            }
                         }
                     }
                 }

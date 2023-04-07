@@ -13,7 +13,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             //'fr_nashu':['male','shen',4,[],[]],
             //'fr_derk':['male','jin',4,[],[]],
             //'fr_crow':['male','wei',4,[],[]],
-            'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
+            'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['fobidai', 'des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
             'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], []],
             "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
@@ -48,7 +48,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_milite": ["male", "fr_g_dragon", 7, ["milite_sz", "milite_yj"], []],
             "fr_jackson": ["male", "wu", 3, ["jackson_eb", "jackson_tm", "site_qj"], []],
             "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ["des:檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。"]],
-            "fr_sayisu": ["female", "wu", 3, ["sayisu_fp", "sayisu_fj"], []],
+            "fr_sayisu": ["female", "fr_g_dragon", 3, ["sayisu_fp", "sayisu_fj"], []],
             "fr_telina": ["female", "wu", 3, ["telina_hs", "telina_th"], ["des:特丽娜拥有特殊的「未来视」能力，她能够预知近至下一秒，远至数年的所有事件。在「瓦尔亚那百科全书」完成编写后，精灵族就在寻找拥有预言能力的人。因此特丽娜成为第一个受邀进入万灵之森的兽人。"]],
             "fr_oert": ["male", "shen", 4, ["oert_lh", "oert_wy"], ["des:轮回之神欧尔特，不像其他的神那样高高在上。据传，欧尔特曾在瓦尔亚娜大陆最重要的节日“火灵日”，亲自来到瓦尔亚娜大陆的一座山峰上为瓦尔亚娜的百姓祈福，并参加兽人族的祭典活动。而受他惠顾的小贩说到：“神灵大人最喜欢我们家的丸子。”虽然真假未可知。"]],
             "fr_rest": ["male", "shu", 3, ["rest_qf", "rest_nb"], ["des:瑞斯特，生于人鱼之海附近，虽说当地兽人族与鱼人族的关系并不融洽，但瑞斯特算是少有的与两族同时交好的人，其目前在二者之间经商。"]],
@@ -579,22 +579,22 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         filter: function (event, player) {
                             var bool1 = false
-                            for (var i of lib.suit) {
-                                if (player.countCards('h', { suit: i }) > 1) bool1 = true;
+                            for (var i of ['red','black']) {
+                                if (player.countCards('h', { color: i }) > 1){ bool1 = true;}
                             }
                             var bool2 = false
-                            var suits = []
+                            var colors = []
                             game.hasPlayer(function (current) {
                                 if (current != player) {
                                     var cards = current.getCards('e', function (card) {
                                         return get.number(card) == 8
                                     })
                                     for (var j = 0; j < cards.length; j++) {
-                                        if (!suits.contains(get.suit(cards[j]))) suits.push(get.suit(cards[j]))
+                                        if (!colors.contains(get.color(cards[j]))) colors.push(get.color(cards[j]))
                                     }
                                 }
                             })
-                            if (suits.length) bool2 = true
+                            if (colors.length){ bool2 = true}
                             return bool1 && player.countCards('he') > 0 && bool2
                         },
                         direct: true,
@@ -602,24 +602,24 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             'step 0'
                             player.chooseToDiscard(2, get.prompt2('tails_qx'), 'hs', function (card) {
                                 if (ui.selected.cards.length) {
-                                    return get.suit(card) == get.suit(ui.selected.cards[0]);
+                                    return get.color(card) == get.color(ui.selected.cards[0]);
                                 }
-                                var suits = []
+                                var colors = []
                                 game.hasPlayer(function (current) {
                                     if (current != player) {
                                         var cards = current.getCards('e', function (card) {
                                             return get.number(card) == 8
                                         })
                                         for (var j = 0; j < cards.length; j++) {
-                                            if (!suits.contains(get.suit(cards[j]))) suits.push(get.suit(cards[j]))
+                                            if (!colors.contains(get.color(cards[j]))) colors.push(get.color(cards[j]))
                                         }
                                     }
                                 })
-                                if (!suits) return false
+                                if (!colors) return false
                                 var cards = player.getCards('hs');
                                 for (var i = 0; i < cards.length; i++) {
                                     if (card != cards[i]) {
-                                        if (get.suit(card) == get.suit(cards[i]) && (suits.contains(get.suit(card)))) return true;
+                                        if (get.color(card) == get.color(cards[i]) && (colors.contains(get.color(card)))) return true;
                                     }
                                 }
                                 return false;
@@ -627,7 +627,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                 var player = _status.event.player
                                 var num = game.countPlayer(function (current) {
                                     return current != player && get.attitude(player, current) < 0 && current.countCards('e', function (card) {
-                                        return get.number(card) == 8 && get.suit(card) == ui.selected.cards[0]
+                                        return get.number(card) == 8 && get.color(card) == ui.selected.cards[0]
                                     }) > 0
                                 })
                                 if (num == 0) {
@@ -638,14 +638,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             })
                             'step 1'
                             if (result.bool) {
-                                event.suit = get.suit(result.cards[0])
+                                event.color = get.color(result.cards[0])
                                 player.chooseTarget([1, Infinity], true).set('ai', function (target) {
                                     var player = _status.event.player
                                     return -get.attitude(player, target)
                                 }).set('prompt', '销毁任意角色的任意张点数为8的装备牌，并造成等量火焰伤害').set('filterTarget', function (card, player, target) {
-                                    var suit = _status.event.suit
+                                    var color = _status.event.color
                                     return target.countCards('e', function (card) {
-                                        return get.number(card) == 8 && get.suit(card) == event.suit
+                                        return get.number(card) == 8 && get.color(card) == event.color
                                     }) > 0
                                 })
                             } else {
@@ -657,7 +657,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             event.target = event.targets.shift()
                             if (!event.target.isAlive()) event.goto(3)
                             var cards = event.target.getCards('e', function (card) {
-                                return get.number(card) == 8 && get.suit(card) == event.suit
+                                return get.number(card) == 8 && get.color(card) == event.color
                             })
                             player.chooseCardButton([1, Infinity], cards, '销毁' + get.translation(event.target) + '的至少一张装备牌', true).set('ai', function (button) {
                                 return get.value(button.link, event.target);
@@ -746,6 +746,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         }
                         if (event.mes == 'fr_card_zhuanyi') {
                             var str
+                            if (player.countCards('e', { subtype: 'equip1' }) > 0) player.discard(player.getCards('e', { subtype: 'equip1' }))
                             if (player.next != player.previous) {
                                 str = '与你的上家（' + get.translation(player.previous) + '）或你的下家（' + get.translation(player.next) + '）交换位置'
                             } else {
@@ -9405,7 +9406,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         list2.push("弃置一张黑色牌令此伤害+1")
                     }
                     list1.push('cancel2')
-                    player.chooseControl(list1).set("choiceList", list2).set('prompt', '是否发动〖覆身〗').set("ai", function () {
+                    player.chooseControl(list1).set("choiceList", list2).set('prompt', '是否对' + get.translation(trigger.player) + '发动〖覆身〗').set("ai", function () {
                         if (get.attitude(player, trigger.player) > 0) {
                             if (player.countCards('h', { color: 'red' }) > 0) {
                                 return '弃置红色'
@@ -16463,7 +16464,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         translate: {
             //技能
             'sheep_rh': '熔合',
-            'sheep_rh_info': ' 出牌阶段，你可以将两张装备牌“'+get.introduce('hecheng') +'”为一张装备牌；当你处于濒死状态时，你可以重铸一张装备牌，然后将体力回复至1点。',
+            'sheep_rh_info': ' 出牌阶段，你可以将两张装备牌“' + get.introduce('hecheng') + '”为一张装备牌；当你处于濒死状态时，你可以重铸一张装备牌，然后将体力回复至1点。',
             'bladewolf_rh': '融毁',
             'bladewolf_rh_info': '锁定技，当你死亡时，你可以分配X点火焰伤害（X为你本局游戏累计受到的伤害值）。',
             'bladewolf_qp': '潜破',
@@ -16471,9 +16472,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'sheep_jf': '机算',
             'sheep_jf_info': '出牌阶段限一次，你可以展示牌堆顶两张牌并弃置之，然后计算一个随机幂函数（最高二次幂）的积分（积分上限为其中较大的牌，下限为其中较小的牌），若你计算正确：你获得牌堆顶的五张牌，然后，你选择一项：1.交给一名其他角色五张牌。2.弃置五张牌。',
             'tails_qx': '巧械',
-            'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同花色的牌，销毁场上任意张花色与你弃置牌相同的、点数为8的装备牌，对失去之的角色各造成等量火焰伤害。',
+            'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同颜色的牌，销毁场上任意张颜色与你弃置牌相同的、点数为8的装备牌，对失去之的角色各造成等量火焰伤害。',
             'tails_jd': '机动',
-            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:你与上家或下家交换座位并将手牌弃至两张，可获得其一张装备区的牌并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
+            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:弃置你的武器牌并与上家或下家交换座位，然后将手牌弃至两张，可获得其一张装备区的牌并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
             'dier_xy': '夕炎',
             'dier_xy_info': '锁定技，当你使用【杀】指定目标后，你获得该角色的一张牌。',
             'dier_sb': '守宝',

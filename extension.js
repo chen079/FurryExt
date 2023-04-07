@@ -120,10 +120,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     return player == game.me;
                 },
                 content: function () {
-                    var u = lib.config.extension_福瑞拓展_xuanshi;
-                    if (u == 2) {
-                        player.addSkill('xuanshi');
-                    }
+                    'step 0'
+                    if (lib.config.extension_福瑞拓展_xuanshi == 2) player.addSkill('xuanshi');
+                    'step 1'
                     player.update();
                 },
             }
@@ -175,7 +174,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '5.修改科恩的势力为机',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_sheep', 'fr_tails'];
+                    var Furry_players = ['fr_sheep', 'fr_tails','fr_bladewolf','fr_dier'];
                     var Furry_redoplayers = ['fr_qima'];
                     //更新卡牌
                     var Furry_cards = [];
@@ -728,7 +727,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                     game.getFileList('extension/十周年UI/image/decoration', (folders, files) => {
-                        const furryCardFiles = ['name_fr_g_dragon.webp', 'name_fr_g_dragon.png', 'name_fr_g_ji.png', 'name2_fr_g_ji.png'];
+                        const furryCardFiles = ['name_fr_g_dragon.webp', 'name_fr_g_dragon.png', 'name_fr_g_ji.png', 'name_fr_g_ji.webp'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -1076,7 +1075,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (!ret) {
                         alert("请确认你明白点击此选项导致的后果");
                         alert("由游戏版本过低导致任何问题本扩展均不负责");
-                        //game.saveConfig('furryNotMetionNonameVersion',true);
+                        game.saveConfig('furryNotMetionNonameVersion',true);
                     }
                     else {
                         game.saveConfig('extension_福瑞拓展_enable', false);
@@ -2178,7 +2177,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
                 "wuyin": {
                     name: "五音",
-                    info: "<li>宫音：摸牌阶段，你多摸两张牌 <li>商音：出牌阶段，你可以额外使用一张【杀】<li>角音：你跳过你的下个弃牌阶段 <li>徵音：结束阶段，你摸两张牌 <li>羽音：回合结束时，你令一名其他角色技能失效直到其回合结束。"
+                    info: "<li>宫音：摸牌阶段，你多摸两张牌 <li>商音：出牌阶段，你可以额外使用一张【杀】<li>角音：你跳过你的下个弃牌阶段 <li>徵音：结束阶段，你摸两张牌 <li>羽音：回合结束时，你可以令一名其他角色技能失效直到其回合结束。"
                 },
                 "mad": {
                     name: "狂属性",
@@ -2582,7 +2581,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.0.9.5",
+            version: "2.1.0.0",
         }, files: {}
     }
 })
