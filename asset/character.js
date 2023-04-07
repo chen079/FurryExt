@@ -659,7 +659,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             var cards = event.target.getCards('e', function (card) {
                                 return get.number(card) == 8 && get.color(card) == event.color
                             })
-                            player.chooseCardButton([1, Infinity], cards, '销毁' + get.translation(event.target) + '的至少一张装备牌', true).set('ai', function (button) {
+                            player.chooseCardButton(1, cards, '销毁' + get.translation(event.target) + '的一张装备牌', true).set('ai', function (button) {
                                 return get.value(button.link, event.target);
                             })
                             'step 4'
@@ -16472,9 +16472,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'sheep_jf': '机算',
             'sheep_jf_info': '出牌阶段限一次，你可以展示牌堆顶两张牌并弃置之，然后计算一个随机幂函数（最高二次幂）的积分（积分上限为其中较大的牌，下限为其中较小的牌），若你计算正确：你获得牌堆顶的五张牌，然后，你选择一项：1.交给一名其他角色五张牌。2.弃置五张牌。',
             'tails_qx': '巧械',
-            'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同颜色的牌，销毁场上任意张颜色与你弃置牌相同的、点数为8的装备牌，对失去之的角色各造成等量火焰伤害。',
+            'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同花色的牌，销毁场上任意名角色的各至多一张颜色与你弃置牌相同的、点数为8的装备牌，对其各造成1点火焰伤害。',
             'tails_jd': '机动',
-            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:弃置你的武器牌并与上家或下家交换座位，然后将手牌弃至两张，可获得其一张装备区的牌并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
+            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:与上家或下家交换座位并将手牌弃至两张（若你有武器牌则弃置之），可获得其一张装备区的牌并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
             'dier_xy': '夕炎',
             'dier_xy_info': '锁定技，当你使用【杀】指定目标后，你获得该角色的一张牌。',
             'dier_sb': '守宝',
