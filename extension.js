@@ -172,6 +172,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '3.新人物 西普、塔尔斯',
                         '4.减少bug',
                         '5.修改科恩的势力为机',
+                        '2.0.9.6',
+                        '1.增加新势力：机',
+                        '2.将福瑞群像作为游戏模式独立出来',
+                        '3.新人物 西普、塔尔斯',
+                        '4.减少bug',
+                        '5.修改科恩的势力为机'
                     ];
                     //更新武将
                     var Furry_players = ['fr_sheep', 'fr_tails','fr_bladewolf','fr_dier'];
