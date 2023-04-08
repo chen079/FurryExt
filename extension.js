@@ -643,16 +643,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     }, 1000)
                 }
-                if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
+                if (lib.config.exp && lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
                     //武将界面
                     setTimeout(() => {
-                        if (lib.config.exp&&ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
+                        if (ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
                             ggMod.junk.addArray(furryrank[0])
                             ggMod.rare.addArray(furryrank[1])
                             ggMod.epic.addArray(furryrank[2])
                             ggMod.legend.addArray(furryrank[3])
                         }
-                    },500)
+                    }, 500)
                 }
             })
             // ---------------------------------------瞬发技按钮------------------------------------------//
