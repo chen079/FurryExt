@@ -180,7 +180,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '5.修改科恩的势力为机'
                     ];
                     //更新武将
-                    var Furry_players = ['fr_sheep', 'fr_tails','fr_bladewolf','fr_dier'];
+                    var Furry_players = ['fr_sheep', 'fr_tails', 'fr_bladewolf', 'fr_dier'];
                     var Furry_redoplayers = ['fr_qima'];
                     //更新卡牌
                     var Furry_cards = [];
@@ -614,12 +614,45 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 event.resume();
             };
+            //乐色
+            var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala']
+            //珍贵
+            var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_jiejie"
+                , "fr_sayisu", "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
+            //史诗
+            var furryepic = ["fr_hars", "fr_muyada", "fr_marxya", "fr_muli", "fr_alas", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_hynea", "fr_dier",
+                "fr_aroncy", "fr_berg", "fr_markn", "fr_morly", "fr_dog", "fr_muen", "fr_glit", "fr_edmon", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
+                , "fr_slen", "fr_paers", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala"]
+            //传说
+            var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
+                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
+            var furryrank = [furryjunk, furryrare, furryepic, furrylegend]
+
+            lib.rank.rarity.junk.addArray(furryrank[0]);
+            lib.rank.rarity.rare.addArray(furryrank[1]);
+            lib.rank.rarity.epic.addArray(furryrank[2]);
+            lib.rank.rarity.legend.addArray(furryrank[3]);
+            //势力
             lib.arenaReady.push(() => {
                 if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
                     setTimeout(() => {
-                        lib.groupnature.fr_g_dragon = 'fr_g_dragon'
-                        lib.groupnature.fr_g_ji = 'fr_g_ji'
+                        //势力
+                        if (lib.groupnature) {
+                            lib.groupnature.fr_g_dragon = 'fr_g_dragon'
+                            lib.groupnature.fr_g_ji = 'fr_g_ji'
+                        }
                     }, 1000)
+                }
+                if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
+                    //武将界面
+                    setTimeout(() => {
+                        if (lib.config.exp&&ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
+                            ggMod.junk.addArray(furryrank[0])
+                            ggMod.rare.addArray(furryrank[1])
+                            ggMod.epic.addArray(furryrank[2])
+                            ggMod.legend.addArray(furryrank[3])
+                        }
+                    },500)
                 }
             })
             // ---------------------------------------瞬发技按钮------------------------------------------//
@@ -702,13 +735,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (lib.config.extensions.contains('十周年UI') && lib.config['extension_十周年UI_enable']) {
                     game.getFileList('extension/十周年UI/image/card', (folders, files) => {
                         const furryCardFiles = [
-                            'fr_card_cmhc.jpg','fr_card_cmhc.bmp', 'fr_card_cmhc.png', 'fr_card_cmhc.webp', 'fr_card_djlj.jpg', 'fr_card_djlj.webp','fr_card_djlj.bmp',
-                            'fr_card_gzbj.jpg', 'fr_card_gzbj.png', 'fr_card_gzbj.webp','fr_card_gzbj.bmp', 'fr_card_lltj.jpg', 'fr_card_lltj.png', 'fr_card_lltj.webp','fr_card_lltj.bmp',
-                            'fr_card_lyzq.jpg', 'fr_card_lyzq.png', 'fr_card_lyzq.webp', 'fr_card_lyzq.bmp','fr_card_ttbl.jpg', 'fr_card_ttbl.png', 'fr_card_ttbl.webp', 'fr_card_ttbl.bmp','fr_card_xysx.jpg',
-                            'fr_card_xysx.png', 'fr_card_xysx.webp', 'fr_card_yxys.jpg','fr_card_yxys.bmp', 'fr_card_xysx.bmp','fr_card_yxys.png', 'fr_card_yxys.webp', 'fr_card_zfxd.jpg','fr_card_zfxd.bmp',
-                            'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp','fr_card_zh.bmp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp','fr_card_zhcz.bmp',
-                            'fr_equip1_syzg.jpg','fr_equip1_syzg.bmp', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp', 'fr_equip5_wxpp.bmp','fr_card_scfm.png',
-                            'fr_card_scfm.webp', 'fr_card_scfm.jpg','fr_card_scfm.bmp',
+                            'fr_card_cmhc.jpg', 'fr_card_cmhc.bmp', 'fr_card_cmhc.png', 'fr_card_cmhc.webp', 'fr_card_djlj.jpg', 'fr_card_djlj.webp', 'fr_card_djlj.bmp',
+                            'fr_card_gzbj.jpg', 'fr_card_gzbj.png', 'fr_card_gzbj.webp', 'fr_card_gzbj.bmp', 'fr_card_lltj.jpg', 'fr_card_lltj.png', 'fr_card_lltj.webp', 'fr_card_lltj.bmp',
+                            'fr_card_lyzq.jpg', 'fr_card_lyzq.png', 'fr_card_lyzq.webp', 'fr_card_lyzq.bmp', 'fr_card_ttbl.jpg', 'fr_card_ttbl.png', 'fr_card_ttbl.webp', 'fr_card_ttbl.bmp', 'fr_card_xysx.jpg',
+                            'fr_card_xysx.png', 'fr_card_xysx.webp', 'fr_card_yxys.jpg', 'fr_card_yxys.bmp', 'fr_card_xysx.bmp', 'fr_card_yxys.png', 'fr_card_yxys.webp', 'fr_card_zfxd.jpg', 'fr_card_zfxd.bmp',
+                            'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp', 'fr_card_zh.bmp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp', 'fr_card_zhcz.bmp',
+                            'fr_equip1_syzg.jpg', 'fr_equip1_syzg.bmp', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp', 'fr_equip5_wxpp.bmp', 'fr_card_scfm.png',
+                            'fr_card_scfm.webp', 'fr_card_scfm.jpg', 'fr_card_scfm.bmp',
                         ];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
@@ -1081,7 +1114,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (!ret) {
                         alert("请确认你明白点击此选项导致的后果");
                         alert("由游戏版本过低导致任何问题本扩展均不负责");
-                        game.saveConfig('furryNotMetionNonameVersion',true);
+                        game.saveConfig('furryNotMetionNonameVersion', true);
                     }
                     else {
                         game.saveConfig('extension_福瑞拓展_enable', false);
@@ -1314,14 +1347,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "step 4"
                 if (!event.notrigger) event.trigger('damageSource');
             };
-            lib.rank.rarity.junk.addArray(["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala']);
-            lib.rank.rarity.rare.addArray(["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_jiejie"
-                , "fr_sayisu", "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']);
-            lib.rank.rarity.epic.addArray(["fr_hars", "fr_muyada", "fr_marxya", "fr_muli", "fr_alas", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_hynea",
-                "fr_aroncy", "fr_berg", "fr_markn", "fr_morly", "fr_dog", "fr_muen", "fr_glit", "fr_edmon", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala"]);
-            lib.rank.rarity.legend.addArray(["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci",
-                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']);
             //------------------------------------------国战武将------------------------------------------//
             if (lib.characterPack.mode_guozhan) {
                 if (config.heroes) {
@@ -2137,9 +2162,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
             //------------------------------------------说明------------------------------------------//
             var introduce = {
-                'hecheng':{
-                    name:'合成',
-                    info:'<li>合成：指的是将两张装备变为一张，效果为二者的叠加。<li>合成后的装备类型取决于合成中你先选择的装备。'
+                'hecheng': {
+                    name: '合成',
+                    info: '<li>合成：指的是将两张装备变为一张，效果为二者的叠加。<li>合成后的装备类型取决于合成中你先选择的装备。'
                 },
                 'shunfa': {
                     name: '瞬发技',
@@ -2553,6 +2578,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "name": "自动更新",
                 "intro": "游戏开始后会自动检查福瑞拓展是否为最新版",
                 "init": true,
+            },
+            "exp": {
+                "name": "实验性内容",
+                "intro": "开启测试性内容，若不知道有什么用，请勿打开。",
+                "init": false,
             },
             "acknowledgments": {
                 "name": "鸣谢清单",

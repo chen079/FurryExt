@@ -579,8 +579,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         filter: function (event, player) {
                             var bool1 = false
-                            for (var i of ['red','black']) {
-                                if (player.countCards('h', { color: i }) > 1){ bool1 = true;}
+                            for (var i of ['red', 'black']) {
+                                if (player.countCards('h', { color: i }) > 1) { bool1 = true; }
                             }
                             var bool2 = false
                             var colors = []
@@ -594,7 +594,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                     }
                                 }
                             })
-                            if (colors.length){ bool2 = true}
+                            if (colors.length) { bool2 = true }
                             return bool1 && player.countCards('he') > 0 && bool2
                         },
                         direct: true,
@@ -10787,7 +10787,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 content: function () {
                     "step 0"
-                    player.loseHp()
                     var list = [];
                     for (var i = 0; i < game.dead.length; i++) {
                         if (game.dead[i].maxHp != 0) {
@@ -10800,6 +10799,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     });
                     "step 1"
                     if (result.bool) {
+                        player.loseHp()
                         for (var i = 0; i < game.dead.length && game.dead[i].name != result.buttons[0].link; i++);
                         var dead = game.dead[i];
                         dead.revive(1);
@@ -11398,10 +11398,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     event.target = event.targets.shift()
                     event.target.chooseBool('是否替' + get.translation(player) + '承受来自' + get.translation(trigger.source) + '的' + trigger.num + '点' + (trigger.nature ? get.translation(trigger.nature) + '属性' : '') + '伤害')
                         .set('ai', function () {
-                            var target = _status.event.player
-                            var player = _status.event.getParent().player
-                            return get.attitude(target, player) > 0 && target.hp + target.hujia > num
-                        })
+                            var target = _status.event.target
+                            var player = _status.event.player
+                            return get.attitude(player, target) > 0 && player.hp + player.hujia > num
+                        }).set('target', player)
                     "step 2"
                     if (result.bool) {
                         event.target.popup('代替');
