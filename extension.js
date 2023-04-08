@@ -702,13 +702,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (lib.config.extensions.contains('十周年UI') && lib.config['extension_十周年UI_enable']) {
                     game.getFileList('extension/十周年UI/image/card', (folders, files) => {
                         const furryCardFiles = [
-                            'fr_card_cmhc.jpg', 'fr_card_cmhc.png', 'fr_card_cmhc.webp', 'fr_card_djlj.jpg', 'fr_card_djlj.webp',
-                            'fr_card_gzbj.jpg', 'fr_card_gzbj.png', 'fr_card_gzbj.webp', 'fr_card_lltj.jpg', 'fr_card_lltj.png', 'fr_card_lltj.webp',
-                            'fr_card_lyzq.jpg', 'fr_card_lyzq.png', 'fr_card_lyzq.webp', 'fr_card_ttbl.jpg', 'fr_card_ttbl.png', 'fr_card_ttbl.webp', 'fr_card_xysx.jpg',
-                            'fr_card_xysx.png', 'fr_card_xysx.webp', 'fr_card_yxys.jpg', 'fr_card_yxys.png', 'fr_card_yxys.webp', 'fr_card_zfxd.jpg',
-                            'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp',
-                            'fr_equip1_syzg.jpg', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp', 'fr_card_scfm.png',
-                            'fr_card_scfm.webp', 'fr_card_scfm.jpg',
+                            'fr_card_cmhc.jpg','fr_card_cmhc.bmp', 'fr_card_cmhc.png', 'fr_card_cmhc.webp', 'fr_card_djlj.jpg', 'fr_card_djlj.webp','fr_card_djlj.bmp',
+                            'fr_card_gzbj.jpg', 'fr_card_gzbj.png', 'fr_card_gzbj.webp','fr_card_gzbj.bmp', 'fr_card_lltj.jpg', 'fr_card_lltj.png', 'fr_card_lltj.webp','fr_card_lltj.bmp',
+                            'fr_card_lyzq.jpg', 'fr_card_lyzq.png', 'fr_card_lyzq.webp', 'fr_card_lyzq.bmp','fr_card_ttbl.jpg', 'fr_card_ttbl.png', 'fr_card_ttbl.webp', 'fr_card_ttbl.bmp','fr_card_xysx.jpg',
+                            'fr_card_xysx.png', 'fr_card_xysx.webp', 'fr_card_yxys.jpg','fr_card_yxys.bmp', 'fr_card_xysx.bmp','fr_card_yxys.png', 'fr_card_yxys.webp', 'fr_card_zfxd.jpg','fr_card_zfxd.bmp',
+                            'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp','fr_card_zh.bmp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp','fr_card_zhcz.bmp',
+                            'fr_equip1_syzg.jpg','fr_equip1_syzg.bmp', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp', 'fr_equip5_wxpp.bmp','fr_card_scfm.png',
+                            'fr_card_scfm.webp', 'fr_card_scfm.jpg','fr_card_scfm.bmp',
                         ];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
@@ -2587,7 +2587,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.1.0.0",
+            version: "2.1.0.1",
         }, files: {}
     }
 })

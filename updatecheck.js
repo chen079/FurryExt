@@ -1,76 +1,45 @@
 // @ts-check
 (() => ({
 	// 扩展版本
-	version: "2.1.0.0",
+	version: "2.1.0.1",
 
 	// 扩展的上一个版本
 	oldversion: "2.0.9.5",
 
 	// 更新内容汇总
 	changeLog: `
-	v2.1.0.0总和更新
+	增加了手杀版美化卡牌
+	添加了鸣谢名单
+	请确保你是从2.1.0.0升级，否则可能会有内容失效
+	2.1.0.0正式版请加群：556343851
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
 	updateFiles: [
-		'furry_lib.jpg',
 		'extension.css',
 		'extension.js',
 		'asset/cards.js',
 		'asset/character.js',
 		'asset/drama.js',
-		'image/lutou/fr_bosswore.jpg',
-		'image/character/fr_bosswore.jpg',
-		'image/others/qqgroup.png',
-		'image/card/fr_card_djlj.png',
-		'image/card/fr_card_scfm.png',
-		'image/card/pretty/fr_card_djlj.jpg',
-		'image/card/pretty/fr_card_djlj.webp',
-		'image/card/pretty/fr_card_djlj.png',
-		'image/card/pretty/fr_card_scfm.jpg',
-		'image/card/pretty/fr_card_scfm.webp',
-		'image/card/pretty/fr_card_scfm.png',
-		'image/group/border_fr_g_dragon.png',
-		'image/group/detail_fr_g_dragon.png',
-		'image/group/detail_fr_g_dragon_other.png',
-		'image/group/name2_fr_g_dragon.png',
-		'image/equip/fr_equip1_syzg.png',
-		'image/equip/fr_equip5_wxpp.png',
-		'image/border/fr_g_dragon.png',
-		'image/group/name_fr_g_dragon.png',
-		'image/group/name_fr_g_dragon.webp',
-		'image/lutou/fr_dier.jpg',
-		'image/character/fr_dier.jpg',
-		'image/group/border_fr_g_ji.png',
-		'image/group/detail_fr_g_ji.png',
-		'image/group/detail_fr_g_ji_other.png',
-		'image/group/name2_fr_g_ji.png',
-		'image/group/name_fr_g_ji.png',
-		'image/group/name_fr_g_ji.webp',
-		'image/border/fr_g_ji.png',
-		'image/lutou/fr_bladewolf.jpg',
-		'image/lutou/fr_crow.jpg',
-		'image/lutou/fr_derk.jpg',
-		'image/lutou/fr_nashu.jpg',
-		'image/lutou/fr_rasali.jpg',
-		'image/lutou/fr_sheep.jpg',
-		'image/lutou/fr_zhan.jpg',
-		'image/character/fr_bladewolf.jpg',
-		'image/character/fr_crow.jpg',
-		'image/character/fr_derk.jpg',
-		'image/character/fr_nashu.jpg',
-		'image/character/fr_rasali.jpg',
-		'image/character/fr_sheep.jpg',
-		'image/character/fr_zhan.jpg',
-		'image/button/button_ol.png',
-		'image/button/button_olten.png',
-		'image/button/button_shousha.png',
-		'image/qidongye/furry_lib.jpg',
-		'image/qidongye/furry_lib2.png',
-		'image/card/fr_card_chongci.png',
-		'image/card/fr_card_zhuanyi.png',
-		'image/character/fr_tails.jpg',
-		'image/lutou/fr_tails.jpg'
+		'acknowledgments/img/15.jpg',
+		'acknowledgments/img/16.jpg',
+		'acknowledgments/img/17.jpg',
+		'acknowledgments/img/18.jpg',
+		'acknowledgments/Acknowledgments.html',
+		'image/card/pretty/fr_card_cmhc.bmp',
+		'image/card/pretty/fr_card_djlj.bmp',
+		'image/card/pretty/fr_card_gzbj.bmp',
+		'image/card/pretty/fr_card_lltj.bmp',
+		'image/card/pretty/fr_card_lyzq.bmp',
+		'image/card/pretty/fr_card_scfm.bmp',
+		'image/card/pretty/fr_card_ttbl.bmp',
+		'image/card/pretty/fr_card_xysx.bmp',
+		'image/card/pretty/fr_card_yxys.bmp',
+		'image/card/pretty/fr_equip1_syzg.bmp',
+		'image/card/pretty/fr_card_zfxd.bmp',
+		'image/card/pretty/fr_card_zh.bmp',
+		'image/card/pretty/fr_card_zhcz.bmp',
+		'image/card/pretty/fr_equip5_wxpp.bmp',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
