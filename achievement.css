@@ -1,0 +1,307 @@
+@font-face {
+    font-family: "得意黑";
+    src: url("/acknowledgments/font/SmileySans-Oblique.otf")
+}
+
+.fr-achiWindow {
+    display: block;
+    background-size: cover;
+    z-index: 21;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.fr-achiWindow-bk {
+    z-index: 1;
+    display: block;
+    background-size: 100% 100%;
+    width: 50%;
+    height: 50%;
+    background-image: url('image/achievement/background.png');
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    overflow: hidden;
+}
+
+.fr-achiWindow-tips {
+    background-size: 100% 100%;
+    width: 6%;
+    height: 30%;
+    padding: 7% 0 0;
+    top: 0%;
+    left: 8%;
+}
+
+.fr-achiWindow-bk-cover {
+    z-index: 3;
+    display: block;
+    left: 0;
+    background-size: 100% 100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('image/achievement/background_cover.png');
+    pointer-events: none;
+}
+
+.fr-achiWindow-return {
+    z-index: 5;
+    background-size: 100% 100%;
+    display: block;
+    left: 88.5%;
+    top: 11%;
+    background-image: url('image/achievement/exit_icon.png');
+    width: 3.5vw;
+    height: 3.5vw;
+}
+
+.fr-achiWindow-text {
+    display: block;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+    left: calc(8.177%);
+    top: calc(13.33%);
+    width: calc(83.976%);
+    height: calc(76.13%);
+}
+
+.fr-achiWindow-textinner {
+    display: block;
+    width: calc(90%);
+    height: calc(100%);
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 55%;
+    box-shadow: none;
+    text-shadow: none;
+    color: black;
+    font-family: 'yuanli';
+    overflow: scroll;
+}
+
+.fr-achiWindow-openFilter {
+    width: 8%;
+    height: 0;
+    padding: 9.6% 1px 0;
+    top: 80%;
+    left: 85.5%;
+    background-image: url('image/achievement/button_openFilter.png');
+    background-size: 100%;
+}
+
+.fr-achiWindow-filterWindow {
+    z-index: 7;
+    height: 100%;
+    width: 0;
+    left: 50%;
+    padding: 0 50% 0 0;
+    background-size: 100%;
+    background-image: url('image/achievement/filter_bg.png');
+}
+
+.fr-achiWindow-filterExit {
+    z-index: 8;
+    background-size: 100% 100%;
+    display: block;
+    right: 12%;
+    top: 4.8%;
+    background-image: url('image/achievement/exit_icon.png');
+    width: 3.5vw;
+    height: 3.5vw;
+}
+
+.fr-achiWindow-filter-icon {
+    width: 33%;
+    height: 33%;
+    left: 0;
+    top: 0;
+    background-size: 100%;
+    font-size: 3.5vw;
+    background-image: url('image/achievement/star.png');
+}
+
+.fr-achiWindow-filter-lv1 {
+    width: 72%;
+    height: 22%;
+    top: 12.6%;
+    left: 13.5%;
+    background-size: 100%;
+    background-image: url('image/achievement/filter_optional.png');
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #604b1f;
+    font-size: 3vw;
+}
+
+.fr-achiWindow-filter-lv2 {
+    width: 72%;
+    height: 22%;
+    top: 32.8%;
+    left: 13.5%;
+    background-size: 100%;
+    background-image: url('image/achievement/filter_optional.png');
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #604b1f;
+    font-size: 3vw;
+}
+
+.fr-achiWindow-filter-lv3 {
+    width: 72%;
+    height: 22%;
+    top: 53%;
+    left: 13.5%;
+    background-size: 100%;
+    background-image: url('image/achievement/filter_optional.png');
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #604b1f;
+    font-size: 3vw;
+}
+
+.fr-achiWindow-filter-lv4 {
+    width: 72%;
+    height: 22%;
+    top: 73.2%;
+    left: 13.5%;
+    background-size: 100%;
+    background-image: url('image/achievement/filter_optional.png');
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #604b1f;
+    font-size: 3vw;
+}
+
+.fr-dialog-completeAchi {
+    z-index: 99;
+    top: 5%;
+    margin: auto;
+    width: 100%;
+    height: 10%;
+    background: url('image/others/tc2.png') no-repeat center;
+    background-size: contain;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    padding-top: 1.6%;
+    justify-content: center;
+    font-family: "得意黑";
+    font-size: 4vh;
+}
+
+.frw-background {
+    z-index: 22;
+    position: absolute;
+    background-size: cover;
+    top: 50%;
+    left: 50%;
+    display: block;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    background-image: url('image/background/tavern.jpg');
+}
+
+.frw-background>.fr-winner-head {
+    display: block;
+    position: absolute;
+    left: calc(50% - 150px);
+    top: 50%;
+    width: 200px;
+    height: 275px;
+    background-size: 100% 100%;
+    transform: translate(-50%, -50%);
+    z-index: 23;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+
+.frw-background>.fr-winner-biankuang {
+    display: block;
+    position: absolute;
+    left: calc(50% - 150px);
+    top: 50%;
+    width: 210px;
+    height: 285px;
+    background-size: 100% 100%;
+    background-image: url('image/others/fr_pic_biankuang.png');
+    transform: translate(-50%, -50%);
+    z-index: 24;
+}
+
+.frw-background>.fr-win-text {
+    position: absolute;
+    left: 50%;
+    top: calc(50% - 135px);
+    bottom: 10px;
+    width: 630px;
+    background-repeat: no-repeat;
+    height: 100px;
+    transform: translate(-50%, -100%);
+    z-index: 25;
+    font-family: 'xinwei';
+    overflow: scroll;
+    font-size: 65px;
+    color: red;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.frw-background>.fr-win-close-button {
+    position: absolute;
+    left: 50%;
+    top: calc(100% - 100px);
+    width: 100px;
+    height: 50px;
+    line-height: 50px;
+    transform: translate(-50%, 0%);
+    z-index: 25;
+    background-size: 100% 100%;
+    background-image: url('image/button/button_shousha.png');
+    font-family: 'HYZLSJ';
+    overflow: scroll;
+    font-size: 32px;
+    text-align: center;
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.frw-background>.fr-winner-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 350px;
+    min-height: 100px;
+    transform: translate(0%, -50%);
+    z-index: 25;
+    font-family: 'xinwei';
+    font-size: 35px;
+    text-align: center;
+}
+
+.frw-background>.fr-achi-hasDone {
+    position: absolute;
+    left: 3%;
+    top: 50%;
+    width: 350px;
+    min-height: 100px;
+    transform: translate(0%, -50%);
+    color: yellow;
+    z-index: 25;
+    font-family: 'xinwei';
+    font-size: 3vh;
+}

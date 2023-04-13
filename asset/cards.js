@@ -1,3 +1,4 @@
+'use strict';
 game.import('card', function (lib, game, ui, get, ai, _status) {
     var furryCard = {
         name: 'furryCard',//卡包命名
@@ -785,7 +786,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             if (skills.length) {
                                 ui.window.removeChild(event.node);
                                 ui.window.removeChild(text);
-                                ui.window.removeChild(button);
+                                button.close()
                                 event.node.innerHTML = '';
                                 event.skills = skills
                                 game.resume();
@@ -826,7 +827,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         text.style.color = "white"
                         text.style.textAlign = 'center';
                         ui.window.appendChild(text);
-                        var button = ui.create.div('.menubutton.highlight.large', '确定', function () {
+                        var button = ui.create.control('确定', function () {
                             skillName()
                         });
                         button.style.width = '70px';

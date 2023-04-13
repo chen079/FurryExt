@@ -1,4 +1,3 @@
-/// <reference path="../../typings/index.d.ts"/>
 'use strict';
 game.import("extension", function (lib, game, ui, get, ai, _status) {
     window.furry = {
@@ -109,6 +108,15 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
     return {
         name: "福瑞拓展",
         editable: false, content: function (config, pack) {
+            //————成就系统————//
+            window.openfrAchievement = function () {
+                if (game.frAchi) {
+                    game.frAchi.openAchievementMainPage();
+                    return;
+                } else {
+                    alert("发生了点小问题，您可以重新载入本扩展试试。");
+                }
+            };
             //技能作弊
             lib.skill._xuanshi_item = {
                 trigger: {
@@ -120,9 +128,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     return player == game.me;
                 },
                 content: function () {
-                    'step 0'
-                    if (lib.config.extension_福瑞拓展_xuanshi == 2) player.addSkill('xuanshi');
-                    'step 1'
+                    var u = lib.config.extension_福瑞拓展_xuanshi;
+                    if (u == 2) {
+                        player.addSkill('xuanshi');
+                    }
                     player.update();
                 },
             }
@@ -616,47 +625,49 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             };
             //乐色
             var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala']
+            //普通
+            var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
             //珍贵
-            var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_jiejie"
-                , "fr_sayisu", "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
+            var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_hars"
+                , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
             //史诗
-            var furryepic = ["fr_hars", "fr_muyada", "fr_marxya", "fr_muli", "fr_alas", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_hynea", "fr_dier",
-                "fr_aroncy", "fr_berg", "fr_markn", "fr_morly", "fr_dog", "fr_muen", "fr_glit", "fr_edmon", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala"]
+            var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
+                "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
+                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala"]
             //传说
             var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
                 "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
-            var furryrank = [furryjunk, furryrare, furryepic, furrylegend]
+            var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
 
             lib.rank.rarity.junk.addArray(furryrank[0]);
-            lib.rank.rarity.rare.addArray(furryrank[1]);
-            lib.rank.rarity.epic.addArray(furryrank[2]);
-            lib.rank.rarity.legend.addArray(furryrank[3]);
+            lib.rank.rarity.common.addArray(furryrank[1]);
+            lib.rank.rarity.rare.addArray(furryrank[2]);
+            lib.rank.rarity.epic.addArray(furryrank[3]);
+            lib.rank.rarity.legend.addArray(furryrank[4]);
             //势力
             lib.arenaReady.push(() => {
-                if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
-                    setTimeout(() => {
-                        //势力
+                setTimeout(() => {
+                    //势力
+                    if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
                         if (lib.groupnature) {
                             lib.groupnature.fr_g_dragon = 'fr_g_dragon'
                             lib.groupnature.fr_g_ji = 'fr_g_ji'
                         }
-                    }, 1000)
-                }
-                if (lib.config.exp && lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
+                    }
                     //武将界面
-                    setTimeout(() => {
-                        if (ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
+                    if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
+                        if (config.exp && ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
                             ggMod.junk.addArray(furryrank[0])
-                            ggMod.rare.addArray(furryrank[1])
-                            ggMod.epic.addArray(furryrank[2])
-                            ggMod.legend.addArray(furryrank[3])
+                            ggMod.common.addArray(furryrank[1])
+                            ggMod.rare.addArray(furryrank[2])
+                            ggMod.epic.addArray(furryrank[3])
+                            ggMod.legend.addArray(furryrank[4])
                         }
-                    }, 500)
-                }
+                    }
+                }, 1000)
             })
             // ---------------------------------------瞬发技按钮------------------------------------------//
-            //按钮样式来自天牢令拓展    瞬发技参考自时空枢纽拓展
+            //按钮样式来自天牢令拓展    瞬发技参考自福瑞拓展拓展
             lib.element.player.FrShunfajiInit = function (skillname) {
                 if (!this.isUnderControl(true)) {
                     return;
@@ -1394,6 +1405,27 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             lib.perfectPair.fr_wore = ['fr_tiers']
             lib.perfectPair.fr_miya = ['db_fr_krikt']
         }, precontent: function (furryPack) {
+            //成就系统
+            lib.init.js(lib.assetURL + 'extension/福瑞拓展', 'furry_achievement', function () {
+                lib.init.css(lib.assetURL + 'extension/福瑞拓展', 'mainPage');
+                lib.init.css(lib.assetURL + 'extension/福瑞拓展', 'achievement');
+                lib.arenaReady.push(function () {
+                    ui.create.system("福瑞成就", function () {
+                        if (typeof window.openfrAchievement == 'function') {
+                            window.openfrAchievement();
+                        } else {
+                            alert("错误：您似乎没有正常导入福瑞拓展扩展文件");
+                        }
+                    }, true);
+                    try {
+                        game.frAchi.init();
+                    } catch (e) {
+                        alert("错误：成就初始化失败");
+                    }
+                });
+            }, function () {
+                alert("错误：时空成就导入失败");
+            });
             if (furryPack.enable) {
                 game.addMode('furry_lib', {
                     game: {
@@ -1991,6 +2023,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 })
 
                 //定义势力
+                var url = lib.assetURL + 'extension/福瑞拓展';
+                lib.init.css(url, 'extension');
                 lib.group.add('fr_g_dragon');
                 lib.translate.fr_g_dragon = '龙';
                 lib.translate.fr_g_dragon2 = '龙';
@@ -1998,7 +2032,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.group.add('fr_g_ji');
                 lib.translate.fr_g_ji = '机';
                 lib.translate.fr_g_ji2 = '机';
-
+                lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/furrymode.js', null);
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
                 lib.config.all.characters.push('furryPack');
                 lib.translate['furryPack_character_config'] = "<img style=width:100px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png>";// 包名翻译
@@ -2018,7 +2052,15 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 return null;
             };
             lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/skin.js', null);//这一行代码加载扩展中的skin.js文件。   
-            //点击提示的css参考了活动武将
+            //点击提示 参考自活动武将
+            game.getPhone = function () {
+                //获取浏览器navigator对象的userAgent属性（浏览器用于HTTP请求的用户代理头的值）
+                var info = navigator.userAgent;
+                //通过正则表达式的test方法判断是否包含“Mobile”字符串
+                var isPhone = /mobile|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i.test(info);
+                //如果包含“Mobile”（是手机设备）则返回true
+                return isPhone;
+            };
             get.FrskillTips = function (tipname, id) {
                 const frtip = ui.create.div('.Fr-frtips', document.body);
                 frtip.style.zIndex = 998;
@@ -2027,7 +2069,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 var herf = document.getElementById(id);
                 if (herf) {
                     var left = herf.getBoundingClientRect().left;
-                    if (/mobile|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i.test(navigator.userAgent)) left += herf.offsetParent.offsetLeft;
+                    if (game.getPhone()) left += herf.offsetParent.offsetLeft;
                     left += document.body.offsetWidth * 0.15;
                     skilltip.style.left = left + 'px';
                     skilltip.style.top = (herf.getBoundingClientRect().top + 30) + 'px';
@@ -2162,6 +2204,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
             //------------------------------------------说明------------------------------------------//
             var introduce = {
+                'zhinang': {
+                    name: '智囊',
+                    info: '<li>智囊：一些武将的技能允许他们以一些方式获得专属锦囊，同时还会允许他们做出第二选择——智囊。<li>智囊为固定的三种通常牌库里有的普通锦囊。这些武将在获得专属锦囊时可以选择获取专属锦囊，或者获取智囊中的锦囊之一。<li>线下可由面杀玩家自行约定选取的三张锦囊，线上暂定为过河拆桥、无懈可击、无中生有。'
+                },
                 'hecheng': {
                     name: '合成',
                     info: '<li>合成：指的是将两张装备变为一张，效果为二者的叠加。<li>合成后的装备类型取决于合成中你先选择的装备。'
@@ -2288,8 +2334,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 });
                 return dialog;
             };
-            var url = lib.assetURL + 'extension/福瑞拓展';
-            lib.init.css(url, 'extension');
         }, help: {}, config: {
             "tuozhanjieshao": {
                 name: "拓展介绍",
@@ -2407,6 +2451,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qitazaxiang.png></b>",
                 "clear": true,
                 "nopointer": true,
+            },
+            "fr_OpenAchievement": {
+                "name": '福瑞拓展成就',
+                "clear": true,
+                onclick: function () {
+                    if (typeof window.openfrAchievement == 'function') {
+                        window.openfrAchievement();
+                    } else {
+                        alert("错误：您似乎没有打开福瑞拓展包。");
+                    }
+                }
             },
             "furry_onlineUpdate": {
                 //检查游戏更新
@@ -2617,7 +2672,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.1.0.1",
+            version: "2.1.0.2",
         }, files: {}
     }
 })

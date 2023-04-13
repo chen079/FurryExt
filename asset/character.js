@@ -1,5 +1,4 @@
-//武将包
-/// <reference path="../../../typings/index.d.ts"/>
+'use strict';
 game.import('character', function (lib, game, ui, get, ai, _status) {
     var furryPack = {
         name: 'furryPack',//武将包命名（必填）
@@ -12,7 +11,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             //'fr_rasali':['male','shen',4,[],[]],
             //'fr_nashu':['male','shen',4,[],[]],
             //'fr_derk':['male','jin',4,[],[]],
-            //'fr_crow':['male','wei',4,[],[]],
+            'fr_crow': ['male', 'wei', 3, ['crow_my', 'crow_mc', 'crow_td'], []],
             'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['fobidai', 'des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
             'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], []],
             "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
@@ -92,7 +91,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_taber": ["male", "wu", 4, ["taber_jj", "taber_sj"], []],
             "fr_yinhu": ["male", "shen", 3, ["yinhu_xr", "yinhu_zd", "yinhu_sp"], []],
             "fr_dragon": ["male", "fr_g_dragon", 4, ["dragon_hy", "dragon_ly", "dragon_hn"], []],
-            "fr_terz": ["male", "wei", 4, ["terz_sp", "terz_fz", "terz_ts"], []],
+            "fr_terz": ["male", "wei", 4, ["terz_sp", "terz_fz", "terz_ts"], ['fobidai']],
             "fr_jet": ["male", "shen", 3, ["jet_fy", "jet_ww", "jet_sl", "jet_cl"], ["hiddenSkill"]],
             "fr_slen": ["male", "wei", 3, ["slen_xj", "slen_gc"], []],
             "fr_paers": ["male", "shu", 4, ["paers_fy", "pares_xh"], []],
@@ -119,9 +118,93 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_zeta": ["male", "fr_g_dragon", 4, ["zeta_gz", "zeta_fg"], []],
             "fr_fox": ["male", "shu", 4, ["fox_hm"], []],
             "fr_molis": ["female", "wei", 3, ["molis_hs", "molis_dx", "molis_sy"], []],
-            "fr_shisan": ["female", "qun", 3, ["shisan_dg", "shisan_tx"], []],
+            "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'crow_my': {
+                mark: true,
+                popup: false,
+                trigger: {
+                    target: "useCardToTargeted",
+                },
+                onremove: true,
+                intro: {
+                    content: "已记录牌名：$",
+                },
+                filter: function (event, player) {
+                    return get.type2(event.card) == 'trick' && _status.currentPhase != player
+                },
+                check: function (event, player) {
+                    return get.effect(player, event.card, event.player, player) < 0;
+                },
+                content: function () {
+                    'step 0'
+                    player.judge('crow_my', function (card) { return (get.suit(card) != 'spade') ? 1.5 : -0.5 }).judge2 = function (result) {
+                        return result.bool;
+                    };
+                    'step 1'
+                    if (result.judge > 0) {
+                        player.markAuto('crow_my', [trigger.card.name])
+                        trigger.targets.remove(player);
+                        trigger.getParent().triggeredTargets2.remove(player);
+                        trigger.untrigger();
+                    }
+                },
+                group: 'crow_my_clean',
+                subSkill: {
+                    clean: {
+                        trigger: {
+                            global: 'roundStart'
+                        },
+                        popup: false,
+                        preHidden: true,
+                        charlotte: true,
+                        forced: true,
+                        content: function () {
+                            delete player.storage.crow_my
+                        }
+                    }
+                }
+            },
+            'crow_mc': {
+                forced: true,
+                trigger: {
+                    global: "useCard",
+                },
+                filter: function (event, player) {
+                    return get.zhinangs().contains(event.card.name) || player.getStorage('crow_my').contains(event.card.name)
+                },
+                content: function () {
+                    player.draw();
+                },
+                ai: {
+                    threaten: 1.4,
+                    noautowuxie: true,
+                },
+            },
+            'crow_td': {
+                audio: 2,
+                inherit: "tiandu",
+                trigger: {
+                    player: "judgeEnd",
+                },
+                preHidden: true,
+                frequent: function (event) {
+                    if (event.result.card.name == 'du') return false;
+                    //if(get.mode()=='guozhan') return false;
+                    return true;
+                },
+                check: function (event) {
+                    if (event.result.card.name == 'du') return false;
+                    return true;
+                },
+                filter: function (event, player) {
+                    return get.position(event.result.card, true) == 'o';
+                },
+                content: function () {
+                    player.gain(trigger.result.card, 'gain2');
+                },
+            },
             'sheep_jf': {
                 enable: 'phaseUse',
                 usable: 1,
@@ -146,16 +229,33 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.showCards(event.cards);
                     player.discard(event.cards)
                     'step 1'
-                    var num1 = get.number(event.cards[0]), num2 = get.number(event.cards[1])
-                    var cardnum = [num1, num2].sort((a, b) => {
-                        return a - b;
-                    });
-                    event.result = lib.skill.sheep_jf.integrate(cardnum[0], cardnum[1])
-                    event.choices = event.result.results.slice().sort(() => Math.random() - 0.5)
-                    player.chooseControl()
-                        .set('choiceList', event.choices).set('ai', function () {
-                            return event.result.results[0]
-                        }).set('prompt', '函数' + event.result.f + '在' + '[' + cardnum[0] + ',' + cardnum[1] + ']' + '上的积分结果为')
+                    if (event.isMine()) {
+                        var num1 = get.number(event.cards[0]), num2 = get.number(event.cards[1])
+                        var cardnum = [num1, num2].sort((a, b) => {
+                            return a - b;
+                        });
+                        event.result = lib.skill.sheep_jf.integrate(cardnum[0], cardnum[1])
+                        event.choices = event.result.results.slice().sort(() => Math.random() - 0.5)
+                        player.chooseControl()
+                            .set('choiceList', event.choices).set('ai', function () {
+                                return event.result.results[0]
+                            }).set('prompt', '函数' + event.result.f + '在' + '[' + cardnum[0] + ',' + cardnum[1] + ']' + '上的积分结果为')
+                    } else {
+                        game.log(player, '计算正确')
+                        event.cards = get.cards(5)
+                        player.showCards(event.cards);
+                        player.gain(event.cards, 'gain2');
+                        player.chooseControl().set('choiceList', [
+                            '将五张牌交给一名其他角色',
+                            '弃置五张牌',
+                        ]).set('ai', function () {
+                            if (game.hasPlayer(function (current) {
+                                return current != player && get.attitude(player, current) > 2;
+                            })) return 0;
+                            return 1;
+                        });
+                        event.goto(3)
+                    }
                     'step 2'
                     if (event.choices[result.index] === event.result.results[0]) {
                         game.log(player, '计算正确')
@@ -204,7 +304,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         var target = result.targets[0];
                         player.give(result.cards, target);
                     }
-                }
+                },
+                ai: {
+                    order: 7.5,
+                    result: {
+                        player: 1,
+                    },
+                },
             },
             'sheep_rh': {
                 enable: "phaseUse",
@@ -775,6 +881,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     'step 4'
                     event.temptarget = result.targets[0]
+                    player.turnOver()
                     game.broadcastAll(function (target1, target2) {
                         game.swapSeat(target1, target2);
                     }, player, event.temptarget);
@@ -873,7 +980,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 content: function () {
                     'step 0'
-                    trigger.player.chooseCard(2 * trigger.num, 'h', '是否交给' + get.translation(player) + Math.max(1, Math.floor(trigger.player.countCards('h') / 2)) + '张手牌，然后将此伤害转移给该角色并令其摸' + get.cnNumber(player.getDamagedHp() + 1) + '张牌').set('ai', function (card) {
+                    trigger.player.chooseCard(2 * trigger.num, 'h', '是否交给' + get.translation(player) + get.cnNumber(Math.max(1, Math.floor(trigger.player.countCards('h') / 2))) + '张手牌，然后将此伤害转移给该角色并令其摸' + get.cnNumber(player.getDamagedHp() + 1) + '张牌').set('ai', function (card) {
                         var player = _status.event.player
                         var target = _status.event.target
                         var att = get.attitude(player, target)
@@ -4966,7 +5073,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     "step 0"
                     var list = ['免疫']
                     var choiceList = ['下一名角色的回合内，你不能成为手牌数大于你的角色的目标。']
-                    if (trigger.player != player && player.countCards('h') > 0) {
+                    if (trigger.player != player && player.countCards('h') > 0 && trigger.player.isAlive()) {
                         list.push('出杀')
                         choiceList.push('将一张牌当【杀】对' + get.translation(trigger.player) + '使用')
                     }
@@ -5487,6 +5594,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     trigger.player.removeSkill('jiejie_zr_2')
                     trigger.player.loseHp(3)
                     player.loseMaxHp(2)
+                    game.frAchi.addProgress('当断则断', 'character');
                 },
             },
             "jiejie_my": {
@@ -11395,7 +11503,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     event.targets = targets
                     "step 1"
                     var num = trigger.num
-                    event.target = event.targets.shift()
+                    if (event.targets) event.target = event.targets.shift()
                     event.target.chooseBool('是否替' + get.translation(player) + '承受来自' + get.translation(trigger.source) + '的' + trigger.num + '点' + (trigger.nature ? get.translation(trigger.nature) + '属性' : '') + '伤害')
                         .set('ai', function () {
                             var target = _status.event.target
@@ -16463,6 +16571,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'crow_td': '天妒',
+            'crow_td_info': '你的判定牌生效后，你可以获得此牌。',
+            'crow_my': '藐意',
+            'crow_my_info': '①你的回合外，当你成为锦囊牌目标时，你可以进行一次判定，若结果不为黑桃，你记录此牌并令其对你无效。②每轮游戏开始时，你清除〖藐意①〗的记录。',
+            'crow_mc': '谋策',
+            'crow_mc_info': '锁定技，当一名角色使用' + get.introduce('zhinang') + '牌名的锦囊或〖藐意①〗记录的牌时，你摸一张牌。',
             'sheep_rh': '熔合',
             'sheep_rh_info': ' 出牌阶段，你可以将两张装备牌“' + get.introduce('hecheng') + '”为一张装备牌；当你处于濒死状态时，你可以重铸一张装备牌，然后将体力回复至1点。',
             'bladewolf_rh': '融毁',
@@ -16474,7 +16588,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'tails_qx': '巧械',
             'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同花色的牌，销毁场上任意名角色的各至多一张颜色与你弃置牌相同的、点数为8的装备牌，对其各造成1点火焰伤害。',
             'tails_jd': '机动',
-            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:与上家或下家交换座位并将手牌弃至两张（若你有武器牌则弃置之），可获得其一张装备区的牌并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
+            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:与上家或下家交换座位并翻面且将手牌弃至两张（若你有武器牌则弃置之），可获得其一张装备区的牌并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
             'dier_xy': '夕炎',
             'dier_xy_info': '锁定技，当你使用【杀】指定目标后，你获得该角色的一张牌。',
             'dier_sb': '守宝',
@@ -16492,7 +16606,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'francium_ch': '晨昏',
             'francium_ch_info': '锁定技，回合开始时，你改变你的' + get.introduce('hubian') + '状态；当你受到伤害时，若你的手牌数小于伤害来源，你令此伤害-1。',
             'francium_sx': '生息',
-            'francium_sx_info': get.introduce('hubianji') + '，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。',
+            'francium_sx_info': get.introduce('hubianji') + '，出牌阶段限一次，<li>圣咏：你可以令两名有手牌的角色交换手牌，然后你摸两张牌并回复1点体力；<li>暗涌：你可以将所有手牌当无距离与次数限制的【杀】对一名其他角色使用，若此【杀】造成伤害，你摸X张牌（X为该角色体力上限且至多为6）。',
             'francium_yl': '盈亏',
             'francium_yl_info': get.introduce('hubianji') + '，每回合限三次，<li>圣咏：你的回合内，当你使用一张即时牌结算完毕后，你可以将此牌置于牌堆顶，然后从牌堆底摸一张牌；<li>暗涌：你的回合外，当一名其他角色进入濒死状态时，你可以将一张手牌当【杀】对其使用。',
             'francium_mm': '明灭',
@@ -16902,7 +17016,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "pares_xh": "星汇",
             "pares_xh_info": "锁定技，当你造成或受到伤害后，将你的手牌数调整为你的当前体力值，若你因此失去了牌，你摸一张牌。",
             "slen_xj": "心计",
-            "slen_xj_info": "出牌阶段限一次，你可以交给一名其他角色至多两张手牌：<br>若你交给其一张手牌，其选择一项：</br><li>①交给你点数不大于此牌的所有牌；<li>②交给你点数不小于此牌的所有牌。</li>若你交给其两张手牌，其可以交给你任意张点数介于二者之间（含二者）的手牌并摸等量的牌，若其交给你点数属于该区间内的所有手牌，其额外摸一张牌。",
+            "slen_xj_info": "出牌阶段限一次，你可以交给一名有手牌的其他角色至多两张手牌：<br>若你交给其一张手牌，其选择一项：</br><li>①交给你点数不大于此牌的所有牌；<li>②交给你点数不小于此牌的所有牌。</li>若你交给其两张手牌，其可以交给你任意张点数介于二者之间（含二者）的手牌并摸等量的牌，若其交给你点数属于该区间内的所有手牌，其额外摸一张牌。",
             "zenia_yy": "余音",
             "zenia_yy_info": get.introduce('yunlvji') + "。出牌阶段限一次，<li>平：你可以令一名角色摸X张牌，然后弃置Y张手牌。<li>仄：你可以令一名角色弃置X张手牌，然后摸Y张牌（X为你的体力上限，Y为你的体力值）。<li>转韵：你发动〖韵生〗结算完毕后。",
             "zenia_ys": "韵生",
@@ -16982,7 +17096,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "mala_sz": "斩击",
             "mala_sz_info": "锁定技，当你造成伤害时，你可以流失1点体力，令此伤害翻倍；当你受到伤害后，你结束当前回合。",
             "zeta_gz": "固铸",
-            "zeta_gz_info": "一名角色的回合结束时，若本回合有四种花色的牌进入过" + get.introduce('center') + "，你可以分配其中一种花色的牌。若你未因此获得牌，你重置〖复归〗并令一名角色执行一个额外的出牌阶段。",
+            "zeta_gz_info": "一名角色的回合结束时，若本回合有四种花色的牌进入过" + get.introduce('center') + "，你可以分配其中一种花色的牌。若你将这些牌全部分配给其他角色，你重置〖复归〗并令一名角色执行一个额外的出牌阶段。",
             "zeta_fg": "复归",
             "zeta_fg_info": "每轮每种类别限一次，你使用牌结算完毕后，你可以从牌堆中检索一张基本牌或非基本牌。",
             "fox_hm": "幻梦",
@@ -17145,6 +17259,95 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            "fr_milis": '铸刃千口',
+            "fr_lions": '梦魂归乡',
+            "fr_xit": '言叙求生',
+            "fr_nier": '智解万象',
+            "fr_laays": '镣铐游荡者',
+            'fr_liya': '动运千机',
+            'fr_mala': '龙裔之王',
+            "fr_yada": '能言巧辩',
+            "fr_muliy": '峰回路转',
+            "fr_sier": '降龙伏虎',
+            "fr_klif": '追猎者',
+            "fr_west": '仁心医者',
+            "fr_milite": '疑计丛生',
+            "fr_jackson": '沙之使徒',
+            "fr_jiejie": '饮血剑法',
+            "fr_sayisu": '兵不血刃',
+            "fr_rest": '兴风作浪',
+            "fr_kert": '掠魂动魄',
+            "fr_keya": '佣兵团长',
+            "fr_klier": '坚实后盾',
+            "fr_lint": '制衡掣肘',
+            "fr_patxi": '以身殉戒',
+            "fr_nore": '观微洞察',
+            "fr_nulia": '渡化万物',
+            "fr_terlk": '披荆斩棘',
+            "fr_wore": '千变万化',
+            "fr_hynea": '登峰造极',
+            'fr_linyan': '双人共舞',
+            'fr_shark': '其人之道',
+            "fr_muyada": '死战不休',
+            "fr_marxya": '谨小慎微',
+            "fr_muli": '筹谋划策',
+            "fr_alas": '破空断魂',
+            "fr_ken": '机器之心',
+            "fr_sisk": '嗜血狂徒',
+            "fr_skry": '毒计百出',
+            "fr_lusiya": '聪慧英才',
+            "fr_kersm": '盟国之约',
+            "fr_dier": '守龙之护',
+            "fr_aroncy": '缴械武解',
+            "fr_berg": '镜花水月',
+            "fr_markn": '洞中窾会',
+            "fr_morly": '枪林弹雨',
+            "fr_dog": '足智多谋',
+            "fr_glit": '以牙还牙',
+            "fr_edmon": '以死护全',
+            "fr_mika": '但求浪息',
+            "fr_dmoa": '日夜笙歌',
+            "fr_verb": '绝处逢生',
+            "fr_taber": '掘地三尺',
+            "fr_dragon": '黑焰之龙',
+            "fr_jgby": '狂炎灼冰',
+            "fr_slen": '八面玲珑',
+            "fr_paers": '斗转星移',
+            "fr_pluvia": '治疗之刃',
+            "fr_ventus": '泣血之刃',
+            "fr_zenia": '余音绕梁',
+            "fr_lamost": '犹记繁华',
+            "fr_fox": '幻梦一场',
+            "fr_zeta": '固铸何归？',
+            "fr_ham": '浪潮汹涌',
+            "fr_sam": '固若金汤',
+            'fr_tiger': '混元一气',
+            'fr_kmjia': '教指人心',
+            "fr_liona": '整军待战',
+            "fr_ala": '睚眦必报',
+            "fr_wes": '同生共死',
+            "fr_kesaya": '无影无踪',
+            "fr_milism": '黔水之灵',
+            "fr_yas_klin": '祭天请神',
+            "fr_bofeng": '玄色一剑',
+            "fr_xiaomo": '破击无声',
+            "fr_nanci": '狐媚之魂',
+            "fr_bladewolf": '机魂熔炉',
+            "fr_sheep": '能机巧算',
+            "fr_tails": '灵能飞跃',
+            "fr_ciyu": '素色一心',
+            "fr_delta": '破瞬之斩',
+            "fr_peter_likes": '操魂控魄',
+            "fr_yinhu": '祥瑞祝福',
+            "fr_terz": '审时度势',
+            "fr_jet": '混乱之神',
+            "fr_knier": '花非花，雾非雾',
+            "fr_kasaers": '长吟千古',
+            "fr_molis": '时空跳跃者',
+            "fr_shisan": '察微知宏',
+            "fr_zhongyu": '狂火之炎',
+            'fr_qima': '破月之心',
+            'fr_francium': '双舞翩翩',
             "fr_muen": "游历冒险家",
             "fr_horn": "恶灵推手",
             "fr_yifeng": "执月之手",

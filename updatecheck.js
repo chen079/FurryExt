@@ -1,22 +1,55 @@
-// @ts-check
 (() => ({
 	// 扩展版本
-	version: "2.1.0.1",
+	version: "2.1.0.2",
 
 	// 扩展的上一个版本
-	oldversion: "2.0.9.5",
+	oldversion: "2.1.0.1",
 
 	// 更新内容汇总
 	changeLog: `
-	增加了手杀版美化卡牌
-	添加了鸣谢名单
-	修正十周年卡牌底部过长的bug
-	请确保你是从2.1.0.0升级，否则可能会有内容失效
-	2.1.0.0正式版请加群：556343851
+	修正nulia点击取消依然失去体力的bug
+	修正了祭蹈在人少时的bug
+	tails新增翻面效果
+	修改诸多技能描述
+	新增成就系统——未完成
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
 	updateFiles: [
+		'acknowledgments/Acknowledgments.html',
+		'acknowledgments/img/19.jpg',
+		'acknowledgments/img/20.jpg',
+		'mainPage.css',
+		'achievement.css',
+		'furry_achievement.js',
+		'image/achievement/background.png',
+		'image/achievement/background_cover.png',
+		'image/achievement/button_openFilter.png',
+		'image/achievement/exit_icon.png',
+		'image/achievement/filter_bg.png',
+		'image/achievement/filter_button_off.png',
+		'image/achievement/filter_button_on.png',
+		'image/achievement/filter_optional.png',
+		'image/achievement/filter_optional_on.png',
+		'image/achievement/hide_done.png',
+		'image/achievement/isGained.png',
+		'image/achievement/isGained2.png',
+		'image/achievement/isNew.png',
+		'image/achievement/splitLine.png',
+		'image/achievement/star.png',
+		'image/achievement/star2.png',
+		'image/achievement/star3.png',
+		'image/achievement/tips_character.png',
+		'image/achievement/tips_game.png',
+		'image/achievement/tips_special.png',
+		'image/homePage/background.png',
+		'image/homePage/button_character.png',
+		'image/homePage/button_game.png',
+		'image/homePage/button_special.png',
+		'image/homePage/scoreSheet.png',
+		'image/others/tc2.png',
+		'image/others/victory.png',
+		'image/others/fr_pic_biankuang.png',
 		'extension.css',
 		'extension.js',
 		'asset/cards.js',
@@ -55,6 +88,7 @@
 		'image/card/pretty/fr_card_zh.png',
 		'image/card/pretty/fr_card_zhcz.png',
 		'image/card/pretty/fr_equip5_wxpp.png',
+		'audio/skill/other/achievement_complete.mp3'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
