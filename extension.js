@@ -2032,7 +2032,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.group.add('fr_g_ji');
                 lib.translate.fr_g_ji = '机';
                 lib.translate.fr_g_ji2 = '机';
-                lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/furrymode.js', null);
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
                 lib.config.all.characters.push('furryPack');
                 lib.translate['furryPack_character_config'] = "<img style=width:100px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png>";// 包名翻译
