@@ -12,7 +12,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             //'fr_nashu':['male','shen',4,[],[]],
             //'fr_derk':['male','jin',4,[],[]],
             'fr_crow': ['male', 'wei', 3, ['crow_my', 'crow_mc', 'crow_td'], []],
-            'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['fobidai', 'des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
+            //'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['fobidai', 'des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
             'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], []],
             "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
             'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], []],
@@ -214,7 +214,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     var x2 = Math.floor(20 * Math.random() - 10);
                     var x3 = Math.floor(20 * Math.random() - 10);
                     f = ((x1 == 1 ? '' : x1) == -1 ? '-' : x1) + 'x² ' + (x2 < 0 ? "" : "+") + ((x2 == 1 ? '' : x2) == -1 ? '-' : x2) + 'x ' + (x3 < 0 ? "" : "+") + ((x3 == 1 ? '' : x3) == -1 ? '-' : x3)
-                    const A = ((x1 / 3) * (b ** 3) + (x2 / 2) * (b ** 2) + (x3 * b)) - ((x1 / 3) * (a ** 3) + (x2 / 2) * (a ** 2) + (x3 * a));
+                    const A = ((x1 / 3) * (b ^ 3) + (x2 / 2) * (b ^ 2) + (x3 * b)) - ((x1 / 3) * (a ^ 3) + (x2 / 2) * (a ^ 2) + (x3 * a));
                     const error1 = A + ((Math.floor(Math.random() * 11) - 5) / 10) * A + 1;
                     const error2 = A + ((Math.floor(Math.random() * 21) - 10) / 100) * A + 2;
                     const error3 = A + ((Math.floor(Math.random() * 51) - 25) / 100) * A + 3;
@@ -11048,7 +11048,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             cards.push(event.dialog.buttons[i].link)
                         }
                         event.cards = cards
-                        player.chooseTarget(1, true,).set('prompt', '将剩余的牌交给一名角色')
+                        player.chooseTarget(1, true).set('prompt', '将剩余的牌交给一名角色')
                     }
                     "step 6"
                     event.dialog.close()
