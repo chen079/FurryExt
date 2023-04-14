@@ -274,50 +274,6 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			}
 			this.inited = true;
 		},
-		saveToFile: function (saveObject, callback) {
-			const fs = require('fs');
-			const path = require('path');
-
-			const saveJSON = JSON.stringify(saveObject);
-			const savePath = path.join(__dirname, 'save.txt');
-
-			fs.access(savePath, function (err) {
-				if (err) {  // 文件不存在
-					fs.writeFile(savePath, saveJSON, function (err) {
-						if (err) {
-							callback(err);
-						} else {
-							callback(null);
-						}
-					});
-				} else {  // 文件存在
-					fs.writeFile(savePath, saveJSON, function (err) {
-						if (err) {
-							callback(err);
-						} else {
-							callback(null);
-						}
-					});
-				}
-			});
-		},
-		loadFromFile: function (callback) {
-			const path = require('path');
-			const savePath = path.join(__dirname, 'save.txt');
-			try {
-				const data = fs.readFileSync(savePath);
-				const saveObject = JSON.parse(data);
-				callback(null, saveObject);
-			} catch (err) {
-				console.error('读取成就文件错误，已重置', err);
-				const emptySave = {
-					got: [],
-					progress: {},
-					date: {}
-				};
-				callback(null, emptySave);
-			}
-		},
 		//重置已获得
 		reset: function () {
 			lib.config.frAchiStorage = {
@@ -330,13 +286,6 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		//保存设置
 		saveConfig: function () {
 			game.saveConfig('frAchiStorage', lib.config.frAchiStorage);
-			this.saveToFile(lib.config.frAchiStorage, function (err) {
-				if (err) {
-					console.error(err);
-				} else {
-					console.log('成就已保存!');
-				}
-			});
 		},
 		//计算成就数
 		amount: function (type) {
@@ -423,13 +372,6 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			lib.config.frAchiStorage.got.push(name);
 			var date = new Date();
 			lib.config.frAchiStorage.date[name] = (new Date()).getTime();
-			this.saveToFile(lib.config.frAchiStorage, function (err) {
-				if (err) {
-					console.error(err);
-				} else {
-					console.log('成就已保存!');
-				}
-			});
 			this.addDone(name);
 			this.popupDialog(name);
 		},

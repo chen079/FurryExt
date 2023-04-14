@@ -627,19 +627,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     }, 1000)
                 }
-                setTimeout(() => {
-                    if (game.frAchi) {
-                        game.frAchi.loadFromFile(function (err, saveObject) {
-                            if (err) {
-                                console.error(err);
-                            } else {
-                                lib.config.frAchiStorage = saveObject;
-                                console.log('文件已加载!');
-                            }
-                        });
-                        game.frAchi.saveConfig();
-                    }
-                }, 500)
                 if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
                     //武将界面
                     setTimeout(() => {
