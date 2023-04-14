@@ -135,6 +135,394 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     player.update();
                 },
             }
+            /**
+* 自用选择一定范围内数字的事件，目前为初版
+* @function chooseNumber
+* @author Rintim <rintim@foxmail.com>
+* @copyright BSD-2-Clause
+* @param {number} min - 能选择的最小值
+* @param {number} max - 能选择的最大值
+* @param {number | string | object | boolean | function(number): boolean} options - 其余设置
+* @returns {Lib.element.Event}
+*/
+            lib.element.player.chooseNumber = function chooseNumber(min, max, ...options) {
+                let next = game.createEvent("chooseNumber");
+                let begin, prompt, prompt2, transform = {}, forced, filter;
+
+                for (const item of options) {
+                    if (typeof item === "number") {
+                        begin = item;
+                    }
+                    else if (typeof item === "string") {
+                        if (!prompt) prompt = item;
+                        else if (!prompt2) prompt2 = item;
+                    }
+                    else if (typeof item === "object") {
+                        transform = item;
+                    }
+                    else if (typeof item === "boolean") {
+                        forced = item;
+                    }
+                    else if (typeof item === "function") {
+                        filter = item;
+                    }
+                }
+
+                if (!min || !max) return;
+                if (min == max) return;
+                [min, max] = [Math.min(min, max), Math.max(min, max)];
+                if (!begin || begin < min) begin = min;
+                if (begin && begin > max) begin = max;
+
+                next.set("player", this);
+                next.set("min", min);
+                next.set("max", max);
+                next.set("num", begin);
+                next.set("show", transform);
+
+                if (prompt) next.set("prompt", prompt);
+                if (prompt2) next.set("prompt2", prompt2);
+                if (forced) next.set("forced", forced);
+                if (filter) next.set("filter", filter);
+
+                next.setContent("chooseNumber");
+
+                return next;
+            };
+
+            /**
+              * 自用选择一定范围内数字的事件，目前为初版
+              * @function chooseNumber
+              * @author Rintim <rintim@foxmail.com>
+              * @copyright BSD-2-Clause
+              * @returns {void}
+            */
+            lib.element.content.chooseNumber = function chooseNumberContent() {
+                "step 0"
+                if (event.isMine()) {
+                    let isInput = false;
+
+                    event.controls = {
+                        cancel: ui.create.control("取消", () => { }),
+                        min: ui.create.control("最小", () => { }),
+                        minusss: ui.create.control("---", () => { }),
+                        minuss: ui.create.control("--", () => { }),
+                        minus: ui.create.control("-", () => { }),
+                        num: ui.create.control(event.num, () => { }),
+                        plus: ui.create.control("+", () => { }),
+                        pluss: ui.create.control("++", () => { }),
+                        plusss: ui.create.control("+++", () => { }),
+                        max: ui.create.control("最大", () => { }),
+                        clear: ui.create.control("确认", () => {
+                            if (isInput) {
+
+                            }
+                            else {
+                                event.result = { bool: true, choice: event.num };
+                                game.resume();
+                            }
+                        })
+                    };
+
+                    if (event.forced) {
+                        event.controls.cancel.close();
+                        delete event.controls.cancel;
+                    }
+
+                    const difference = event.max - event.min;
+                    if (difference <= 100) {
+                        event.controls.plusss.close();
+                        event.controls.minusss.close();
+                        delete event.controls.plusss;
+                        delete event.controls.minusss;
+                    }
+                    if (difference <= 10) {
+                        event.controls.pluss.close();
+                        event.controls.minuss.close();
+                        delete event.controls.pluss;
+                        delete event.controls.minuss;
+                    }
+
+                    const symbol = {
+                        m: Symbol("minus"),
+                        p: Symbol("plus"),
+                        l: Symbol("limit"),
+                        i: Symbol("input")
+                    }
+
+                    const divsConfig = new Map();
+                    if (event.controls.plus) divsConfig.set(event.controls.plus, [symbol.p, 1]);
+                    if (event.controls.pluss) divsConfig.set(event.controls.pluss, [symbol.p, 10]);
+                    if (event.controls.plusss) divsConfig.set(event.controls.plusss, [symbol.p, 100]);
+
+                    if (event.controls.minus) divsConfig.set(event.controls.minus, [symbol.m, -1]);
+                    if (event.controls.minuss) divsConfig.set(event.controls.minuss, [symbol.m, -10]);
+                    if (event.controls.minusss) divsConfig.set(event.controls.minusss, [symbol.m, -100]);
+
+                    divsConfig.set(event.controls.min, [symbol.l, event.min]);
+                    divsConfig.set(event.controls.max, [symbol.l, event.max]);
+
+                    const doUpdate = (sym) => {
+                        for (const [div, [sym2, num]] of divsConfig) {
+                            switch (sym2) {
+                                case symbol.l:
+                                    if (event.num === num && !div.classList.contains("disabled"))
+                                        div.classList.add("disabled");
+                                    else if (div.classList.contains("disabled"))
+                                        div.classList.remove("disabled");
+
+                                    break;
+                                default:
+                                    switch (sym) {
+                                        case symbol.i:
+                                            switch (sym2) {
+                                                case symbol.p:
+                                                    if (event.num + num <= event.max && div.classList.contains("disabled"))
+                                                        div.classList.remove("disabled");
+                                                    break;
+                                                case symbol.m:
+                                                    if (event.num + num >= event.min && div.classList.contains("disabled"))
+                                                        div.classList.remove("disabled");
+                                                    break;
+                                            }
+                                            break;
+                                        case symbol.l:
+                                            switch (event.num) {
+                                                case event.min:
+                                                    if (sym2 === symbol.p && div.classList.contains("disabled"))
+                                                        div.classList.remove("disabled");
+                                                    if (sym2 === symbol.m && !div.classList.contains("disabled"))
+                                                        div.classList.add("disabled");
+                                                    break;
+                                                case event.max:
+                                                    if (sym2 === symbol.m && div.classList.contains("disabled"))
+                                                        div.classList.remove("disabled");
+                                                    if (sym2 === symbol.p && !div.classList.contains("disabled"))
+                                                        div.classList.add("disabled");
+                                                    break;
+                                            }
+                                            break;
+                                        case symbol.m:
+                                            if (event.num + num <= event.max && div.classList.contains("disabled"))
+                                                div.classList.remove("disabled");
+                                            if (event.num + num < event.min && !div.classList.contains("disabled"))
+                                                div.classList.add("disabled");
+                                            break;
+                                        case symbol.p:
+                                            if (event.num + num >= event.min && div.classList.contains("disabled"))
+                                                div.classList.remove("disabled");
+                                            if (event.num + num > event.max && !div.classList.contains("disabled"))
+                                                div.classList.add("disabled");
+                                            break;
+                                        default:
+                                            if (event.num + num < event.min && !div.classList.contains("disabled"))
+                                                div.classList.add("disabled");
+                                            if (event.num + num > event.max && !div.classList.contains("disabled"))
+                                                div.classList.add("disabled");
+                                            break;
+                                    }
+                                    break;
+                            }
+                        }
+                    };
+
+                    const doFilter = () => {
+                        if (event.filter) {
+                            const result = event.filter(event.num);
+                            if (result && event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.remove("disabled");
+                            else if (!result && !event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.add("disabled");
+                        }
+                    };
+
+                    const doShow = () => {
+                        event.controls.num.textContent = (Reflect.get(event.show, event.num) != null ? Reflect.get(event.show, event.num) : event.num).toString();
+                        if (event.controls.num.classList.contains("disabled")) event.controls.num.classList.remove("disabled");
+                    };
+
+                    const pressTemplate = (self, sym, num) => () => {
+                        if (!self.classList.contains("disabled")) {
+                            event.num = num + event.num * Number(sym !== symbol.l);
+
+                            doUpdate(sym);
+                            doFilter();
+
+                            doShow();
+                        }
+                    };
+
+                    const pressDownTemplate = (self, sym, num) => ((doMethod => () => {
+                        self._setTimeout = setTimeout(() => {
+                            delete self._setTimeout;
+                            self._setInterval = setInterval(() => {
+                                doMethod();
+                                if (self.classList.contains("disabled")) {
+                                    clearInterval(self._setInterval);
+                                    delete self._setInterval;
+                                }
+                            }, 50);
+                        }, 500);
+                    })(pressTemplate(self, sym, num)));
+
+                    const pressUpTemplate = (self) => () => {
+                        if (self._setTimeout) {
+                            clearTimeout(self._setTimeout);
+                            delete self._setTimeout;
+                        }
+                        if (self._setInterval) {
+                            clearInterval(self._setInterval);
+                            delete self._setInterval;
+                        }
+                    };
+
+                    const itemTemplate = (filter, callback) => () => {
+                        if (isInput) {
+                            const num = parseInt(event._input.value);
+                            if (filter(num)) {
+                                isInput = false;
+                                event._div.removeChild(event._input);
+                                event.controls.dialog.content.removeChild(event._div);
+                                event._div.delete();
+
+                                callback(num);
+
+                                delete event._div;
+                                delete event._input;
+                                if (!event.prompt) event.controls.dialog.hide();
+
+                                doUpdate(symbol.i);
+                                doFilter();
+                                doShow();
+
+                            }
+                            else callback(true);
+                        }
+                        else {
+                            event.result = callback(false);
+                            game.resume();
+                        }
+                    }
+
+                    doUpdate();
+                    doFilter();
+
+                    let numdiv = event.controls.num;
+                    numdiv.addEventListener(lib.config.touchscreen ? "touchend" : "click", _click => {
+                        if (!numdiv.classList.contains("disabled")) {
+                            isInput = true;
+
+                            numdiv.classList.add("disabled");
+                            for (const [div, _item] of divsConfig)
+                                if (!div.classList.contains("disabled"))
+                                    div.classList.add("disabled");
+
+                            if (!event.prompt) event.controls.dialog.show();
+
+                            let div = ui.create.div();
+                            event.controls.dialog.add(div);
+
+                            div.append(`请输入范围内的数字（${event.min}~${event.max}）`);
+
+                            let input = document.createElement("input");
+                            input.type = "number";
+                            input.setAttribute("maxlength", difference.toString().length);
+                            input.addEventListener("keydown", e => e.stopPropagation());
+                            input.addEventListener("keyup", e => e.stopPropagation());
+
+                            div.append(input);
+
+                            event._div = div;
+                            event._input = input;
+                        }
+                    })
+
+                    for (const [div, [sym, num]] of divsConfig) {
+                        div.addEventListener(lib.config.touchscreen ? "touchend" : "click", pressTemplate(div, sym, num));
+                        if (lib.config.button_press) {
+                            div.addEventListener(lib.config.touchscreen ? "touchstart" : "mousedown", pressDownTemplate(div, sym, num));
+                            div.addEventListener(lib.config.touchscreen ? "touchend" : "mouseup", pressUpTemplate(div));
+                        }
+                    }
+
+                    event.controls.cancel.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(_num =>
+                        true, bool => { bool }));
+                    event.controls.clear.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(num =>
+                        num >= event.min && num <= event.max, bool => {
+                            if (typeof bool === "number") {
+                                event.num = bool;
+                            }
+                            else if (bool === true) {
+                                if (event.controls.clear._setTimeout) {
+                                    clearTimeout(event.controls.clear._setTimeout);
+                                    delete event.controls.clear._setTimeout;
+                                }
+                                let text = document.createElement("span");
+                                text.style.color = "#FF3333";
+                                text.style.fontFamily = "12px";
+                                text.textContent = "请输入符合要求的数字！";
+                                event._div.append(text);
+                                event.controls.clear._setTimeout = setTimeout(() => {
+                                    event._div.removeChild(text);
+                                }, 2000);
+                            }
+                            else if (bool === false) return { bool: true, choice: event.num };
+                        }));
+
+                    event.controls.dialog = ui.create.dialog();
+                    event.controls.dialog.hide();
+                    if (event.prompt) {
+                        event.controls.dialog.show();
+                        event.controls.dialog.add(event.prompt);
+                        if (event.prompt2) event.controls.dialog.addText(event.prompt2, event.prompt2.length <= 20 || event.centerprompt2)
+                    }
+
+                    event.configs = divsConfig;
+
+                    game.pause();
+                    game.countChoose();
+                    event.choosing = true;
+                }
+                else if (event.isOnline()) {
+                    event.send();
+                }
+                else {
+                    event.result = "ai";
+                }
+                "step 1"
+                if (event.result === "ai") {
+                    if (event.ai) event.result = event.ai(player, event.filter, event.getParent());
+                    else if (event.goon) event.result = event.goon;
+
+                    if (typeof event.result === "number") {
+                        let result = Math.min(Math.max(event.result, event.min), event.max) + event.min;
+                        while (true) {
+                            if (!event.filter || event.filter(result)) break;
+                            result = Math.floor(Math.random() * (event.max - event.min + 1)) + event.min;
+                        }
+                        event.result = { bool: true, choice: result };
+                    }
+                    else if (event.forced) {
+                        while (true) {
+                            event.result = { bool: true, choice: Math.floor(Math.random() * (event.max - event.min + 1)) + event.min };
+                            if (!event.filter || event.filter(event.result.choice)) break;
+                        }
+                    }
+                    else event.result = { bool: false };
+                }
+
+                event.choosing = false;
+                _status.imchoosing = false;
+                if (event.controls) for (const name in event.controls) event.controls[name].close();
+                if (event.configs) event.configs.clear();
+                if (event.result.bool && event.logSkill) {
+                    if (typeof event.logSkill === "string") {
+                        player.logSkill(event.logSkill);
+                    }
+                    else if (Array.isArray(event.logSkill)) {
+                        player.logSkill.apply(player, event.logSkill);
+                    }
+                }
+                event.resume();
+            };
             //---------------------------------------更新说明------------------------------------------//
             //更新公告 参考十周年拓展
             if (config.update) {
@@ -267,6 +655,15 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             lib.groupnature.fr_g_dragon = 'fr_g_dragon'
                             lib.groupnature.fr_g_ji = 'fr_g_ji'
                         }
+                        game.frAchi.loadFromFile(function (err, saveObject) {
+                            if (err) {
+                                console.error(err);
+                            } else {
+                                lib.config.frAchiStorage = saveObject;
+                                console.log('文件已加载!');
+                            }
+                        });
+                        game.frAchi.saveConfig();
                     }
                     //武将界面
                     if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {

@@ -34,58 +34,58 @@
 .fr-bookWindow-openAchi-character {
     background-size: 100% 100%;
     left: 50%;
-    top: 20%;
+    top: 10%;
     background-repeat: no-repeat;
     background-image: url('image/homePage/button_character.png');
-    width: 35%;
-    height: 13%;
+    width: 11%;
+    height: 80%;
 }
 
 .fr-bookWindow-openAchi-game {
     background-size: 100% 100%;
-    left: 50%;
-    top: 45%;
+    left: 63%;
+    top: 10%;
     background-repeat: no-repeat;
     background-image: url('image/homePage/button_game.png');
-    width: 35%;
-    height: 13%;
+    width: 11%;
+    height: 80%;
 }
 
 .fr-bookWindow-openAchi-special {
     background-size: 100% 100%;
     display: block;
-    left: 50%;
-    top: 70%;
+    left: 76%;
+    top: 10%;
     background-repeat: no-repeat;
     background-image: url('image/homePage/button_special.png');
-    width: 35%;
-    height: 13%;
+    width: 11%;
+    height: 80%;
 }
 
-.fr-bookWindow-title{
-    background-size: 100%;
-    left: 16%;
-    top: 20%;
+.fr-bookWindow-openReward{
+    background-size: 100% 100%;
+    left: 21%;
+    top: 12%;
     background-repeat: no-repeat;
-    background-image: url('image/others/title.png');
-    width: 33%;
-    height: 35%;
+    background-image: url('image/homePage/button_reward.png');
+    width: 23%;
+    height: 30%;
 }
 
 .fr-bookWindow-scoreSheet-bk {
-    background-size: 100%;
-    left: 15%;
-    top: 45%;
+    background-size: 100% 100%;
+    left: 20%;
+    top: 47%;
     background-image: url('image/homePage/scoreSheet.png');
-    width: 36%;
-    height: 35%;
+    width: 25%;
+    height: 38%;
 }
 
 .fr-bookWindow-scoreSheet {
     background-size: 100% 100%;
     display: block;
-    left: 42.2%;
-    top: 24%;
+    left: 34%;
+    top: 12%;
     width: 32.1%;
     height: 65%;
     text-align: center;
@@ -93,16 +93,6 @@
     align-items: center;
     justify-content: center;
     font-size: 13vh;
-}
-
-.fr-bookWindow-openReward {
-    background-size: 100%;
-    display: block;
-    left: 15%;
-    top: 1%;
-    background-image: url('image/homePage/button_reward.png');
-    width: 15%;
-    padding: 100% 0 0;
 }
 
 .fr-bookWindow-page-main {

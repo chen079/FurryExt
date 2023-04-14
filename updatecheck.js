@@ -25,6 +25,7 @@
 		'image/achievement/background.png',
 		'image/achievement/background_cover.png',
 		'image/achievement/button_openFilter.png',
+		'image/homePage/button_reward.png',
 		'image/achievement/exit_icon.png',
 		'image/achievement/filter_bg.png',
 		'image/achievement/filter_button_off.png',
