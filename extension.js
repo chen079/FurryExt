@@ -135,16 +135,110 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     player.update();
                 },
             }
+            //---------------------------------------更新说明------------------------------------------//
+            //更新公告 参考十周年拓展
+            lib.skill._Furry_changeLog = {
+                charlotte: true,
+                ruleSkill: true,
+                trigger: { global: ['chooseButtonBefore', 'gameStart', 'gameDrawAfter', 'phaseBefore'] },
+                filter: function (event, player) {
+                    if (event.name == 'chooseButton' && event.parent.name != 'chooseCharacter') return false;
+                    return !lib.config.extension_福瑞拓展_Frversion || lib.config.extension_福瑞拓展_Frversion != lib.extensionPack.福瑞拓展.version;
+                },
+                direct: true,
+                firstDo: true,
+                priority: Infinity,
+                content: function () {
+                    'step 0'
+                    //标记版本号
+                    game.saveConfig('extension_福瑞拓展_Frversion', lib.extensionPack.福瑞拓展.version);
+                    'step 1'
+                    //更新告示
+                    var Furry_update = [
+                        '/Character/',
+                        '/redoCharacter/',
+                        '2.0.9.1',
+                        '1.紧急修复 韵律技 bug',
+                        '2.修复 普鲁维亚 描述错误',
+                        '3.修复自动更新内容的错误',
+                        '2.0.9.2',
+                        '1.修复 移动端提示错位的bug',
+                        '2.回调 奇玛 【俱灭】 并设置为ai禁选',
+                        '3.按照官方给出的蓄力技重写奇玛【断斩】',
+                        '4.清除部分冗余代码',
+                        '2.0.9.3',
+                        '1.修复 多默尔 【笙歌】拼点可能出现的bug',
+                        '2.新增 两张新卡 【弹尽粮绝】、【水草丰茂】',
+                        '3.新增 新势力 龙',
+                        '2.0.9.4',
+                        '1.增强 穆里 终策',
+                        '2.新人物 戴尔',
+                        '3.修改部分代码',
+                        '4.新boss 沃尔 ———建议打开弱的武将包',
+                        '2.0.9.5',
+                        '1.增加新势力：机',
+                        '2.将福瑞群像作为游戏模式独立出来',
+                        '3.新人物 西普、塔尔斯',
+                        '4.减少bug',
+                        '5.修改科恩的势力为机',
+                    ];
+                    //更新武将
+                    var Furry_players = ['fr_sheep', 'fr_tails'];
+                    var Furry_redoplayers = ['fr_qima'];
+                    //更新卡牌
+                    var Furry_cards = [];
+                    var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
+                    for (var i = 0; i < Furry_update.length; i++) {
+                        if (Furry_update[i] == '/Character/') {
+                            dialog.addText('更新武将：');
+                            dialog.addSmall([Furry_players, 'character']);
+                        } else if (Furry_update[i] == '/redoCharacter/') {
+                            dialog.addText('更改武将：');
+                            dialog.addSmall([Furry_redoplayers, 'character']);
+                        }
+                        else if (Furry_update[i] == '/Card/') {
+                            var cards = Furry_cards.slice(0);
+                            for (var i = 0; i < cards.length; i++) {
+                                cards[i] = [get.translation(get.type(cards[i])), '', cards[i]];
+                            }
+                            dialog.addText('更新卡牌：');
+                            dialog.addSmall([cards, 'vcard']);
+                        } else if (Furry_update[i].indexOf('ti') != -1) {
+                            dialog.addText(Furry_update[i]);
+                        } else {
+                            var li = document.createElement('li');
+                            li.innerHTML = Furry_update[i];
+                            li.style.textAlign = 'left';
+                            li.style['lineHeight'] = '20px'
+                            li.style['paddingLeft'] = '10px'
+                            dialog.content.appendChild(li);
+                        }
+                    }
+                    dialog.open();
+                    var hidden = false;
+                    if (!ui.auto.classList.contains('hidden')) {
+                        ui.auto.hide();
+                        hidden = true;
+                    }
+                    game.pause();
+                    var control = ui.create.control('确定', function () {
+                        dialog.close();
+                        control.close();
+                        if (hidden) ui.auto.show();
+                        game.resume();
+                    });
+                },
+            };
             /**
-* 自用选择一定范围内数字的事件，目前为初版
-* @function chooseNumber
-* @author Rintim <rintim@foxmail.com>
-* @copyright BSD-2-Clause
-* @param {number} min - 能选择的最小值
-* @param {number} max - 能选择的最大值
-* @param {number | string | object | boolean | function(number): boolean} options - 其余设置
-* @returns {Lib.element.Event}
-*/
+          * 自用选择一定范围内数字的事件，目前为初版
+          * @function chooseNumber
+          * @author Rintim <rintim@foxmail.com>
+          * @copyright BSD-2-Clause
+          * @param {number} min - 能选择的最小值
+          * @param {number} max - 能选择的最大值
+          * @param {number | string | object | boolean | function(number): boolean} options - 其余设置
+          * @returns {Lib.element.Event}
+        */
             lib.element.player.chooseNumber = function chooseNumber(min, max, ...options) {
                 let next = game.createEvent("chooseNumber");
                 let begin, prompt, prompt2, transform = {}, forced, filter;
@@ -523,138 +617,18 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 event.resume();
             };
-            //---------------------------------------更新说明------------------------------------------//
-            //更新公告 参考十周年拓展
-            if (config.update) {
-                lib.skill._Furry_changeLog = {
-                    charlotte: true,
-                    ruleSkill: true,
-                    trigger: { global: ['chooseButtonBefore', 'gameStart', 'gameDrawAfter', 'phaseBefore'] },
-                    filter: function (event, player) {
-                        if (event.name == 'chooseButton' && event.parent.name != 'chooseCharacter') return false;
-                        return !lib.config.extension_福瑞拓展_Frversion || lib.config.extension_福瑞拓展_Frversion != lib.extensionPack.福瑞拓展.version;
-                    },
-                    direct: true,
-                    firstDo: true,
-                    priority: Infinity,
-                    content: function () {
-                        'step 0'
-                        //标记版本号
-                        game.saveConfig('extension_福瑞拓展_Frversion', lib.extensionPack.福瑞拓展.version);
-                        'step 1'
-                        //更新告示
-                        var Furry_update = [
-                            '/Character/',
-                            '/redoCharacter/',
-                            '2.0.9.1',
-                            '1.紧急修复 韵律技 bug',
-                            '2.修复 普鲁维亚 描述错误',
-                            '3.修复自动更新内容的错误',
-                            '2.0.9.2',
-                            '1.修复 移动端提示错位的bug',
-                            '2.回调 奇玛 【俱灭】 并设置为ai禁选',
-                            '3.按照官方给出的蓄力技重写奇玛【断斩】',
-                            '4.清除部分冗余代码',
-                            '2.0.9.3',
-                            '1.修复 多默尔 【笙歌】拼点可能出现的bug',
-                            '2.新增 两张新卡 【弹尽粮绝】、【水草丰茂】',
-                            '3.新增 新势力 龙',
-                            '2.0.9.4',
-                            '1.增强 穆里 终策',
-                            '2.新人物 戴尔',
-                            '3.修改部分代码',
-                            '4.新boss 沃尔 ———建议打开弱的武将包',
-                            '2.0.9.5',
-                            '1.增加新势力：机',
-                            '2.将福瑞群像作为游戏模式独立出来',
-                            '3.新人物 西普、塔尔斯',
-                            '4.减少bug',
-                            '5.修改科恩的势力为机',
-                            '2.0.9.6',
-                            '1.增加新势力：机',
-                            '2.将福瑞群像作为游戏模式独立出来',
-                            '3.新人物 西普、塔尔斯',
-                            '4.减少bug',
-                            '5.修改科恩的势力为机'
-                        ];
-                        //更新武将
-                        var Furry_players = ['fr_sheep', 'fr_tails', 'fr_bladewolf', 'fr_dier'];
-                        var Furry_redoplayers = ['fr_qima'];
-                        //更新卡牌
-                        var Furry_cards = [];
-                        var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
-                        for (var i = 0; i < Furry_update.length; i++) {
-                            if (Furry_update[i] == '/Character/') {
-                                dialog.addText('更新武将：');
-                                dialog.addSmall([Furry_players, 'character']);
-                            } else if (Furry_update[i] == '/redoCharacter/') {
-                                dialog.addText('更改武将：');
-                                dialog.addSmall([Furry_redoplayers, 'character']);
-                            }
-                            else if (Furry_update[i] == '/Card/') {
-                                var cards = Furry_cards.slice(0);
-                                for (var i = 0; i < cards.length; i++) {
-                                    cards[i] = [get.translation(get.type(cards[i])), '', cards[i]];
-                                }
-                                dialog.addText('更新卡牌：');
-                                dialog.addSmall([cards, 'vcard']);
-                            } else if (Furry_update[i].indexOf('ti') != -1) {
-                                dialog.addText(Furry_update[i]);
-                            } else {
-                                var li = document.createElement('li');
-                                li.innerHTML = Furry_update[i];
-                                li.style.textAlign = 'left';
-                                li.style['lineHeight'] = '20px'
-                                li.style['paddingLeft'] = '10px'
-                                dialog.content.appendChild(li);
-                            }
-                        }
-                        dialog.open();
-                        var hidden = false;
-                        if (!ui.auto.classList.contains('hidden')) {
-                            ui.auto.hide();
-                            hidden = true;
-                        }
-                        game.pause();
-                        var control = ui.create.control('确定', function () {
-                            dialog.close();
-                            control.close();
-                            if (hidden) ui.auto.show();
-                            game.resume();
-                        });
-                    },
-                };
-            }
-            //乐色
-            var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala']
-            //普通
-            var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
-            //珍贵
-            var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_hars"
-                , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
-            //史诗
-            var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
-                "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala"]
-            //传说
-            var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
-                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
-            var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
-
-            lib.rank.rarity.junk.addArray(furryrank[0]);
-            lib.rank.rarity.common.addArray(furryrank[1]);
-            lib.rank.rarity.rare.addArray(furryrank[2]);
-            lib.rank.rarity.epic.addArray(furryrank[3]);
-            lib.rank.rarity.legend.addArray(furryrank[4]);
-            //势力
             lib.arenaReady.push(() => {
-                setTimeout(() => {
-                    //势力
-                    if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
+                if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
+                    setTimeout(() => {
+                        //势力
                         if (lib.groupnature) {
                             lib.groupnature.fr_g_dragon = 'fr_g_dragon'
                             lib.groupnature.fr_g_ji = 'fr_g_ji'
                         }
+                    }, 1000)
+                }
+                setTimeout(() => {
+                    if (game.frAchi) {
                         game.frAchi.loadFromFile(function (err, saveObject) {
                             if (err) {
                                 console.error(err);
@@ -665,17 +639,19 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         });
                         game.frAchi.saveConfig();
                     }
+                }, 500)
+                if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
                     //武将界面
-                    if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
-                        if (config.exp && ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
+                    setTimeout(() => {
+                        if (lib.config.exp && ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
                             ggMod.junk.addArray(furryrank[0])
                             ggMod.common.addArray(furryrank[1])
                             ggMod.rare.addArray(furryrank[2])
                             ggMod.epic.addArray(furryrank[3])
                             ggMod.legend.addArray(furryrank[4])
                         }
-                    }
-                }, 1000)
+                    }, 500)
+                }
             })
             // ---------------------------------------瞬发技按钮------------------------------------------//
             //按钮样式来自天牢令拓展    瞬发技参考自福瑞拓展拓展
@@ -1136,7 +1112,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (!ret) {
                         alert("请确认你明白点击此选项导致的后果");
                         alert("由游戏版本过低导致任何问题本扩展均不负责");
-                        game.saveConfig('furryNotMetionNonameVersion', true);
+                        //game.saveConfig('furryNotMetionNonameVersion',true);
                     }
                     else {
                         game.saveConfig('extension_福瑞拓展_enable', false);
@@ -2034,8 +2010,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 })
 
                 //定义势力
-                var url = lib.assetURL + 'extension/福瑞拓展';
-                lib.init.css(url, 'extension');
                 lib.group.add('fr_g_dragon');
                 lib.translate.fr_g_dragon = '龙';
                 lib.translate.fr_g_dragon2 = '龙';
@@ -2043,6 +2017,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.group.add('fr_g_ji');
                 lib.translate.fr_g_ji = '机';
                 lib.translate.fr_g_ji2 = '机';
+
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
                 lib.config.all.characters.push('furryPack');
                 lib.translate['furryPack_character_config'] = "<img style=width:100px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png>";// 包名翻译
@@ -2344,6 +2319,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 });
                 return dialog;
             };
+            var url = lib.assetURL + 'extension/福瑞拓展';
+            lib.init.css(url, 'extension');
         }, help: {}, config: {
             "tuozhanjieshao": {
                 name: "拓展介绍",
@@ -2647,11 +2624,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             "exp": {
                 "name": "实验性内容",
                 "intro": "开启测试性内容，若不知道有什么用，请勿打开。",
-                "init": false,
-            },
-            "update": {
-                "name": "更新提示",
-                "intro": "开启更新内容显示，请确保你有十周年UI",
                 "init": false,
             },
             "acknowledgments": {
