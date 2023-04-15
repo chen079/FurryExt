@@ -691,13 +691,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             var bool2 = false
                             var colors = []
                             game.hasPlayer(function (current) {
-                                if (current != player) {
-                                    var cards = current.getCards('e', function (card) {
-                                        return get.number(card) == 8
-                                    })
-                                    for (var j = 0; j < cards.length; j++) {
-                                        if (!colors.contains(get.color(cards[j]))) colors.push(get.color(cards[j]))
-                                    }
+                                var cards = current.getCards('e', function (card) {
+                                    return get.number(card) == 8
+                                })
+                                for (var j = 0; j < cards.length; j++) {
+                                    if (!colors.contains(get.color(cards[j]))) colors.push(get.color(cards[j]))
                                 }
                             })
                             if (colors.length) { bool2 = true }
@@ -17334,7 +17332,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_nanci": '狐媚之魂',
             "fr_bladewolf": '机魂熔炉',
             "fr_sheep": '能机巧算',
-            "fr_tails": '灵能飞跃',
+            "fr_tails": '灵活的机械师',
             "fr_ciyu": '素色一心',
             "fr_delta": '破瞬之斩',
             "fr_peter_likes": '操魂控魄',

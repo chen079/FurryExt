@@ -726,7 +726,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             'fr_card_xysx.png', 'fr_card_xysx.webp', 'fr_card_yxys.jpg', 'fr_card_yxys.bmp', 'fr_card_xysx.bmp', 'fr_card_yxys.png', 'fr_card_yxys.webp', 'fr_card_zfxd.jpg', 'fr_card_zfxd.bmp',
                             'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp', 'fr_card_zh.bmp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp', 'fr_card_zhcz.bmp',
                             'fr_equip1_syzg.jpg', 'fr_equip1_syzg.bmp', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp', 'fr_equip5_wxpp.bmp', 'fr_card_scfm.png',
-                            'fr_card_scfm.webp', 'fr_card_scfm.jpg', 'fr_card_scfm.bmp',
+                            'fr_card_scfm.webp', 'fr_card_scfm.jpg', 'fr_card_scfm.bmp','fr_equip1_mhlq.bmp','fr_equip1_mhlq.jpg','fr_equip1_mhlq.webp','fr_equip1_mhlq.png'
                         ];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
@@ -763,7 +763,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                     game.getFileList('extension/十周年UI/image/ass', (folders, files) => {
-                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png'];
+                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png','fr_equip1_mhlq.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -821,7 +821,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 //装备区小图标素材
                 if (lib.config.extensions.contains('福瑞拓展') && lib.config['extension_福瑞拓展_enable']) {
                     game.getFileList('extension/../image/card', (folders, files) => {
-                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png'];
+                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png','fr_equip1_mhlq.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -835,7 +835,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 if (lib.config.extensions.contains('EngEX') && lib.config['extension_EngEX_enable']) {
                     game.getFileList('extension/EngEX/images/ass', (folders, files) => {
-                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png'];
+                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png','fr_equip1_mhlq.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -1107,6 +1107,27 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
+            //一轮结束
+            lib.skill._roundEnd = {
+                charlotte: true,
+                ruleSkill: true,
+                trigger: {
+                    player: ['phaseAfter', 'phaseCancelled', 'phaseSkipped']
+                },//伪·一轮的结束
+                filter: function (event, player) {
+                    return !event.skill && player.next == _status.roundStart;
+                },
+                forceDie: true,
+                direct: true,
+                priority: -Infinity,
+                lastDo: true,
+                content: function () {
+                    'step 0'
+                    event.trigger('roundEnd');//End时机常用于技能结算
+                    'step 1'
+                    event.trigger('roundAfter');//After时机常用于效果清除
+                },
+            }
             lib.element.player.setfrAvatar = function (name, name2, video, fakeme) {
                 var node
                 if (this.name2 == name) {
@@ -1171,7 +1192,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
-            //------------------------------------------转韵-----------------
+            //------------------------------------------转韵-----------------//
             lib.element.player.changeYun = function (skill) {
                 //若导入的player.skill为平，则改为仄
                 if (this[skill] && this[skill] == '平') {
@@ -1198,6 +1219,37 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
+            //参考自：天牢令——铝宝 ---------------------------------------发动技能函数------------------------------------------//
+            var FrLogSkill = lib.element.player.logSkill;
+            lib.element.player.logSkill = function (skillname) {
+                FrLogSkill.apply(this, arguments);
+                var next = game.createEvent('FrLogSkill');
+                next.player = this;
+                next.skill = skillname;
+                next.setContent('emptyEvent');
+            };
+            lib.element.player.FrGetName = function () {
+                if (this.name.lastIndexOf("_") == -1) {
+                    return this.name;
+                }
+                return this.name.slice(this.name.lastIndexOf("_") + 1);
+            };
+            lib.skill._Fr_useSkillAfter = {
+                popup: false,
+                forced: true,
+                trigger: {
+                    player: "useSkillBefore",
+                },
+                filter: function (event, player) {
+                    return true;
+                },
+                content: function () {
+                    var next = game.createEvent('FrLogSkill');
+                    next.player = player;
+                    next.skill = trigger.skill;
+                    next.setContent('emptyEvent');
+                }
+            };
             //------------------------------------------AI禁将------------------------------------------//
             if (lib.config.ban_ai) {
                 var savedFilter = lib.filter.characterDisabled;
@@ -1208,6 +1260,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     return savedFilter(i, libCharacter);
                 };
             }
+            //获取花色
+            lib.element.player.getSuitNum = function (position) {
+                var player = this;
+                if (!position) position = 'h';
+                return player.getCards(position).reduce(function (arr, card) {
+                    return arr.add(get.suit(card, player)), arr;
+                }, []).length;
+            };
             //视为伤害
             lib.element.player.fakeDamage = function () {
                 var next = game.createEvent('damage');

@@ -4,17 +4,80 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         name: 'furryCard',//卡包命名
         connect: true,//卡包是否可以联机
         card: {
-            'fr_card_chongci':{
-                image: 'ext:福瑞拓展/image/card/fr_card_chongci.png',
-                type:"db_atk",
-                fullimage:true,
-                derivation:"fr_tails",
+            "fr_equip1_mhlq": {
+                image: 'ext:福瑞拓展/image/card/fr_equip1_mhlq.png',
+                fullskin: true,
+                type: "equip",
+                subtype: "equip1",
+                distance: {
+                    attackFrom: -1,
+                },
+                ai: {
+                    basic: {
+                        equipValue: 2,
+                        order: function (card, player) {
+                            if (player && player.hasSkillTag('reverseEquip')) {
+                                return 8.5 - get.equipValue(card, player) / 20;
+                            }
+                            else {
+                                return 8 + get.equipValue(card, player) / 20;
+                            }
+                        },
+                        useful: 3,
+                        value: function (card, player, index, method) {
+                            if (player.isDisabled(get.subtype(card))) return 0.01;
+                            var value = 0;
+                            var info = get.info(card);
+                            var current = player.getEquip(info.subtype);
+                            if (current && card != current) {
+                                value = get.value(current, player);
+                            }
+                            var equipValue = info.ai.equipValue;
+                            if (equipValue == undefined) {
+                                equipValue = info.ai.basic.equipValue;
+                            }
+                            if (typeof equipValue == 'function') {
+                                if (method == 'raw') return equipValue(card, player);
+                                if (method == 'raw2') return equipValue(card, player) - value;
+                                return Math.max(0.1, equipValue(card, player) - value);
+                            }
+                            if (typeof equipValue != 'number') equipValue = 0;
+                            if (method == 'raw') return equipValue;
+                            if (method == 'raw2') return equipValue - value;
+                            return Math.max(0.1, equipValue - value);
+                        },
+                    },
+                    result: {
+                        target: function (player, target, card) {
+                            return target.hujia
+                        },
+                    },
+                },
+                skills: ["mhlq_skill"],
+                enable: true,
+                selectTarget: -1,
+                filterTarget: function (card, player, target) {
+                    return target == player;
+                },
+                modTarget: true,
+                allowMultiple: false,
+                content: function () {
+                    if (cards.length && get.position(cards[0], true) == 'o') target.equip(cards[0]);
+                },
+                toself: true,
+                fullimage: true,
             },
-            'fr_card_zhuanyi':{
+            'fr_card_chongci': {
+                image: 'ext:福瑞拓展/image/card/fr_card_chongci.png',
+                type: "db_atk",
+                fullimage: true,
+                derivation: "fr_tails",
+            },
+            'fr_card_zhuanyi': {
                 image: 'ext:福瑞拓展/image/card/fr_card_zhuanyi.png',
-                type:"db_atk",
-                fullimage:true,
-                derivation:"fr_tails",
+                type: "db_atk",
+                fullimage: true,
+                derivation: "fr_tails",
             },
             'fr_card_scfm': {
                 image: 'ext:福瑞拓展/image/card/fr_card_scfm.png',
@@ -71,7 +134,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     })
                 },
                 content: function () {
-                    target.addTempSkill('card_djlj', {player:'phaseAfter'})
+                    target.addTempSkill('card_djlj', { player: 'phaseAfter' })
                 },
                 ai: {
                     value: [7.5, 1],
@@ -984,6 +1047,75 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             },
         },
         skill: {
+            "mhlq_skill": {
+                equipSkill: true,
+                direct: true,
+                trigger: {
+                    player: "useCardToPlayered",
+                },
+                filter: function (event, player) {
+                    return event.card && event.card.name == 'sha';
+                },
+                content:function(){
+                    'step 0'
+                    trigger.target.addTempSkill('pojia')
+                    trigger.target.storage.pojia={
+                        hujia:0,
+                        cards:[]
+                    }
+                    'step 1'
+                    trigger.target.storage.pojia.hujia+=trigger.target.hujia
+                    trigger.target.storage.pojia.cards.push(trigger.card)
+                    'step 2'
+                    if(trigger.target.hujia!=0) trigger.target.changeHujia(-trigger.target.hujia)
+                    'step 3'
+                    trigger.target.markSkill('pojia');
+                },
+                ai:{
+                    skillTagFilter:function(player,tag,arg){
+                        if(arg&&arg.name=='sha') return true;
+                        return false;
+                    },
+                },
+            },
+            'pojia':{
+                firstDo:true,
+                init:function(player,skill){
+                    if(!player.storage[skill]) player.storage[skill]={
+                        hujia:0,
+                        cards:[]
+                    };
+                },
+                onremove:true,
+                trigger:{
+                    player:["damage","damageCancelled","damageZero"],
+                    source:["damage","damageCancelled","damageZero"],
+                    target:["shaMiss","useCardToExcluded","useCardToEnd","eventNeutralized"],
+                    global:["useCardEnd"],
+                },
+                charlotte:true,
+                filter:function(event,player){
+                    return player.storage.pojia.cards&&event.card&&player.storage.pojia.cards.contains(event.card)&&(event.name!='damage'||event.notLink());
+                },
+                silent:true,
+                forced:true,
+                popup:false,
+                priority:12,
+                content:function(){
+                    player.storage.pojia.cards.remove(trigger.card);
+                    if(!player.storage.pojia.cards.length){
+                        if(player.storage.pojia.hujia!=0){
+                            player.changeHujia(player.storage.pojia.hujia)
+                            player.storage.pojia.hujia=0
+                        }
+                        player.removeSkill('pojia')
+                    }
+                },
+                marktext:"✖",
+                intro:{
+                    content:"当前护甲已失效",
+                },
+            },
             'wxpp_skill': {
                 enable: "phaseUse",
                 equipSkill: true,
@@ -1130,7 +1262,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                                 return -get.attitude(player, target)
                             })
                             'step 1'
-                            if(result.bool){
+                            if (result.bool) {
                                 result.targets[0].addTempSkill('baiban', { player: "phaseEnd" })
                             }
                         }
@@ -1248,6 +1380,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         },//技能
         translate: {
             //技能
+            'mhlq_skill':'鸣鸿龙雀',
+            'mhlq_skill_info':'锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害。',
             'card_djlj': '弹尽粮绝',
             'card_djlj_info': '锁定技，①摸牌阶段额定摸牌数-1，②使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
             "card_sx": "嗜血",
@@ -1258,8 +1392,11 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
-            'fr_card_chongci':'冲刺',
-            'fr_card_zhuanyi':'转移',
+            'fr_equip1_mhlq':'鸣鸿龙雀',
+            'fr_equip1_mhlq_info':'锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害。',
+            'pojia':'破甲',
+            'fr_card_chongci': '冲刺',
+            'fr_card_zhuanyi': '转移',
             'fr_card_scfm': '水草丰茂',
             'fr_card_scfm_info': '出牌阶段，对所有角色使用，目标角色摸一张牌。',
             'fr_card_djlj': '弹尽粮绝',
@@ -1290,6 +1427,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_zhcz_info": "出牌阶段，对一名角色使用，该角色展示X张手牌（X为其手牌数的一半并向下取整），然后你选择一项：1.重铸其展示的所有牌，2.重铸其未展示的所有牌。",
         },
         list: [
+            ['heart', '10', 'fr_equip1_mhlq'],
             ['spade', '5', 'fr_card_zfxd'],
             ['club', '11', 'fr_card_zfxd'],
             ['heart', '11', 'fr_card_cmhc'],
