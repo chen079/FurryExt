@@ -822,6 +822,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }, this, name, name2)
                 }
             }
+            // ---------------------------------------自定义函数：获取最后一张手牌-----------------------------------------//
+            lib.element.player.getLastUsed = function (num) {
+                if (typeof num != 'number') num = 0;
+                var history = this.getAllHistory('useCard');
+                if (history.length <= num) return null;
+                return history[history.length - num - 1];
+            }
             // ---------------------------------------自定义函数：获取花色-----------------------------------------//
             lib.element.player.getSuitNum = function (position) {
                 var player = this;
