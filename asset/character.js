@@ -10,7 +10,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['des:西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——奥尔斯拉特，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。']],
             //'fr_rasali':['male','shen',4,[],[]],
             //'fr_nashu':['male','shen',4,[],[]],
-            //'fr_derk':['male','jin',4,[],[]],
+            'fr_derk':['male','jin',4,['derk_ly'],[]],
             'fr_crow': ['male', 'wei', 3, ['crow_my', 'crow_mc', 'crow_td'], []],
             'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['fobidai', 'des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
             'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], []],
@@ -121,6 +121,78 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'derk_ly':{
+                locked:false,
+                mod:{
+                    cardUsable:function(card,player){
+                        var color1=get.color(card), evt=player.getLastAllUsed();
+                        if(evt&&evt.card&&color1==get.color(evt.card)) return Infinity;
+                    },
+                    aiOrder:function(player,card,num){
+                        if(typeof card=='object'&&player.isPhaseUsing()){
+                            var evt=player.getLastAllUsed(1);
+                            var evtb=player.getLastAllUsed(2)
+                            if(evt&&evt.card&&evtb&&evtb.card&&(evtb.card.number&&evt.card.number&&((get.number(evt.card,false)+get.number(evtb.card,false))%13)==get.number(card))){
+                                return num+10;
+                            }
+                            var cards=player.getCards('hs').remove(card)
+                            var cardlist=[]
+                            for(var i=0;i<cards.length;i++){
+                                cardlist.push(get.number(cards[i]))
+                            }
+                            if(evt&&evt.card){
+                                var value2=(get.number(card)+get.number(evt.card))%13
+                                value2=value2==0?13:value2
+                                if(cardlist.contains(value2)) return num+3
+                            }
+                        }
+                    },
+                },
+                trigger:{
+                    player:"useCard",
+                },
+                mark:true,
+                intro:{
+                    markcount:function(storage,player){
+                        var evt=player.getLastAllUsed();
+                        var evt1=player.getLastAllUsed(1);
+                        if(evt&&evt1&&evt.card&&evt1.card){
+                            var value=(get.number(evt.card,false)+get.number(evt1.card,false))%13
+                            value=value==0?13:value
+                            return get.cardnum(value)
+                        }
+                        return 
+                    },
+                    mark:function( dialog, storage, player,skill){
+                        var evt=player.getLastAllUsed();
+                        var evt1=player.getLastAllUsed(1);
+                        if(evt&&evt.card){
+                            dialog.addText('你上一张使用牌的点数为'+get.number(evt.card))
+                            dialog.addText('你使用'+get.translation(get.color(evt.card))+'的牌无次数限制')
+                        }
+                        if(evt&&evt.card&&evt1&&evt1.card){
+                            var value=(get.number(evt.card,false)+get.number(evt1.card,false))%13
+                            value=value==0?13:value
+                            dialog.addText('当你使用点数为'+get.cardnum(value)+'的牌时，你摸两张牌')
+                        }
+                    }
+                },
+                frequent:true,
+                filter:function(event,player){
+                    var evt=player.getLastAllUsed(1);
+                    if(!evt||!evt.card) return false;
+                    if(!player.isPhaseUsing()) return false;
+                    var evtb=player.getLastAllUsed(2);
+                    if(!evtb||!evtb.card) return false;
+                    var value=(get.number(evt.card,false)+get.number(evtb.card,false))%13
+                    value=value==0?13:value
+                    return typeof get.number(evt.card,false)=='number'&&typeof get.number(evtb.card,false)=='number'&&(value==get.number(event.card));
+                },
+                content:function(){
+                    'step 0'
+                    player.draw(2);
+                },
+            },
             'crow_my': {
                 mark: true,
                 popup: false,
@@ -652,7 +724,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             "rewrite_bagua", "rewrite_baiyin", "rewrite_lanyinjia", "rewrite_renwang", "tengjia", 'guding', 'zhuque', "bagua", "baiyin", "lanyinjia", "renwang", "tengjia",
                             'dilu', 'jueying', 'zhuahuang', 'chitu', 'dawan', 'zixin', 'hualiu', 'muniu', 'bintieshuangji', 'wuxinghelingshan', 'wutiesuolian', 'wushuangfangtianji', 'chixueqingfeng',
                             'huxinjing', 'guilongzhanyuedao', 'heiguangkai', 'linglongshimandai', 'hongmianbaihuapao', 'qimenbagua', 'guofengyupao', 'zhaogujing', 'sanlve', 'tianjitu',
-                            'taigongyinfu', 'shufazijinguan', 'xuwangzhimian', 'fr_equip5_wxpp', 'fr_equip1_syzg'].randomGets(5)
+                            'taigongyinfu', 'shufazijinguan', 'xuwangzhimian', 'fr_equip5_wxpp', 'fr_equip1_syzg','fr_equip1_mhlq','fr_equip2_yyxl'].randomGets(5)
                         var choices = []
                         for (var i = 0; i < namelist.length; i++) {
                             choices.push(['equip', 8, namelist[i]])
@@ -789,6 +861,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player: "useCardToPlayered",
                     target: "useCardToTargeted",
                 },
+                init:function(player,stoarge){
+                    if(!player.storage.tails_jd) player.storage.tails_jd=[0,true]
+                },
                 filter: function (event, player) {
                     if (event.player == event.target || event.targets.length != 1) return false;
                     return true
@@ -833,6 +908,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     'step 3'
                     if ((event.tes && event.tes.name == 'sha' && event.mes == 'fr_card_zhuanyi') || (event.tes && event.tes.name == 'shan' && event.mes == 'fr_card_chongci')) {
+                        if(player.storage.tails_jd[1]) player.storage.tails_jd[1]=false
                         game.log(player, '谋弈失败');
                         var cards = player.getCards('h');
                         if (cards.length) {
@@ -843,6 +919,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         return
                     } else {
                         game.log(player, '谋弈成功');
+                        if(player.storage.tails_jd[1]&&!game.frAchi.hasAchi('IQ:400', 'game')){
+                            player.storage.tails_jd[0]+=1
+                            if(player.storage.tails_jd[0]>=8){
+                                game.frAchi.addProgress('IQ:400', 'character')
+                            }
+                        }
                         if (player == trigger.player) {
                             trigger.excluded.add(event.target)
                         } else {
@@ -978,7 +1060,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 content: function () {
                     'step 0'
-                    trigger.player.chooseCard(2 * trigger.num, 'h', '是否交给' + get.translation(player) + get.cnNumber(Math.max(1, Math.floor(trigger.player.countCards('h') / 2))) + '张手牌，然后将此伤害转移给该角色并令其摸' + get.cnNumber(player.getDamagedHp() + 1) + '张牌').set('ai', function (card) {
+                    trigger.player.chooseCard(Math.max(1, Math.floor(trigger.player.countCards('h') / 2)), 'h')
+                    .set('prompt','###是否对'+get.translation(trigger.source)+'发动【讨雠】？###交给' + get.translation(player) + get.cnNumber(Math.max(1, Math.floor(trigger.player.countCards('h') / 2))) + '张手牌，然后将此伤害转移给'+ get.translation(player)+'并令其摸' + get.cnNumber(player.getDamagedHp() + 1) + '张牌')
+                    .set('ai', function (card) {
                         var player = _status.event.player
                         var target = _status.event.target
                         var att = get.attitude(player, target)
@@ -1516,6 +1600,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
+                    list=list.filterInD('d')
                     var cards = list.slice(0, 2)
                     player.gain(cards, 'gain2')
                     player.storage.nanci_tq = cards
@@ -4222,7 +4307,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     source: "damageBegin",
                 },
                 filter: function (event, player) {
-                    return event.card && event.card.name == 'sha';
+                    return event.card&&event.card.name=='sha'&&event.getParent().name=='sha'
                 },
                 init: function (player) {
                     if (!player.storage.miya_hz) player.storage.miya_hz = 0
@@ -9819,7 +9904,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                                 }
                             }
                             if (goon) {
-                                player.chooseTarget(get.prompt('ciyu_ss'), '素术：是否增加一名' + get.translation(trigger.card) + '的目标？', function (card, player, target) {
+                                player.chooseTarget(get.prompt('ciyu_ss'), '素术：是否增+1名' + get.translation(trigger.card) + '的目标？', function (card, player, target) {
                                     var player = _status.event.source;
                                     return !_status.event.targets.contains(target) && lib.filter.targetEnabled2(_status.event.card, player, target)
                                 }).set('ai', function (target) {
@@ -15533,6 +15618,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
+                    list=list.filterInD('d')
                     var suit = []
                     for (var j = 0; j < list.length; j++) {
                         var cardsuit = get.suit(list[j])
@@ -15561,6 +15647,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
+                    list=list.filterInD('d')
                     var suitsort = [[], [], [], []]
                     for (var j = 0; j < list.length; j++) {
                         var cardsuit = get.suit(list[j])
@@ -15733,7 +15820,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 intro: {
                     mark: function (dialog, storage, player) {
                         dialog.addText('目前可用的类型');
-                        dialog.addText(storage)
+                        var list=[]
+                        for(var i=0;i<player.storage.zeta_fg.length;i++){
+                            list.push(get.translation(player.storage.zeta_fg[i])+'牌')
+                        }
+                        dialog.addText(list)
                     },
                 },
                 content: function () {
@@ -16569,6 +16660,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'derk_ly':'连语',
+            'derk_ly_info':'当你使用牌时，若此牌的点数与你使用的前两张牌的点数和对13取余相等，你摸两张牌；锁定技，你使用与你上一张使用牌的颜色相同的牌无次数限制。',
             'crow_td': '天妒',
             'crow_td_info': '你的判定牌生效后，你可以获得此牌。',
             'crow_my': '藐意',
@@ -16720,13 +16813,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "skery_yj": "饮鸩",
             "skery_yj_info": "其他角色使用【酒】或【桃】生效前，你可以弃置一张手牌并进行判定，若结果为红色，你弃置其两张手牌；若结果为黑色，此牌无效。",
             "miya_hz": "挥斩",
-            "miya_hz_info": "当你的杀造成伤害后，你摸两张牌并获得1个“挥斩”标记，然后本回合内下一次【杀】的伤害+X（X为“挥斩”标记数量）。",
+            "miya_hz_info": "当你的【杀】造成伤害后，你摸两张牌并获得1个“挥斩”标记，然后本回合内下一次因执行【杀】的效果造成的伤害+X（X为“挥斩”标记数量）。",
             "miya_gzhz": "挥斩",
-            "miya_gzhz_info": "当你的杀造成伤害后，你摸一张牌并获得1个“挥斩”标记，然后本回合内下一次【杀】的伤害+X（X为“挥斩”标记数量）。",
+            "miya_gzhz_info": "当你的【杀】造成伤害后，你摸一张牌并获得1个“挥斩”标记，然后本回合内下一次因执行【杀】的效果造成的伤害+X（X为“挥斩”标记数量）。",
             "miya_ks": "狂嗜",
-            "miya_ks_info": "锁定技，出牌阶段，你可以额外使用一张【杀】；当你的【杀】造成伤害后，本回合出【杀】次数加一。",
+            "miya_ks_info": "锁定技，出牌阶段，你可以额外使用一张【杀】；当你的【杀】造成伤害后，本回合出【杀】次数+1。",
             "miya_gzks": "狂嗜",
-            "miya_gzks_info": "锁定技，当你的【杀】造成伤害后，本回合出【杀】次数加一。",
+            "miya_gzks_info": "锁定技，当你的【杀】造成伤害后，本回合出【杀】次数+1。",
             "milism_ql": "潜鳞",
             "milism_ql_info": "当你于回合外受到伤害后，你免除即将受到的伤害直到回合结束。并获得以下效果直到你的回合开始：1.除【五谷丰登】和【桃园结义】外，普通锦囊牌对你无效。2.你不会成为【乐不思蜀】和【兵粮寸断】的目标。",
             "milism_th": "同游",
@@ -17056,7 +17149,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "jbgy_ze": "诛恶",
             "jbgy_ze_info": "锁定技，其他角色对你造成伤害前，将伤害来源改为你；回合结束时，若你于本回合内造成的伤害不小于你的体力值，你回复一点体力并获得场上一张牌。",
             "xiaomo_ld": "灵动",
-            "xiaomo_ld_info": "当你于一回合内第一次受到其他角色造成的伤害时，你可以取消之并与其各摸一张牌，然后你获得1点护甲。",
+            "xiaomo_ld_info": "当你回合内第一次受到伤害时，若此伤害为其他角色造成的，你可以取消之并与其各摸一张牌，然后你获得1点护甲。",
             "xiaomo_sj": "闪击",
             "xiaomo_sj_info": "摸牌阶段，你多摸等同于你护甲值的牌；当你使用【杀】指定目标时，你可以失去任意数量的护甲，令此【杀】的目标失去等量护甲，然后令此【杀】伤害+X（X为你失去护甲的值）。",
             "adward_qm": "千面",
@@ -17094,7 +17187,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "mala_sz": "斩击",
             "mala_sz_info": "锁定技，当你造成伤害时，你可以流失1点体力，令此伤害翻倍；当你受到伤害后，你结束当前回合。",
             "zeta_gz": "固铸",
-            "zeta_gz_info": "一名角色的回合结束时，若本回合有四种花色的牌进入过" + get.introduce('center') + "，你可以分配其中一种花色的牌。若你将这些牌全部分配给其他角色，你重置〖复归〗并令一名角色执行一个额外的出牌阶段。",
+            "zeta_gz_info": "一名角色的回合结束时，若本回合有四种花色的牌进入过" + get.introduce('center') + "，你可以分配于弃牌堆的其中一种花色的牌。若你将这些牌全部分配给其他角色，你重置〖复归〗并令一名角色执行一个额外的出牌阶段。",
             "zeta_fg": "复归",
             "zeta_fg_info": "每轮每种类别限一次，你使用牌结算完毕后，你可以从牌堆中检索一张基本牌或非基本牌。",
             "fox_hm": "幻梦",
@@ -17257,6 +17350,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            'fr_derk':'黯影随行',
+            'fr_crow':'智谋慧者',
             "fr_milis": '铸刃千口',
             "fr_lions": '梦魂归乡',
             "fr_xit": '言叙求生',

@@ -1,9 +1,9 @@
 (() => ({
 	// 扩展版本
-	version: "2.1.0.3",
+	version: "2.1.0.4",
 
 	// 扩展的上一个版本
-	oldversion: "2.1.0.2",
+	oldversion: "2.1.0.3",
 
 	// 更新内容汇总
 	changeLog: `
@@ -15,6 +15,11 @@
 	继续修复bugs
 	修正了 tails的部分错误
 	新卡牌：鸣鸿龙雀
+	新卡牌：影夜项链
+	为所有卡牌增加手杀版本美化
+	鸣谢清单新增一堆人
+	修复低版本无名杀无法运行的bug
+	修正实验模式的bug
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
@@ -46,9 +51,20 @@
 		'image/achievement/isGained2.png',
 		'image/achievement/isNew.png',
 		'image/achievement/splitLine.png',
-		'image/achievement/star.png',
+		'image/achievement/star1.png',
 		'image/achievement/star2.png',
 		'image/achievement/star3.png',
+		'image/achievement/star4.png',
+		'image/achievement/star5.png',
+		'image/achievement/star6.png',
+		'image/achievement/star7.png',
+		'image/card/fr_equip2_yyxl.png',
+		'image/equip/fr_equip2_yyxl.png',
+		'image/equip/fr_equip1_mhlq.png',
+		'image/card/pretty/fr_equip2_yyxl.png',
+		'image/card/pretty/fr_equip2_yyxl.bmp',
+		'image/card/pretty/fr_equip2_yyxl.webp',
+		'image/card/pretty/fr_equip2_yyxl.jpg',
 		'image/achievement/tips_character.png',
 		'image/achievement/tips_game.png',
 		'image/achievement/tips_special.png',

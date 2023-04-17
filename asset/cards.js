@@ -4,6 +4,67 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         name: 'furryCard',//卡包命名
         connect: true,//卡包是否可以联机
         card: {
+            'fr_equip2_yyxl': {
+                fullskin: true,
+                type: "equip",
+                subtype: "equip2",
+                skills: ["yy_skill"],
+                ai: {
+                    equipValue: function (card, player) {
+                        return 7.5;
+                    },
+                    basic: {
+                        equipValue: 7.5,
+                        order: function (card, player) {
+                            if (player && player.hasSkillTag('reverseEquip')) {
+                                return 8.5 - get.equipValue(card, player) / 20;
+                            }
+                            else {
+                                return 8 + get.equipValue(card, player) / 20;
+                            }
+                        },
+                        useful: 2,
+                        value: function (card, player, index, method) {
+                            if (player.isDisabled(get.subtype(card))) return 0.01;
+                            var value = 0;
+                            var info = get.info(card);
+                            var current = player.getEquip(info.subtype);
+                            if (current && card != current) {
+                                value = get.value(current, player);
+                            }
+                            var equipValue = info.ai.equipValue;
+                            if (equipValue == undefined) {
+                                equipValue = info.ai.basic.equipValue;
+                            }
+                            if (typeof equipValue == 'function') {
+                                if (method == 'raw') return equipValue(card, player);
+                                if (method == 'raw2') return equipValue(card, player) - value;
+                                return Math.max(0.1, equipValue(card, player) - value);
+                            }
+                            if (typeof equipValue != 'number') equipValue = 0;
+                            if (method == 'raw') return equipValue;
+                            if (method == 'raw2') return equipValue - value;
+                            return Math.max(0.1, equipValue - value);
+                        },
+                    },
+                    result: {
+                        target: function (player, target, card) {
+                            return get.equipResult(player, target, card.name);
+                        },
+                    },
+                },
+                enable: true,
+                selectTarget: -1,
+                filterTarget: function (card, player, target) {
+                    return target == player;
+                },
+                modTarget: true,
+                allowMultiple: false,
+                content: function () {
+                    if (cards.length && get.position(cards[0], true) == 'o') target.equip(cards[0]);
+                },
+                toself: true,
+            },
             "fr_equip1_mhlq": {
                 image: 'ext:福瑞拓展/image/card/fr_equip1_mhlq.png',
                 fullskin: true,
@@ -890,13 +951,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         text.style.color = "white"
                         text.style.textAlign = 'center';
                         ui.window.appendChild(text);
-                        var button = ui.create.control('确定', function () {
-                            skillName()
-                        });
-                        button.style.width = '70px';
-                        button.style.left = 'calc(50% - 35px)';
-                        button.style.top = 'calc(50% + 60px)';
-                        ui.window.appendChild(button);
+                        var button = ui.create.control('确定', () => skillName())
                         for (var i in lib.element.event) {
                             event.parent[i] = lib.element.event[i];
                         }
@@ -1056,64 +1111,64 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 filter: function (event, player) {
                     return event.card && event.card.name == 'sha';
                 },
-                content:function(){
+                content: function () {
                     'step 0'
                     trigger.target.addTempSkill('pojia')
-                    trigger.target.storage.pojia={
-                        hujia:0,
-                        cards:[]
+                    trigger.target.storage.pojia = {
+                        hujia: 0,
+                        cards: []
                     }
                     'step 1'
-                    trigger.target.storage.pojia.hujia+=trigger.target.hujia
+                    trigger.target.storage.pojia.hujia += trigger.target.hujia
                     trigger.target.storage.pojia.cards.push(trigger.card)
                     'step 2'
-                    if(trigger.target.hujia!=0) trigger.target.changeHujia(-trigger.target.hujia)
+                    if (trigger.target.hujia != 0) trigger.target.changeHujia(-trigger.target.hujia)
                     'step 3'
                     trigger.target.markSkill('pojia');
                 },
-                ai:{
-                    skillTagFilter:function(player,tag,arg){
-                        if(arg&&arg.name=='sha') return true;
+                ai: {
+                    skillTagFilter: function (player, tag, arg) {
+                        if (arg && arg.name == 'sha') return true;
                         return false;
                     },
                 },
             },
-            'pojia':{
-                firstDo:true,
-                init:function(player,skill){
-                    if(!player.storage[skill]) player.storage[skill]={
-                        hujia:0,
-                        cards:[]
+            'pojia': {
+                firstDo: true,
+                init: function (player, skill) {
+                    if (!player.storage[skill]) player.storage[skill] = {
+                        hujia: 0,
+                        cards: []
                     };
                 },
-                onremove:true,
-                trigger:{
-                    player:["damage","damageCancelled","damageZero"],
-                    source:["damage","damageCancelled","damageZero"],
-                    target:["shaMiss","useCardToExcluded","useCardToEnd","eventNeutralized"],
-                    global:["useCardEnd"],
+                onremove: true,
+                trigger: {
+                    player: ["damage", "damageCancelled", "damageZero"],
+                    source: ["damage", "damageCancelled", "damageZero"],
+                    target: ["shaMiss", "useCardToExcluded", "useCardToEnd", "eventNeutralized"],
+                    global: ["useCardEnd"],
                 },
-                charlotte:true,
-                filter:function(event,player){
-                    return player.storage.pojia.cards&&event.card&&player.storage.pojia.cards.contains(event.card)&&(event.name!='damage'||event.notLink());
+                charlotte: true,
+                filter: function (event, player) {
+                    return player.storage.pojia.cards && event.card && player.storage.pojia.cards.contains(event.card) && (event.name != 'damage' || event.notLink());
                 },
-                silent:true,
-                forced:true,
-                popup:false,
-                priority:12,
-                content:function(){
+                silent: true,
+                forced: true,
+                popup: false,
+                priority: 12,
+                content: function () {
                     player.storage.pojia.cards.remove(trigger.card);
-                    if(!player.storage.pojia.cards.length){
-                        if(player.storage.pojia.hujia!=0){
+                    if (!player.storage.pojia.cards.length) {
+                        if (player.storage.pojia.hujia != 0) {
                             player.changeHujia(player.storage.pojia.hujia)
-                            player.storage.pojia.hujia=0
+                            player.storage.pojia.hujia = 0
                         }
                         player.removeSkill('pojia')
                     }
                 },
-                marktext:"✖",
-                intro:{
-                    content:"当前护甲已失效",
+                marktext: "✖",
+                intro: {
+                    content: "当前护甲已失效",
                 },
             },
             'wxpp_skill': {
@@ -1353,6 +1408,18 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     },
                 },
             },
+            'yy_skill': {
+                trigger:{
+                    target:"shaBefore",
+                },
+                forced: true,
+                filter: function (event, player) {
+                    return event.player != player;
+                },
+                content: function () {
+                    trigger.player.addTempSkill('fengyin', 'shaAfter')
+                }
+            },
             'card_djlj': {
                 trigger: {
                     player: ["useCardAfter", "phaseDrawBegin"],
@@ -1380,21 +1447,25 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         },//技能
         translate: {
             //技能
-            'mhlq_skill':'鸣鸿龙雀',
-            'mhlq_skill_info':'锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害。',
+            'mhlq_skill': '鸣鸿龙雀',
+            'mhlq_skill_info': '锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害。',
             'card_djlj': '弹尽粮绝',
             'card_djlj_info': '锁定技，①摸牌阶段额定摸牌数-1，②使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
             "card_sx": "嗜血",
             "card_sx_info": "出牌阶段结束后，若你于此阶段杀死过其他角色，你摸三张牌并额外执行一个出牌阶段。",
+            'yy_skill': '影夜项链',
+            'yy_skill_info': '锁定技，当你成为其他角色【杀】的目标前，你令该角色非锁定技失效直到此【杀】结算完毕（时机同青钢剑）。',
             "sy_skill": "霜月之弓",
             "sy_skill_info": "当你或你攻击范围内的角色受到一名其他角色造成的非冰属性伤害后，你可以弃置两张牌，然后对伤害来源造成1点冰属性伤害。",
             "wxpp_skill": "演奏",
             "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
-            'fr_equip1_mhlq':'鸣鸿龙雀',
-            'fr_equip1_mhlq_info':'锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害。',
-            'pojia':'破甲',
+            'fr_equip2_yyxl': '影夜项链',
+            'fr_equip2_yyxl_info': '锁定技，当你成为其他角色【杀】的目标前，你令该角色非锁定技失效直到此【杀】结算完毕。',
+            'fr_equip1_mhlq': '鸣鸿龙雀',
+            'fr_equip1_mhlq_info': '锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害（时机同青钢剑）。',
+            'pojia': '破甲',
             'fr_card_chongci': '冲刺',
             'fr_card_zhuanyi': '转移',
             'fr_card_scfm': '水草丰茂',
@@ -1428,6 +1499,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         },
         list: [
             ['heart', '10', 'fr_equip1_mhlq'],
+            ['spade', '4', 'fr_equip2_yyxl'],
             ['spade', '5', 'fr_card_zfxd'],
             ['club', '11', 'fr_card_zfxd'],
             ['heart', '11', 'fr_card_cmhc'],

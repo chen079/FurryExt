@@ -1,6 +1,6 @@
 @font-face {
     font-family: "得意黑";
-    src: url("/acknowledgments/font/SmileySans-Oblique.otf")
+    src: url("./acknowledgments/font/SmileySans-Oblique.otf")
 }
 
 .fr-achiWindow {
@@ -102,6 +102,14 @@
     background-image: url('image/achievement/filter_bg.png');
 }
 
+.fr-achiWindow-filterWindow>.fr-achiWindow-filterIn {
+    z-index: 8;
+    height: 82%;
+    width: 100%;
+    top: 12.6%;
+    overflow-y: auto;
+}
+
 .fr-achiWindow-filterExit {
     z-index: 8;
     background-size: 100% 100%;
@@ -120,59 +128,13 @@
     top: 0;
     background-size: 100%;
     font-size: 3.5vw;
-    background-image: url('image/achievement/star.png');
+    background-image: url('image/achievement/star1.png');
 }
 
-.fr-achiWindow-filter-lv1 {
+.fr-achiWindow-filter-lv {
     width: 72%;
-    height: 22%;
-    top: 12.6%;
-    left: 13.5%;
-    background-size: 100%;
-    background-image: url('image/achievement/filter_optional.png');
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #604b1f;
-    font-size: 3vw;
-}
-
-.fr-achiWindow-filter-lv2 {
-    width: 72%;
-    height: 22%;
-    top: 32.8%;
-    left: 13.5%;
-    background-size: 100%;
-    background-image: url('image/achievement/filter_optional.png');
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #604b1f;
-    font-size: 3vw;
-}
-
-.fr-achiWindow-filter-lv3 {
-    width: 72%;
-    height: 22%;
-    top: 53%;
-    left: 13.5%;
-    background-size: 100%;
-    background-image: url('image/achievement/filter_optional.png');
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #604b1f;
-    font-size: 3vw;
-}
-
-.fr-achiWindow-filter-lv4 {
-    width: 72%;
-    height: 22%;
-    top: 73.2%;
-    left: 13.5%;
+    height: 26%;
+    left: 12.25%;
     background-size: 100%;
     background-image: url('image/achievement/filter_optional.png');
     text-align: center;

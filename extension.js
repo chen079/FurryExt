@@ -157,36 +157,26 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     var Furry_update = [
                         '/Character/',
                         '/redoCharacter/',
-                        '2.0.9.1',
-                        '1.紧急修复 韵律技 bug',
-                        '2.修复 普鲁维亚 描述错误',
-                        '3.修复自动更新内容的错误',
-                        '2.0.9.2',
-                        '1.修复 移动端提示错位的bug',
-                        '2.回调 奇玛 【俱灭】 并设置为ai禁选',
-                        '3.按照官方给出的蓄力技重写奇玛【断斩】',
-                        '4.清除部分冗余代码',
-                        '2.0.9.3',
-                        '1.修复 多默尔 【笙歌】拼点可能出现的bug',
-                        '2.新增 两张新卡 【弹尽粮绝】、【水草丰茂】',
-                        '3.新增 新势力 龙',
-                        '2.0.9.4',
-                        '1.增强 穆里 终策',
-                        '2.新人物 戴尔',
-                        '3.修改部分代码',
-                        '4.新boss 沃尔 ———建议打开弱的武将包',
-                        '2.0.9.5',
-                        '1.增加新势力：机',
-                        '2.将福瑞群像作为游戏模式独立出来',
-                        '3.新人物 西普、塔尔斯',
-                        '4.减少bug',
-                        '5.修改科恩的势力为机',
+                        '/Card/',
+                        '修正nulia点击取消依然失去体力的bug',
+                        '修正了祭蹈在人少时的bug',
+                        'tails新增翻面效果',
+                        '修改诸多技能描述',
+                        '新增成就系统——未完成',
+                        '继续修复bugs',
+                        '修正了 tails的部分错误',
+                        '新卡牌：鸣鸿龙雀',
+                        '新卡牌：影夜项链',
+                        '为所有卡牌增加手杀版本美化',
+                        '鸣谢清单新增一堆人',
+                        '修复低版本无名杀无法运行的bug',
+                        '修正实验模式的bug',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_sheep', 'fr_tails'];
-                    var Furry_redoplayers = ['fr_qima'];
+                    var Furry_players = ['fr_derk', 'fr_crow'];
+                    var Furry_redoplayers = ['fr_tails'];
                     //更新卡牌
-                    var Furry_cards = [];
+                    var Furry_cards = ['fr_equip1_mhlq','fr_equip2_yyxl'];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
                     for (var i = 0; i < Furry_update.length; i++) {
                         if (Furry_update[i] == '/Character/') {
@@ -617,29 +607,66 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 event.resume();
             };
+            //乐色
+            var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala','fr_derk']
+            //普通
+            var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
+            //珍贵
+            var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_hars"
+                , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
+            //史诗
+            var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
+                "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
+                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala",'fr_crow']
+            //传说
+            var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
+                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
+            var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
+            lib.furryrank = furryrank
+            lib.rank.rarity.junk.addArray(furryrank[0]);
+            lib.rank.rarity.common.addArray(furryrank[1]);
+            lib.rank.rarity.rare.addArray(furryrank[2]);
+            lib.rank.rarity.epic.addArray(furryrank[3]);
+            lib.rank.rarity.legend.addArray(furryrank[4]);
+            game.ggModPush = function () {
+                ggMod.junk.addArray(lib.furryrank[0])
+                ggMod.common.addArray(lib.furryrank[1])
+                ggMod.rare.addArray(lib.furryrank[2])
+                ggMod.epic.addArray(lib.furryrank[3])
+                ggMod.legend.addArray(lib.furryrank[4])
+            }
             lib.arenaReady.push(() => {
-                if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
-                    setTimeout(() => {
-                        //势力
+                setTimeout(() => {
+                    //势力
+                    if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
                         if (lib.groupnature) {
                             lib.groupnature.fr_g_dragon = 'fr_g_dragon'
                             lib.groupnature.fr_g_ji = 'fr_g_ji'
                         }
-                    }, 1000)
-                }
-                if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
-                    //武将界面
-                    setTimeout(() => {
-                        if (lib.config.exp && ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
-                            ggMod.junk.addArray(furryrank[0])
-                            ggMod.common.addArray(furryrank[1])
-                            ggMod.rare.addArray(furryrank[2])
-                            ggMod.epic.addArray(furryrank[3])
-                            ggMod.legend.addArray(furryrank[4])
-                        }
-                    }, 500)
-                }
+                    }
+                    if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable'] && lib.config.exp) {
+                        game.ggModPush()
+                    }
+                }, 1000)
             })
+            //翻译牌点数
+            get.cardnum = function (num) {
+                var str
+                switch (num) {
+                    case 1: str = 'A'; break;
+                    case 11: str = 'J'; break;
+                    case 12: str = 'Q'; break;
+                    case 13: str = 'K'; break;
+                    default: str = num; break;
+                }
+                return str
+            }
+            lib.element.player.getLastAllUsed = function (num) {
+                if (typeof num != 'number') num = 0;
+                var history = this.getAllHistory('useCard');
+                if (history.length <= num) return null;
+                return history[history.length - num - 1];
+            }
             // ---------------------------------------瞬发技按钮------------------------------------------//
             //按钮样式来自天牢令拓展    瞬发技参考自福瑞拓展拓展
             lib.element.player.FrShunfajiInit = function (skillname) {
@@ -726,7 +753,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             'fr_card_xysx.png', 'fr_card_xysx.webp', 'fr_card_yxys.jpg', 'fr_card_yxys.bmp', 'fr_card_xysx.bmp', 'fr_card_yxys.png', 'fr_card_yxys.webp', 'fr_card_zfxd.jpg', 'fr_card_zfxd.bmp',
                             'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp', 'fr_card_zh.bmp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp', 'fr_card_zhcz.bmp',
                             'fr_equip1_syzg.jpg', 'fr_equip1_syzg.bmp', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp', 'fr_equip5_wxpp.bmp', 'fr_card_scfm.png',
-                            'fr_card_scfm.webp', 'fr_card_scfm.jpg', 'fr_card_scfm.bmp','fr_equip1_mhlq.bmp','fr_equip1_mhlq.jpg','fr_equip1_mhlq.webp','fr_equip1_mhlq.png'
+                            'fr_card_scfm.webp', 'fr_card_scfm.jpg', 'fr_card_scfm.bmp', 'fr_equip1_mhlq.bmp', 'fr_equip1_mhlq.jpg', 'fr_equip1_mhlq.webp', 'fr_equip1_mhlq.png', 'fr_equip2_yyxl.png', 'fr_equip2_yyxl.bmp', 'fr_equip2_yyxl.webp', 'fr_equip2_yyxl.jpg'
                         ];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
@@ -763,7 +790,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                     game.getFileList('extension/十周年UI/image/ass', (folders, files) => {
-                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png','fr_equip1_mhlq.png'];
+                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png', 'fr_equip1_mhlq.png', 'fr_equip2_yyxl.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -821,7 +848,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 //装备区小图标素材
                 if (lib.config.extensions.contains('福瑞拓展') && lib.config['extension_福瑞拓展_enable']) {
                     game.getFileList('extension/../image/card', (folders, files) => {
-                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png','fr_equip1_mhlq.png'];
+                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png', 'fr_equip1_mhlq.png', 'fr_equip2_yyxl.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -835,7 +862,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 if (lib.config.extensions.contains('EngEX') && lib.config['extension_EngEX_enable']) {
                     game.getFileList('extension/EngEX/images/ass', (folders, files) => {
-                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png','fr_equip1_mhlq.png'];
+                        const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png', 'fr_equip1_mhlq.png', 'fr_equip2_yyxl.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
                                 if (game.readFile && game.writeFile) {
@@ -1219,37 +1246,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
-            //参考自：天牢令——铝宝 ---------------------------------------发动技能函数------------------------------------------//
-            var FrLogSkill = lib.element.player.logSkill;
-            lib.element.player.logSkill = function (skillname) {
-                FrLogSkill.apply(this, arguments);
-                var next = game.createEvent('FrLogSkill');
-                next.player = this;
-                next.skill = skillname;
-                next.setContent('emptyEvent');
-            };
-            lib.element.player.FrGetName = function () {
-                if (this.name.lastIndexOf("_") == -1) {
-                    return this.name;
-                }
-                return this.name.slice(this.name.lastIndexOf("_") + 1);
-            };
-            lib.skill._Fr_useSkillAfter = {
-                popup: false,
-                forced: true,
-                trigger: {
-                    player: "useSkillBefore",
-                },
-                filter: function (event, player) {
-                    return true;
-                },
-                content: function () {
-                    var next = game.createEvent('FrLogSkill');
-                    next.player = player;
-                    next.skill = trigger.skill;
-                    next.setContent('emptyEvent');
-                }
-            };
             //------------------------------------------AI禁将------------------------------------------//
             if (lib.config.ban_ai) {
                 var savedFilter = lib.filter.characterDisabled;
@@ -2706,7 +2702,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.1.0.3",
+            version: "2.1.0.4",
         }, files: {}
     }
 })
