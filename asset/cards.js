@@ -75,13 +75,18 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 },
                 ai: {
                     basic: {
-                        equipValue: 2,
+                        equipValue: 3,
                         order: function (card, player) {
+                            if (game.hasPlayer(function (current) {
+                                return current.hujia > 0 && get.attitude(player, current) < 0
+                            })) {
+                                return 10 + get.equipValue(card, player) / 20;
+                            }
                             if (player && player.hasSkillTag('reverseEquip')) {
                                 return 8.5 - get.equipValue(card, player) / 20;
                             }
                             else {
-                                return 8 + get.equipValue(card, player) / 20;
+                                return 8.5 + get.equipValue(card, player) / 20;
                             }
                         },
                         useful: 3,
@@ -110,7 +115,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     },
                     result: {
                         target: function (player, target, card) {
-                            return target.hujia
+                            return get.equipResult(player, target, card.name)
                         },
                     },
                 },
@@ -1120,6 +1125,9 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     }
                     'step 1'
                     trigger.target.storage.pojia.hujia += trigger.target.hujia
+                    if (trigger.target.storage.pojia.hujia >= 10 && player == game.me) {
+                        game.frAchi.addProgress('叠甲是没有前途的', 'game')
+                    }
                     trigger.target.storage.pojia.cards.push(trigger.card)
                     'step 2'
                     if (trigger.target.hujia != 0) trigger.target.changeHujia(-trigger.target.hujia)
@@ -1131,6 +1139,12 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         if (arg && arg.name == 'sha') return true;
                         return false;
                     },
+                    result: {
+                        target: function (target, player, card) {
+                            return -target.hujia / 5
+                        },
+                        player: 1,
+                    }
                 },
             },
             'pojia': {
@@ -1409,8 +1423,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 },
             },
             'yy_skill': {
-                trigger:{
-                    target:"shaBefore",
+                trigger: {
+                    target: "shaBefore",
                 },
                 forced: true,
                 filter: function (event, player) {

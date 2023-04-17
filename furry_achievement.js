@@ -125,6 +125,12 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				extra: "一刀，一刀，一刀...",
 				progress: 1
 			},
+			"当断则断": {
+				level: 3,
+				info: "使用檞界累计发动三次〖断破〗。",
+				extra: "剑光如我，斩尽牛杂！",
+				progress: 3
+			},
 		},
 		game: {
 			"叠最厚的甲": {
@@ -133,17 +139,17 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				extra: "挨最毒的打",
 				progress: 1
 			},
+			'叠甲是没有前途的': {
+				level: 6,
+				info: '使用【鸣鸿龙雀】令一名角色单次失去10点及以上的护甲。',
+				extra: '喊什么喊，我敢杀你！',
+				progress: 1
+			},
 			'IQ:400': {
 				level: 5,
 				info: '使用〖机动〗在一局游戏内，至少进行8次“谋弈”，且全部成功',
 				extra: '哈哈，猜的真准！',
 				progress: 1,
-			},
-			"当断则断": {
-				level: 6,
-				info: "使用累计发动三次〖断破〗。",
-				extra: "剑光如我，斩尽牛杂！",
-				progress: 3
 			},
 			'看我一箭穿心！': {
 				level: 3,
@@ -604,9 +610,9 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				},
 				refreshList: function () {
 					var list = Object.keys(lib.fr_achievement[game.frAchi.thisType]);
-					for(let i=0;i<list.length;i++){
-						if(this.checkFilter(list[i])) continue;
-						list.splice(i--,1);
+					for (let i = 0; i < list.length; i++) {
+						if (this.checkFilter(list[i])) continue;
+						list.splice(i--, 1);
 					}
 					var text = "";
 					var isFirst = true;

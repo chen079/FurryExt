@@ -10,7 +10,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['des:西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——奥尔斯拉特，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。']],
             //'fr_rasali':['male','shen',4,[],[]],
             //'fr_nashu':['male','shen',4,[],[]],
-            'fr_derk':['male','jin',4,['derk_ly'],[]],
+            'fr_derk': ['male', 'jin', 4, ['derk_ly'], []],
             'fr_crow': ['male', 'wei', 3, ['crow_my', 'crow_mc', 'crow_td'], []],
             'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['fobidai', 'des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
             'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], []],
@@ -121,74 +121,74 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
-            'derk_ly':{
-                locked:false,
-                mod:{
-                    cardUsable:function(card,player){
-                        var color1=get.color(card), evt=player.getLastAllUsed();
-                        if(evt&&evt.card&&color1==get.color(evt.card)) return Infinity;
+            'derk_ly': {
+                locked: false,
+                mod: {
+                    cardUsable: function (card, player) {
+                        var color1 = get.color(card), evt = player.getLastAllUsed();
+                        if (evt && evt.card && color1 == get.color(evt.card)) return Infinity;
                     },
-                    aiOrder:function(player,card,num){
-                        if(typeof card=='object'&&player.isPhaseUsing()){
-                            var evt=player.getLastAllUsed(1);
-                            var evtb=player.getLastAllUsed(2)
-                            if(evt&&evt.card&&evtb&&evtb.card&&(evtb.card.number&&evt.card.number&&((get.number(evt.card,false)+get.number(evtb.card,false))%13)==get.number(card))){
-                                return num+10;
+                    aiOrder: function (player, card, num) {
+                        if (typeof card == 'object' && player.isPhaseUsing()) {
+                            var evt = player.getLastAllUsed(1);
+                            var evtb = player.getLastAllUsed(2)
+                            if (evt && evt.card && evtb && evtb.card && (evtb.card.number && evt.card.number && ((get.number(evt.card, false) + get.number(evtb.card, false)) % 13) == get.number(card))) {
+                                return num + 10;
                             }
-                            var cards=player.getCards('hs').remove(card)
-                            var cardlist=[]
-                            for(var i=0;i<cards.length;i++){
+                            var cards = player.getCards('hs').remove(card)
+                            var cardlist = []
+                            for (var i = 0; i < cards.length; i++) {
                                 cardlist.push(get.number(cards[i]))
                             }
-                            if(evt&&evt.card){
-                                var value2=(get.number(card)+get.number(evt.card))%13
-                                value2=value2==0?13:value2
-                                if(cardlist.contains(value2)) return num+3
+                            if (evt && evt.card) {
+                                var value2 = (get.number(card) + get.number(evt.card)) % 13
+                                value2 = value2 == 0 ? 13 : value2
+                                if (cardlist.contains(value2)) return num + 3
                             }
                         }
                     },
                 },
-                trigger:{
-                    player:"useCard",
+                trigger: {
+                    player: "useCard",
                 },
-                mark:true,
-                intro:{
-                    markcount:function(storage,player){
-                        var evt=player.getLastAllUsed();
-                        var evt1=player.getLastAllUsed(1);
-                        if(evt&&evt1&&evt.card&&evt1.card){
-                            var value=(get.number(evt.card,false)+get.number(evt1.card,false))%13
-                            value=value==0?13:value
+                mark: true,
+                intro: {
+                    markcount: function (storage, player) {
+                        var evt = player.getLastAllUsed();
+                        var evt1 = player.getLastAllUsed(1);
+                        if (evt && evt1 && evt.card && evt1.card) {
+                            var value = (get.number(evt.card, false) + get.number(evt1.card, false)) % 13
+                            value = value == 0 ? 13 : value
                             return get.cardnum(value)
                         }
-                        return 
+                        return
                     },
-                    mark:function( dialog, storage, player,skill){
-                        var evt=player.getLastAllUsed();
-                        var evt1=player.getLastAllUsed(1);
-                        if(evt&&evt.card){
-                            dialog.addText('你上一张使用牌的点数为'+get.number(evt.card))
-                            dialog.addText('你使用'+get.translation(get.color(evt.card))+'的牌无次数限制')
+                    mark: function (dialog, storage, player, skill) {
+                        var evt = player.getLastAllUsed();
+                        var evt1 = player.getLastAllUsed(1);
+                        if (evt && evt.card) {
+                            dialog.addText('你上一张使用牌的点数为' + get.number(evt.card))
+                            dialog.addText('你使用' + get.translation(get.color(evt.card)) + '的牌无次数限制')
                         }
-                        if(evt&&evt.card&&evt1&&evt1.card){
-                            var value=(get.number(evt.card,false)+get.number(evt1.card,false))%13
-                            value=value==0?13:value
-                            dialog.addText('当你使用点数为'+get.cardnum(value)+'的牌时，你摸两张牌')
+                        if (evt && evt.card && evt1 && evt1.card) {
+                            var value = (get.number(evt.card, false) + get.number(evt1.card, false)) % 13
+                            value = value == 0 ? 13 : value
+                            dialog.addText('当你使用点数为' + get.cardnum(value) + '的牌时，你摸两张牌')
                         }
                     }
                 },
-                frequent:true,
-                filter:function(event,player){
-                    var evt=player.getLastAllUsed(1);
-                    if(!evt||!evt.card) return false;
-                    if(!player.isPhaseUsing()) return false;
-                    var evtb=player.getLastAllUsed(2);
-                    if(!evtb||!evtb.card) return false;
-                    var value=(get.number(evt.card,false)+get.number(evtb.card,false))%13
-                    value=value==0?13:value
-                    return typeof get.number(evt.card,false)=='number'&&typeof get.number(evtb.card,false)=='number'&&(value==get.number(event.card));
+                frequent: true,
+                filter: function (event, player) {
+                    var evt = player.getLastAllUsed(1);
+                    if (!evt || !evt.card) return false;
+                    if (!player.isPhaseUsing()) return false;
+                    var evtb = player.getLastAllUsed(2);
+                    if (!evtb || !evtb.card) return false;
+                    var value = (get.number(evt.card, false) + get.number(evtb.card, false)) % 13
+                    value = value == 0 ? 13 : value
+                    return typeof get.number(evt.card, false) == 'number' && typeof get.number(evtb.card, false) == 'number' && (value == get.number(event.card));
                 },
-                content:function(){
+                content: function () {
                     'step 0'
                     player.draw(2);
                 },
@@ -724,7 +724,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             "rewrite_bagua", "rewrite_baiyin", "rewrite_lanyinjia", "rewrite_renwang", "tengjia", 'guding', 'zhuque', "bagua", "baiyin", "lanyinjia", "renwang", "tengjia",
                             'dilu', 'jueying', 'zhuahuang', 'chitu', 'dawan', 'zixin', 'hualiu', 'muniu', 'bintieshuangji', 'wuxinghelingshan', 'wutiesuolian', 'wushuangfangtianji', 'chixueqingfeng',
                             'huxinjing', 'guilongzhanyuedao', 'heiguangkai', 'linglongshimandai', 'hongmianbaihuapao', 'qimenbagua', 'guofengyupao', 'zhaogujing', 'sanlve', 'tianjitu',
-                            'taigongyinfu', 'shufazijinguan', 'xuwangzhimian', 'fr_equip5_wxpp', 'fr_equip1_syzg','fr_equip1_mhlq','fr_equip2_yyxl'].randomGets(5)
+                            'taigongyinfu', 'shufazijinguan', 'xuwangzhimian', 'fr_equip5_wxpp', 'fr_equip1_syzg', 'fr_equip1_mhlq', 'fr_equip2_yyxl'].randomGets(5)
                         var choices = []
                         for (var i = 0; i < namelist.length; i++) {
                             choices.push(['equip', 8, namelist[i]])
@@ -861,8 +861,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player: "useCardToPlayered",
                     target: "useCardToTargeted",
                 },
-                init:function(player,stoarge){
-                    if(!player.storage.tails_jd) player.storage.tails_jd=[0,true]
+                init: function (player, stoarge) {
+                    if (!player.storage.tails_jd) player.storage.tails_jd = [0, true]
                 },
                 filter: function (event, player) {
                     if (event.player == event.target || event.targets.length != 1) return false;
@@ -908,7 +908,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     'step 3'
                     if ((event.tes && event.tes.name == 'sha' && event.mes == 'fr_card_zhuanyi') || (event.tes && event.tes.name == 'shan' && event.mes == 'fr_card_chongci')) {
-                        if(player.storage.tails_jd[1]) player.storage.tails_jd[1]=false
+                        if (player.storage.tails_jd[1]) player.storage.tails_jd[1] = false
                         game.log(player, '谋弈失败');
                         var cards = player.getCards('h');
                         if (cards.length) {
@@ -919,10 +919,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         return
                     } else {
                         game.log(player, '谋弈成功');
-                        if(player.storage.tails_jd[1]&&!game.frAchi.hasAchi('IQ:400', 'game')){
-                            player.storage.tails_jd[0]+=1
-                            if(player.storage.tails_jd[0]>=8){
-                                game.frAchi.addProgress('IQ:400', 'character')
+                        if (player.storage.tails_jd[1] && !game.frAchi.hasAchi('IQ:400', 'game') && player == game.me) {
+                            player.storage.tails_jd[0] += 1
+                            if (player.storage.tails_jd[0] >= 8) {
+                                game.frAchi.addProgress('IQ:400', 'game')
                             }
                         }
                         if (player == trigger.player) {
@@ -1061,22 +1061,22 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 content: function () {
                     'step 0'
                     trigger.player.chooseCard(Math.max(1, Math.floor(trigger.player.countCards('h') / 2)), 'h')
-                    .set('prompt','###是否对'+get.translation(trigger.source)+'发动【讨雠】？###交给' + get.translation(player) + get.cnNumber(Math.max(1, Math.floor(trigger.player.countCards('h') / 2))) + '张手牌，然后将此伤害转移给'+ get.translation(player)+'并令其摸' + get.cnNumber(player.getDamagedHp() + 1) + '张牌')
-                    .set('ai', function (card) {
-                        var player = _status.event.player
-                        var target = _status.event.target
-                        var att = get.attitude(player, target)
-                        if (trigger.num > 1 || (player.hp == 1 && player.countCards('hs', 'tao') == 0)) {
-                            return 9 - get.value(card)
-                        }
-                        if (att > 0 && player.countCards('hs', 'tao') == 0) {
-                            return 9 - get.value(card)
-                        } else if (att > 0 && player.countCards('hs', 'tao') > 0) {
-                            return 7 - get.value(card)
-                        } else {
-                            return 4 - get.value(card)
-                        }
-                    }).set('target', player)
+                        .set('prompt', '###是否对' + get.translation(trigger.source) + '发动【讨雠】？###交给' + get.translation(player) + get.cnNumber(Math.max(1, Math.floor(trigger.player.countCards('h') / 2))) + '张手牌，然后将此伤害转移给' + get.translation(player) + '并令其摸' + get.cnNumber(player.getDamagedHp() + 1) + '张牌')
+                        .set('ai', function (card) {
+                            var player = _status.event.player
+                            var target = _status.event.target
+                            var att = get.attitude(player, target)
+                            if (trigger.num > 1 || (player.hp == 1 && player.countCards('hs', 'tao') == 0)) {
+                                return 9 - get.value(card)
+                            }
+                            if (att > 0 && player.countCards('hs', 'tao') == 0) {
+                                return 9 - get.value(card)
+                            } else if (att > 0 && player.countCards('hs', 'tao') > 0) {
+                                return 7 - get.value(card)
+                            } else {
+                                return 4 - get.value(card)
+                            }
+                        }).set('target', player)
                     'step 1'
                     if (result.bool) {
                         player.gain(result.cards, trigger.player, 'giveAuto')
@@ -1600,7 +1600,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
-                    list=list.filterInD('d')
+                    list = list.filterInD('d')
                     var cards = list.slice(0, 2)
                     player.gain(cards, 'gain2')
                     player.storage.nanci_tq = cards
@@ -4307,7 +4307,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     source: "damageBegin",
                 },
                 filter: function (event, player) {
-                    return event.card&&event.card.name=='sha'&&event.getParent().name=='sha'
+                    return event.card && event.card.name == 'sha' && event.getParent().name == 'sha'
                 },
                 init: function (player) {
                     if (!player.storage.miya_hz) player.storage.miya_hz = 0
@@ -5677,7 +5677,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     trigger.player.removeSkill('jiejie_zr_2')
                     trigger.player.loseHp(3)
                     player.loseMaxHp(2)
-                    game.frAchi.addProgress('当断则断', 'character');
+                    if (!game.frAchi.hasAchi('当断则断', 'character') && player == game.me & !(player.name == 'fr_jiejie' || player.name1 == 'fr_jiejie' || player.name2 == 'fr_jiejie')) {
+                        game.frAchi.addProgress('当断则断', 'character');
+                    }
                 },
             },
             "jiejie_my": {
@@ -15618,7 +15620,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
-                    list=list.filterInD('d')
+                    list = list.filterInD('d')
                     var suit = []
                     for (var j = 0; j < list.length; j++) {
                         var cardsuit = get.suit(list[j])
@@ -15647,7 +15649,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
-                    list=list.filterInD('d')
+                    list = list.filterInD('d')
                     var suitsort = [[], [], [], []]
                     for (var j = 0; j < list.length; j++) {
                         var cardsuit = get.suit(list[j])
@@ -15820,9 +15822,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 intro: {
                     mark: function (dialog, storage, player) {
                         dialog.addText('目前可用的类型');
-                        var list=[]
-                        for(var i=0;i<player.storage.zeta_fg.length;i++){
-                            list.push(get.translation(player.storage.zeta_fg[i])+'牌')
+                        var list = []
+                        for (var i = 0; i < player.storage.zeta_fg.length; i++) {
+                            list.push(get.translation(player.storage.zeta_fg[i]) + '牌')
                         }
                         dialog.addText(list)
                     },
@@ -16660,8 +16662,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
-            'derk_ly':'连语',
-            'derk_ly_info':'当你使用牌时，若此牌的点数与你使用的前两张牌的点数和对13取余相等，你摸两张牌；锁定技，你使用与你上一张使用牌的颜色相同的牌无次数限制。',
+            'derk_ly': '连语',
+            'derk_ly_info': '当你使用牌时，若此牌的点数与你使用的前两张牌的点数和对13取余相等，你摸两张牌；锁定技，你使用与你上一张使用牌的颜色相同的牌无次数限制。',
             'crow_td': '天妒',
             'crow_td_info': '你的判定牌生效后，你可以获得此牌。',
             'crow_my': '藐意',
@@ -17350,8 +17352,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
-            'fr_derk':'黯影随行',
-            'fr_crow':'智谋慧者',
+            'fr_derk': '黯影随行',
+            'fr_crow': '智谋慧者',
             "fr_milis": '铸刃千口',
             "fr_lions": '梦魂归乡',
             "fr_xit": '言叙求生',
