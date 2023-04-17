@@ -919,10 +919,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         return
                     } else {
                         game.log(player, '谋弈成功');
-                        if (player.storage.tails_jd[1] && !game.frAchi.hasAchi('IQ:400', 'game') && player == game.me) {
+                        if (player.storage.tails_jd[1] && !game.frAchi.hasAchi('IQ:400', 'character') && player == game.me && (player.name == 'fr_tails' || player.name1 == 'fr_tails' || player.name2 == 'fr_tails')) {
                             player.storage.tails_jd[0] += 1
                             if (player.storage.tails_jd[0] >= 8) {
-                                game.frAchi.addProgress('IQ:400', 'game')
+                                game.frAchi.addProgress('IQ:400', 'character')
                             }
                         }
                         if (player == trigger.player) {
@@ -5677,7 +5677,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     trigger.player.removeSkill('jiejie_zr_2')
                     trigger.player.loseHp(3)
                     player.loseMaxHp(2)
-                    if (!game.frAchi.hasAchi('当断则断', 'character') && player == game.me & !(player.name == 'fr_jiejie' || player.name1 == 'fr_jiejie' || player.name2 == 'fr_jiejie')) {
+                    if (!game.frAchi.hasAchi('当断则断', 'character') && player == game.me && (player.name == 'fr_jiejie' || player.name1 == 'fr_jiejie' || player.name2 == 'fr_jiejie')) {
                         game.frAchi.addProgress('当断则断', 'character');
                     }
                 },

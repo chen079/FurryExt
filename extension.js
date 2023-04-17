@@ -1365,15 +1365,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             lib.perfectPair.fr_bofeng = ['fr_ciyu']
             lib.perfectPair.fr_wore = ['fr_tiers']
             lib.perfectPair.fr_miya = ['db_fr_krikt']
-            //------------------------------------------设置：成就系统------------------------------------------//
-            window.openfrAchievement = function () {
-                if (game.frAchi) {
-                    game.frAchi.openAchievementMainPage();
-                    return;
-                } else {
-                    alert("发生了点小问题，您可以重新载入本扩展试试。");
-                }
-            };
         }, precontent: function (furryPack) {
             //---------------------------------------设置：武将评级------------------------------------------//
             //乐色
@@ -1392,12 +1383,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
             var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
             game.furryrank = furryrank
-            //------------------------------------------载入初始js/css------------------------------------------//
-            lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/skin.js', null);//这一行代码加载扩展中的skin.js文件。 
-            lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/drama.js', null)
-            lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/cards.js', null);
-            lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
+            //------------------------------------------载入css------------------------------------------//
             lib.init.css(lib.assetURL + 'extension/福瑞拓展', 'extension');
+            //------------------------------------------设置：成就系统------------------------------------------//
+            window.openfrAchievement = function () {
+                if (game.frAchi) {
+                    game.frAchi.openAchievementMainPage();
+                    return;
+                } else {
+                    alert("发生了点小问题，您可以重新载入本扩展试试。");
+                }
+            };
             //成就系统
             lib.init.js(lib.assetURL + 'extension/福瑞拓展', 'furry_achievement', function () {
                 lib.init.css(lib.assetURL + 'extension/福瑞拓展', 'mainPage');
@@ -1689,6 +1685,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             };
             //------------------------------------------武将包------------------------------------------//
             if (furryPack.enable) {
+                //------------------------------------------载入初始js------------------------------------------//
+                lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/skin.js', null);//这一行代码加载扩展中的skin.js文件。 
+                lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/drama.js', null)
+                lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/cards.js', null);
+                lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
                 game.addMode('furry_lib', {
                     game: {
                         syncMenu: true,
