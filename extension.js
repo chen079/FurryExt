@@ -176,7 +176,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     var Furry_players = ['fr_derk', 'fr_crow'];
                     var Furry_redoplayers = ['fr_tails'];
                     //更新卡牌
-                    var Furry_cards = ['fr_equip1_mhlq', 'fr_equip2_yyxl'];
+                    var Furry_cards = ['fr_equip1_mhlq','fr_equip2_yyxl'];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
                     for (var i = 0; i < Furry_update.length; i++) {
                         if (Furry_update[i] == '/Character/') {
@@ -608,7 +608,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 event.resume();
             };
             //乐色
-            var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala', 'fr_derk']
+            var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala','fr_derk']
             //普通
             var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
             //珍贵
@@ -617,7 +617,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //史诗
             var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
                 "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow']
+                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala",'fr_crow']
             //传说
             var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
                 "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
@@ -628,39 +628,29 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             lib.rank.rarity.rare.addArray(furryrank[2]);
             lib.rank.rarity.epic.addArray(furryrank[3]);
             lib.rank.rarity.legend.addArray(furryrank[4]);
-            game.ggModPush = function () {
-                ggMod.junk.addArray(lib.furryrank[0])
-                ggMod.common.addArray(lib.furryrank[1])
-                ggMod.rare.addArray(lib.furryrank[2])
-                ggMod.epic.addArray(lib.furryrank[3])
-                ggMod.legend.addArray(lib.furryrank[4])
-            }
             lib.arenaReady.push(() => {
                 if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
                     setTimeout(() => {
-                        lib.groupnature.fr_g_dragon = 'fr_g_dragon'
-                        lib.groupnature.fr_g_ji = 'fr_g_ji'
+                        //势力
+                        if (lib.groupnature) {
+                            lib.groupnature.fr_g_dragon = 'fr_g_dragon'
+                            lib.groupnature.fr_g_ji = 'fr_g_ji'
+                        }
                     }, 1000)
                 }
-            })
-            //翻译牌点数
-            get.cardnum = function (num) {
-                var str
-                switch (num) {
-                    case 1: str = 'A'; break;
-                    case 11: str = 'J'; break;
-                    case 12: str = 'Q'; break;
-                    case 13: str = 'K'; break;
-                    default: str = num; break;
+                if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
+                    //武将界面
+                    setTimeout(() => {
+                        if (lib.config.exp && ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
+                            ggMod.junk.addArray(furryrank[0])
+                            ggMod.common.addArray(furryrank[1])
+                            ggMod.rare.addArray(furryrank[2])
+                            ggMod.epic.addArray(furryrank[3])
+                            ggMod.legend.addArray(furryrank[4])
+                        }
+                    }, 500)
                 }
-                return str
-            }
-            lib.element.player.getLastAllUsed = function (num) {
-                if (typeof num != 'number') num = 0;
-                var history = this.getAllHistory('useCard');
-                if (history.length <= num) return null;
-                return history[history.length - num - 1];
-            }
+            })
             // ---------------------------------------瞬发技按钮------------------------------------------//
             //按钮样式来自天牢令拓展    瞬发技参考自福瑞拓展拓展
             lib.element.player.FrShunfajiInit = function (skillname) {
