@@ -1454,7 +1454,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 });
             }, function () {
-                alert("错误：时空成就导入失败");
+                alert("错误：成就导入失败");
             });
             if (furryPack.enable) {
                 game.addMode('furry_lib', {
