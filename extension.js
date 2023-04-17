@@ -108,33 +108,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
     return {
         name: "福瑞拓展",
         editable: false, content: function (config, pack) {
-            //————成就系统————//
-            window.openfrAchievement = function () {
-                if (game.frAchi) {
-                    game.frAchi.openAchievementMainPage();
-                    return;
-                } else {
-                    alert("发生了点小问题，您可以重新载入本扩展试试。");
-                }
-            };
-            //技能作弊
-            lib.skill._xuanshi_item = {
-                trigger: {
-                    global: "gameStart",
-                },
-                forced: true,
-                silent: true,
-                filter: function (event, player) {
-                    return player == game.me;
-                },
-                content: function () {
-                    var u = lib.config.extension_福瑞拓展_xuanshi;
-                    if (u == 2) {
-                        player.addSkill('xuanshi');
-                    }
-                    player.update();
-                },
-            }
             //---------------------------------------更新说明------------------------------------------//
             //更新公告 参考十周年拓展
             lib.skill._Furry_changeLog = {
@@ -176,7 +149,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     var Furry_players = ['fr_derk', 'fr_crow'];
                     var Furry_redoplayers = ['fr_tails'];
                     //更新卡牌
-                    var Furry_cards = ['fr_equip1_mhlq','fr_equip2_yyxl'];
+                    var Furry_cards = ['fr_equip1_mhlq', 'fr_equip2_yyxl'];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
                     for (var i = 0; i < Furry_update.length; i++) {
                         if (Furry_update[i] == '/Character/') {
@@ -219,16 +192,106 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     });
                 },
             };
-            /**
-          * 自用选择一定范围内数字的事件，目前为初版
-          * @function chooseNumber
-          * @author Rintim <rintim@foxmail.com>
-          * @copyright BSD-2-Clause
-          * @param {number} min - 能选择的最小值
-          * @param {number} max - 能选择的最大值
-          * @param {number | string | object | boolean | function(number): boolean} options - 其余设置
-          * @returns {Lib.element.Event}
-        */
+            //---------------------------------------定义新属性伤害------------------------------------------//
+            lib.translate.mad = '<font color=#d17367>狂</font>';
+            lib.nature.add('mad');
+            lib.linked.add('mad');
+            lib.skill._define_damage = {
+                trigger: {
+                    player: "damageAfter",
+                },
+                forced: true,
+                priority: Infinity,
+                filter: function (event, player) {
+                    if (event.nature) return true;
+                    return false;
+                },
+                content: function () {
+                    'step 0'
+                    if (trigger.nature == "mad") {
+                        trigger.player.addMark('fr_mad')
+                    }
+                    'step 1'
+                    trigger.player.update();
+                },
+            }
+            lib.skill.fr_mad = {
+                forced: true,
+                trigger: {
+                    player: "phaseJieshuBegin",
+                },
+                filter: function (event, player) {
+                    return player.countMark('fr_mad') > 0
+                },
+                marktext: '疯狂',
+                charlotte: true,
+                unique: true,
+                content: function () {
+                    var num = player.countMark('fr_mad')
+                    player.randomDiscard(num, 'he', true);
+                },
+                mark: true,
+                intro: {
+                    name: "疯狂",
+                    mark: function (dialog, storage, player) {
+                        dialog.addText("结束阶段，你随机弃置" + get.cnNumber(player.countMark('fr_mad')) + "张牌；当你回复体力后，你移除此技能。");
+                    },
+                },
+                group: "fr_mad_remove",
+                subSkill: {
+                    remove: {
+                        trigger: {
+                            player: "recoverEnd",
+                        },
+                        forced: true,
+                        content: function () {
+                            var num = player.countMark('fr_mad')
+                            player.removeMark('fr_mad', num)
+                            player.unmarkSkill('fr_mad')
+                        }
+                    }
+                },
+                ai: {
+                    result: {
+                        player: -1
+                    }
+                }
+            }
+            //技能作弊
+            lib.skill._xuanshi_item = {
+                trigger: {
+                    global: "gameStart",
+                },
+                forced: true,
+                silent: true,
+                filter: function (event, player) {
+                    return player == game.me;
+                },
+                content: function () {
+                    var u = lib.config.extension_福瑞拓展_xuanshi;
+                    if (u == 2) {
+                        player.addSkill('xuanshi');
+                    }
+                    player.update();
+                },
+            }
+            //————成就系统————//
+            window.openfrAchievement = function () {
+                if (game.frAchi) {
+                    game.frAchi.openAchievementMainPage();
+                    return;
+                } else {
+                    alert("发生了点小问题，您可以重新载入本扩展试试。");
+                }
+            };
+            lib.arenaReady.push(() => {
+                if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
+                    setTimeout(() => {
+                        lib.groupnature.fr_g_dragon = 'fr_g_dragon'
+                        lib.groupnature.fr_g_ji = 'fr_g_ji'
+                    }, 1000)
+                }
+            })
             lib.element.player.chooseNumber = function chooseNumber(min, max, ...options) {
                 let next = game.createEvent("chooseNumber");
                 let begin, prompt, prompt2, transform = {}, forced, filter;
@@ -273,14 +336,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
                 return next;
             };
-
-            /**
-              * 自用选择一定范围内数字的事件，目前为初版
-              * @function chooseNumber
-              * @author Rintim <rintim@foxmail.com>
-              * @copyright BSD-2-Clause
-              * @returns {void}
-            */
             lib.element.content.chooseNumber = function chooseNumberContent() {
                 "step 0"
                 if (event.isMine()) {
@@ -607,50 +662,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 event.resume();
             };
-            //乐色
-            var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala','fr_derk']
-            //普通
-            var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
-            //珍贵
-            var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_hars"
-                , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
-            //史诗
-            var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
-                "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala",'fr_crow']
-            //传说
-            var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
-                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
-            var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
-            lib.furryrank = furryrank
-            lib.rank.rarity.junk.addArray(furryrank[0]);
-            lib.rank.rarity.common.addArray(furryrank[1]);
-            lib.rank.rarity.rare.addArray(furryrank[2]);
-            lib.rank.rarity.epic.addArray(furryrank[3]);
-            lib.rank.rarity.legend.addArray(furryrank[4]);
-            lib.arenaReady.push(() => {
-                if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
-                    setTimeout(() => {
-                        //势力
-                        if (lib.groupnature) {
-                            lib.groupnature.fr_g_dragon = 'fr_g_dragon'
-                            lib.groupnature.fr_g_ji = 'fr_g_ji'
-                        }
-                    }, 1000)
-                }
-                if (lib.config.extensions && lib.config.extensions.contains('武将界面') && lib.config['extension_武将界面_enable']) {
-                    //武将界面
-                    setTimeout(() => {
-                        if (lib.config.exp && ggMod.junk && ggMod.rare && ggMod.epic && ggMod.legend) {
-                            ggMod.junk.addArray(furryrank[0])
-                            ggMod.common.addArray(furryrank[1])
-                            ggMod.rare.addArray(furryrank[2])
-                            ggMod.epic.addArray(furryrank[3])
-                            ggMod.legend.addArray(furryrank[4])
-                        }
-                    }, 500)
-                }
-            })
             // ---------------------------------------瞬发技按钮------------------------------------------//
             //按钮样式来自天牢令拓展    瞬发技参考自福瑞拓展拓展
             lib.element.player.FrShunfajiInit = function (skillname) {
@@ -704,6 +715,90 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     });
                 }
             };
+            //互变
+            lib.skill.hubian = {
+                init: function (player) {
+                    player.storage.hubian = false
+                },
+                charlotte: true,
+                forced: true,
+                onremove: true,
+                onunmark: true,
+                marktext: "互变",
+                intro: {
+                    name: "互变",
+                    mark: function (dialog, storage, player) {
+                        dialog.addText('当前你处于' + (player.storage.hubian ? '圣咏' : '暗涌') + '状态')
+                    }
+                },
+            };
+            lib.element.player.changeHubian = function () {
+                if (!this.hasSkill('hubian')) this.addSkill('hubian');
+                this.storage.hubian = !this.storage.hubian;
+                this.markSkill('hubian');
+                game.broadcastAll(function (player) {
+                    player.$changeHubian();
+                }, this);
+                game.log(this, '改变了其互变状态，当前状态为：', '#g' + (this.storage.hubian ? '圣咏' : '暗涌'))
+            }
+            lib.element.player.$changeHubian = function () {
+                var mark = this.marks.hubian, player = this
+                if (mark) {
+                    if (!player.storage.hubian) {
+                        mark.firstChild.innerHTML = "暗涌"
+                    } else {
+                        mark.firstChild.innerHTML = "圣咏"
+                    }
+                }
+            }
+            //------------------------------------------转韵-----------------//
+            lib.element.player.changeYun = function (skill) {
+                //若导入的player.skill为平，则改为仄
+                if (this[skill] && this[skill] == '平') {
+                    this[skill] = '仄'
+                } else {
+                    //否则改为平
+                    this[skill] = '平'
+                }
+                //转韵后刷新skill的技能
+                if (this.getStat('skill')[skill]) delete this.getStat('skill')[skill];
+                //发出记录
+                game.log(this, '#g【', '#g' + get.translation(skill), '#g】', '的韵律转为' + this[skill]);
+            };
+            lib.element.player.$changeYun = function (skill) {
+                var mark = this.marks[skill];
+                if (mark) {
+                    if (mark.firstChild.reversed) {
+                        mark.firstChild.reversed = false;
+                        mark.firstChild.style.transform = 'none';
+                    }
+                    else {
+                        mark.firstChild.reversed = true;
+                        mark.firstChild.style.transform = 'rotate(180deg)';
+                    }
+                }
+            }
+            //乐色
+            var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala', 'fr_derk']
+            //普通
+            var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
+            //珍贵
+            var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_hars"
+                , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
+            //史诗
+            var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
+                "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
+                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow']
+            //传说
+            var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
+                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
+            var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
+            game.furryrank = furryrank
+            lib.rank.rarity.junk.addArray(furryjunk);
+            lib.rank.rarity.common.addArray(furrycommon);
+            lib.rank.rarity.rare.addArray(furryrare);
+            lib.rank.rarity.epic.addArray(furryepic);
+            lib.rank.rarity.legend.addArray(furrylegend);
             //---------------------------------------显示手牌上限------------------------------------------//
             if (config.ShowmaxHandcard) {
                 lib.skill._ShowmaxHandcard = {
@@ -873,71 +968,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
-                }
-            }
-            //---------------------------------------定义新属性伤害------------------------------------------//
-            lib.translate.mad = '<font color=#d17367>狂</font>';
-            lib.nature.add('mad');
-            lib.linked.add('mad');
-            lib.skill._define_damage = {
-                trigger: {
-                    player: "damageAfter",
-                },
-                forced: true,
-                priority: Infinity,
-                filter: function (event, player) {
-                    if (event.nature) return true;
-                    return false;
-                },
-                content: function () {
-                    'step 0'
-                    if (trigger.nature == "mad") {
-                        trigger.player.addMark('fr_mad')
-                    }
-                    'step 1'
-                    trigger.player.update();
-                },
-            }
-            lib.skill.fr_mad = {
-                forced: true,
-                trigger: {
-                    player: "phaseJieshuBegin",
-                },
-                filter: function (event, player) {
-                    return player.countMark('fr_mad') > 0
-                },
-                marktext: '疯狂',
-                charlotte: true,
-                unique: true,
-                content: function () {
-                    var num = player.countMark('fr_mad')
-                    player.randomDiscard(num, 'he', true);
-                },
-                mark: true,
-                intro: {
-                    name: "疯狂",
-                    mark: function (dialog, storage, player) {
-                        dialog.addText("结束阶段，你随机弃置" + get.cnNumber(player.countMark('fr_mad')) + "张牌；当你回复体力后，你移除此技能。");
-                    },
-                },
-                group: "fr_mad_remove",
-                subSkill: {
-                    remove: {
-                        trigger: {
-                            player: "recoverEnd",
-                        },
-                        forced: true,
-                        content: function () {
-                            var num = player.countMark('fr_mad')
-                            player.removeMark('fr_mad', num)
-                            player.unmarkSkill('fr_mad')
-                        }
-                    }
-                },
-                ai: {
-                    result: {
-                        player: -1
-                    }
                 }
             }
             if (config.furry_onlineUpdate2) {
@@ -1118,27 +1148,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
-            //一轮结束
-            lib.skill._roundEnd = {
-                charlotte: true,
-                ruleSkill: true,
-                trigger: {
-                    player: ['phaseAfter', 'phaseCancelled', 'phaseSkipped']
-                },//伪·一轮的结束
-                filter: function (event, player) {
-                    return !event.skill && player.next == _status.roundStart;
-                },
-                forceDie: true,
-                direct: true,
-                priority: -Infinity,
-                lastDo: true,
-                content: function () {
-                    'step 0'
-                    event.trigger('roundEnd');//End时机常用于技能结算
-                    'step 1'
-                    event.trigger('roundAfter');//After时机常用于效果清除
-                },
-            }
             lib.element.player.setfrAvatar = function (name, name2, video, fakeme) {
                 var node
                 if (this.name2 == name) {
@@ -1165,69 +1174,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     game.broadcast(function (player, name, name2) {
                         player.setfrAvatar(name, name2, false)
                     }, this, name, name2)
-                }
-            }
-            //互变
-            lib.skill.hubian = {
-                init: function (player) {
-                    player.storage.hubian = false
-                },
-                charlotte: true,
-                forced: true,
-                onremove: true,
-                onunmark: true,
-                marktext: "互变",
-                intro: {
-                    name: "互变",
-                    mark: function (dialog, storage, player) {
-                        dialog.addText('当前你处于' + (player.storage.hubian ? '圣咏' : '暗涌') + '状态')
-                    }
-                },
-            };
-            lib.element.player.changeHubian = function () {
-                if (!this.hasSkill('hubian')) this.addSkill('hubian');
-                this.storage.hubian = !this.storage.hubian;
-                this.markSkill('hubian');
-                game.broadcastAll(function (player) {
-                    player.$changeHubian();
-                }, this);
-                game.log(this, '改变了其互变状态，当前状态为：', '#g' + (this.storage.hubian ? '圣咏' : '暗涌'))
-            }
-            lib.element.player.$changeHubian = function () {
-                var mark = this.marks.hubian, player = this
-                if (mark) {
-                    if (!player.storage.hubian) {
-                        mark.firstChild.innerHTML = "暗涌"
-                    } else {
-                        mark.firstChild.innerHTML = "圣咏"
-                    }
-                }
-            }
-            //------------------------------------------转韵-----------------//
-            lib.element.player.changeYun = function (skill) {
-                //若导入的player.skill为平，则改为仄
-                if (this[skill] && this[skill] == '平') {
-                    this[skill] = '仄'
-                } else {
-                    //否则改为平
-                    this[skill] = '平'
-                }
-                //转韵后刷新skill的技能
-                if (this.getStat('skill')[skill]) delete this.getStat('skill')[skill];
-                //发出记录
-                game.log(this, '#g【', '#g' + get.translation(skill), '#g】', '的韵律转为' + this[skill]);
-            };
-            lib.element.player.$changeYun = function (skill) {
-                var mark = this.marks[skill];
-                if (mark) {
-                    if (mark.firstChild.reversed) {
-                        mark.firstChild.reversed = false;
-                        mark.firstChild.style.transform = 'none';
-                    }
-                    else {
-                        mark.firstChild.reversed = true;
-                        mark.firstChild.style.transform = 'rotate(180deg)';
-                    }
                 }
             }
             //------------------------------------------AI禁将------------------------------------------//
@@ -2647,11 +2593,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "name": "自动更新",
                 "intro": "游戏开始后会自动检查福瑞拓展是否为最新版",
                 "init": true,
-            },
-            "exp": {
-                "name": "实验性内容",
-                "intro": "开启测试性内容，若不知道有什么用，请勿打开。",
-                "init": false,
             },
             "acknowledgments": {
                 "name": "鸣谢清单",

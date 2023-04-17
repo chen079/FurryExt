@@ -269,15 +269,15 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			if (furryPack) {
 				var firstWinSet = function (name) {
 					let level = 3;
-					if (lib.furryrank[0].contains(name)) {
+					if (game.furryrank[0].contains(name)) {
 						level = 5
-					} else if (lib.furryrank[1].contains(name)) {
+					} else if (game.furryrank[1].contains(name)) {
 						level = 4
-					} else if (lib.furryrank[2].contains(name)) {
+					} else if (game.furryrank[2].contains(name)) {
 						level = 3
-					} else if (lib.furryrank[3].contains(name)) {
+					} else if (game.furryrank[3].contains(name)) {
 						level = 2
-					} else if (lib.furryrank[4].contains(name)) {
+					} else if (game.furryrank[4].contains(name)) {
 						level = 1
 					}
 					lib.fr_achievement['character'][lib.characterTitle[name]] = {
