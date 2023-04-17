@@ -89,7 +89,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                                 return 8.5 + get.equipValue(card, player) / 20;
                             }
                         },
-                        useful: 3,
+                        useful: 2,
                         value: function (card, player, index, method) {
                             if (player.isDisabled(get.subtype(card))) return 0.01;
                             var value = 0;
