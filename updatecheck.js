@@ -33,6 +33,8 @@
 		'image/card/pretty/fr_equip1_syzg.bmp',
 		'image/card/pretty/fr_equip1_syzg.webp',
 		'image/card/pretty/fr_equip1_syzg.jpg',
+		'image/card/fr_card_chongci.png',
+		'image/card/fr_card_zhuanyi.png',
 		'mainPage.css',
 		'achievement.css',
 		'furry_achievement.js',
