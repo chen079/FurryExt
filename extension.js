@@ -176,7 +176,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     var Furry_players = ['fr_derk', 'fr_crow'];
                     var Furry_redoplayers = ['fr_tails'];
                     //更新卡牌
-                    var Furry_cards = ['fr_equip1_mhlq','fr_equip2_yyxl'];
+                    var Furry_cards = ['fr_equip1_mhlq', 'fr_equip2_yyxl'];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
                     for (var i = 0; i < Furry_update.length; i++) {
                         if (Furry_update[i] == '/Character/') {
@@ -607,27 +607,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 event.resume();
             };
-            //乐色
-            var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala','fr_derk']
-            //普通
-            var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
-            //珍贵
-            var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_hars"
-                , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
-            //史诗
-            var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
-                "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala",'fr_crow']
-            //传说
-            var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
-                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
-            var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
-            lib.furryrank = furryrank
-            lib.rank.rarity.junk.addArray(furryrank[0]);
-            lib.rank.rarity.common.addArray(furryrank[1]);
-            lib.rank.rarity.rare.addArray(furryrank[2]);
-            lib.rank.rarity.epic.addArray(furryrank[3]);
-            lib.rank.rarity.legend.addArray(furryrank[4]);
+            lib.rank.rarity.junk.addArray(lib.furryrank[0]);
+            lib.rank.rarity.common.addArray(lib.furryrank[1]);
+            lib.rank.rarity.rare.addArray(lib.furryrank[2]);
+            lib.rank.rarity.epic.addArray(lib.furryrank[3]);
+            lib.rank.rarity.legend.addArray(lib.furryrank[4]);
             game.ggModPush = function () {
                 ggMod.junk.addArray(lib.furryrank[0])
                 ggMod.common.addArray(lib.furryrank[1])
@@ -1436,6 +1420,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             lib.perfectPair.fr_miya = ['db_fr_krikt']
         }, precontent: function (furryPack) {
             //成就系统
+
             lib.init.js(lib.assetURL + 'extension/福瑞拓展', 'furry_achievement', function () {
                 lib.init.css(lib.assetURL + 'extension/福瑞拓展', 'mainPage');
                 lib.init.css(lib.assetURL + 'extension/福瑞拓展', 'achievement');
@@ -1457,6 +1442,22 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 alert("错误：成就导入失败");
             });
             if (furryPack.enable) {
+                //乐色
+                var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala', 'fr_derk']
+                //普通
+                var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
+                //珍贵
+                var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_hars"
+                    , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
+                //史诗
+                var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
+                    "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
+                    , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow']
+                //传说
+                var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
+                    "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium']
+                var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
+                lib.furryrank = furryrank
                 game.addMode('furry_lib', {
                     game: {
                         syncMenu: true,

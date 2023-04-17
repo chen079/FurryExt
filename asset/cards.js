@@ -5,6 +5,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         connect: true,//卡包是否可以联机
         card: {
             'fr_equip2_yyxl': {
+                image: 'ext:福瑞拓展/image/card/fr_equip1_yyxl.png',
                 fullskin: true,
                 type: "equip",
                 subtype: "equip2",
