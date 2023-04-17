@@ -829,7 +829,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (history.length <= num) return null;
                 return history[history.length - num - 1];
             }
-            // ---------------------------------------自定义函数：获取花色-----------------------------------------//
+            // ---------------------------------------自定义函数：获取花色数量-----------------------------------------//
             lib.element.player.getSuitNum = function (position) {
                 var player = this;
                 if (!position) position = 'h';
@@ -1629,6 +1629,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 return audio;
             };
             //------------------------------------------自定义get函数------------------------------------------//
+            get.cardnum=function(num){
+                var cardnum
+                switch(num){
+                    case 11:cardnum='J';break;
+                    case 12:cardnum='Q';break;
+                    case 13:cardnum='K';break;
+                    case 1:cardnum='A';break;
+                    default:cardnum=num
+                }
+                return cardnum
+            }
             get.FrskillTips = function (tipname, id) {
                 const frtip = ui.create.div('.Fr-frtips', document.body);
                 frtip.style.zIndex = 998;
