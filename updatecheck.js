@@ -48,7 +48,6 @@
 		'image/achievement/filter_optional_on.png',
 		'image/achievement/hide_done.png',
 		'image/achievement/isGained.png',
-		'image/achievement/isGained2.png',
 		'image/achievement/isNew.png',
 		'image/achievement/splitLine.png',
 		'image/achievement/star1.png',
