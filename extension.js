@@ -823,7 +823,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
             }
             // ---------------------------------------自定义函数：获取最后一张手牌-----------------------------------------//
-            lib.element.player.getLastUsed = function (num) {
+            lib.element.player.getLastAllUsed = function (num) {
                 if (typeof num != 'number') num = 0;
                 var history = this.getAllHistory('useCard');
                 if (history.length <= num) return null;
