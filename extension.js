@@ -153,8 +153,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '修正实验模式的bug',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_derk', 'fr_crow'];
-                    var Furry_redoplayers = ['fr_tails'];
+                    var Furry_players = ['fr_derk', 'fr_crow','fr_zhan'];
+                    var Furry_redoplayers = ['fr_tails','fr_yinhu'];
                     //更新卡牌
                     var Furry_cards = ['fr_equip1_mhlq', 'fr_equip2_yyxl'];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');

@@ -7,6 +7,19 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             'fr_equip2_yyxl': {
                 image: 'ext:福瑞拓展/image/card/fr_equip1_yyxl.png',
                 fullskin: true,
+                loseDelay:false,
+                onLose:function(){
+                    var next=game.createEvent('yyxl_draw');
+                    event.next.remove(next);
+                    var evt=event.getParent();
+                    if(evt.getlx===false) evt=evt.getParent();
+                    evt.after.push(next);
+                    next.player=player;
+                    next.setContent(function(){
+                        if(player.isDamaged()) player.logSkill('yy_skill');
+                        player.draw(2);
+                    });
+                },
                 type: "equip",
                 subtype: "equip2",
                 skills: ["yy_skill"],
@@ -207,7 +220,10 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     value: [7.5, 1],
                     useful: [5, 1],
                     result: {
-                        target: -1
+                        target: function (player, target) {
+                            if(target==_status.currentPhase) return 1
+                            return -1
+                        },
                     },
                     order: 1.2,
                 },
@@ -1425,11 +1441,11 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             },
             'yy_skill': {
                 trigger: {
-                    target: "shaBefore",
+                    target: "useCardToPlayer",
                 },
                 forced: true,
                 filter: function (event, player) {
-                    return event.player != player;
+                    return event.player != player && event.card.name == 'sha';
                 },
                 content: function () {
                     trigger.player.addTempSkill('fengyin', 'shaAfter')
@@ -1463,13 +1479,13 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         translate: {
             //技能
             'mhlq_skill': '鸣鸿龙雀',
-            'mhlq_skill_info': '锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害。',
+            'mhlq_skill_info': '锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害（时机同青釭剑）。',
             'card_djlj': '弹尽粮绝',
             'card_djlj_info': '锁定技，①摸牌阶段额定摸牌数-1，②使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
             "card_sx": "嗜血",
             "card_sx_info": "出牌阶段结束后，若你于此阶段杀死过其他角色，你摸三张牌并额外执行一个出牌阶段。",
             'yy_skill': '影夜项链',
-            'yy_skill_info': '锁定技，当你成为其他角色【杀】的目标前，你令该角色非锁定技失效直到此【杀】结算完毕（时机同青钢剑）。',
+            'yy_skill_info': '锁定技。①其他角色指定你为【杀】的目标时，你令该角色非锁定技失效直到此【杀】结算完毕。②当你失去装备区内的【影夜项链】时，你摸两张牌。',
             "sy_skill": "霜月之弓",
             "sy_skill_info": "当你或你攻击范围内的角色受到一名其他角色造成的非冰属性伤害后，你可以弃置两张牌，然后对伤害来源造成1点冰属性伤害。",
             "wxpp_skill": "演奏",
@@ -1477,9 +1493,9 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
 
             //卡牌
             'fr_equip2_yyxl': '影夜项链',
-            'fr_equip2_yyxl_info': '锁定技，当你成为其他角色【杀】的目标前，你令该角色非锁定技失效直到此【杀】结算完毕。',
+            'fr_equip2_yyxl_info': '锁定技。①其他角色指定你为【杀】的目标时，你令该角色非锁定技失效直到此【杀】结算完毕。②当你失去装备区内的【影夜项链】时，你摸两张牌。',
             'fr_equip1_mhlq': '鸣鸿龙雀',
-            'fr_equip1_mhlq_info': '锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害（时机同青钢剑）。',
+            'fr_equip1_mhlq_info': '锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害（时机同青釭剑）。',
             'pojia': '破甲',
             'fr_card_chongci': '冲刺',
             'fr_card_zhuanyi': '转移',

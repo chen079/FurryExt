@@ -6,7 +6,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connect: true,//该武将包是否可以联机（必填）
         character: {
             'fr_tails': ['male', 'qun', 3, ['tails_jd', 'tails_qx'], []],
-            //'fr_zhan':['male','qun',3,[],[]],
+            'fr_zhan': ['male', 'qun', 3, ['zhan_sf', 'zhan_jf'], []],
             'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['des:西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——奥尔斯拉特，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。']],
             //'fr_rasali':['male','shen',4,[],[]],
             //'fr_nashu':['male','shen',4,[],[]],
@@ -121,6 +121,184 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'zhan_sf': {
+                trigger: {
+                    player: 'damageEnd'
+                },
+                forced: true,
+                init: function (player, skill) {
+                    player.addSkillBlocker(skill);
+                },
+                onremove: function (player, skill) {
+                    player.removeSkillBlocker(skill);
+                },
+                charlotte: true,
+                locked: true,
+                skillBlocker: function (skill, player) {
+                    return skill != 'zhan_sf' && skill != 'zhan_jf' && !lib.skill[skill].charlotte;
+                },
+                content: function () {
+                    'step 0'
+                    event.count = trigger.num;
+                    'step 1'
+                    event.count--;
+                    var choiceList = ['获得一张指定类型的牌'];
+                    if (player.canMoveCard()) choiceList.push('移动场上的一张牌');
+                    player.chooseControl('cancel2').set('choiceList', choiceList).set('prompt', get.prompt('zhan_sf')).set('ai', function () {
+                        var player = _status.event.player;
+                        if (player.canMoveCard(true)) return 1;
+                        return 0;
+                    });
+                    'step 2'
+                    if (result.control == 'cancel2') event.finish();
+                    else {
+                        player.logSkill('zhan_sf');
+                        player.draw();
+                        if (result.index == 0) {
+                            player.chooseControl('basic', 'trick', 'equip').set('prompt', '选择获得一种类型的牌').set('ai', function () {
+                                var player = _status.event.player;
+                                if (player.hp <= 3 && !player.countCards('h', { name: ['shan', 'tao'] })) return 'basic';
+                                if (player.countCards('he', { type: 'equip' }) < 2) return 'equip';
+                                return 'trick';
+                            });
+                        }
+                        else {
+                            player.moveCard(true);
+                            event.goto(4);
+                        }
+                    }
+                    'step 3'
+                    var card = get.cardPile2(function (card) {
+                        return get.type(card, 'trick') == result.control;
+                    });
+                    if (card) player.gain(card, 'gain2', 'log');
+                    'step 4'
+                    if (event.count > 0) event.goto(1);
+                },
+                group: 'zhan_sf_1',
+                subSkill: {
+                    1: {
+                        trigger: {
+                            player: "damageAfter"
+                        },
+                        forced: true,
+                        content: function () {
+                            player.recover()
+                        }
+                    }
+                },
+                ai: {
+                    maixie: true,
+                    "maixie_hp": true,
+                    effect: {
+                        target: function (card, player, target) {
+                            if (get.tag(card, 'damage')) {
+                                if (player.hasSkillTag('jueqing', false, target)) return [1, -2];
+                                if (!target.hasFriend()) return;
+                                var num = 1;
+                                if (get.attitude(player, target) > 0) {
+                                    if (player.needsToDiscard()) {
+                                        num = 0.7;
+                                    }
+                                    else {
+                                        num = 0.5;
+                                    }
+                                }
+                                if (target.hp >= 4) return [1, num * 2];
+                                if (target.hp == 3) return [1, num * 1.5];
+                                if (target.hp == 2) return [1, num * 0.5];
+                            }
+                        },
+                    },
+                },
+            },
+            'zhan_jf': {
+                trigger: {
+                    player: 'phaseZhunbeiBegin'
+                },
+                skillAnimation: true,
+                animationColor: "orange",
+                init: function (player) {
+                    if (!player.storage.zhan_jf) player.storage.zhan_jf = 0
+                },
+                filter: function (event, player) {
+                    return player.storage.zhan_jf >= 2 * player.hp
+                },
+                juexingji: true,
+                forced: true,
+                mark: true,
+                intro: {
+                    content: "当前累计受到了$点伤害",
+                },
+                content: function () {
+                    'step 0'
+                    player.awakenSkill('zhan_jf');
+                    player.gainMaxHp();
+                    player.recover()
+                    player.removeSkill('zhan_sf')
+                    'step 1'
+                    player.addSkill('zhan_nj')
+                    player.addSkill('zhan_zb')
+                },
+                derivation: ["zhan_jn", "zhan_zb"],
+                group: "zhan_jf_count",
+                subSkill: {
+                    count: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: "damageBegin4",
+                        },
+                        content: function () {
+                            player.storage.zhan_jf += trigger.num
+                        },
+                        sub: true,
+                    },
+                },
+            },
+            'zhan_jn': {
+                trigger: {
+                    player: 'phaseZhunbeiBegin'
+                },
+                filter: function (event, player) {
+                    return player.maxHp < 10
+                },
+                direct: true,
+                content: function () {
+                    player.gainMaxHp()
+                    player.recover()
+                }
+            },
+            'zhan_zb': {
+                trigger: {
+                    global: 'phaseBegin'
+                },
+                filter: function (event, player) {
+                    return event.player.hp < player.maxHp && event.player != player
+                },
+                check: function (event, player) {
+                    return get.attitude(player, event.player) < 0
+                },
+                content: function () {
+                    'step 0'
+                    if (player.maxHp > 1) {
+                        player.chooseNumber(1, player.maxHp, player.maxHp)
+                            .set("prompt", get.prompt(event.name))
+                            .set("prompt2", get.translation(`${event.name}_info`))
+                            .set("ai", function (player, _event) {
+                                return Math.min(trigger.player.hp - 1, player.maxHp - 1)
+                            })
+                            .set("goon", player.maxHp);
+                    } else {
+                        player.chooseBool(get.prompt2(event.name)).set("ai", (..._args) => true)
+                    }
+                    'step 1'
+                    if (result.bool) {
+                        player.loseMaxHp(result.choice || 1)
+                        trigger.player.damage((result.choice || 1), player, 'thunder')
+                    }
+                }
+            },
             'derk_ly': {
                 locked: false,
                 mod: {
@@ -11504,9 +11682,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 intro: {
                     content: function (event, player) {
                         if (player.hasSkill('yinhu_xr')) {
-                            return "摸牌阶段，你多摸两张牌；出牌阶段，你可以额外使用一张【杀】且你的【杀】无距离限制。"
+                            return "摸牌阶段，你多摸两张牌；出牌阶段，你可以额外使用一张【杀】且你的【杀】无距离限制；你的判定会朝着有利的方向进行。"
                         }
-                        return "摸牌阶段，你多摸一张牌；出牌阶段，你可以额外使用一张【杀】且你的【杀】无距离限制。"
+                        return "摸牌阶段，你多摸一张牌；出牌阶段，你可以额外使用一张【杀】且你的【杀】无距离限制；你的判定会朝着有利的方向进行。"
                     },
                 },
                 trigger: {
@@ -11523,7 +11701,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     trigger.num += 1;
                 },
-                group: "fr_zhufu_1",
+                group: ["fr_zhufu_1", "fr_zhufu_2"],
                 ai: {
                     threaten: 1.5,
                 },
@@ -11541,6 +11719,33 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         sub: true,
                     },
+                    '2': {
+                        trigger: {
+                            player: "judgeBegin",
+                        },
+                        forced: true,
+                        charlotte: true,
+                        silent: true,
+                        filter: function (event, player) {
+                            return !event.directresult;
+                        },
+                        content: function () {
+                            var tempcard = false, temp = -Infinity;
+                            for (var i = 0; i < ui.cardPile.childElementCount; i++) {
+                                var card = ui.cardPile.childNodes[i];
+                                var temp2 = trigger.judge(card);
+                                if (temp2 > temp) {
+                                    tempcard = card;
+                                    temp = temp2;
+                                }
+                            }
+                            if (tempcard) trigger.directresult = tempcard;
+                        },
+                        ai: {
+                            luckyStar: true,
+                        },
+                        popup: false,
+                    }
                 },
             },
             "yinhu_xr": {
@@ -11557,7 +11762,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     "step 0"
                     player.chooseTarget([1, Math.floor(game.countPlayer() / 2)], "令至多" + get.translation(Math.floor(game.countPlayer() / 2)) + "名角色获得〖祝福〗", false)
                         .set('ai', function (target) {
-                            return get.attitude(_status.event.player, target)
+                            return get.attitude(_status.event.player, target) * (1 + target.countCards('j'))
                         })
                     "step 1"
                     if (result.bool) {
@@ -16662,6 +16867,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'zhan_sf': '束缚',
+            'zhan_sf_info': '锁定技。①当你受到1点伤害后，你可以选择一项并摸一张牌：获得牌堆里你选择的类型的一张牌，或移动场上的一张牌。②你除了〖束缚〗和〖解放〗外的技能无效。③当你受到伤害结算完毕后，你回复1点体力。',
+            'zhan_jf': '解放',
+            'zhan_jf_info': '觉醒技，准备阶段，若你累计受到国你体力上限两倍的伤害，你增加1点体力上限并回复1点体力，然后失去〖束缚〗并获得〖聚能〗与〖震爆〗。',
+            'zhan_jn': '聚能',
+            'zhan_jn_info': '准备阶段，若你的体力上限小于10，你增加1点体力上限并回复1点体力。',
+            'zhan_zb': '震爆',
+            'zhan_zb_info': '一名角色的回合开始时，若你的体力上限大于该角色体力值，你可以失去任意点体力上限并对该角色造成等量的雷电伤害。',
             'derk_ly': '连语',
             'derk_ly_info': '当你使用牌时，若此牌的点数与你使用的前两张牌的点数和对13取余（若整除则视为K）相等，你摸两张牌；锁定技，你使用与你上一张使用牌的颜色相同的牌无次数限制。',
             'crow_td': '天妒',
@@ -17059,7 +17272,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "glit_sx": "歃血",
             "glit_sx_info": "当你于回合外受到伤害/流失体力/回复体力/失去牌/获得牌/横置/翻面后，你进行一次判定，若结果为红色，你可以令一名其他角色受到等量伤害/流失等量体力/回复等量体力/弃置等量的牌/摸等量的牌/横置/翻面。",
             "fr_zhufu": "祝福",
-            "fr_zhufu_info": "锁定技。摸牌阶段，你多摸一张牌，若你拥有〖祥瑞〗，则改为两张；出牌阶段，你可以额外使用一张【杀】且你的【杀】无距离限制。",
+            "fr_zhufu_info": "锁定技。摸牌阶段，你多摸一张牌，若你拥有〖祥瑞〗，则改为两张；出牌阶段，你可以额外使用一张【杀】且你的【杀】无距离限制；你的判定会朝着对你有利的方向倾斜。",
             "yinhu_xr": "祥瑞",
             "yinhu_xr_info": "一轮游戏开始时，你可以选择至多X名角色并令其获得〖祝福〗直到其回合结束（X为场上角色数的一半并向下取整）。",
             "yinhu_zd": "祭蹈",
