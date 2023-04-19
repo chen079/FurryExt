@@ -1283,6 +1283,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             player: "phaseDrawBegin2",
                         },
+                        equipSkill:true,
                         direct: true,
                         filter: function (event, player) {
                             return !event.numFixed;
@@ -1298,6 +1299,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     shang: {
+                        equipSkill:true,
                         onremove: function (player) {
                             player.unmarkSkill('wxpp_skill')
                         },
@@ -1308,6 +1310,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     jue: {
+                        equipSkill:true,
                         trigger: {
                             player: "phaseDiscardBefore",
                         },
@@ -1320,6 +1323,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     zhi: {
+                        equipSkill:true,
                         trigger: {
                             player: "phaseJieshuBegin",
                         },
@@ -1332,6 +1336,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     yu: {
+                        equipSkill:true,
                         trigger: {
                             player: "phaseEnd"
                         },

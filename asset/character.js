@@ -246,7 +246,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     "step 3"
                     if (result.bool) {
                         for (var i = 0; i < result.targets.length; i++) {
-                            result.targets[i].addTempSkill('fr_elin', { player: "phaseAfter" })
+                            result.targets[i].addSkill('fr_elin')
                         }
                     }
                 },
@@ -17612,6 +17612,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            'fr_zhan':"束缚之厄",
             'fr_derk': '黯影随行',
             'fr_crow': '智谋慧者',
             "fr_milis": '铸刃千口',

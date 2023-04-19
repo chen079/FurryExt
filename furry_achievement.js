@@ -1,6 +1,7 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
+		'fr_zhan':"枷锁是困不住我的，只会让我更加强大！",
 		'fr_derk': '这只是计划的一部分。',
 		'fr_crow': '流言止于智者...',
 		'fr_tiers': "我于杀戮之中盛放！",
