@@ -238,8 +238,19 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 1'
                     player.addSkill('zhan_jn')
                     player.addSkill('zhan_zb')
+                    "step 2"
+                    player.chooseTarget([1, Math.floor(game.countPlayer() / 2)], "令至多" + get.translation(Math.floor(game.countPlayer() / 2)) + "名角色获得〖厄临〗", false)
+                        .set('ai', function (target) {
+                            return -get.attitude(_status.event.player, target) * (1 + target.countCards('j'))
+                        })
+                    "step 3"
+                    if (result.bool) {
+                        for (var i = 0; i < result.targets.length; i++) {
+                            result.targets[i].addTempSkill('fr_elin', { player: "phaseAfter" })
+                        }
+                    }
                 },
-                derivation: ["zhan_jn", "zhan_zb"],
+                derivation: ["zhan_jn", "zhan_zb","fr_elin"],
                 group: "zhan_jf_count",
                 subSkill: {
                     count: {
@@ -11680,6 +11691,35 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                 },
             },
+            "fr_elin": {
+                trigger:{
+                    player:"judgeBegin",
+                },
+                forced:true,
+                charlotte:true,
+                silent:true,
+                filter:function (event, player) {
+                    return !event.directresult;
+                },
+                content:function () {
+                    var tempcard = false, temp = -Infinity;
+                    for (var i = 0; i < ui.cardPile.childElementCount; i++) {
+                        var card = ui.cardPile.childNodes[i];
+                        var temp2 = trigger.judge(card);
+                        if (temp2 < temp) {
+                            tempcard = card;
+                            temp = temp2;
+                        }
+                    }
+                    if (tempcard) trigger.directresult = tempcard;
+                },
+                ai:{
+                    luckyStar:false,
+                    BadLuck:true,
+                },
+                popup:false,
+                sub:true,
+            },
             "fr_zhufu": {
                 unique: true,
                 forced: true,
@@ -16872,10 +16912,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            "fr_elin":"厄临",
+            "fr_elin_info":"锁定技，你的判定会朝向对你不利的方向倾斜。",
             'zhan_sf': '束缚',
             'zhan_sf_info': '锁定技。①当你受到1点伤害后，你可以选择一项：获得牌堆里你选择的类型的一张牌，或移动场上的一张牌。②你除了〖束缚〗和〖解放〗外的技能无效。③当你受到伤害结算完毕后，你回复1点体力。',
             'zhan_jf': '解放',
-            'zhan_jf_info': '觉醒技，准备阶段，若你累计受到与造成过的伤害之和不小于你体力上限两倍，你增加1点体力上限并回复1点体力，然后失去〖束缚〗并获得〖聚能〗与〖震爆〗。',
+            'zhan_jf_info': '觉醒技，准备阶段，若你累计受到与造成过的伤害之和不小于你体力上限两倍，你增加1点体力上限并回复1点体力，然后失去〖束缚〗并获得〖聚能〗与〖震爆〗，然后你可以令至多X名其他角色获得〖厄临〗（X为场上角色数的一半并向下取整）。',
             'zhan_jn': '聚能',
             'zhan_jn_info': '准备阶段，若你的体力上限小于10，你增加1点体力上限；若你的护甲小于5，你获得1点护甲；锁定技，你的手牌上限等于你的体力上限与护甲之和。',
             'zhan_zb': '震爆',
