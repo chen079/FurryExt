@@ -1035,35 +1035,53 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
 
             //---------------------------------------设置：主内单挑音乐------------------------------------------//
-            lib.skill._furry_zhuneibgm = {
-                trigger: {
-                    global: "dieAfter",
-                },
-                forced: true,
-                nobracket: true,
-                priority: -9993,
-                content: function () {
-                    var n = [1].randomGet();
-                    if (n == 1) {
-                        var num;
-                        var num1
-                        var mode = get.mode();
-                        if (mode == 'identity') {
-                            num = get.population('nei');
-                            num1 = get.population('zhu');
-                        }
-                        if (game.countPlayer() == 2 && num > 0 && num1 > 0) {
-                            var url = lib.assetURL + 'extension/福瑞拓展/audio/bgm/'
-                            var choice
-                            switch (config.furry_zhuneimusic) {
-                                case 1: choice = 'Hopes And Dreams.mp3'; break;
-                                case 2: choice = 'MEGALOVANIA.mp3';break;
+            if(config.furry_zhuneimusic==1){
+                lib.skill._furry_zhuneibgm={
+                    trigger:{ 
+                        global:"dieAfter",
+                    }, 
+                    forced:true, 
+                    nobracket:true, 
+                    priority:-9993,
+                    content:function (){  
+                        var n=[1].randomGet();
+                        if(n==1){
+                            var num;
+                            var num1
+                            var mode=get.mode();
+                            if(mode=='identity'){
+                                num=get.population('nei');
+                                num1=get.population('zhu');
                             }
-                            ui.backgroundMusic.src = url + choice
-                        }
-                    }
-                    ui.backgroundMusic.loop = true;
-                },
+                            if(game.countPlayer()==2&&num>0&&num1>0) ui.backgroundMusic.src=lib.assetURL+'extension/福瑞拓展/audio/bgm/Hopes And Dreams.mp3'; 
+                        }  
+                        ui.backgroundMusic.loop=true;           
+                    },       
+                }  
+            }
+            if(config.furry_zhuneimusic==2){
+                lib.skill._furry_zhuneibgm={
+                    trigger:{ 
+                        global:"dieAfter",
+                    }, 
+                    forced:true, 
+                    nobracket:true, 
+                    priority:-9993,
+                    content:function (){  
+                        var n=[1].randomGet();
+                        if(n==1){
+                            var num;
+                            var num1
+                            var mode=get.mode();
+                            if(mode=='identity'){
+                                num=get.population('nei');
+                                num1=get.population('zhu');
+                            }
+                            if(game.countPlayer()==2&&num>0&&num1>0) ui.backgroundMusic.src=lib.assetURL+'extension/福瑞拓展/audio/bgm/MEGALOVANIA.mp3'; 
+                        }  
+                        ui.backgroundMusic.loop=true;           
+                    },       
+                }  
             }
             //---------------------------------------设置：自动更新------------------------------------------//
             if (config.furryCardFileConfig2 && game.getFileList && lib.config.extensions) {

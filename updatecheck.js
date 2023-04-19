@@ -96,7 +96,8 @@
 		'image/bgm/5.png',
 		'image/bgm/z0.png',
 		'image/bgm/z1.png',
-		'image/bgm/z2.png'
+		'image/bgm/z2.png',
+		'audio/bgm/MEGALOVANIA.mp3'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
