@@ -237,7 +237,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.recover()
                     player.removeSkill('zhan_sf')
                     'step 1'
-                    player.addSkill('zhan_nj')
+                    player.addSkill('zhan_jn')
                     player.addSkill('zhan_zb')
                 },
                 derivation: ["zhan_jn", "zhan_zb"],
