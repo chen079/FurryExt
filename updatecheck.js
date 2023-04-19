@@ -1,9 +1,9 @@
 (() => ({
 	// 扩展版本
-	version: "2.1.0.4",
+	version: "2.1.0.5",
 
 	// 扩展的上一个版本
-	oldversion: "2.1.0.3",
+	oldversion: "2.1.0.4",
 
 	// 更新内容汇总
 	changeLog: `
@@ -19,6 +19,8 @@
 	为所有卡牌增加手杀版本美化
 	鸣谢清单新增一堆人
 	修复低版本无名杀无法运行的bug
+	新角色 展
+	新增bgm选项，请在菜单选取
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
@@ -81,7 +83,20 @@
 		'asset/cards.js',
 		'asset/character.js',
 		'asset/drama.js',
-		'audio/skill/other/achievement_complete.mp3'
+		'audio/skill/other/achievement_complete.mp3',
+		'audio/bgm/Hopes And Dreams.mp3',
+		'audio/bgm/furry_bgm_BattleAgainstATrueHero.mp3',
+		'audio/bgm/MySunset.mp3',
+		'audio/bgm/FarOut.mp3',
+		'image/bgm/0.png',
+		'image/bgm/1.png',
+		'image/bgm/2.png',
+		'image/bgm/3.png',
+		'image/bgm/4.png',
+		'image/bgm/5.png',
+		'image/bgm/z0.png',
+		'image/bgm/z1.png',
+		'image/bgm/z2.png'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

@@ -153,7 +153,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (result.control == 'cancel2') event.finish();
                     else {
                         player.logSkill('zhan_sf');
-                        player.draw();
                         if (result.index == 0) {
                             player.chooseControl('basic', 'trick', 'equip').set('prompt', '选择获得一种类型的牌').set('ai', function () {
                                 var player = _status.event.player;
@@ -228,7 +227,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 forced: true,
                 mark: true,
                 intro: {
-                    content: "当前累计受到了$点伤害",
+                    content: "当前累计受到与造成了总计$点伤害",
                 },
                 content: function () {
                     'step 0'
@@ -248,9 +247,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         forced: true,
                         trigger: {
                             player: "damageBegin4",
+                            source: "damageBegin4",
                         },
                         content: function () {
                             player.storage.zhan_jf += trigger.num
+                            player.updateMark('zhan_jf')
                         },
                         sub: true,
                     },
@@ -260,13 +261,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: 'phaseZhunbeiBegin'
                 },
-                filter: function (event, player) {
-                    return player.maxHp < 10
+                mod: {
+                    maxHandcardBase: function (player, num) {
+                        return player.maxHp + player.hujia;
+                    },
                 },
+                popup: false,
                 direct: true,
                 content: function () {
-                    player.gainMaxHp()
-                    player.recover()
+                    'step 0'
+                    if (player.maxHp < 10) player.gainMaxHp()
+                    'step 1'
+                    if (player.hujia < 5) player.changeHujia(1)
                 }
             },
             'zhan_zb': {
@@ -286,11 +292,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             .set("prompt", get.prompt(event.name))
                             .set("prompt2", get.translation(`${event.name}_info`))
                             .set("ai", function (player, _event) {
-                                return Math.min(trigger.player.hp - 1, player.maxHp - 1)
+                                return Math.min(trigger.player.hp - 1, player.getDamagedHp() - 1)
                             })
-                            .set("goon", player.maxHp);
                     } else {
-                        player.chooseBool(get.prompt2(event.name)).set("ai", (..._args) => true)
+                        player.chooseBool(get.prompt2(event.name)).set("ai", (..._args) => false)
                     }
                     'step 1'
                     if (result.bool) {
@@ -16868,11 +16873,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         translate: {
             //技能
             'zhan_sf': '束缚',
-            'zhan_sf_info': '锁定技。①当你受到1点伤害后，你可以选择一项并摸一张牌：获得牌堆里你选择的类型的一张牌，或移动场上的一张牌。②你除了〖束缚〗和〖解放〗外的技能无效。③当你受到伤害结算完毕后，你回复1点体力。',
+            'zhan_sf_info': '锁定技。①当你受到1点伤害后，你可以选择一项：获得牌堆里你选择的类型的一张牌，或移动场上的一张牌。②你除了〖束缚〗和〖解放〗外的技能无效。③当你受到伤害结算完毕后，你回复1点体力。',
             'zhan_jf': '解放',
-            'zhan_jf_info': '觉醒技，准备阶段，若你累计受到国你体力上限两倍的伤害，你增加1点体力上限并回复1点体力，然后失去〖束缚〗并获得〖聚能〗与〖震爆〗。',
+            'zhan_jf_info': '觉醒技，准备阶段，若你累计受到与造成过的伤害之和不小于你体力上限两倍，你增加1点体力上限并回复1点体力，然后失去〖束缚〗并获得〖聚能〗与〖震爆〗。',
             'zhan_jn': '聚能',
-            'zhan_jn_info': '准备阶段，若你的体力上限小于10，你增加1点体力上限并回复1点体力。',
+            'zhan_jn_info': '准备阶段，若你的体力上限小于10，你增加1点体力上限；若你的护甲小于5，你获得1点护甲；锁定技，你的手牌上限等于你的体力上限与护甲之和。',
             'zhan_zb': '震爆',
             'zhan_zb_info': '一名角色的回合开始时，若你的体力上限大于该角色体力值，你可以失去任意点体力上限并对该角色造成等量的雷电伤害。',
             'derk_ly': '连语',
