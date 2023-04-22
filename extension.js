@@ -1009,33 +1009,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     },
                 };
             };
-            //---------------------------------------设置：背景音乐------------------------------------------//
-            game.frplayBackgroundMusic = function () {
-                //if(lib.config.background_music=='music_off'){
-                //ui.backgroundMusic.src='';
-                //}
-                //ui.backgroundMusic.autoplay=true;
-                var temp = lib.config.extension_福瑞拓展_Background_Music;
-                if (temp == '0') {
-                    temp = Math.floor(2 + Math.random() * 10); //2加0到29
-                    //生成一个范围2到10的整数
-                    temp = temp.toString();
-                    //转为字符串
-                };
-                ui.backgroundMusic.pause();
-                var item = {
-                    "2": "furry_bgm_tavern.mp3",
-                    "3": "furry_bgm_BattleAgainstATrueHero.mp3",
-                    "4": "MySunset.mp3",
-                    "5": "FarOut.mp3"
-                };
-                if (item[temp]) {
-                    ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + item[temp];
-                } else {
-                    game.playBackgroundMusic();
-                    ui.backgroundMusic.addEventListener('ended', game.playBackgroundMusic);
-                }
-            }
             if (lib.config.extension_福瑞拓展_Background_Music && lib.config.extension_福瑞拓展_Background_Music != "1") {
                 lib.arenaReady.push(function () {
                     //ui.backgroundMusic.autoplay=true;
@@ -1052,52 +1025,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 cbcss.innerHTML = ".frmusicname>.name{color:gold; visibility:hidden;}";
                 document.head.appendChild(cbcss);
             };
-
-            //---------------------------------------设置：背景图片------------------------------------------//
-            game.frBackground_Picture = function () {
-                var temp = lib.config['extension_福瑞拓展_Background_Picture'];
-                if (temp == 'auto') {
-                    var list = [
-                        'picture1',
-                    ];
-                    if (_status.frBackground_Picture) list.remove(_status.frBackground_Picture);
-                    temp = list.randomGet();
-                }
-                _status.frBackground_Picture = temp;
-                if (temp !== '1') {
-                    game.broadcastAll() + ui.background.setBackgroundImage("extension/福瑞拓展/image/background/" + temp + ".jpg");
-                } else {
-                    game.broadcastAll() + ui.background.setBackgroundImage('image/background/' + lib.config.image_background + '.jpg');
-                }
-                var item = lib.config['extension_福瑞拓展_Background_Picture'];
-                if (item != "auto") {
-                    if (_status.Background_Picture_timeout) {
-                        clearTimeout(_status.Background_Picture_timeout);
-                    };
-                } else if (item == "auto") {
-                    var autotime = lib.config['extension_福瑞拓展_Background_Picture_auto'];
-
-                    var Timeout = autotime ? parseInt(autotime) : 30000;
-
-                    ///////////////////////////////////////////////////////
-                    var Timeout2 = _status.Background_Picture_Timeout2;
-                    if (_status.Background_Picture_timeout && Timeout2 && Timeout2 != Timeout) {
-                        clearTimeout(_status.Background_Picture_timeout);
-                    };
-                    /////////////////////////////////////////////////
-                    _status.Background_Picture_timeout = setTimeout(function () {
-                        game.frBackground_Picture();
-                    }, Timeout); /*Timeout*/
-                    _status.Background_Picture_Timeout2 = Timeout;
-                };
-            };
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (lib.config.extension_福瑞拓展_Background_Picture && lib.config.extension_福瑞拓展_Background_Picture != "1") {
                 lib.arenaReady.push(function () {
                     game.frBackground_Picture();
                 });
             };
-
             //---------------------------------------设置：主内单挑音乐------------------------------------------//
             if (lib.config.extension_福瑞拓展_furry_zhuneimusic != 'z0') {
                 lib.skill._furry_zhuneibgm = {
@@ -1509,6 +1442,71 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             lib.perfectPair.fr_miya = ['db_fr_krikt']
             lib.perfectPair.sheep = ['fr_bladewolf']
         }, precontent: function (furryPack) {
+            //---------------------------------------设置：背景图片------------------------------------------//
+            game.frBackground_Picture = function () {
+                var temp = lib.config['extension_福瑞拓展_Background_Picture'];
+                if (temp == 'auto') {
+                    var list = [
+                        'picture1',
+                    ];
+                    if (_status.frBackground_Picture) list.remove(_status.frBackground_Picture);
+                    temp = list.randomGet();
+                }
+                _status.frBackground_Picture = temp;
+                if (temp !== '1') {
+                    game.broadcastAll() + ui.background.setBackgroundImage("extension/福瑞拓展/image/background/" + temp + ".jpg");
+                } else {
+                    game.broadcastAll() + ui.background.setBackgroundImage('image/background/' + lib.config.image_background + '.jpg');
+                }
+                var item = lib.config['extension_福瑞拓展_Background_Picture'];
+                if (item != "auto") {
+                    if (_status.Background_Picture_timeout) {
+                        clearTimeout(_status.Background_Picture_timeout);
+                    };
+                } else if (item == "auto") {
+                    var autotime = lib.config['extension_福瑞拓展_Background_Picture_auto'];
+
+                    var Timeout = autotime ? parseInt(autotime) : 30000;
+
+                    ///////////////////////////////////////////////////////
+                    var Timeout2 = _status.Background_Picture_Timeout2;
+                    if (_status.Background_Picture_timeout && Timeout2 && Timeout2 != Timeout) {
+                        clearTimeout(_status.Background_Picture_timeout);
+                    };
+                    /////////////////////////////////////////////////
+                    _status.Background_Picture_timeout = setTimeout(function () {
+                        game.frBackground_Picture();
+                    }, Timeout); /*Timeout*/
+                    _status.Background_Picture_Timeout2 = Timeout;
+                };
+            };
+            //---------------------------------------设置：背景音乐------------------------------------------//
+            game.frplayBackgroundMusic = function () {
+                //if(lib.config.background_music=='music_off'){
+                //ui.backgroundMusic.src='';
+                //}
+                //ui.backgroundMusic.autoplay=true;
+                var temp = lib.config.extension_福瑞拓展_Background_Music;
+                if (temp == '0') {
+                    temp = Math.floor(2 + Math.random() * 10); //2加0到29
+                    //生成一个范围2到10的整数
+                    temp = temp.toString();
+                    //转为字符串
+                };
+                ui.backgroundMusic.pause();
+                var item = {
+                    "2": "furry_bgm_tavern.mp3",
+                    "3": "furry_bgm_BattleAgainstATrueHero.mp3",
+                    "4": "MySunset.mp3",
+                    "5": "FarOut.mp3"
+                };
+                if (item[temp]) {
+                    ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + item[temp];
+                } else {
+                    game.playBackgroundMusic();
+                    ui.backgroundMusic.addEventListener('ended', game.playBackgroundMusic);
+                }
+            }
             //---------------------------------------设置：武将评级------------------------------------------//
             //乐色
             var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala', 'fr_derk']
@@ -2368,6 +2366,153 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                             ' </br>运气：' + game.frStars(6) + ' 生存：' + game.frStars(3) +
                                             ' </br>控制：' + game.frStars(5) + ' 辅助：' + game.frStars(0) +
                                             '</br>谋略：' + game.frStars(0) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_rasali',
+                                            '</br><span class="bluetext">关联角色</span>：所有兽人<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(1) + ' 生存：' + game.frStars(6) +
+                                            ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(5) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                        ['fr_nashu',
+                                            '</br><span class="bluetext">关联角色</span>：所有兽人<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(5) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(0) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        milanview: {
+                            name: '米兰寺',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_ala',
+                                            '</br><span class="bluetext">关联角色</span>：林&炎、霍恩<br>',
+                                            '进攻：' + game.frStars(4) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(5) + ' 辅助：' + game.frStars(2) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_linyan',
+                                            '</br><span class="bluetext">关联角色</span>：奥拉、霍恩<br>',
+                                            '进攻：' + game.frStars(1) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(2) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(5) +
+                                            '</br>谋略：' + game.frStars(3) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_horn',
+                                            '</br><span class="bluetext">关联角色</span>：林&炎、奥拉<br>',
+                                            '进攻：' + game.frStars(2) + ' 爆发：' + game.frStars(2) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(5) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(0) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        jixieview: {
+                            name: '机械造物',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_ken',
+                                            '</br><span class="bluetext">关联角色</span>：无<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(6) + ' 辅助：' + game.frStars(6) +
+                                            '</br>谋略：' + game.frStars(0) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_sheep',
+                                            '</br><span class="bluetext">关联角色</span>：刃狼<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(6) +
+                                            '</br>谋略：' + game.frStars(6) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_bladewolf',
+                                            '</br><span class="bluetext">关联角色</span>：西普<br>',
+                                            '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(6) +
+                                            ' </br>运气：' + game.frStars(3) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                    ];
+                                    lib.game.createview(node, charalist);
+                                }
+                            },
+                        },
+                        dragonview: {
+                            name: '巨龙之谷',
+                            mode: '',
+                            intro: [],
+                            showcase: function (init) {
+                                var node = this;
+                                if (init) {
+                                    var charalist = [
+                                        ['fr_berg',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(6) + ' 辅助：' + game.frStars(6) +
+                                            '</br>谋略：' + game.frStars(0) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_dragon',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(6) +
+                                            '</br>谋略：' + game.frStars(6) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_lens',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(3) + ' 爆发：' + game.frStars(2) +
+                                            ' </br>运气：' + game.frStars(4) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(2) + ' </br>'],
+                                        ['fr_mala',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(6) +
+                                            ' </br>运气：' + game.frStars(4) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(2) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(4) + ' </br>'],
+                                        ['fr_marxya',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(6) + ' 爆发：' + game.frStars(6) +
+                                            ' </br>运气：' + game.frStars(4) + ' 生存：' + game.frStars(3) +
+                                            ' </br>控制：' + game.frStars(2) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_zeta',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(3) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(4) + ' 辅助：' + game.frStars(5) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_dier',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(4) + ' 爆发：' + game.frStars(2) +
+                                            ' </br>运气：' + game.frStars(3) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(0) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_milite',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(6) +
+                                            ' </br>运气：' + game.frStars(2) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(1) + ' 辅助：' + game.frStars(6) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
+                                        ['fr_sayisu',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(0) +
+                                            ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(4) +
+                                            ' </br>控制：' + game.frStars(4) + ' 辅助：' + game.frStars(0) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(5) + ' </br>'],
+                                        ['fr_shisan',
+                                            '</br><span class="bluetext">关联角色</span>：龙族角色<br>',
+                                            '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(6) +
+                                            ' </br>运气：' + game.frStars(3) + ' 生存：' + game.frStars(0) +
+                                            ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(2) +
+                                            '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(4) + ' </br>'],
                                     ];
                                     lib.game.createview(node, charalist);
                                 }

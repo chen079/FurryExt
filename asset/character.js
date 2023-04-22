@@ -17988,8 +17988,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'youdangzhe': '游荡旅行者',
             'renyu': '人鱼之海',
             'jianaier': '迦奈尔联邦',
-            'dragongu': '龙之谷'
-
+            'dragongu': '龙之谷',
+            'milan':'米兰寺',
+            'jixiezaowu':'机械造物'
         },
         characterSort: {
             furryPack: {
@@ -18001,7 +18002,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 'youdangzhe': ['fr_miya', 'fr_krikt', 'fr_laays'],
                 'renyu': ['fr_rest', 'fr_nanci'],
                 'jianaier': ['fr_wore', 'fr_tiers', 'fr_tery',],
-                'dragongu': ['fr_berg', 'fr_dragon', 'fr_lens', 'fr_mala', 'fr_marxya', 'fr_zeta']
+                'dragongu': ['fr_berg', 'fr_dragon', 'fr_lens', 'fr_mala', 'fr_marxya', 'fr_zeta','fr_dier','fr_milite','fr_sayisu','fr_shisan'],
+                'milan':['fr_linyan','fr_horn','fr_ala'],
+                'jixiezaowu':['fr_bladewolf','fr_sheep','fr_ken']
             }
         },
         characterTitle: {
