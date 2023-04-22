@@ -5,18 +5,18 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         connect: true,//卡包是否可以联机
         card: {
             'fr_equip2_yyxl': {
-                image: 'ext:福瑞拓展/image/card/fr_equip1_yyxl.png',
+                image: 'ext:福瑞拓展/image/card/fr_equip2_yyxl.png',
                 fullskin: true,
-                loseDelay:false,
-                onLose:function(){
-                    var next=game.createEvent('yyxl_draw');
+                loseDelay: false,
+                onLose: function () {
+                    var next = game.createEvent('yyxl_draw');
                     event.next.remove(next);
-                    var evt=event.getParent();
-                    if(evt.getlx===false) evt=evt.getParent();
+                    var evt = event.getParent();
+                    if (evt.getlx === false) evt = evt.getParent();
                     evt.after.push(next);
-                    next.player=player;
-                    next.setContent(function(){
-                        if(player.isDamaged()) player.logSkill('yy_skill');
+                    next.player = player;
+                    next.setContent(function () {
+                        if (player.isDamaged()) player.logSkill('yy_skill');
                         player.draw(2);
                     });
                 },
@@ -221,7 +221,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     useful: [5, 1],
                     result: {
                         target: function (player, target) {
-                            if(target==_status.currentPhase) return 1
+                            if (target == _status.currentPhase) return 1
                             return -1
                         },
                     },
@@ -1283,7 +1283,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             player: "phaseDrawBegin2",
                         },
-                        equipSkill:true,
+                        equipSkill: true,
                         direct: true,
                         filter: function (event, player) {
                             return !event.numFixed;
@@ -1299,7 +1299,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     shang: {
-                        equipSkill:true,
+                        equipSkill: true,
                         onremove: function (player) {
                             player.unmarkSkill('wxpp_skill')
                         },
@@ -1310,7 +1310,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     jue: {
-                        equipSkill:true,
+                        equipSkill: true,
                         trigger: {
                             player: "phaseDiscardBefore",
                         },
@@ -1323,7 +1323,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     zhi: {
-                        equipSkill:true,
+                        equipSkill: true,
                         trigger: {
                             player: "phaseJieshuBegin",
                         },
@@ -1336,7 +1336,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     yu: {
-                        equipSkill:true,
+                        equipSkill: true,
                         trigger: {
                             player: "phaseEnd"
                         },
@@ -1534,14 +1534,10 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_zhcz_info": "出牌阶段，对一名角色使用，该角色展示X张手牌（X为其手牌数的一半并向下取整），然后你选择一项：1.重铸其展示的所有牌，2.重铸其未展示的所有牌。",
         },
         list: [
-            ['heart', '10', 'fr_equip1_mhlq'],
-            ['spade', '4', 'fr_equip2_yyxl'],
             ['spade', '5', 'fr_card_zfxd'],
             ['club', '11', 'fr_card_zfxd'],
             ['heart', '11', 'fr_card_cmhc'],
             ['club', '1', 'fr_card_cmhc'],
-            ['spade', "13", 'fr_equip1_syzg'],
-            ['heart', "7", 'fr_equip5_wxpp'],
             ["heart", "6", "fr_card_yxys"],
             ["diamond", "7", "fr_card_yxys"],
             ["club", "8", "fr_card_yxys"],
@@ -1565,6 +1561,12 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             ['club', '5', "fr_card_lltj", null, ['gifts']],
             ['diamond', '5', "fr_card_lltj", null, ['gifts']]
         ],
+    }
+    if (lib.config.achiReward && lib.config.achiReward.card.length != 0) {
+        for (var i = 0; i < lib.config.achiReward.card.length; i++) {
+            var card = lib.config.achiReward.card[i]
+            furryCard.list.push(card)
+        }
     }
     return furryCard;
 });

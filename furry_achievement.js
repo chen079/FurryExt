@@ -1,7 +1,9 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
-		'fr_zhan':"枷锁是困不住我的，只会让我更加强大！",
+		'fr_nashu':'邪恶的灵魂，呵呵，不过是我的盘中餐...',
+		'fr_rasali':'唯有善良，方为出路。',
+		'fr_zhan': "枷锁是困不住我的，只会让我更加强大！",
 		'fr_derk': '这只是计划的一部分。',
 		'fr_crow': '流言止于智者...',
 		'fr_tiers': "我于杀戮之中盛放！",
@@ -118,13 +120,30 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				level: 5,
 				info: '使用塔尔斯在一局内使得一名角色装备着5张点数为8的装备',
 				extra: '这也太累了...',
-				progress: 1,
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_zeta')
+				},
+				rewardInfo: '奖励：解锁角色——泽塔',
+				progress: 1
 			},
 			"连破之刃": {
 				level: 7,
 				info: "使用米亚造成一次8点及以上的伤害。",
 				extra: "一刀，一刀，一刀...",
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_krikt')
+				},
+				rewardInfo: '奖励：解锁角色——科里科特',
 				progress: 1
+			},
+			'天下归心': {
+				level: 5,
+				info: '使用努力亚作为主公进行一局八人及以上的军争局，并令存活的忠臣的数量大于游戏总人数的一半（向上取整）。',
+				extra: '周公吐哺，天下归心。',
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_francium')
+				},
+				rewardInfo: '奖励：解锁角色——弗兰西亚',
 			},
 			'IQ:400': {
 				level: 5,
@@ -133,9 +152,13 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				progress: 1,
 			},
 			"当断则断": {
-				level: 3,
+				level: 7,
 				info: "使用檞界累计发动三次〖断破〗。",
 				extra: "剑光如我，斩尽牛杂！",
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_crow', 'fr_liona')
+				},
+				rewardInfo: '奖励：解锁角色——克劳、里欧那',
 				progress: 3
 			},
 		},
@@ -160,10 +183,13 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			},
 		},
 		special: {
-			"隐藏成就": {
-				level: 1,
-				info: "真的是隐藏成就",
-				extra: "你要信我啊",
+			"你真的很无聊": {
+				level: 4,
+				info: "你是没事可干了嘛？",
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_zhan')
+				},
+				rewardInfo: '奖励：解锁角色——展',
 				progress: 1
 			},
 		}
@@ -262,6 +288,14 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		};
 		game.saveConfig('frAchiStorage', lib.config.frAchiStorage);
 	}
+	//初始化奖励
+	if (!lib.config.achiReward) {
+		lib.config.achiReward = {
+			character: [],
+			card: []
+		}
+		game.saveConfig('achiReward', lib.config.achiReward);
+	}
 	game.frAchi = {
 		//初始化成就系统数据
 		init: function () {
@@ -281,10 +315,32 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 					} else if (game.furryrank[4].contains(name)) {
 						level = 1
 					}
+					let reward
+					let rewardInfo
+					switch (name) {
+						case 'fr_nashu': reward = function () { game.frAchi.unlockCharacter('fr_rasali') }; rewardInfo = '奖励：解锁角色——让萨利'; break;
+						case 'fr_sam': reward = function () { game.frAchi.unlockCharacter('fr_ham') }; rewardInfo = '奖励：解锁角色——海'; break;
+						case 'fr_sheep': reward = function () { game.frAchi.unlockCharacter('fr_bladewolf') }; rewardInfo = '奖励：解锁角色——刃狼'; break;
+						case 'fr_bofeng': reward = function () { game.frAchi.unlockCharacter('fr_ciyu') }; rewardInfo = '奖励：解锁角色——迟雨'; break;
+						case 'fr_yifa': reward = function () { game.frAchi.unlockCharacter('fr_yifeng') }; rewardInfo = '奖励：解锁角色——弈风'; break;
+						case 'fr_taber': reward = function () { game.frAchi.unlockCharacter('fr_verb') }; rewardInfo = '奖励：解锁角色——韦贝尔'; break;
+						case 'fr_tiers': reward = function () { game.frAchi.unlockCharacter('fr_wore') }; rewardInfo = '奖励：解锁角色——沃尔'; break;
+						case 'fr_francium': reward = function () { game.frAchi.unlockCharacter('fr_knier', 'fr_zenia') }; rewardInfo = '奖励：解锁角色——科妮尔、泽妮亚'; break;
+						case 'fr_hars': reward = function () { game.frAchi.unlockCharacter('fr_jet', 'fr_yinhu') }; rewardInfo = '奖励：解锁角色——杰特、寅虎'; break;
+						case 'fr_oert': reward = function () { game.frAchi.unlockCharacter('fr_faers') }; rewardInfo = '奖励：解锁角色——法斯'; break;
+						case 'fr_lens': reward = function () { game.frAchi.unlockCharacter('fr_mala', 'fr_dier') }; rewardInfo = '奖励：解锁角色——马拉、戴尔'; break;
+						case 'fr_lions': reward = function () { game.frAchi.unlockCharacter('fr_lamost', 'fr_lint', 'fr_muen') }; rewardInfo = '奖励：解锁角色——拉莫斯特、林特、牧恩'; break;
+						case 'fr_yifeng': reward = function () { game.frAchi.unlockCard(['spade', "13", 'fr_equip1_syzg']) }; rewardInfo = '奖励：解锁新卡牌——霜月之弓'; break;
+						case 'fr_tiger': reward = function () { game.frAchi.unlockCard(['heart', '10', 'fr_equip1_mhlq']) }; rewardInfo = '奖励：解锁新卡牌——鸣鸿龙雀'; break;
+						case 'fr_qima': reward = function () { game.frAchi.unlockCard(['spade', '4', 'fr_equip2_yyxl']) }; rewardInfo = '奖励：解锁新卡牌——影夜项链'; break;
+						case 'fr_liya': reward = function () { game.frAchi.unlockCard(['heart', "7", 'fr_equip5_wxpp']) }; rewardInfo = '奖励：解锁新卡牌——忘弦琵琶'; break;
+					}
 					lib.fr_achievement['character'][lib.characterTitle[name]] = {
 						name: lib.characterTitle[name],
 						info: "使用" + lib.translate[name] + "获得一场胜利。",
 						level: level,
+						reward: reward,
+						rewardInfo: rewardInfo,
 						extra: lib.fr_winnerSay[name]
 					};
 				};
@@ -300,6 +356,35 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			}
 			this.inited = true;
 		},
+		//保存存档文件
+		saveToFile: function () {
+			var data = JSON.stringify({
+				frAchiStorage: lib.config.frAchiStorage,
+				achiReward: lib.config.achiReward
+			});
+			var path = 'extension/福瑞拓展';
+			var fileName = 'save.json';
+			game.ensureDirectory(path, function () {
+				game.writeFile(data, path, fileName, function (err) {
+					if (err) {
+						console.log('成就存档保存错误:', err);
+					} else {
+						console.log('成就存档已保存');
+					}
+				});
+			}, fileName);
+		},
+		getAll: function () {
+			var types = new Set(['character', 'special', 'game']);
+			for (var type of types) {
+				var keys = Object.keys(lib.fr_achievement[type]);
+				for (var key of keys) {
+					var name = { 'character': 'c', 'game': 'g', 'special': 's' }[type] + ',' + key
+					if (!this.hasAchi(name)) this.got();
+				}
+			}
+			this.saveConfig()
+		},
 		//重置已获得
 		reset: function () {
 			lib.config.frAchiStorage = {
@@ -307,11 +392,68 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				progress: {},
 				date: {}
 			};
+			lib.config.achiReward = {
+				character: [],
+				card: []
+			}
+			this.saveConfig();
+		},
+		//读取存档文件
+		loadFromFile: function () {
+			// 配置文件路径
+			var configPath = 'extension/福瑞拓展/save.json';
+			// 读取配置文件
+			game.readFile(configPath, function (data) {
+				try {
+					// 解析配置文件内容
+					var isBuffer = (data instanceof ArrayBuffer);
+					if (isBuffer) {
+						var decoder = new TextDecoder("UTF-8");
+						var decodedData = decoder.decode(data);
+						var config = JSON.parse(decodedData);
+					} else {
+						var config = JSON.parse(data);
+					}
+					// 将配置文件内容赋值给全局变量
+					lib.config.frAchiStorage = config.frAchiStorage;
+					lib.config.achiReward = config.achiReward;
+					game.frAchi.saveConfig()
+				} catch (err) {
+					alert('未找到正确json文件，成就存档已重置');
+					game.frAchi.reset()
+				}
+			}, function (err) {
+				alert('未找到正确json文件，成就存档已重置');
+				game.frAchi.reset()
+			});
+		},
+		unlockCharacter: function () {
+			var characters = Array.prototype.slice.call(arguments);
+			var str = '已解锁新角色：'
+			for (var i = 0; i < characters.length; i++) {
+				if (!lib.config.achiReward.character.contains(characters[i])) {
+					lib.config.achiReward.character.push(characters[i]);
+					str += ' ' + get.translation(characters[i])
+				}
+			}
+			alert(str)
+			this.saveConfig()
+		},
+		unlockCard: function () {
+			var cards = Array.prototype.slice.call(arguments);
+			for (var i = 0; i < cards.length; i++) {
+				if (!lib.config.achiReward.card.contains(cards[i])) {
+					lib.config.achiReward.card.push(cards[i]);
+				}
+			}
+			alert('已解锁新卡牌：' + get.translation(cards[0][2]))
 			this.saveConfig();
 		},
 		//保存设置
 		saveConfig: function () {
 			game.saveConfig('frAchiStorage', lib.config.frAchiStorage);
+			game.saveConfig('achiReward', lib.config.achiReward);
+			this.saveToFile()
 		},
 		//计算成就数
 		amount: function (type) {
@@ -394,6 +536,11 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			}
 			return this.getInfoName(name);
 		},
+		reward: function (name) {
+			var list = this.ofName(name)
+			let info = game.frAchi.info(list[1], list[0]);
+			if (info && info.reward) info.reward()
+		},
 		//达成新成就
 		got: function (name) {
 			if (lib.config.frAchiStorage.got.contains(name)) return;
@@ -401,7 +548,9 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			var date = new Date();
 			lib.config.frAchiStorage.date[name] = (new Date()).getTime();
 			this.addDone(name);
+			this.reward(name)
 			this.popupDialog(name);
+			this.saveConfig()
 		},
 		//增加成就进度
 		addProgress: function (name, type) {
@@ -671,6 +820,12 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 								let pog = lib.config.frAchiStorage.progress[name2] || 0;
 								text += '（' + pog + '/' + info.progress + '）';
 							}
+						}
+						if (info.rewardInfo) {
+							text += "<br>";
+							text += "<br><span style='font-size:22px;font-family:得意黑;'>&nbsp;&nbsp;※";
+							text += info.rewardInfo;
+							text += "</span>";
 						}
 						//<--
 						text += "<br>";

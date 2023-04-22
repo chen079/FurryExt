@@ -1,9 +1,9 @@
 (() => ({
 	// 扩展版本
-	version: "2.1.0.5",
+	version: "2.1.0.6",
 
 	// 扩展的上一个版本
-	oldversion: "2.1.0.4",
+	oldversion: "2.1.0.5",
 
 	// 更新内容汇总
 	changeLog: `
@@ -97,7 +97,8 @@
 		'image/bgm/z0.png',
 		'image/bgm/z1.png',
 		'image/bgm/z2.png',
-		'audio/bgm/MEGALOVANIA.mp3'
+		'audio/bgm/MEGALOVANIA.mp3',
+		'image/background/decadeUI.jpg',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

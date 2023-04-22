@@ -42,6 +42,34 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 doing();
             });
         },
+        count: 0,
+        groupeggClick: function () {
+            this.count++;
+            var str
+            if (!game.frAchi.hasAchi('你真的很无聊', 'special')) {
+                switch (this.count) {
+                    case 2: str = "说了是下面的啦！QWQ"; break;
+                    case 4: str = '你是不是听不懂人话(╯▔皿▔)╯'; break;
+                    case 8: str = '别点了别点了＞﹏＜'; break;
+                    case 10: str = '说了不要点了，点下面那个！(；′⌒`)'; break;
+                    case 11: str = '你是听不懂嘛，点下面那个(╯▔皿▔)╯'; break;
+                    case 12: str = '你真的好无聊，你的目的是什么呢？(╯‵□′)╯︵┻━┻'; break;
+                    case 13: str = '这里真的没东西，不要再点了！ヾ(≧へ≦)〃'; break;
+                    case 15: str = '你到底在干啥！(；′⌒`)'; break;
+                    case 17: str = '不要再点了！QAQ'; break;
+                    case 19: str = '好吧，我被你的毅力打动了，你想要什么？(・∀・(・∀・(・∀・*)'; break;
+                    case 20: str = '想要一个特殊成就吗？还是你早就已经知道了，就这么折磨我TAT'; break;
+                    case 21: str = '给你给你，你这无聊的家伙！'; break;
+                    default: str = '不是点击这里，是下面的彩色字体。0v0'; break;
+                }
+                if (this.count == 21) {
+                    if (!game.frAchi.hasAchi('你真的很无聊', 'special')) game.frAchi.addProgress('你真的很无聊', 'special')
+                }
+            } else {
+                str = '不是点击这里，是下面的彩色字体。'
+            }
+            alert(str)
+        }
     };
     //------------------进度条样式----------------//
     if (typeof game.furryCreateProgress != 'function') {
@@ -830,14 +858,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (history.length <= num) return null;
                 return history[history.length - num - 1];
             }
-            // ---------------------------------------自定义函数：获取花色数量-----------------------------------------//
-            lib.element.player.getSuitNum = function (position) {
-                var player = this;
-                if (!position) position = 'h';
-                return player.getCards(position).reduce(function (arr, card) {
-                    return arr.add(get.suit(card, player)), arr;
-                }, []).length;
-            };
             // ---------------------------------------自定义函数：视为伤害------------------------------------------//
             lib.element.player.fakeDamage = function () {
                 var next = game.createEvent('damage');
@@ -990,7 +1010,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 };
             };
             //---------------------------------------设置：背景音乐------------------------------------------//
-            game.skplayBackgroundMusic = function () {
+            game.frplayBackgroundMusic = function () {
                 //if(lib.config.background_music=='music_off'){
                 //ui.backgroundMusic.src='';
                 //}
@@ -1006,8 +1026,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 var item = {
                     "2": "furry_bgm_tavern.mp3",
                     "3": "furry_bgm_BattleAgainstATrueHero.mp3",
-                    "4":"MySunset.mp3",
-                    "5":"FarOut.mp3"
+                    "4": "MySunset.mp3",
+                    "5": "FarOut.mp3"
                 };
                 if (item[temp]) {
                     ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + item[temp];
@@ -1020,11 +1040,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.arenaReady.push(function () {
                     //ui.backgroundMusic.autoplay=true;
                     //ui.backgroundMusic.pause();
-                    game.skplayBackgroundMusic();
-                    ui.backgroundMusic.addEventListener('ended', game.skplayBackgroundMusic);
+                    game.frplayBackgroundMusic();
+                    ui.backgroundMusic.addEventListener('ended', game.frplayBackgroundMusic);
                 });
             };
-            lib.sk_changeSkill = config.changeGroup;
+            lib.fr_changeSkill = config.changeGroup;
             //---隐藏音乐可视化菜单上的文字，这样只显示设计的CD封面看着更简洁干净---
             // lib.init.css(lib.assetURL+"extension/福瑞拓展",'hidename');
             if (lib.config.extension_福瑞拓展_Background_Music) {
@@ -1033,55 +1053,73 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 document.head.appendChild(cbcss);
             };
 
+            //---------------------------------------设置：背景图片------------------------------------------//
+            game.frBackground_Picture = function () {
+                var temp = lib.config['extension_福瑞拓展_Background_Picture'];
+                if (temp == 'auto') {
+                    var list = [
+                        'picture1',
+                    ];
+                    if (_status.frBackground_Picture) list.remove(_status.frBackground_Picture);
+                    temp = list.randomGet();
+                }
+                _status.frBackground_Picture = temp;
+                if (temp !== '1') {
+                    game.broadcastAll() + ui.background.setBackgroundImage("extension/福瑞拓展/image/background/" + temp + ".jpg");
+                } else {
+                    game.broadcastAll() + ui.background.setBackgroundImage('image/background/' + lib.config.image_background + '.jpg');
+                }
+                var item = lib.config['extension_福瑞拓展_Background_Picture'];
+                if (item != "auto") {
+                    if (_status.Background_Picture_timeout) {
+                        clearTimeout(_status.Background_Picture_timeout);
+                    };
+                } else if (item == "auto") {
+                    var autotime = lib.config['extension_福瑞拓展_Background_Picture_auto'];
+
+                    var Timeout = autotime ? parseInt(autotime) : 30000;
+
+                    ///////////////////////////////////////////////////////
+                    var Timeout2 = _status.Background_Picture_Timeout2;
+                    if (_status.Background_Picture_timeout && Timeout2 && Timeout2 != Timeout) {
+                        clearTimeout(_status.Background_Picture_timeout);
+                    };
+                    /////////////////////////////////////////////////
+                    _status.Background_Picture_timeout = setTimeout(function () {
+                        game.frBackground_Picture();
+                    }, Timeout); /*Timeout*/
+                    _status.Background_Picture_Timeout2 = Timeout;
+                };
+            };
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            if (lib.config.extension_福瑞拓展_Background_Picture && lib.config.extension_福瑞拓展_Background_Picture != "1") {
+                lib.arenaReady.push(function () {
+                    game.frBackground_Picture();
+                });
+            };
 
             //---------------------------------------设置：主内单挑音乐------------------------------------------//
-            if(config.furry_zhuneimusic==1){
-                lib.skill._furry_zhuneibgm={
-                    trigger:{ 
-                        global:"dieAfter",
-                    }, 
-                    forced:true, 
-                    nobracket:true, 
-                    priority:-9993,
-                    content:function (){  
-                        var n=[1].randomGet();
-                        if(n==1){
-                            var num;
-                            var num1
-                            var mode=get.mode();
-                            if(mode=='identity'){
-                                num=get.population('nei');
-                                num1=get.population('zhu');
-                            }
-                            if(game.countPlayer()==2&&num>0&&num1>0) ui.backgroundMusic.src=lib.assetURL+'extension/福瑞拓展/audio/bgm/Hopes And Dreams.mp3'; 
-                        }  
-                        ui.backgroundMusic.loop=true;           
-                    },       
-                }  
-            }
-            if(config.furry_zhuneimusic==2){
-                lib.skill._furry_zhuneibgm={
-                    trigger:{ 
-                        global:"dieAfter",
-                    }, 
-                    forced:true, 
-                    nobracket:true, 
-                    priority:-9993,
-                    content:function (){  
-                        var n=[1].randomGet();
-                        if(n==1){
-                            var num;
-                            var num1
-                            var mode=get.mode();
-                            if(mode=='identity'){
-                                num=get.population('nei');
-                                num1=get.population('zhu');
-                            }
-                            if(game.countPlayer()==2&&num>0&&num1>0) ui.backgroundMusic.src=lib.assetURL+'extension/福瑞拓展/audio/bgm/MEGALOVANIA.mp3'; 
-                        }  
-                        ui.backgroundMusic.loop=true;           
-                    },       
-                }  
+            if (lib.config.extension_福瑞拓展_furry_zhuneimusic != 'z0') {
+                lib.skill._furry_zhuneibgm = {
+                    trigger: {
+                        global: "dieAfter",
+                    },
+                    forced: true,
+                    nobracket: true,
+                    priority: -Infinity,
+                    ruleSkill: true,
+                    filter: function (event, player) {
+                        return game.players.length == 2 && get.population('nei') > 0 && get.population('zhu') > 0 && get.mode() == 'identity'
+                    },
+                    content: function () {
+                        switch (lib.config.extension_福瑞拓展_furry_zhuneimusic) {
+                            case 'z1': str = 'Hopes And Dreams.mp3'; break;
+                            case 'z2': str = 'MEGALOVANIA.mp3'; break;
+                        }
+                        ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + str
+                        ui.backgroundMusic.loop = true;
+                    },
+                }
             }
             //---------------------------------------设置：自动更新------------------------------------------//
             if (config.furryCardFileConfig2 && game.getFileList && lib.config.extensions) {
@@ -1458,6 +1496,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     lib.characterPack.mode_guozhan.fr_skry = ["male", "wu", 3, ["skery_gzds", "skery_yj"], [url + 'fr_skry.jpg']]
                     lib.characterPack.mode_guozhan.fr_muyada = ["male", "qun", 3, ["mudaya_bz"], [url + 'fr_muyada.jpg']]
                     lib.characterPack.mode_guozhan.fr_muli = ["male", "qun", 4, ["muli_cm", "muli_yl"], [url + 'fr_muli.jpg']]
+                    lib.characterPack.mode_guozhan.fr_sheep = ["female", "ye", 3, ["sheep_gzjf"], [url + 'fr_sheep.jpg']]
+                    lib.characterPack.mode_guozhan.fr_bladewolf = ["male", "qun", 4, ["bladewolf_rh",], [url + 'fr_bladewolf.jpg']]
                 }
             }
             //------------------------------------------国战：珠联璧合------------------------------------------//
@@ -1467,6 +1507,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             lib.perfectPair.fr_bofeng = ['fr_ciyu']
             lib.perfectPair.fr_wore = ['fr_tiers']
             lib.perfectPair.fr_miya = ['db_fr_krikt']
+            lib.perfectPair.sheep = ['fr_bladewolf']
         }, precontent: function (furryPack) {
             //---------------------------------------设置：武将评级------------------------------------------//
             //乐色
@@ -1482,7 +1523,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow']
             //传说
             var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
-                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium','fr_zhan']
+                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium', 'fr_zhan', 'fr_rasali', 'fr_nashu']
             var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
             game.furryrank = furryrank
             //------------------------------------------载入css------------------------------------------//
@@ -1510,6 +1551,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }, true);
                     try {
                         game.frAchi.init();
+                        game.frAchi.loadFromFile()
                     } catch (e) {
                         alert("错误：成就初始化失败");
                     }
@@ -2439,6 +2481,26 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "clear": true,
                 "nopointer": true,
             },
+            "Background_Picture": {
+                name: "<b>背景图片</b>",
+                intro: "背景图片：可随意切换精美高清的背景图片。",
+                init: lib.config.extension_福瑞拓展_Background_Picture === undefined ? "1" : lib.config.extension_福瑞拓展_Background_Picture,
+                item: {
+                    "1": "默认背景",
+                    "decadeUI": "十周年UI",
+                    "auto": "自动切换",
+                },
+                onclick: function (item) {
+                    game.saveConfig('extension_福瑞拓展_Background_Picture', item);
+                    game.frBackground_Picture();
+                },
+                "visualMenu": function (node, link) { //link是冒号前面的，比如default:经典卡背，link就是default
+                    node.style.height = node.offsetWidth * 0.67 + "px"; //高度设置成宽度的0.67倍
+                    node.style.backgroundSize = '100% 100%'; //图片拉伸
+                    node.className = 'button character frBackgroundname';
+                    node.setBackgroundImage('extension/福瑞拓展/image/background/' + link + '.jpg'); //设置图片
+                },
+            },
             "Background_Music": {
                 name: "<b>背景音乐</b>",
                 intro: "背景音乐：可随意点播、切换优质动听的背景音乐",
@@ -2448,12 +2510,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     "1": "默认音乐",
                     "2": "Tarven",
                     "3": "Battle Against A True Hero",
-                    "3": "My Sunset",
+                    "4": "My Sunset",
+                    "5": "Far Out",
                 },
                 onclick: function (item) {
                     game.saveConfig('extension_福瑞拓展_Background_Music', item);
-                    game.skplayBackgroundMusic();
-                    ui.backgroundMusic.addEventListener('ended', game.skplayBackgroundMusic);
+                    game.frplayBackgroundMusic();
+                    ui.backgroundMusic.addEventListener('ended', game.frplayBackgroundMusic);
                 },
                 "visualMenu": function (node, link) {
                     node.style.height = node.offsetWidth * 0.6913 + "px";
@@ -2479,12 +2542,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             },
             "heroes": {
-                name: "国战武将",
+                name: "<b>国战武将</b>",
                 intro: "开启此功能重启后生效。开启后将池将增加国战专属武将",
                 init: false,
             },
             "ban_ai": {
-                "name": "AI禁将",
+                "name": "<b>AI禁将</b>",
                 "intro": "开启后，设置所有非福瑞扩展的武将配置为AI禁选。重启后生效。",
                 init: false,
                 onclick: function (item) {
@@ -2492,14 +2555,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     game.saveConfig('extension_福瑞拓展_ban_ai', item);
                 }
             },
+            'furryCardFileConfig2': {
+                'name': '<b>自动导入素材</b>',
+                'init': true,
+                'intro': '<font color=\'#ADEAEA\'>开启后将自动检测并导入图片素材',
+            },
             "furryCardFileConfig": {
                 name: "<div><button id='furryCardFileConfig' onclick='furry.furryCardFileConfig()'>导入美化卡牌素材</button> </div>",
                 clear: true
-            },
-            'furryCardFileConfig2': {
-                'name': '<b><font color=\'#ADEAEA\'>自动导入大将军金卡等素材',
-                'init': true,
-                'intro': '<font color=\'#ADEAEA\'>开启后将自动检测并导入图片素材',
             },
             'new_character_title': {
                 "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/pifumoshi.png></b>",
@@ -2507,7 +2570,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "nopointer": true,
             },
             "frLutou": {
-                name: "露头模式",
+                name: "<b>露头模式</b>",
                 intro: "切换武将插画与皮肤为露头，需要搭配十周年UI使用。",
                 init: false,
                 onclick: function (item) {
@@ -2523,18 +2586,18 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "nopointer": true,
             },
             "xuanshi": {
-                name: "技能作弊",
+                name: "<b>技能作弊</b>",
                 "init": "1",
                 "item": { "1": "关闭", "2": "开启" }
             },
             "ShowmaxHandcard": {
-                name: '手牌上限',
+                name: '<b>手牌上限</b>',
                 init: false,
                 intro: '将游戏内显示的手牌数改为显示手牌数与手牌上限。(例：2/3，代表拥有2张牌，手牌上限为3)',
             },
             "fr_shunfajiButton": {
-                "name": "<b><font color=\"#00FFFF\">瞬发技按钮样式",
-                "intro": "<b><font color=\"#00FFFF\">切换瞬发技按钮样式<br>可根据个人喜好切换<br>切换后，重启生效",
+                "name": "<b>瞬发技按钮样式</b>",
+                "intro": "<b>切换瞬发技按钮样式<br>可根据个人喜好切换<br>切换后，重启生效",
                 "init": "shousha",
                 "item": {
                     "shousha": "<b><font color=\"#FF6020\">手杀样式",
@@ -2543,7 +2606,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             },
             "selectDrama": {
-                "name": "剧情选择",
+                "name": "<b>剧情选择</b>",
                 "intro": "选择播放的剧情",
                 "init": "1",
                 "item": {
@@ -2556,7 +2619,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             },
             "openlib": {
-                "name": "打开群像<div>&gt;</div>",
+                "name": "<b>打开群像</b><div>&gt;</div>",
                 "clear": true,
                 onclick: function () {
                     game.saveConfig('mode', 'furry_lib');
@@ -2569,17 +2632,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qitazaxiang.png></b>",
                 "clear": true,
                 "nopointer": true,
-            },
-            "fr_OpenAchievement": {
-                "name": '福瑞拓展成就',
-                "clear": true,
-                onclick: function () {
-                    if (typeof window.openfrAchievement == 'function') {
-                        window.openfrAchievement();
-                    } else {
-                        alert("错误：您似乎没有打开福瑞拓展包。");
-                    }
-                }
             },
             "furry_onlineUpdate": {
                 //检查游戏更新
@@ -2747,23 +2799,34 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 },
             },
+            "fr_OpenAchievement": {
+                "name": "<b><span id='chengjiu' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>打开福瑞成就菜单</span></b>",
+                "clear": true,
+                onclick: function () {
+                    if (typeof window.openfrAchievement == 'function') {
+                        window.openfrAchievement();
+                    } else {
+                        alert("错误：您似乎没有打开福瑞拓展包。");
+                    }
+                }
+            },
             "furry_onlineUpdate2": {
-                "name": "自动更新",
+                "name": "<b>自动更新</b>",
                 "intro": "游戏开始后会自动检查福瑞拓展是否为最新版",
                 "init": true,
             },
             "acknowledgments": {
-                "name": "鸣谢清单",
+                "name": "<b>鸣谢清单</b>",
                 "clear": true,
                 "onclick": function () {
                     ui.create.iframe(lib.assetURL + 'extension/福瑞拓展/acknowledgments/Acknowledgments.html')
                 }
             },
             "group_egg": {
-                "name": "交流群号:556343851",
+                "name": "<b>交流群号:556343851</b>",
                 "clear": true,
                 "onclick": function () {
-                    alert("不是这里，点击下面的彩色字体哦！")
+                    window.furry.groupeggClick()
                 },
             },
             "BugFeedBack": {
@@ -2794,11 +2857,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 translate: {
                 },
             },
-            intro: "<li>图片来自网络，若有侵权请联系作者删除<li><font color=\"red\">点击底部彩色字体可直接加入群聊</font><li>👇下方为QQ群二维码<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup.png></img>",
+            intro: "<li>(｡･∀･)ﾉﾞ嗨，" + lib.config.connect_nickname + "！欢迎游玩福瑞拓展！<li>图片来自网络，若有侵权请联系作者删除<li><font color=\"red\">点击底部彩色字体可直接加入群聊</font><li>👇下方为QQ群二维码<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup.png></img>",
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.1.0.5",
+            version: "2.1.0.6",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })
