@@ -1223,12 +1223,19 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 },
                 content: function () {
                     'step 0'
+                    event.index=[]
+                    'step 1'
                     player.chooseControl('宫', '商', '角', '清角', '徵', '羽', '变宫', 'cancel2').set('ai', function () {
                         return 'cancel2'
                     })
-                    'step 1'
+                    'step 2'
                     if (result.control == 'cancel2') {
+                        if(event.index.toString() === [1, 1, 5, 5, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1].toString()){
+                            if(!game.frAchi.hasAchi('你会弹琴吗？','special')) game.frAchi.addProgress('你会弹琴吗？','special')
+                        }
                         event.finish()
+                    }else{
+                        event.index.push(result.index+1)
                     }
                     if (result.control == '宫') {
                         game.frPlayAudio('gong')
@@ -1245,7 +1252,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     } else if (result.control == '变宫') {
                         game.frPlayAudio('biangong')
                     }
-                    event.goto(0)
+                    'step 3'
+                    event.goto(1)
                 },
                 group: "wxpp_skill_wxpp",
                 subSkill: {

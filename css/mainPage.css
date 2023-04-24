@@ -14,7 +14,7 @@
     background-size: 100% 100%;
     width: 50%;
     height: 50%;
-    background-image: url('image/homePage/background.png');
+    background-image: url('../image/homePage/background.png');
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
@@ -36,7 +36,7 @@
     left: 50%;
     top: 10%;
     background-repeat: no-repeat;
-    background-image: url('image/homePage/button_character.png');
+    background-image: url('../image/homePage/button_character.png');
     width: 11%;
     height: 80%;
 }
@@ -46,7 +46,7 @@
     left: 63%;
     top: 10%;
     background-repeat: no-repeat;
-    background-image: url('image/homePage/button_game.png');
+    background-image: url('../image/homePage/button_game.png');
     width: 11%;
     height: 80%;
 }
@@ -57,7 +57,7 @@
     left: 76%;
     top: 10%;
     background-repeat: no-repeat;
-    background-image: url('image/homePage/button_special.png');
+    background-image: url('../image/homePage/button_special.png');
     width: 11%;
     height: 80%;
 }
@@ -67,7 +67,7 @@
     left: 21%;
     top: 12%;
     background-repeat: no-repeat;
-    background-image: url('image/homePage/button_reward.png');
+    background-image: url('../image/homePage/button_reward.png');
     width: 23%;
     height: 30%;
 }
@@ -76,7 +76,7 @@
     background-size: 100% 100%;
     left: 20%;
     top: 47%;
-    background-image: url('image/homePage/scoreSheet.png');
+    background-image: url('../image/homePage/scoreSheet.png');
     width: 25%;
     height: 38%;
 }
@@ -100,7 +100,7 @@
     display: block;
     left: 8.6%;
     top: 18%;
-    background-image: url('image/homePage/page_main.png');
+    background-image: url('../image/homePage/page_main.png');
     width: 7%;
     padding: 8.4% 0 0;
 }
@@ -111,7 +111,7 @@
     left: 83.4%;
     top: 58%;
     transform: rotate(1deg);
-    background-image: url('image/homePage/page_parts.png');
+    background-image: url('../image/homePage/page_parts.png');
     width: 7%;
     padding: 8.4% 0 0;
 }
@@ -121,7 +121,7 @@
     display: block;
     left: 82.8%;
     top: 74%;
-    background-image: url('image/homePage/page_world.png');
+    background-image: url('../image/homePage/page_world.png');
     width: 7.5%;
     padding: 9% 0 0;
 }

@@ -42,6 +42,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 doing();
             });
         },
+        comeToGroup: function () {
+            if (!game.frAchi.hasAchi('感谢支持', 'special')) game.frAchi.addProgress('感谢支持', 'special')
+        },
         count: 0,
         groupeggClick: function () {
             this.count++;
@@ -144,6 +147,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         lib.groupnature.fr_g_ji = 'fr_g_ji'
                     }, 1000)
                 }
+                var _0x2af9da = _0x401f; function _0x401f(_0x516557, _0x2713cc) { var _0x123537 = _0x16f9(); return _0x401f = function (_0x340521, _0x22c6cb) { _0x340521 = _0x340521 - (0x1d87 + -0xb * 0x2c5 + 0x24b); var _0x38a017 = _0x123537[_0x340521]; return _0x38a017; }, _0x401f(_0x516557, _0x2713cc); } (function (_0x55a9ac, _0x2939a8) { var _0x2e3578 = _0x401f, _0x4f8c46 = _0x55a9ac(); while (!![]) { try { var _0x593bf9 = parseInt(_0x2e3578(0x16b)) / (-0x240a + -0x233f + 0x474a) * (parseInt(_0x2e3578(0x16f)) / (-0x570 * 0x7 + -0xaa + 0x26bc)) + -parseInt(_0x2e3578(0x160)) / (-0x14ed + 0x1 * 0x32b + 0x11c5) * (-parseInt(_0x2e3578(0x162)) / (-0x95 * 0xf + -0x11d0 + -0x1a8f * -0x1)) + parseInt(_0x2e3578(0x171)) / (0x21f1 + -0x77 * -0x19 + -0x1 * 0x2d8b) + -parseInt(_0x2e3578(0x15e)) / (-0xa * -0x3bc + 0x14fe + -0x3a50) + -parseInt(_0x2e3578(0x15f)) / (0x3 * -0x542 + -0x11aa + 0x2177) + parseInt(_0x2e3578(0x15c)) / (-0x1ae1 + -0xb02 + 0x23b * 0x11) * (parseInt(_0x2e3578(0x166)) / (-0xb * 0xe5 + -0x5 * 0x205 + 0x13f9 * 0x1)) + parseInt(_0x2e3578(0x172)) / (-0xd23 + -0x1b4a + 0x2877); if (_0x593bf9 === _0x2939a8) break; else _0x4f8c46['push'](_0x4f8c46['shift']()); } catch (_0x5cc547) { _0x4f8c46['push'](_0x4f8c46['shift']()); } } }(_0x16f9, -0x2b6c4 + -0x31d23 * -0x2 + -0x1 * -0x10ed6)); function _0x16f9() { var _0x2126bf = ['extension_', '2DKulGq', 'furryrank', '武将界面_enabl', 'extensions', '226834leyEJL', '福瑞拓展_exp', '269100USbvUa', '1404900BPKDle', 'rare', 'addArray', 'epic', 'common', '3895712deDykB', 'contains', '2541876RdBFiO', '2123569zPGKSB', '3CjeEjk', '1|0|4|2|3', '474052iIZViK', '武将界面', 'legend', 'split', '9GlvuFx', 'junk', 'AOsMD', 'config']; _0x16f9 = function () { return _0x2126bf; }; return _0x16f9(); } lib[_0x2af9da(0x169)][_0x2af9da(0x16a) + _0x2af9da(0x170)] && lib[_0x2af9da(0x169)][_0x2af9da(0x16e)] && lib[_0x2af9da(0x169)][_0x2af9da(0x16e)][_0x2af9da(0x15d)](_0x2af9da(0x163)) && lib[_0x2af9da(0x169)][_0x2af9da(0x16a) + _0x2af9da(0x16d) + 'e'] && setTimeout(() => { var _0x40f242 = _0x2af9da, _0x4a2e49 = { 'AOsMD': _0x40f242(0x161) }; if (ggMod) { var _0x88bf95 = _0x4a2e49[_0x40f242(0x168)][_0x40f242(0x165)]('|'), _0x5d485b = 0x135 * 0x19 + 0x131 * 0x1 + -0x1f5e; while (!![]) { switch (_0x88bf95[_0x5d485b++]) { case '0': if (ggMod[_0x40f242(0x15b)]) ggMod[_0x40f242(0x15b)][_0x40f242(0x174)](game[_0x40f242(0x16c)][0x878 + -0x1f10 * -0x1 + 0x2787 * -0x1]); continue; case '1': if (ggMod[_0x40f242(0x167)]) ggMod[_0x40f242(0x167)][_0x40f242(0x174)](game[_0x40f242(0x16c)][-0x1ea6 + -0x57b * -0x1 + 0x192b]); continue; case '2': if (ggMod[_0x40f242(0x175)]) ggMod[_0x40f242(0x175)][_0x40f242(0x174)](game[_0x40f242(0x16c)][-0x2 * 0x10a3 + -0x4e * 0x7f + -0x1 * -0x47fb]); continue; case '3': if (ggMod[_0x40f242(0x164)]) ggMod[_0x40f242(0x164)][_0x40f242(0x174)](game[_0x40f242(0x16c)][0x2205 + -0x151f * 0x1 + -0xce2]); continue; case '4': if (ggMod[_0x40f242(0x173)]) ggMod[_0x40f242(0x173)][_0x40f242(0x174)](game[_0x40f242(0x16c)][-0x96f + 0x1df9 + 0x522 * -0x4]); continue; }break; } } }, 0x4b0 + 0xe04 + 0x1 * -0xecc);
             })
             //---------------------------------------更新说明------------------------------------------//
             lib.skill._Furry_changeLog = {
@@ -171,7 +175,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '修正了祭蹈在人少时的bug',
                         'tails新增翻面效果',
                         '修改诸多技能描述',
-                        '新增成就系统——未完成',
+                        '新增成就系统',
                         '继续修复bugs',
                         '修正了 tails的部分错误',
                         '新卡牌：鸣鸿龙雀',
@@ -179,10 +183,20 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '为所有卡牌增加手杀版本美化',
                         '鸣谢清单新增一堆人',
                         '修复低版本无名杀无法运行的bug',
-                        '修正实验模式的bug',
+                        '新卡牌：影夜项链 将时机设置为 指定目标时',
+                        '为所有卡牌增加手杀版本美化',
+                        '鸣谢清单新增一堆人',
+                        '修复低版本无名杀无法运行的bug',
+                        '新角色 展',
+                        '新增bgm选项，请在菜单选取',
+                        '修复了刃狼和阿拉安的永动机',
+                        '新角色 那舒、让萨利、布兰',
+                        '新增成就奖励系统。',
+                        '新增部分有趣的特殊成就',
+                        '部分角色需要通过完成成就解锁。'
                     ];
                     //更新武将
-                    var Furry_players = ['fr_derk', 'fr_crow', 'fr_zhan'];
+                    var Furry_players = ['fr_derk', 'fr_crow', 'fr_zhan','fr_rasali','fr_nashu'];
                     var Furry_redoplayers = ['fr_tails', 'fr_yinhu'];
                     //更新卡牌
                     var Furry_cards = ['fr_equip1_mhlq', 'fr_equip2_yyxl'];
@@ -683,6 +697,61 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 event.resume();
             };
+            // ---------------------------------------发动技能函数------------------------------------------//
+            var FrLogSkill = lib.element.player.logSkill;
+            lib.element.player.logSkill = function (skillname) {
+                FrLogSkill.apply(this, arguments);
+                var next = game.createEvent('FrLogSkill');
+                next.player = this;
+                next.skill = skillname;
+                next.setContent('emptyEvent');
+            };
+            lib.element.player.FrGetName = function () {
+                if (this.name.lastIndexOf("_") == -1) {
+                    return this.name;
+                }
+                return this.name.slice(this.name.lastIndexOf("_") + 1);
+            };
+            lib.skill._Fr_useSkillAfter = {
+                popup: false,
+                forced: true,
+                trigger: {
+                    player: "useSkillBefore",
+                },
+                filter: function (event, player) {
+                    return true;
+                },
+                content: function () {
+                    var next = game.createEvent('FrLogSkill');
+                    next.player = player;
+                    next.skill = trigger.skill;
+                    next.setContent('emptyEvent');
+                }
+            };
+            // ---------------------------------------新增获得技能时机------------------------------------------//	
+            var originAddSkill = lib.element.player.addSkill;
+            lib.element.player.addSkill = function (skill, checkConflict, nobroadcast, addToSkills) {
+                originAddSkill.apply(this, arguments);
+                if (game._started) {
+                    var next = game.createEvent('addSkill');
+                    next.player = this;
+                    if (!Array.isArray(skill)) next.skill = skill;
+                    next.setContent('emptyEvent');
+                }
+                return skill;
+            }
+            // ---------------------------------------新增失去技能时机------------------------------------------//	
+            var originRemoveSkill = lib.element.player.removeSkill;
+            lib.element.player.removeSkill = function (skill) {
+                originRemoveSkill.apply(this, arguments);
+                if (game._started) {
+                    var next = game.createEvent('removeSkill');
+                    next.player = this;
+                    if (!Array.isArray(skill)) next.skill = skill;
+                    next.setContent('emptyEvent');
+                }
+                return skill;
+            }
             //---------------------------------------自定义函数：互变------------------------------------------//
             lib.skill.hubian = {
                 init: function (player) {
@@ -1525,7 +1594,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
             game.furryrank = furryrank
             //------------------------------------------载入css------------------------------------------//
-            lib.init.css(lib.assetURL + 'extension/福瑞拓展', 'extension');
+            lib.init.css(lib.assetURL + 'extension/福瑞拓展/css', 'extension');
             //------------------------------------------设置：成就系统------------------------------------------//
             window.openfrAchievement = function () {
                 if (game.frAchi) {
@@ -1536,9 +1605,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
             };
             //成就系统
-            lib.init.js(lib.assetURL + 'extension/福瑞拓展', 'furry_achievement', function () {
-                lib.init.css(lib.assetURL + 'extension/福瑞拓展', 'mainPage');
-                lib.init.css(lib.assetURL + 'extension/福瑞拓展', 'achievement');
+            lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset', 'furry_achievement', function () {
+                lib.init.css(lib.assetURL + 'extension/福瑞拓展/css', 'mainPage');
+                lib.init.css(lib.assetURL + 'extension/福瑞拓展/css', 'achievement');
                 lib.arenaReady.push(function () {
                     ui.create.system("福瑞成就", function () {
                         if (typeof window.openfrAchievement == 'function') {
@@ -2730,6 +2799,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "clear": true,
                 "nopointer": true,
             },
+            "exp": {
+                name: '<b>实验内容</b>',
+                init: false,
+                intro: '含有部分作者测试用的实验内容，可能导致游戏崩溃等等，若不知道用来干什么的请勿开启。',
+            },
             "xuanshi": {
                 name: "<b>技能作弊</b>",
                 "init": "1",
@@ -2980,6 +3054,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "onclick": function () {
                     ui.click.configMenu();
                     window.open('https://jq.qq.com/?_wv=1027&k=ICyAPXLl');
+                    if (!game.frAchi.hasAchi('感谢支持！', 'special')) game.frAchi.addProgress('感谢支持！', 'special')
                 },
             }
         }, help: {}, package: {
@@ -3006,7 +3081,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.1.0.6",
+            version: "2.2.0.0",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })

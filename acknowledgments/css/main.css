@@ -1,6 +1,6 @@
 @font-face{
 	font-family:"得意黑";
-	src:url("../font/SmileySans-Oblique.otf")
+	src:url("../font/SmileySans-Oblique.ttf")
 }
 body.loginpage {
         background-image: url("../img/background.jpg");

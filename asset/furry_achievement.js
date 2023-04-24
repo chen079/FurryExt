@@ -1,8 +1,8 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
-		'fr_nashu':'邪恶的灵魂，呵呵，不过是我的盘中餐...',
-		'fr_rasali':'唯有善良，方为出路。',
+		'fr_nashu': '邪恶的灵魂，呵呵，不过是我的盘中餐...',
+		'fr_rasali': '唯有善良，方为出路。',
 		'fr_zhan': "枷锁是困不住我的，只会让我更加强大！",
 		'fr_derk': '这只是计划的一部分。',
 		'fr_crow': '流言止于智者...',
@@ -145,6 +145,15 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				},
 				rewardInfo: '奖励：解锁角色——弗兰西亚',
 			},
+			'链式反应': {
+				level: 5,
+				info: '使用刃狼对一名角色分配不少于15点伤害',
+				extra: '核弹大爆炸~~~',
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_tery')
+				},
+				rewardInfo: '奖励：解锁角色——特瑞',
+			},
 			'IQ:400': {
 				level: 5,
 				info: '使用塔尔斯的〖机动〗在一局游戏内，至少进行8次“谋弈”，且全部成功',
@@ -173,6 +182,10 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				level: 6,
 				info: '使用【鸣鸿龙雀】令一名角色单次失去10点及以上的护甲。',
 				extra: '喊什么喊，我敢杀你！',
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_blam')
+				},
+				rewardInfo: '奖励：解锁角色——布兰',
 				progress: 1
 			},
 			'看我一箭穿心！': {
@@ -191,6 +204,37 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				},
 				rewardInfo: '奖励：解锁角色——展',
 				progress: 1
+			},
+			"黑客入侵": {
+				level: 6,
+				info: "这种事情不要啊~!",
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_neises')
+				},
+				rewardInfo: '奖励：解锁角色——内瑟斯',
+				extra: '真的只是测试木人而已...'
+			},
+			"感谢支持！": {
+				level: 7,
+				info: "谢谢你的支持嘞！",
+				extra: '我们的QQ群是：556343851',
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_yas_klin')
+				},
+				rewardInfo: '奖励：解锁角色——亚瑟克林',
+				progress: 1,
+			},
+			"你会弹琴吗？": {
+				level: 3,
+				info: "使用忘弦琵琶弹奏小星星的前两句",
+				extra: '谱子不会是网上找的罢...',
+				progress: 1,
+			},
+			"超级肝帝": {
+				level: 7,
+				info: "解锁除此成就外的所有成就。",
+				extra: '你是肝帝，还是黑客？',
+				progress: 1,
 			},
 		}
 		/*
@@ -318,6 +362,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 					let reward
 					let rewardInfo
 					switch (name) {
+						case 'fr_pluvia': reward = function () { game.frAchi.unlockCharacter('fr_ventus') }; rewardInfo = '奖励：解锁角色——凡图斯'; break;
 						case 'fr_nashu': reward = function () { game.frAchi.unlockCharacter('fr_rasali') }; rewardInfo = '奖励：解锁角色——让萨利'; break;
 						case 'fr_sam': reward = function () { game.frAchi.unlockCharacter('fr_ham') }; rewardInfo = '奖励：解锁角色——海'; break;
 						case 'fr_sheep': reward = function () { game.frAchi.unlockCharacter('fr_bladewolf') }; rewardInfo = '奖励：解锁角色——刃狼'; break;
@@ -354,6 +399,9 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				this.reset();
 				game.saveConfig('frAchiNew', true);
 			}
+			if (this.amount() == this.amountOfGained() + 1) {
+				if (this.hasAchi('超级肝帝', 'character')) this.addProgress('超级肝帝', 'character')
+			}
 			this.inited = true;
 		},
 		//保存存档文件
@@ -380,7 +428,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				var keys = Object.keys(lib.fr_achievement[type]);
 				for (var key of keys) {
 					var name = { 'character': 'c', 'game': 'g', 'special': 's' }[type] + ',' + key
-					if (!this.hasAchi(name)) this.got();
+					if (!this.hasAchi(name)) this.got(name);
 				}
 			}
 			this.saveConfig()
@@ -998,7 +1046,8 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//成就计量技能
 	lib.skill["_fr_achi_连破之刃"] = {
 		trigger: {
-			global: "damageBefore"
+			global: "damageBefore",
+			source:"damageBefore"
 		},
 		firstDo: true,
 		priority: 6,
@@ -1047,6 +1096,24 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		},
 		content: function () {
 			game.frAchi.addProgress('叠最厚的甲', 'game');
+		}
+	};
+	lib.skill["_fr_achi_黑客入侵"] = {
+		trigger: {
+			global: "phaseBefore",
+			player: "enterGame",
+		},
+		firstDo: true,
+		priority: 6,
+		forced: true,
+		popup: false,
+		filter: function (event, player) {
+			if (game.me != player) return false;
+			if (player.name != 'fr_neises' && player.name1 != 'fr_neises' && player.name2 != 'fr_neises') return false
+			return !game.frAchi.hasAchi('黑客入侵', 'special');
+		},
+		content: function () {
+			game.frAchi.addProgress('黑客入侵', 'special');
 		}
 	};
 	//卡牌击杀成就的获得写在这里

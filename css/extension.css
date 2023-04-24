@@ -7,7 +7,7 @@
     height: 393px;
     text-align: center;
     background-size: 100% 100%;
-    background-image: url('image/others/furry_pic_bigdialog.png');
+    background-image: url('../image/others/furry_pic_bigdialog.png');
     transform: translate(-50%, -50%);
     z-index: 22;
 }
@@ -45,7 +45,7 @@
     height: 30px;
     width: 30px;
     background-size: 100% 100%;
-    background-image: url('image/others/furry_pic_close.png');
+    background-image: url('../image/others/furry_pic_close.png');
 }
 
 .furry-dialog>.furry-dialog-icon {
@@ -65,7 +65,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-image: url("image/others/progress_bg.png");
+    background-image: url("../image/others/progress_bg.png");
     background-size: 100% 100%;
     background-repeat: no-repeat;
     z-index: 20;
@@ -78,7 +78,7 @@
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    background-image: url("image/others/progress_bar.png");
+    background-image: url("../image/others/progress_bar.png");
     background-size: 0;
     background-repeat: no-repeat;
 }
@@ -117,7 +117,7 @@
     top: calc(30%);    
     width: 45px;
     height: 19px;
-    background-image: url('image/button/button_ol.png');
+    background-image: url('../image/button/button_ol.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     z-index: 130;
@@ -136,7 +136,7 @@
     top: calc(30%);    
     width: 45px;
     height: 19px;
-    background-image: url('image/button/button_olten.png');
+    background-image: url('../image/button/button_olten.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     z-index: 130;
@@ -155,7 +155,7 @@
     top: calc(30%);    
     width: 45px;
     height: 19px;
-    background-image: url('image/button/button_shousha.png');
+    background-image: url('../image/button/button_shousha.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     z-index: 130;
@@ -169,16 +169,16 @@
 
 /*这里是龙势力*/
 .button.character.newstyle>.identity[data-nature="fr_g_dragon"]{
-	background-image: url('image/group/name2_fr_g_dragon.png') !important;
+	background-image: url('../image/group/name2_fr_g_dragon.png') !important;
 	background-size: 100% 100% !important;
 }
 
 .qh-shousha-big-avatar[data-group='fr_g_dragon']>.qh-avatar-label {
-    background-image: url('image/group/detail_fr_g_dragon.png');
+    background-image: url('../image/group/detail_fr_g_dragon.png');
 }
 
 .qh-shousha-big-avatar[data-group='fr_g_dragon']>.qh-avatar-label-other {
-    background-image: url('image/group/detail_fr_g_dragon_other.png');
+    background-image: url('../image/group/detail_fr_g_dragon_other.png');
 }
 
 .player>.camp-wrap[data-camp='fr_g_dragon']>.camp-back {
@@ -187,16 +187,16 @@
 
 /*这里是机势力*/
 .button.character.newstyle>.identity[data-nature="fr_g_ji"]{
-	background-image: url('image/group/name2_fr_g_ji.png') !important;
+	background-image: url('../image/group/name2_fr_g_ji.png') !important;
 	background-size: 100% 100% !important;
 }
 
 .qh-shousha-big-avatar[data-group='fr_g_ji']>.qh-avatar-label {
-    background-image: url('image/group/detail_fr_g_ji.png');
+    background-image: url('../image/group/detail_fr_g_ji.png');
 }
 
 .qh-shousha-big-avatar[data-group='fr_g_ji']>.qh-avatar-label-other {
-    background-image: url('image/group/detail_fr_g_ji_other.png');
+    background-image: url('../image/group/detail_fr_g_ji_other.png');
 }
 
 .player>.camp-wrap[data-camp='fr_g_ji']>.camp-back {

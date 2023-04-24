@@ -1,6 +1,6 @@
 @font-face {
     font-family: "得意黑";
-    src: url("acknowledgments/font/SmileySans-Oblique.otf")
+    src: url("../acknowledgments/font/SmileySans-Oblique.ttf")
 }
 
 .fr-achiWindow {
@@ -19,7 +19,7 @@
     background-size: 100% 100%;
     width: 50%;
     height: 50%;
-    background-image: url('image/achievement/background.png');
+    background-image: url('../image/achievement/background.png');
     transform: translate(-50%, -50%);
     top: 50%;
     left: 50%;
@@ -43,7 +43,7 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-image: url('image/achievement/background_cover.png');
+    background-image: url('../image/achievement/background_cover.png');
     pointer-events: none;
 }
 
@@ -53,7 +53,7 @@
     display: block;
     left: 88.5%;
     top: 11%;
-    background-image: url('image/achievement/exit_icon.png');
+    background-image: url('../image/achievement/exit_icon.png');
     width: 3.5vw;
     height: 3.5vw;
 }
@@ -88,7 +88,7 @@
     padding: 9.6% 1px 0;
     top: 80%;
     left: 85.5%;
-    background-image: url('image/achievement/button_openFilter.png');
+    background-image: url('../image/achievement/button_openFilter.png');
     background-size: 100%;
 }
 
@@ -99,7 +99,7 @@
     left: 50%;
     padding: 0 50% 0 0;
     background-size: 100%;
-    background-image: url('image/achievement/filter_bg.png');
+    background-image: url('../image/achievement/filter_bg.png');
 }
 
 .fr-achiWindow-filterWindow>.fr-achiWindow-filterIn {
@@ -116,7 +116,7 @@
     display: block;
     right: 12%;
     top: 4.8%;
-    background-image: url('image/achievement/exit_icon.png');
+    background-image: url('../image/achievement/exit_icon.png');
     width: 3.5vw;
     height: 3.5vw;
 }
@@ -128,7 +128,7 @@
     top: 0;
     background-size: 100%;
     font-size: 3.5vw;
-    background-image: url('image/achievement/star1.png');
+    background-image: url('../image/achievement/star1.png');
 }
 
 .fr-achiWindow-filter-lv {
@@ -136,7 +136,7 @@
     height: 26%;
     left: 12.25%;
     background-size: 100%;
-    background-image: url('image/achievement/filter_optional.png');
+    background-image: url('../image/achievement/filter_optional.png');
     text-align: center;
     display: flex;
     align-items: center;
@@ -151,7 +151,7 @@
     margin: auto;
     width: 100%;
     height: 10%;
-    background: url('image/others/tc2.png') no-repeat center;
+    background: url('../image/others/tc2.png') no-repeat center;
     background-size: contain;
     text-align: center;
     display: flex;
@@ -172,7 +172,7 @@
     min-width: 100%;
     min-height: 100%;
     transform: translate(-50%, -50%);
-    background-image: url('image/background/tavern.jpg');
+    background-image: url('../image/background/tavern.jpg');
 }
 
 .frw-background>.fr-winner-head {
@@ -199,7 +199,7 @@
     width: 210px;
     height: 285px;
     background-size: 100% 100%;
-    background-image: url('image/others/fr_pic_biankuang.png');
+    background-image: url('../image/others/fr_pic_biankuang.png');
     transform: translate(-50%, -50%);
     z-index: 24;
 }
@@ -233,7 +233,7 @@
     transform: translate(-50%, 0%);
     z-index: 25;
     background-size: 100% 100%;
-    background-image: url('image/button/button_shousha.png');
+    background-image: url('../image/button/button_shousha.png');
     font-family: 'HYZLSJ';
     overflow: scroll;
     font-size: 32px;
