@@ -1,6 +1,6 @@
 (() => ({
 	// 扩展版本
-	version: "2.2.0.0",
+	version: "2.2.0.1",
 
 	// 扩展的上一个版本
 	oldversion: "2.2.0.0",
@@ -20,18 +20,16 @@
 		'asset/drama.js',
 		'asset/furry_achievement.js',
 		'extension.js',
-		'image/character/fr_aoeslat.jpg',
-		'image/character/fr_blam.jpg',
-		'image/character/fr_lamas.jpg',
-		'image/character/fr_mouse.jpg',
-		'image/character/fr_neises.jpg',
-		'image/character/fr_thunder.jpg',
-		'image/lutou/fr_aoeslat.jpg',
-		'image/lutou/fr_blam.jpg',
-		'image/lutou/fr_lamas.jpg',
-		'image/lutou/fr_mouse.jpg',
-		'image/lutou/fr_neises.jpg',
-		'image/lutou/fr_thunder.jpg',
+		'image/achievement/tips_reward.png',
+		'image/bgm/0.png',
+		'image/bgm/1.png',
+		'image/bgm/2.png',
+		'image/bgm/3.png',
+		'image/bgm/4.png',
+		'image/bgm/5.png',
+		'image/bgm/z0.png',
+		'image/bgm/z1.png',
+		'image/bgm/z2.png',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

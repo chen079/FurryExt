@@ -220,48 +220,37 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
             },
             "neises_kp": {
-                trigger: {
-                    global: "FrLogSkillBefore",
+                trigger:{
+                    player:"phaseBefore"
                 },
-                logTarget: "player",
-                check: function (event, player) {
-                    return get.attitude(player, event.player) < 0;
+                mark:true,
+                locked:true,
+                mark:true,
+                direct:true,
+                zhuanghuanji:true,
+                init:function(player){
+                    if(!player.storage.buming) player.storage.buming=0;
                 },
-                filter: function (event, player) {
-                    if (event.player == player) return false;
-                    var skill = event.skill;
-                    var info = get.info(skill);
-                    if (!info) return false;
-                    if (info.forced) return false;
-                    if (info.charlotte) return false;
-                    if (info.direct) return false;
-                    var skills = event.player.getOriginalSkills();
-                    if (skills.contains(skill)) return true;
-                    for (var s of skills) {
-                        var info = get.info(s);
-                        if (info && info.subSkill) {
-                            for (var i in info.subSkill) {
-                                if (s + "_" + i == skill) {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                    return false;
-                },
-                content: function () {
-                    'step 0'
-                    player.say(["你的〖" + get.translation(trigger.skill) + "〗被看穿了", "〖" + get.translation(trigger.skill) + "〗小计，不足挂齿"].randomGet());
-                    trigger.cancel();
-                    'step 1'
-                    var evt = _status.event.getParent('phase');
-                    if (evt) {
-                        game.resetSkills();
-                        _status.event = evt;
-                        _status.event.finish();
-                        _status.event.untrigger(true);
+                marktext:'',
+                intro:{
+                    content:function(storage,player){
+                        var list1=['命由天定，事在人为','天行健；君子以自强不息。','地势坤；君子以厚德载物。','云雷屯，君子以经纶。','山下有泉，蒙。君子以果行育德。','云上于天，需。君子以饮食宴乐。','天与水违行，讼。君子以做事谋始。','地中有水，师。君子以容民畜众。','地上有水，比。先王以建万国、亲诸侯。','风行天下小畜。君子以懿文德。','上天下泽，履。君子以辨上下，定民志。','天地交，泰，后以财成天地之道，辅相天地之宜，以左右民。','天地不交，否。君子以俭德辟难，不可荣以禄。','天与火，同人。君子以类族辨物。','火在天上，大有。君子以遏恶扬善，顺天休命。','地中有山，谦。君子以裦多益寡，称物平施。','雷出地奋，豫。先王以作乐崇德，殷荐之上帝，以配祖考。','泽中有雷，随，君子向晦入宴息。','山上有风，蛊。君子以振民育德。','泽上有地，临。君子以教思无穷，容保民无疆。','风行地上，观。先王以省方观民设教。','雷电噬嗑。先王以明罚敕法。','山下有火，贲。君子以明庶政，无敢折狱。','山附于地，剥。上以厚下安宅。','雷在地中，复。先王以至日闭关，商旅不行，后不省方。','天下雷行，物与无妄。先王以茂对时育万物。','天在山中，大畜。君子以多识前言往行，以畜其德。','山下有雷，颐。君子以慎言语，节饮食。','泽灭木，大过。君子以独立不惧，遁世无闷。','水洊至，习坎。君子以常德行，习教事。','明两作，离。大人以继明照于四方。','山上有泽，咸。君子以虚受人。','雷风恒，君子以立不易方。','天下有山，遁。君子以远小人，不恶而严。','雷在天上，大壮。君子以非礼弗履。','明出地上，晋。君子以自昭明德。','明入地中，明夷。君子以莅众用晦而明。','风自火出，家人。君子以言有物而行有恒。','上火下泽，睽。君子以同而异。','山上有水，蹇。君子以反身修德。','雷雨作，解。君子以赦过宥罪。','山下有泽，损。君子以惩忿窒欲。','风雷益，君子以见善则迁，有过则改。','泽上于天，夬。君子以施禄及下，居德则忌。','天下有风，姤。后以施命告四方。','泽上于地，萃。君子以除戎器，戒不虞。','地中生木，升。君子以顺德，积小以高大。','泽无水，困。君子以致命遂志。','木上有水，井。君子以劳民劝相。','泽中有火，革。君子以治历明时。','木上有火，鼎。君子以正位凝命。','洊雷，震。君子以恐惧修省。','兼山，艮。君子以思不出其位。','山上有木，渐。君子以居贤德善俗。','泽上有雷，归妹。君子以永终知敝。','雷电皆至，丰。君子以折狱致刑。','山上有火，旅。君子以明慎用刑而不留狱。','随风，巽。君子以申命行事。','丽泽兑，君子以朋友讲习。','风行水上，涣。先王以享于帝立庙。','泽上有水，节。君子以制数度，议德行。','泽上有风，中孚。君子以议狱缓死。','山上有雷，小过。君子以行过乎恭、丧过乎哀、用过乎俭。','水在火上，既济。君子以思患而豫防之。','火在水上，未济。君子以慎辨物居方。']
+                        var str = '卦辞'
+                        str += '<br><li>'+list1[player.storage.buming]
+                        return str
+                    },
+                    name:function(storage,player){
+                        var list3=['乾坤万象','乾为天','坤为地','⽔雷屯','⼭⽔蒙','⽔天需','天⽔讼','地⽔师','⽔地⽐','风天⼩畜','天泽履','地天泰','天地否','天⽕同⼈','⽕天⼤有','地⼭谦','雷地豫','泽雷随','⼭风蛊','地泽临','风地观','⽕雷筮嗑','⼭⽕贲','⼭地剥','地雷复','天雷⽆妄','⼭天⼤畜','⼭雷颐','泽风⼤过','坎为⽔','离为⽕','泽⼭咸','雷风恒','天⼭遁','雷天⼤壮','⽕地晋','地⽕明夷','风⽕家⼈','⽕泽睽','⼭⽔蹇','雷⽔解','⼭泽损','风雷益','泽天夬','天风姤','泽地萃','地风升','泽⽔困','⽔风井','泽⽕⾰','⽕风⿍','震为雷','⾉为⼭','风⼭渐','雷泽归妹','雷⽕丰','⽕⼭旅','巽为风','兑为泽','风⽔涣','⽔泽节','风泽中孚','雷⼭⼩过','⽔⽕既济','⽕⽔未济']
+                        return list3[player.storage.buming]
+                    },
+                    markcount:function(storage,player){
+                        var list2=['','乾卦','坤卦','屯卦','蒙卦','需卦','讼卦','师卦','比卦','小畜卦','履卦','泰卦','否卦','同人卦','大有卦','谦卦','豫卦','随卦','蛊卦','临卦','观卦','噬嗑卦','贲卦','剥卦','复卦','无妄卦','大畜卦','颐卦','大过卦','坎卦','离卦','咸卦','恒卦','遁卦','大壮卦','晋卦','明夷卦','家人卦','睽卦','蹇卦','解卦','损卦','益卦','夬卦','姤卦','萃卦','升卦','困卦','井卦','革卦','鼎卦','震卦','艮卦','渐卦','归妹卦','丰卦','旅卦','巽卦','兑卦','涣卦','节卦','中孚卦','小过卦','既济卦','未济卦']
+                        return ' '+list2[player.storage.buming]
                     }
                 },
+                content:function(){
+                    player.storage.buming=Math.floor(Math.random()*64)+1
+                }
             },
             'nashu_sg': {
                 trigger: {
@@ -17451,8 +17440,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             //技能
             'blame_jj':'剑祭',
             'blame_jj_info':'出牌阶段，若你的装备区均未被废除，你可以获得你的所有装备区的牌并废除你的装备区，然后指定一名其他角色。直到回合结束，你对其使用牌无距离和次数限制且你的装备牌均视为【杀】，其不能使用和打出手牌。其他角色的出牌阶段开始时，若其手牌数大于你且你有被废除的区域，你摸至与其手牌数相同然后你可以恢复你的一个被废除区域。',
-            'neises_kp': '看破',
-            'neises_kp_info': "每回合限一次，当一名其他角色发动武将牌上的非charlotte非direct非forced技时，你可以终止当前一切结算。",
+            'neises_kp': '演卦',
+            'neises_kp_info': "六十四卦，推演无穷",
             'nashu_th': '餮魂',
             'nashu_th_info': '一名角色死亡时，你可以选择获得其的一个技能（主公技，限定技，觉醒技，隐匿技，使命技，带有Charlotte标签的技能除外），若该角色是你杀死的，你增加1点体力上限并回复1点体力。',
             'nashu_sg': '蚀骨',
@@ -18172,6 +18161,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            'fr_blam':'如入幻境之刃',
             'fr_nashu': '恶魂使者',
             'fr_rasali': '善灵指引',
             'fr_zhan': "束缚之厄",

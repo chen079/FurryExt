@@ -111,6 +111,8 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		"fr_faers": "唯有永恒的安眠才是解脱。",
 		"fr_fate": "我可玩倒闭过好几家赌场。",
 		"fr_adward": "我是最邪恶的法师！<br>&nbsp&nbsp被我吓到了吧？",
+		"fr_blam": '又一个剑下亡魂。',
+		'fr_neises': '生与死轮回不止<br>&nbsp&nbsp我们生，他们死...'
 		//'':'',
 	};
 	//成就列表
@@ -736,8 +738,105 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 
 			var button_reward = ui.create.div('.fr-bookWindow-openReward', bk);
 			button_reward.listen(function () {
-				alert("这个卷轴居然是印上去的！？\n看来这个部分还没做完，以后再来看吧。");
+				bookWindow.delete();
+				game.resume2();
+				lib.onresize.remove(resize);
+				game.frAchi.openrewardView('reward');
 			});
+		},
+		//打开奖励框体
+		openrewardView: function (type) {
+			if (!type) type = 'reward';
+			game.frAchi.thisType = type;
+			game.pause2();
+			//覆盖图层
+			var achiWindow = ui.create.div('.fr-achiWindow');
+			document.body.appendChild(achiWindow);
+			//背景图层
+			var bk = ui.create.div('.fr-achiWindow-bk', achiWindow);
+			var setSize = function () {
+				var screenWidth = ui.window.offsetWidth;
+				var screenHeight = ui.window.offsetHeight;
+				var whr = 1.77778;
+				var width;
+				var height;
+				if (screenWidth / whr > screenHeight) {
+					height = screenHeight;
+					width = height * whr;
+				} else {
+					width = screenWidth;
+					height = screenWidth / whr;
+				}
+				bk.style.height = Math.round(height) + "px";
+				bk.style.width = Math.round(width) + "px";
+			};
+			setSize();
+			var resize = function () {
+				setTimeout(setSize, 500);
+			};
+			//界面提示标签
+			ui.create.div('.fr-achiWindow-tips', bk).setBackgroundImage('extension/福瑞拓展/image/achievement/tips_' + type + '.png');
+			//退出按钮
+			var exit = ui.create.div('.fr-achiWindow-return', bk);
+			lib.onresize.push(resize);
+			exit.listen(function () {
+				achiWindow.delete();
+				delete game.frAchi.hideLevel;
+				delete game.frAchi.thisType;
+				game.resume2();
+				lib.onresize.remove(resize);
+				game.frAchi.openAchievementMainPage();
+				//game.playXwAudio('xwjh_voc_cjdianji',null,true);
+			});
+			//成就文本内容
+			var content = ui.create.div('.fr-achiWindow-textinner', ui.create.div('.fr-achiWindow-text', bk));
+			lib.setScroll(content);
+			//函数方法
+			var state = {
+				refreshList: function () {
+					var text = "";
+					var isFirst = true;
+					//界面提示标签
+					ui.create.div('.fr-achiWindow-tips', bk).setBackgroundImage('extension/福瑞拓展/image/achievement/tips_reward.png');
+					var reward = lib.config.achiReward
+					var rewardlist = []
+					for (var j = 0; j < reward.character.length; j++) {
+						let name = reward.character[j]
+						rewardlist.push([name, lib.characterTitle[name], '武将'])
+					}
+					for (var i = 0; i < reward.card.length; i++) {
+						let card = reward.card[i][2]
+						if (!rewardlist.contains(reward.card[i][2])) {
+							rewardlist.push([card, '', '卡牌'])
+						}
+					}
+					for (var name of rewardlist) {
+						//首项不加分割线
+						if (isFirst) {
+							isFirst = false;
+						} else {
+							text += "<br><p align='center'><img src=" + lib.assetURL + "extension/福瑞拓展/image/achievement/splitLine.png></p><br>";
+						}
+						//<--
+						//显示成就名
+						text += "<span style=\"color:black;font-family:行书szs;font-size:55px;\">&nbsp;";
+						text += get.translation(name[0])
+						text += "</span>&nbsp;&nbsp;&nbsp;";
+						if (name[2] == '武将') {
+							text += "<br><br><span style='font-size:22px;'>&nbsp;&nbsp;<b>◆";
+							text += lib.fr_winnerSay[name[0]]
+							text += "</b></span>";
+						}
+						text += "<br><br><span style='font-size:22px;'>&nbsp;&nbsp;";
+						text += '已解锁:&nbsp;' + name[2] + '&nbsp;——' + name[1] + '&nbsp' + get.translation(name[0])
+						text += "</span>";
+						text += '</p>';
+					}
+					text += "<br><br><br><br><br><br><br>";
+					content.innerHTML = text;
+				}
+			};
+			state.refreshList();
 		},
 		//打开成就视窗
 		openAchievementView: function (type) {
@@ -1046,8 +1145,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//成就计量技能
 	lib.skill["_fr_achi_连破之刃"] = {
 		trigger: {
-			global: "damageBefore",
-			source:"damageBefore"
+			source: "damageEnd",
 		},
 		firstDo: true,
 		priority: 6,
