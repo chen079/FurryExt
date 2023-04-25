@@ -196,7 +196,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '部分角色需要通过完成成就解锁。'
                     ];
                     //更新武将
-                    var Furry_players = ['fr_derk', 'fr_crow', 'fr_zhan','fr_rasali','fr_nashu'];
+                    var Furry_players = ['fr_derk', 'fr_crow', 'fr_zhan', 'fr_rasali', 'fr_nashu'];
                     var Furry_redoplayers = ['fr_tails', 'fr_yinhu'];
                     //更新卡牌
                     var Furry_cards = ['fr_equip1_mhlq', 'fr_equip2_yyxl'];
@@ -307,6 +307,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         player: -1
                     }
                 }
+            }
+            // 判断是否需要弹窗，如果是第一次执行函数或者已经跨天，则弹窗
+            if (!localStorage.getItem("lastPopupDate") || localStorage.getItem("lastPopupDate") !== new Date().toLocaleDateString()) {
+                autoPopup();
+                localStorage.setItem("lastPopupDate", new Date().toLocaleDateString());
             }
             //---------------------------------------技能作弊------------------------------------------//
             lib.skill._xuanshi_item = {
@@ -1087,13 +1092,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 });
             };
             lib.fr_changeSkill = config.changeGroup;
-            //---隐藏音乐可视化菜单上的文字，这样只显示设计的CD封面看着更简洁干净---
-            // lib.init.css(lib.assetURL+"extension/福瑞拓展",'hidename');
-            if (lib.config.extension_福瑞拓展_Background_Music) {
-                var cbcss = document.createElement("style");
-                cbcss.innerHTML = ".frmusicname>.name{color:gold; visibility:hidden;}";
-                document.head.appendChild(cbcss);
-            };
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (lib.config.extension_福瑞拓展_Background_Picture && lib.config.extension_福瑞拓展_Background_Picture != "1") {
                 lib.arenaReady.push(function () {
@@ -2799,11 +2797,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "clear": true,
                 "nopointer": true,
             },
-            "exp": {
+            /*"exp": {
                 name: '<b>实验内容</b>',
                 init: false,
                 intro: '含有部分作者测试用的实验内容，可能导致游戏崩溃等等，若不知道用来干什么的请勿开启。',
-            },
+            },*/
             "xuanshi": {
                 name: "<b>技能作弊</b>",
                 "init": "1",

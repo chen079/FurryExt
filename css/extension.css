@@ -12,6 +12,11 @@
     z-index: 22;
 }
 
+.frmusicname>.name {
+    color: gold;
+    visibility: hidden;
+}
+
 .furry-dialog>.furry-dialog-text {
     position: absolute;
     text-align: left;
@@ -110,67 +115,73 @@
 }
 
 /*瞬发技样式来源：感谢铝宝天牢令拓展的授权*/
-.player>.Fr-shunfaanniu-ol{ 
+.player>.Fr-shunfaanniu-ol {
     display: block;
     position: absolute;
     right: 0px;
-    top: calc(30%);    
+    top: calc(30%);
     width: 45px;
     height: 19px;
     background-image: url('../image/button/button_ol.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     z-index: 130;
-	line-height: 18px;
+    line-height: 18px;
     cursor: pointer;
     font-size: 15px;
-    font-family: 'yuanli';/*字体*/
+    font-family: 'yuanli';
+    /*字体*/
     text-align: center;
-    color: white; /*字体颜色，这个还有用*/
+    color: white;
+    /*字体颜色，这个还有用*/
 }
 
-.player>.Fr-shunfaanniu-olten{ 
+.player>.Fr-shunfaanniu-olten {
     display: block;
     position: absolute;
     right: 0px;
-    top: calc(30%);    
+    top: calc(30%);
     width: 45px;
     height: 19px;
     background-image: url('../image/button/button_olten.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     z-index: 130;
-	line-height: 18px;
+    line-height: 18px;
     cursor: pointer;
     font-size: 15px;
-    font-family: 'HYZLSJ';/*字体*/
+    font-family: 'HYZLSJ';
+    /*字体*/
     text-align: center;
-    color: #F5D78E; /*字体颜色，这个还有用*/
+    color: #F5D78E;
+    /*字体颜色，这个还有用*/
 }
 
-.player>.Fr-shunfaanniu-shousha{ 
+.player>.Fr-shunfaanniu-shousha {
     display: block;
     position: absolute;
     right: 0px;
-    top: calc(30%);    
+    top: calc(30%);
     width: 45px;
     height: 19px;
     background-image: url('../image/button/button_shousha.png');
     background-size: 100% 100%;
     background-repeat: no-repeat;
     z-index: 130;
-	line-height: 18px;
+    line-height: 18px;
     cursor: pointer;
     font-size: 15px;
-    font-family: 'HYZLSJ';/*字体*/
+    font-family: 'HYZLSJ';
+    /*字体*/
     text-align: center;
-    color: #F5D78E; /*字体颜色，这个还有用*/
+    color: #F5D78E;
+    /*字体颜色，这个还有用*/
 }
 
 /*这里是龙势力*/
-.button.character.newstyle>.identity[data-nature="fr_g_dragon"]{
-	background-image: url('../image/group/name2_fr_g_dragon.png') !important;
-	background-size: 100% 100% !important;
+.button.character.newstyle>.identity[data-nature="fr_g_dragon"] {
+    background-image: url('../image/group/name2_fr_g_dragon.png') !important;
+    background-size: 100% 100% !important;
 }
 
 .qh-shousha-big-avatar[data-group='fr_g_dragon']>.qh-avatar-label {
@@ -182,13 +193,13 @@
 }
 
 .player>.camp-wrap[data-camp='fr_g_dragon']>.camp-back {
-	background: linear-gradient(to bottom, rgb(45, 45, 45), rgb(103, 103, 103));
+    background: linear-gradient(to bottom, rgb(45, 45, 45), rgb(103, 103, 103));
 }
 
 /*这里是机势力*/
-.button.character.newstyle>.identity[data-nature="fr_g_ji"]{
-	background-image: url('../image/group/name2_fr_g_ji.png') !important;
-	background-size: 100% 100% !important;
+.button.character.newstyle>.identity[data-nature="fr_g_ji"] {
+    background-image: url('../image/group/name2_fr_g_ji.png') !important;
+    background-size: 100% 100% !important;
 }
 
 .qh-shousha-big-avatar[data-group='fr_g_ji']>.qh-avatar-label {
@@ -200,5 +211,5 @@
 }
 
 .player>.camp-wrap[data-camp='fr_g_ji']>.camp-back {
-	background: linear-gradient(to bottom, rgb(96, 85, 158), rgb(106, 14, 212));
+    background: linear-gradient(to bottom, rgb(96, 85, 158), rgb(106, 14, 212));
 }
