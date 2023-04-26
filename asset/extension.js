@@ -2797,11 +2797,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "clear": true,
                 "nopointer": true,
             },
-            /*"exp": {
-                name: '<b>实验内容</b>',
-                init: false,
-                intro: '含有部分作者测试用的实验内容，可能导致游戏崩溃等等，若不知道用来干什么的请勿开启。',
-            },*/
             "xuanshi": {
                 name: "<b>技能作弊</b>",
                 "init": "1",
