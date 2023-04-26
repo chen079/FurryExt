@@ -196,7 +196,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '部分角色需要通过完成成就解锁。'
                     ];
                     //更新武将
-                    var Furry_players = ['fr_derk', 'fr_crow', 'fr_zhan','fr_rasali','fr_nashu'];
+                    var Furry_players = ['fr_derk', 'fr_crow', 'fr_zhan', 'fr_rasali', 'fr_nashu'];
                     var Furry_redoplayers = ['fr_tails', 'fr_yinhu'];
                     //更新卡牌
                     var Furry_cards = ['fr_equip1_mhlq', 'fr_equip2_yyxl'];
@@ -1562,9 +1562,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     "3": "furry_bgm_BattleAgainstATrueHero.mp3",
                     "4": "MySunset.mp3",
                     "5": "FarOut.mp3",
-                    "6":"BeethovenVirus.mp3",
-                    "7":"MainTitle.mp3",
-                    "8":"存亡之战.mp3"
+                    "6": "BeethovenVirus.mp3",
+                    "7": "MainTitle.mp3",
+                    "8": "存亡之战.mp3"
                 };
                 if (item[temp]) {
                     ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + item[temp];
@@ -1609,6 +1609,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     ui.create.system("福瑞成就", function () {
                         if (typeof window.openfrAchievement == 'function') {
                             window.openfrAchievement();
+                            if ((game.frAchi.amount() == game.frAchi.amountOfGained() + 1) && !game.frAchi.hasAchi('超级肝帝', 'special')) {
+                                game.frAchi.addProgress('超级肝帝', 'special')
+                            }
                         } else {
                             alert("错误：您似乎没有正常导入福瑞拓展扩展文件");
                         }
@@ -2723,9 +2726,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     "3": "Battle Against A True Hero",
                     "4": "My Sunset",
                     "5": "Far Out",
-                    "6":"Beethoven Virus",
-                    "7":"Main Title",
-                    "8":"存亡之战"
+                    "6": "Beethoven Virus",
+                    "7": "Main Title",
+                    "8": "存亡之战"
                 },
                 onclick: function (item) {
                     game.saveConfig('extension_福瑞拓展_Background_Music', item);
@@ -2747,7 +2750,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     "z0": "关闭",
                     "z1": "Hopes And Dreams",
                     "z2": "MEGALOVANIA",
-                    "z3":"El Dorado"
+                    "z3": "El Dorado"
                 },
                 "visualMenu": function (node, link) {
                     node.style.height = node.offsetWidth * 0.83 + "px";
