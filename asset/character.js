@@ -18501,6 +18501,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            'fr_mouse':'奇门八卦',
             'fr_blam': '如入幻境之刃',
             'fr_nashu': '恶魂使者',
             'fr_rasali': '善灵指引',

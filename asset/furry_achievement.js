@@ -1,6 +1,7 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
+		'fr_mouse':'奇门遁甲，唯破万法...',
 		'fr_nashu': '邪恶的灵魂，呵呵，不过是我的盘中餐...',
 		'fr_rasali': '唯有善良，方为出路。',
 		'fr_zhan': "枷锁是困不住我的，只会让我更加强大！",
