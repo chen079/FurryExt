@@ -1110,6 +1110,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         switch (lib.config.extension_福瑞拓展_furry_zhuneimusic) {
                             case 'z1': str = 'Hopes And Dreams.mp3'; break;
                             case 'z2': str = 'MEGALOVANIA.mp3'; break;
+                            case 'z3': str = 'ElDorado.mp3'; break;
                         }
                         ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + str
                         ui.backgroundMusic.loop = true;
@@ -1560,7 +1561,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     "2": "furry_bgm_tavern.mp3",
                     "3": "furry_bgm_BattleAgainstATrueHero.mp3",
                     "4": "MySunset.mp3",
-                    "5": "FarOut.mp3"
+                    "5": "FarOut.mp3",
+                    "6":"BeethovenVirus.mp3",
+                    "7":"MainTitle.mp3",
+                    "8":"存亡之战.mp3"
                 };
                 if (item[temp]) {
                     ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + item[temp];
@@ -2719,6 +2723,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     "3": "Battle Against A True Hero",
                     "4": "My Sunset",
                     "5": "Far Out",
+                    "6":"Beethoven Virus",
+                    "7":"Main Title",
+                    "8":"存亡之战"
                 },
                 onclick: function (item) {
                     game.saveConfig('extension_福瑞拓展_Background_Music', item);
@@ -2740,6 +2747,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     "z0": "关闭",
                     "z1": "Hopes And Dreams",
                     "z2": "MEGALOVANIA",
+                    "z3":"El Dorado"
                 },
                 "visualMenu": function (node, link) {
                     node.style.height = node.offsetWidth * 0.83 + "px";
