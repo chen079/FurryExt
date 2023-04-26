@@ -1087,13 +1087,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 });
             };
             lib.fr_changeSkill = config.changeGroup;
-            //---隐藏音乐可视化菜单上的文字，这样只显示设计的CD封面看着更简洁干净---
-            // lib.init.css(lib.assetURL+"extension/福瑞拓展",'hidename');
-            if (lib.config.extension_福瑞拓展_Background_Music) {
-                var cbcss = document.createElement("style");
-                cbcss.innerHTML = ".frmusicname>.name{color:gold; visibility:hidden;}";
-                document.head.appendChild(cbcss);
-            };
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
             if (lib.config.extension_福瑞拓展_Background_Picture && lib.config.extension_福瑞拓展_Background_Picture != "1") {
                 lib.arenaReady.push(function () {
@@ -2799,11 +2792,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "clear": true,
                 "nopointer": true,
             },
-            "exp": {
+            /*"exp": {
                 name: '<b>实验内容</b>',
                 init: false,
                 intro: '含有部分作者测试用的实验内容，可能导致游戏崩溃等等，若不知道用来干什么的请勿开启。',
-            },
+            },*/
             "xuanshi": {
                 name: "<b>技能作弊</b>",
                 "init": "1",
