@@ -209,17 +209,17 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     target.addAdditionalSkill('mouse_bm_' + player.playerid, kane);
                     game.delayx();
                     'step 3'
-                    if(lib.skill.mouse_bm.getKane(player).length&&game.hasPlayer(function(current){
+                    if (lib.skill.mouse_bm.getKane(player).length && game.hasPlayer(function (current) {
                         return !lib.skill.mouse_bm.getKane(current).length
-                    })){
-                        player.chooseBool('【八门】：是否再交给一名角色一枚“奇门”？').set('ai',function(){
+                    })) {
+                        player.chooseBool('【八门】：是否再交给一名角色一枚“奇门”？').set('ai', function () {
                             return false
                         })
-                    }else{
+                    } else {
                         event.finish()
                     }
                     'step 4'
-                    if(result.bool){
+                    if (result.bool) {
                         event.goto(0)
                     }
                 },
@@ -288,45 +288,27 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         sub: true,
                     },
-                    clear:{
-                        trigger:{
-                            global:"phaseAfter",
-                            player:"die",
+                    clear: {
+                        trigger: {
+                            player: ["die", "phaseBefore"],
                         },
-                        charlotte:true,
-                        forced:true,
-                        popup:false,
-                        forceDie:true,
-                        filter:function(event,player){
-                            if(event.name=='die') return true;
-                            if(!lib.skill.mouse_bm.getKane(event.player).length) return false;
-                            if(event.player.additionalSkills['mouse_bm_'+player.playerid]){
-                                return true;
-                            }
-                            return false;
-                        },
-                        content:function(){
-                            if(trigger.name=='die'){
-                                game.countPlayer(current=>{
-                                    var skills=current.additionalSkills['mouse_bm_'+player.playerid];
-                                    if(skills&&skills.length){
-                                        current.removeAdditionalSkill('mouse_bm_'+player.playerid);
-                                        for(var i of skills){
-                                            trigger.player.removeSkill(i);
-                                        }
+                        charlotte: true,
+                        forced: true,
+                        popup: false,
+                        forceDie: true,
+                        content: function () {
+                            game.countPlayer(current => {
+                                var skills = current.additionalSkills['mouse_bm_' + player.playerid];
+                                if (skills && skills.length) {
+                                    current.removeAdditionalSkill('mouse_bm_' + player.playerid);
+                                    for (var i of skills) {
+                                        current.removeMark(i, 1);
+                                        current.removeSkill(i);
                                     }
-                                });
-                            }
-                            else {
-                                var skills=trigger.player.additionalSkills['mouse_bm_'+player.playerid];
-                                trigger.player.removeAdditionalSkill('mouse_bm_'+player.playerid);
-                                for(var i of skills){
-                                    trigger.player.removeMark(i,1);
-                                    trigger.player.removeSkill(i);
                                 }
-                            }
+                            });
                         },
-                        sub:true,
+                        sub: true,
                     },
                     kaimen: {
                         charlotte: true,
@@ -439,7 +421,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             player: ["phaseJieshuBegin"]
                         },
                         content: function () {
-                            player.loseHp(Math.min(5,player.hp))
+                            player.loseHp(Math.min(5, player.hp))
                         },
                         marktext: "奇门",
                         intro: {
@@ -17780,7 +17762,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         translate: {
             //技能
             "mouse_bm": "八门",
-            "mouse_bm_info": "锁定技。①游戏开始时，你获得“八门”各1枚，称为“奇门”。②出牌阶段开始时，你选择一名没有“奇门”的其他角色。你交给其1枚“奇门”，且令其获得对应效果，然后你可以重复此流程。③当你死亡时，移去场上所有你交出的“奇门”。④⑤回合开始时，若你没有“奇门”，你死亡。",
+            "mouse_bm_info": "锁定技。①游戏开始时，你获得“八门”各1枚，称为“奇门”。②出牌阶段开始时，你选择一名没有“奇门”的其他角色。你交给其1枚“奇门”，且令其获得对应效果，然后你可以重复此流程。③你的回合开始前或当你死亡时，移去场上所有你交出的“奇门”。④回合开始时，若你没有“奇门”你死亡。",
             "mouse_bm_kaimen": "开门",
             "mouse_bm_kaimen_info": "锁定技。①摸牌阶段，你多摸四张牌。②你使用【杀】的次数上限+1。",
             "mouse_bm_xiumen": '休门',
@@ -18520,7 +18502,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
-            'fr_mouse':'奇门八卦',
+            'fr_mouse': '奇门八卦',
             'fr_blam': '如入幻境之刃',
             'fr_nashu': '恶魂使者',
             'fr_rasali': '善灵指引',

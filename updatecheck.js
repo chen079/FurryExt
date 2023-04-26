@@ -40,6 +40,6 @@
 	allFiles: [
 	],
 
-	updateAuto: false,
+	updateAuto: true,
 
 }))();
