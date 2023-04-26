@@ -288,26 +288,45 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         sub: true,
                     },
-                    clear: {
-                        trigger: {
-                            player: ["die","phaseBefore"]
+                    clear:{
+                        trigger:{
+                            global:"phaseAfter",
+                            player:"die",
                         },
-                        charlotte: true,
-                        forced: true,
-                        popup: false,
-                        forceDie: true,
-                        content: function () {
-                            game.countPlayer(current => {
-                                var skills = current.additionalSkills['mouse_bm_' + player.playerid];
-                                if (skills && skills.length) {
-                                    current.removeAdditionalSkill('mouse_bm_' + player.playerid);
-                                    for (var i of skills) {
-                                        trigger.player.removeSkill(i);
+                        charlotte:true,
+                        forced:true,
+                        popup:false,
+                        forceDie:true,
+                        filter:function(event,player){
+                            if(event.name=='die') return true;
+                            if(!lib.skill.mouse_bm.getKane(event.player).length) return false;
+                            if(event.player.additionalSkills['mouse_bm_'+player.playerid]){
+                                return true;
+                            }
+                            return false;
+                        },
+                        content:function(){
+                            if(trigger.name=='die'){
+                                game.countPlayer(current=>{
+                                    var skills=current.additionalSkills['mouse_bm_'+player.playerid];
+                                    if(skills&&skills.length){
+                                        current.removeAdditionalSkill('mouse_bm_'+player.playerid);
+                                        for(var i of skills){
+                                            trigger.player.removeSkill(i);
+                                        }
                                     }
+                                });
+                            }
+                            else {
+                                var skills=trigger.player.additionalSkills['mouse_bm_'+player.playerid];
+                                trigger.player.removeAdditionalSkill('mouse_bm_'+player.playerid);
+                                for(var i of skills){
+                                    trigger.player.removeMark(i,1);
+                                    trigger.player.removeSkill(i);
                                 }
-                            });
+                            }
                         },
-                        sub: true,
+                        sub:true,
                     },
                     kaimen: {
                         charlotte: true,
