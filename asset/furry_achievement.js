@@ -402,7 +402,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				game.saveConfig('frAchiNew', true);
 			}
 			if (this.amount() == this.amountOfGained() + 1) {
-				if (this.hasAchi('超级肝帝', 'character')) this.addProgress('超级肝帝', 'character')
+				if (!this.hasAchi('超级肝帝', 'special')) this.addProgress('超级肝帝', 'special')
 			}
 			this.inited = true;
 		},

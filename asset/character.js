@@ -6,11 +6,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connect: true,//该武将包是否可以联机（必填）
         character: {
             //'fr_thunder':['male','wei',4,[],[]],
-            //'fr_mouse':['male','qun',4,[],[]],
+            'fr_mouse': ['female', 'qun', 4, ['mouse_bm'], []],
             //'fr_lamas':['male','wei',4,[],[]],
             'fr_blam': ['male', 'qun', 4, ['blame_jj'], ['unseen']],
             //'fr_aoeslat':['male','wei',4,[],[]],
-            'fr_neises': ['male', 'fr_g_dragon', 15, ['neises_kp'], ['unseen']],
+            'fr_neises': ['male', 'fr_g_dragon', 15, ['neises_bm'], ['unseen']],
             'fr_tails': ['male', 'qun', 3, ['tails_jd', 'tails_qx'], []],
             'fr_zhan': ['male', 'qun', 3, ['zhan_sf', 'zhan_jf'], ['unseen']],
             'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['des:西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——奥尔斯拉特，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。']],
@@ -127,6 +127,329 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'mouse_bm': {
+                audio: 3,
+                trigger: {
+                    player: "phaseUseBegin",
+                },
+                forced: true,
+                direct: true,
+                group: ["mouse_bm_upstart", "mouse_bm_die"],
+                filter: function (event, player) {
+                    return lib.skill.mouse_bm.getKane(player).length;
+                },
+                getKane: function (player) {
+                    var list = lib.skill.mouse_bm.derivation;
+                    return list.filter(mark => player.hasMark(mark));
+                },
+                derivation: ["mouse_bm_kaimen", "mouse_bm_xiumen", "mouse_bm_shengmen", "mouse_bm_shangmen", "mouse_bm_dumen", "mouse_bm_jingmen", "mouse_bm_simen", "mouse_bm_jinmen"],
+                getValue: function (player, mark, target) {
+                    var att = get.attitude(player, target);
+                    var dis = Math.sqrt(get.distance(player, target, 'absolute'));
+                    switch (mark.slice(6)) {
+                        case 'kaimen':
+                            return get.effect(target, { name: 'wuzhong' }, player, player) * 2.5 / dis;
+                        case 'dumen':
+                            if (target.hasJudge('lebu') && !target.hasCard({ name: 'wuxie' }, 'hs')) return 1;
+                            return get.effect(target, { name: 'lebu' }, player, player) / dis;
+                        case 'jinmen':
+                            return get.effect(target, { name: 'losehp' }, player, player) * 2 / dis;
+                        case 'shangmen':
+                            return get.effect(target, { name: 'damage' }, player, player) * 2 / dis;
+                        case 'xiumen':
+                            if (target.isMin()) return 0;
+                            var eff = get.damageEffect(target, player, target);
+                            if (eff >= 0) return 0;
+                            if (att >= 4) {
+                                if (target.hp == 1) return att * 5 / Math.max(0.1, 5 - dis);
+                                if (target.hp == 2 && target.countCards('he') <= 2) return att * 3 / Math.max(0.1, 5 - dis);
+                            }
+                            if (att > 0) return 0;
+                            return -eff / 5 * dis;
+                        case 'jingmen':
+                            return get.effect(target, { name: 'bingliang' }, player, player) * 2;
+                        case 'shengmen':
+                            return get.recoverEffect(target, player, player) / dis;
+                        case 'simen':
+                            return -target.hp * 2;
+                    }
+                },
+                content: function () {
+                    'step 0'
+                    player.chooseTarget('八门：令一名其他角色获得1枚“奇门”', true, (card, player, target) => {
+                        return player != target && !lib.skill.mouse_bm.getKane(target).length;
+                    }).set('ai', target => {
+                        var player = _status.event.player, kane = lib.skill.mouse_bm.getKane(player);
+                        return Math.abs(Math.max.apply(Math.max, kane.map(i => lib.skill.mouse_bm.getValue(player, i, target))));
+                    });
+                    'step 1'
+                    if (result.bool) {
+                        var target = result.targets[0];
+                        event.target = target;
+                        player.logSkill('mouse_bm', target);
+                        var kane = lib.skill.mouse_bm.getKane(player);
+                        var choiceList = kane.map(i => {
+                            return '<div class="skill">【' + get.translation(lib.translate[i + '_ab'] || get.translation(i).slice(0, 2)) + '】</div>' +
+                                '<div>' + get.skillInfoTranslation(i, player) + '</div>';
+                        });
+                        player.chooseControl(kane).set('choiceList', choiceList).set('displayIndex', false).set('prompt', '选择令' + get.translation(target) + '获得的“奇门”').set('ai', () => {
+                            var controls = _status.event.controls, player = _status.event.player, target = _status.event.getParent().target;
+                            var list = controls.map(i => [i, lib.skill.mouse_bm.getValue(player, i, target)])//.filter(i=>i[1]>=0);
+                            list.sort((a, b) => b[1] - a[1]);
+                            if (list.length) return list[0][0];
+                            return controls.randomGet();
+                        });
+                    } else event.finish();
+                    'step 2'
+                    var kane = result.control;
+                    player.removeMark(kane, 1);
+                    player.popup(kane, 'metal');
+                    player.addSkill('mouse_bm_clear');
+                    target.addMark(kane, 1);
+                    target.addAdditionalSkill('mouse_bm_' + player.playerid, kane);
+                    game.delayx();
+                    'step 3'
+                    if(lib.skill.mouse_bm.getKane(player).length&&game.hasPlayer(function(current){
+                        return !lib.skill.mouse_bm.getKane(current).length
+                    })){
+                        player.chooseBool('【八门】：是否再交给一名角色一枚“奇门”？').set('ai',function(){
+                            return false
+                        })
+                    }else{
+                        event.finish()
+                    }
+                    'step 4'
+                    if(result.bool){
+                        event.goto(0)
+                    }
+                },
+                subSkill: {
+                    mark: {
+                        mark: true,
+                        marktext: "八门",
+                        intro: {
+                            name: "奇门",
+                            "name2": "奇门",
+                            markcount: function (storage, player) {
+                                return lib.skill.mouse_bm.getKane(player).length;
+                            },
+                            content: function (storage, player) {
+                                return '剩余：' + get.translation(lib.skill.mouse_bm.getKane(player));
+                            },
+                        },
+                        sub: true,
+                    },
+                    shengmen: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: "phaseEnd",
+                        },
+                        content: function () {
+                            player.recover(player.getDamagedHp());
+                        },
+                        marktext: "奇门",
+                        intro: {
+                            name: "生门",
+                            "name2": "生门",
+                            content: "回合结束时，回复3点体力",
+                        },
+                        sub: true,
+                    },
+                    upstart: {
+                        trigger: {
+                            global: "phaseBefore",
+                            player: "enterGame",
+                        },
+                        forced: true,
+                        filter: function (event, player) {
+                            return (event.name != 'phase' || game.phaseNumber == 0);
+                        },
+                        content: function () {
+                            var kane = lib.skill.mouse_bm.derivation;
+                            for (var mark of kane) {
+                                player.addMark(mark, 1, false);
+                                player.unmarkSkill(mark);
+                            }
+                            player.addSkill('mouse_bm_mark');
+                        },
+                        sub: true,
+                    },
+                    die: {
+                        trigger: {
+                            player: "phaseBegin",
+                        },
+                        forced: true,
+                        filter: function (event, player) {
+                            return !lib.skill.mouse_bm.getKane(player).length;
+                        },
+                        content: function () {
+                            player.die();
+                        },
+                        sub: true,
+                    },
+                    clear: {
+                        trigger: {
+                            player: ["die","phaseBefore"]
+                        },
+                        charlotte: true,
+                        forced: true,
+                        popup: false,
+                        forceDie: true,
+                        content: function () {
+                            game.countPlayer(current => {
+                                var skills = current.additionalSkills['mouse_bm_' + player.playerid];
+                                if (skills && skills.length) {
+                                    current.removeAdditionalSkill('mouse_bm_' + player.playerid);
+                                    for (var i of skills) {
+                                        trigger.player.removeSkill(i);
+                                    }
+                                }
+                            });
+                        },
+                        sub: true,
+                    },
+                    kaimen: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: "phaseDrawBegin2",
+                        },
+                        content: function () {
+                            trigger.num += 4;
+                        },
+                        mod: {
+                            cardUsable: function (card, player, num) {
+                                if (card.name == 'sha') return num + 1;
+                            },
+                        },
+                        marktext: "奇门",
+                        intro: {
+                            name: "开门",
+                            "name2": "开门",
+                            content: "摸牌阶段多摸四张牌；使用【杀】的次数上限+1",
+                        },
+                        sub: true,
+                    },
+                    dumen: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: "phaseBegin",
+                        },
+                        content: function () {
+                            player.skip('phaseUse');
+                        },
+                        marktext: "奇门",
+                        intro: {
+                            name: "杜门",
+                            "name2": "杜门",
+                            content: "回合开始时，跳过下一个出牌阶段。",
+                        },
+                        sub: true,
+                    },
+                    jinmen: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: "phaseUseBegin",
+                        },
+                        content: function () {
+                            player.loseHp();
+                        },
+                        mod: {
+                            maxHandcard: function (player, num) {
+                                return num - 3;
+                            },
+                        },
+                        marktext: "奇门",
+                        intro: {
+                            name: "惊门",
+                            "name2": "惊门",
+                            content: "出牌阶段开始时，失去1点体力；手牌上限-3",
+                        },
+                        sub: true,
+                    },
+                    shangmen: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: "damageBegin1",
+                        },
+                        content: function () {
+                            trigger.num += 1
+                        },
+                        marktext: "奇门",
+                        intro: {
+                            name: "伤门",
+                            "name2": "伤门",
+                            content: "你受到的伤害+1。",
+                        },
+                        sub: true,
+                    },
+                    xiumen: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: "damageBegin4",
+                        },
+                        content: function () {
+                            trigger.cancel();
+                        },
+                        ai: {
+                            nofire: true,
+                            nodamage: true,
+                            effect: {
+                                target: function (card, player, target, current) {
+                                    if (get.tag(card, 'damage') && !get.tag(card, 'thunderDamage')) return [0, 0];
+                                },
+                            },
+                        },
+                        marktext: "奇门",
+                        intro: {
+                            name: "休门",
+                            "name2": "休门",
+                            content: "当你受到伤害时，防止之",
+                        },
+                        sub: true,
+                    },
+                    simen: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: ["phaseJieshuBegin"]
+                        },
+                        content: function () {
+                            player.loseHp(Math.min(5,player.hp))
+                        },
+                        marktext: "奇门",
+                        intro: {
+                            name: "死门",
+                            "name2": "死门",
+                            content: "结束阶段，你失去所有体力值（至多失去五点）。",
+                        },
+                        sub: true,
+                    },
+                    jingmen: {
+                        charlotte: true,
+                        forced: true,
+                        trigger: {
+                            player: ["phaseZhunbeiBegin"]
+                        },
+                        content: function () {
+                            player.skip('phaseDraw');
+                            player.skip('phaseDiscard');
+                        },
+                        marktext: "奇门",
+                        intro: {
+                            name: "景门",
+                            "name2": "景门",
+                            content: "准备阶段，跳过下一个摸牌阶段和弃牌阶段",
+                        },
+                        sub: true,
+                    },
+                },
+            },
             'blame_jj': {
                 audio: 2,
                 unique: true,
@@ -136,12 +459,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 filterTarget: function (card, player, target) {
                     return target != player;
                 },
-                filter:function(event,player){
-                    return !player.isDisabled('equip1')&&!player.isDisabled('equip2')&&!player.isDisabled('equip2')&&!player.isDisabled('equip4')&&!player.isDisabled('equip5')
+                filter: function (event, player) {
+                    return !player.isDisabled('equip1') && !player.isDisabled('equip2') && !player.isDisabled('equip2') && !player.isDisabled('equip4') && !player.isDisabled('equip5')
                 },
                 content: function () {
-                    var cards=player.getCards('e')
-                    player.gain(cards,'gain2')
+                    var cards = player.getCards('e')
+                    player.gain(cards, 'gain2')
                     player.disableEquip('equip1');
                     player.disableEquip('equip2');
                     player.disableEquip('equip3');
@@ -152,54 +475,54 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     target.addSkill('blame_jj_2');
                     target.markSkillCharacter('blame_jj_1', player, '剑祭', '无法使用或打出任何手牌');
                 },
-                group:'blame_jj_3',
-                subSkill:{
-                    1:{
-                        onremove:function(player){
+                group: 'blame_jj_3',
+                subSkill: {
+                    1: {
+                        onremove: function (player) {
                             player.storage.blame_jj_1.removeSkill('blame_jj_2');
                             player.storage.blame_jj_1.unmarkSkill('blame_jj_1');
                             delete player.storage.blame_jj_1;
                         },
-                        mod:{
-                            targetInRange:function(card,player,target){
-                                if(target.hasSkill('blame_jj_2')){
+                        mod: {
+                            targetInRange: function (card, player, target) {
+                                if (target.hasSkill('blame_jj_2')) {
                                     return true;
                                 }
                             },
-                            cardname:function(card,player){
-                                if(get.type(card,null,false)=='equip') return 'sha';
+                            cardname: function (card, player) {
+                                if (get.type(card, null, false) == 'equip') return 'sha';
                             },
-                            cardUsableTarget:function(card,player,target){
-                                if(target.hasSkill('blame_jj_2')) return true;
+                            cardUsableTarget: function (card, player, target) {
+                                if (target.hasSkill('blame_jj_2')) return true;
                             },
                         },
-                        charlotte:true,
+                        charlotte: true,
                     },
-                    2:{
-                        mod:{
-                            "cardEnabled2":function(card,player){
-                                if(get.position(card)=='h') return false;
+                    2: {
+                        mod: {
+                            "cardEnabled2": function (card, player) {
+                                if (get.position(card) == 'h') return false;
                             },
                         },
-                        ai:{
-                            effect:{
-                                target:function(card,player,target){
-                                    if(get.tag(card,'damage')) return [0,-999999];
+                        ai: {
+                            effect: {
+                                target: function (card, player, target) {
+                                    if (get.tag(card, 'damage')) return [0, -999999];
                                 },
                             },
                         },
-                        charlotte:true,
+                        charlotte: true,
                     },
-                    3:{
-                        trigger:{
-                            global:'phaseUseBegin'
+                    3: {
+                        trigger: {
+                            global: 'phaseUseBegin'
                         },
-                        direct:true,
-                        filter:function(event,player){
-                            return event.player!=player&&event.player.countCards('h')>player.countCards('h')&&player.countDisabled()>0
+                        direct: true,
+                        filter: function (event, player) {
+                            return event.player != player && event.player.countCards('h') > player.countCards('h') && player.countDisabled() > 0
                         },
-                        content:function(){
-                            player.draw(trigger.player.countCards('h')-player.countCards('h'))
+                        content: function () {
+                            player.draw(trigger.player.countCards('h') - player.countCards('h'))
                             player.chooseToEnable();
                         }
                     }
@@ -219,37 +542,36 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                 },
             },
-            "neises_kp": {
-                trigger:{
-                    player:"phaseBefore"
+            "neises_bm": {
+                trigger: {
+                    player: "phaseBefore"
                 },
-                mark:true,
-                locked:true,
-                mark:true,
-                direct:true,
-                zhuanghuanji:true,
-                init:function(player){
-                    if(!player.storage.buming) player.storage.buming=0;
+                mark: true,
+                locked: true,
+                mark: true,
+                direct: true,
+                zhuanghuanji: true,
+                init: function (player) {
+                    if (!player.storage.neises_bm) player.storage.neises_bm = 0;
                 },
-                marktext:'',
-                intro:{
-                    content:function(storage,player){
-                        var list1=['命由天定，事在人为','天行健；君子以自强不息。','地势坤；君子以厚德载物。','云雷屯，君子以经纶。','山下有泉，蒙。君子以果行育德。','云上于天，需。君子以饮食宴乐。','天与水违行，讼。君子以做事谋始。','地中有水，师。君子以容民畜众。','地上有水，比。先王以建万国、亲诸侯。','风行天下小畜。君子以懿文德。','上天下泽，履。君子以辨上下，定民志。','天地交，泰，后以财成天地之道，辅相天地之宜，以左右民。','天地不交，否。君子以俭德辟难，不可荣以禄。','天与火，同人。君子以类族辨物。','火在天上，大有。君子以遏恶扬善，顺天休命。','地中有山，谦。君子以裦多益寡，称物平施。','雷出地奋，豫。先王以作乐崇德，殷荐之上帝，以配祖考。','泽中有雷，随，君子向晦入宴息。','山上有风，蛊。君子以振民育德。','泽上有地，临。君子以教思无穷，容保民无疆。','风行地上，观。先王以省方观民设教。','雷电噬嗑。先王以明罚敕法。','山下有火，贲。君子以明庶政，无敢折狱。','山附于地，剥。上以厚下安宅。','雷在地中，复。先王以至日闭关，商旅不行，后不省方。','天下雷行，物与无妄。先王以茂对时育万物。','天在山中，大畜。君子以多识前言往行，以畜其德。','山下有雷，颐。君子以慎言语，节饮食。','泽灭木，大过。君子以独立不惧，遁世无闷。','水洊至，习坎。君子以常德行，习教事。','明两作，离。大人以继明照于四方。','山上有泽，咸。君子以虚受人。','雷风恒，君子以立不易方。','天下有山，遁。君子以远小人，不恶而严。','雷在天上，大壮。君子以非礼弗履。','明出地上，晋。君子以自昭明德。','明入地中，明夷。君子以莅众用晦而明。','风自火出，家人。君子以言有物而行有恒。','上火下泽，睽。君子以同而异。','山上有水，蹇。君子以反身修德。','雷雨作，解。君子以赦过宥罪。','山下有泽，损。君子以惩忿窒欲。','风雷益，君子以见善则迁，有过则改。','泽上于天，夬。君子以施禄及下，居德则忌。','天下有风，姤。后以施命告四方。','泽上于地，萃。君子以除戎器，戒不虞。','地中生木，升。君子以顺德，积小以高大。','泽无水，困。君子以致命遂志。','木上有水，井。君子以劳民劝相。','泽中有火，革。君子以治历明时。','木上有火，鼎。君子以正位凝命。','洊雷，震。君子以恐惧修省。','兼山，艮。君子以思不出其位。','山上有木，渐。君子以居贤德善俗。','泽上有雷，归妹。君子以永终知敝。','雷电皆至，丰。君子以折狱致刑。','山上有火，旅。君子以明慎用刑而不留狱。','随风，巽。君子以申命行事。','丽泽兑，君子以朋友讲习。','风行水上，涣。先王以享于帝立庙。','泽上有水，节。君子以制数度，议德行。','泽上有风，中孚。君子以议狱缓死。','山上有雷，小过。君子以行过乎恭、丧过乎哀、用过乎俭。','水在火上，既济。君子以思患而豫防之。','火在水上，未济。君子以慎辨物居方。']
-                        var str = '卦辞'
-                        str += '<br><li>'+list1[player.storage.buming]
-                        return str
+                marktext: '',
+                intro: {
+                    mark: function (dialog, storage, player) {
+                        var list1 = ['命由天定，事在人为', '天行健；君子以自强不息。', '地势坤；君子以厚德载物。', '云雷屯，君子以经纶。', '山下有泉，蒙。君子以果行育德。', '云上于天，需。君子以饮食宴乐。', '天与水违行，讼。君子以做事谋始。', '地中有水，师。君子以容民畜众。', '地上有水，比。先王以建万国、亲诸侯。', '风行天下小畜。君子以懿文德。', '上天下泽，履。君子以辨上下，定民志。', '天地交，泰，后以财成天地之道，辅相天地之宜，以左右民。', '天地不交，否。君子以俭德辟难，不可荣以禄。', '天与火，同人。君子以类族辨物。', '火在天上，大有。君子以遏恶扬善，顺天休命。', '地中有山，谦。君子以裦多益寡，称物平施。', '雷出地奋，豫。先王以作乐崇德，殷荐之上帝，以配祖考。', '泽中有雷，随，君子向晦入宴息。', '山上有风，蛊。君子以振民育德。', '泽上有地，临。君子以教思无穷，容保民无疆。', '风行地上，观。先王以省方观民设教。', '雷电噬嗑。先王以明罚敕法。', '山下有火，贲。君子以明庶政，无敢折狱。', '山附于地，剥。上以厚下安宅。', '雷在地中，复。先王以至日闭关，商旅不行，后不省方。', '天下雷行，物与无妄。先王以茂对时育万物。', '天在山中，大畜。君子以多识前言往行，以畜其德。', '山下有雷，颐。君子以慎言语，节饮食。', '泽灭木，大过。君子以独立不惧，遁世无闷。', '水洊至，习坎。君子以常德行，习教事。', '明两作，离。大人以继明照于四方。', '山上有泽，咸。君子以虚受人。', '雷风恒，君子以立不易方。', '天下有山，遁。君子以远小人，不恶而严。', '雷在天上，大壮。君子以非礼弗履。', '明出地上，晋。君子以自昭明德。', '明入地中，明夷。君子以莅众用晦而明。', '风自火出，家人。君子以言有物而行有恒。', '上火下泽，睽。君子以同而异。', '山上有水，蹇。君子以反身修德。', '雷雨作，解。君子以赦过宥罪。', '山下有泽，损。君子以惩忿窒欲。', '风雷益，君子以见善则迁，有过则改。', '泽上于天，夬。君子以施禄及下，居德则忌。', '天下有风，姤。后以施命告四方。', '泽上于地，萃。君子以除戎器，戒不虞。', '地中生木，升。君子以顺德，积小以高大。', '泽无水，困。君子以致命遂志。', '木上有水，井。君子以劳民劝相。', '泽中有火，革。君子以治历明时。', '木上有火，鼎。君子以正位凝命。', '洊雷，震。君子以恐惧修省。', '兼山，艮。君子以思不出其位。', '山上有木，渐。君子以居贤德善俗。', '泽上有雷，归妹。君子以永终知敝。', '雷电皆至，丰。君子以折狱致刑。', '山上有火，旅。君子以明慎用刑而不留狱。', '随风，巽。君子以申命行事。', '丽泽兑，君子以朋友讲习。', '风行水上，涣。先王以享于帝立庙。', '泽上有水，节。君子以制数度，议德行。', '泽上有风，中孚。君子以议狱缓死。', '山上有雷，小过。君子以行过乎恭、丧过乎哀、用过乎俭。', '水在火上，既济。君子以思患而豫防之。', '火在水上，未济。君子以慎辨物居方。']
+                        dialog.addText('卦辞')
+                        dialog.addText(list1[player.storage.neises_bm])
                     },
-                    name:function(storage,player){
-                        var list3=['乾坤万象','乾为天','坤为地','⽔雷屯','⼭⽔蒙','⽔天需','天⽔讼','地⽔师','⽔地⽐','风天⼩畜','天泽履','地天泰','天地否','天⽕同⼈','⽕天⼤有','地⼭谦','雷地豫','泽雷随','⼭风蛊','地泽临','风地观','⽕雷筮嗑','⼭⽕贲','⼭地剥','地雷复','天雷⽆妄','⼭天⼤畜','⼭雷颐','泽风⼤过','坎为⽔','离为⽕','泽⼭咸','雷风恒','天⼭遁','雷天⼤壮','⽕地晋','地⽕明夷','风⽕家⼈','⽕泽睽','⼭⽔蹇','雷⽔解','⼭泽损','风雷益','泽天夬','天风姤','泽地萃','地风升','泽⽔困','⽔风井','泽⽕⾰','⽕风⿍','震为雷','⾉为⼭','风⼭渐','雷泽归妹','雷⽕丰','⽕⼭旅','巽为风','兑为泽','风⽔涣','⽔泽节','风泽中孚','雷⼭⼩过','⽔⽕既济','⽕⽔未济']
-                        return list3[player.storage.buming]
+                    name: function (storage, player) {
+                        var list3 = ['乾坤万象', '乾为天', '坤为地', '⽔雷屯', '⼭⽔蒙', '⽔天需', '天⽔讼', '地⽔师', '⽔地⽐', '风天⼩畜', '天泽履', '地天泰', '天地否', '天⽕同⼈', '⽕天⼤有', '地⼭谦', '雷地豫', '泽雷随', '⼭风蛊', '地泽临', '风地观', '⽕雷筮嗑', '⼭⽕贲', '⼭地剥', '地雷复', '天雷⽆妄', '⼭天⼤畜', '⼭雷颐', '泽风⼤过', '坎为⽔', '离为⽕', '泽⼭咸', '雷风恒', '天⼭遁', '雷天⼤壮', '⽕地晋', '地⽕明夷', '风⽕家⼈', '⽕泽睽', '⼭⽔蹇', '雷⽔解', '⼭泽损', '风雷益', '泽天夬', '天风姤', '泽地萃', '地风升', '泽⽔困', '⽔风井', '泽⽕⾰', '⽕风⿍', '震为雷', '⾉为⼭', '风⼭渐', '雷泽归妹', '雷⽕丰', '⽕⼭旅', '巽为风', '兑为泽', '风⽔涣', '⽔泽节', '风泽中孚', '雷⼭⼩过', '⽔⽕既济', '⽕⽔未济']
+                        return list3[player.storage.neises_bm]
                     },
-                    markcount:function(storage,player){
-                        var list2=['','乾卦','坤卦','屯卦','蒙卦','需卦','讼卦','师卦','比卦','小畜卦','履卦','泰卦','否卦','同人卦','大有卦','谦卦','豫卦','随卦','蛊卦','临卦','观卦','噬嗑卦','贲卦','剥卦','复卦','无妄卦','大畜卦','颐卦','大过卦','坎卦','离卦','咸卦','恒卦','遁卦','大壮卦','晋卦','明夷卦','家人卦','睽卦','蹇卦','解卦','损卦','益卦','夬卦','姤卦','萃卦','升卦','困卦','井卦','革卦','鼎卦','震卦','艮卦','渐卦','归妹卦','丰卦','旅卦','巽卦','兑卦','涣卦','节卦','中孚卦','小过卦','既济卦','未济卦']
-                        return ' '+list2[player.storage.buming]
+                    markcount: function (storage, player) {
+                        var list2 = ['', '乾卦', '坤卦', '屯卦', '蒙卦', '需卦', '讼卦', '师卦', '比卦', '小畜卦', '履卦', '泰卦', '否卦', '同人卦', '大有卦', '谦卦', '豫卦', '随卦', '蛊卦', '临卦', '观卦', '噬嗑卦', '贲卦', '剥卦', '复卦', '无妄卦', '大畜卦', '颐卦', '大过卦', '坎卦', '离卦', '咸卦', '恒卦', '遁卦', '大壮卦', '晋卦', '明夷卦', '家人卦', '睽卦', '蹇卦', '解卦', '损卦', '益卦', '夬卦', '姤卦', '萃卦', '升卦', '困卦', '井卦', '革卦', '鼎卦', '震卦', '艮卦', '渐卦', '归妹卦', '丰卦', '旅卦', '巽卦', '兑卦', '涣卦', '节卦', '中孚卦', '小过卦', '既济卦', '未济卦']
+                        return ' ' + list2[player.storage.neises_bm]
                     }
                 },
-                content:function(){
-                    player.storage.buming=Math.floor(Math.random()*64)+1
+                content: function () {
+                    player.storage.neises_bm = Math.floor(Math.random() * 64) + 1
                 }
             },
             'nashu_sg': {
@@ -17438,10 +17760,28 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
-            'blame_jj':'剑祭',
-            'blame_jj_info':'出牌阶段，若你的装备区均未被废除，你可以获得你的所有装备区的牌并废除你的装备区，然后指定一名其他角色。直到回合结束，你对其使用牌无距离和次数限制且你的装备牌均视为【杀】，其不能使用和打出手牌。其他角色的出牌阶段开始时，若其手牌数大于你且你有被废除的区域，你摸至与其手牌数相同然后你可以恢复你的一个被废除区域。',
-            'neises_kp': '演卦',
-            'neises_kp_info': "六十四卦，推演无穷",
+            "mouse_bm": "八门",
+            "mouse_bm_info": "锁定技。①游戏开始时，你获得“八门”各1枚，称为“奇门”。②出牌阶段开始时，你选择一名没有“奇门”的其他角色。你交给其1枚“奇门”，且令其获得对应效果，然后你可以重复此流程。③回合开始前或当你死亡时，移去场上所有你交出的“奇门”。④回合开始时，若你没有“奇门”，你死亡。",
+            "mouse_bm_kaimen": "开门",
+            "mouse_bm_kaimen_info": "锁定技。①摸牌阶段，你多摸四张牌。②你使用【杀】的次数上限+1。",
+            "mouse_bm_xiumen": '休门',
+            "mouse_bm_xiumen_info": '锁定技。当你受到伤害时，防止之。',
+            "mouse_bm_shengmen": "生门",
+            "mouse_bm_shengmen_info": "锁定技。回合结束时，你回复所有已损体力值。",
+            "mouse_bm_shangmen": "伤门",
+            "mouse_bm_shangmen_info": "锁定技。你受到的伤害+1。",
+            "mouse_bm_dumen": "杜门",
+            "mouse_bm_dumen_info": "锁定技。回合开始时，你跳过下一个出牌阶段。",
+            "mouse_bm_jingmen": "景门",
+            "mouse_bm_jingmen_info": "锁定技。准备阶段，你跳过下一个摸牌阶段和弃牌阶段。",
+            "mouse_bm_simen": "死门",
+            "mouse_bm_simen_info": "锁定技。结束阶段，你失去所有体力值（至多失去五点）。",
+            "mouse_bm_jinmen": '惊门',
+            "mouse_bm_jinmen_info": '锁定技。出牌阶段开始时，你失去1点体力；你的手牌上限-3。',
+            'blame_jj': '剑祭',
+            'blame_jj_info': '出牌阶段，若你的装备区均未被废除，你可以获得你的所有装备区的牌并废除你的装备区，然后指定一名其他角色。直到回合结束，你对其使用牌无距离和次数限制且你的装备牌均视为【杀】，其不能使用和打出手牌。其他角色的出牌阶段开始时，若其手牌数大于你且你有被废除的区域，你摸至与其手牌数相同然后你可以恢复你的一个被废除区域。',
+            'neises_bm': '卜命',
+            'neises_bm_info': "六十四卦，推演无穷",
             'nashu_th': '餮魂',
             'nashu_th_info': '一名角色死亡时，你可以选择获得其的一个技能（主公技，限定技，觉醒技，隐匿技，使命技，带有Charlotte标签的技能除外），若该角色是你杀死的，你增加1点体力上限并回复1点体力。',
             'nashu_sg': '蚀骨',
@@ -18161,7 +18501,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
-            'fr_blam':'如入幻境之刃',
+            'fr_blam': '如入幻境之刃',
             'fr_nashu': '恶魂使者',
             'fr_rasali': '善灵指引',
             'fr_zhan': "束缚之厄",

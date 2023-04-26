@@ -3074,7 +3074,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.2.0.1",
+            version: "2.2.0.2",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })
