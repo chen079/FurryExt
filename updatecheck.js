@@ -1,18 +1,17 @@
 (() => ({
 	// 扩展版本
-	version: "2.2.0.2",
+	version: "2.2.0.3",
 
 	// 扩展的上一个版本
-	oldversion: "2.2.0.1",
+	oldversion: "2.2.0.2",
 
 	// 更新内容汇总
 	changeLog: `
-	更新成就奖励菜单
-	修复米亚成就无法完成的bug
-	专辑重绘封面
-	新人物 缪斯
-	修复肝帝成就无法完成的bug
-	福瑞拓展2.2.0.0正式版更新
+	德克人物原画重置
+	新卡牌 雪中送炭
+	重置 卢森特 技能
+	重置 莱恩斯 技能
+	新增成就 人与狂流、你在造假吗？、还不可以认输！、哈尔斯的高徒
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
@@ -25,24 +24,15 @@
 		'asset/drama.js',
 		'asset/furry_achievement.js',
 		'extension.js',
-		'audio/bgm/BeethovenVirus.mp3',
-		'audio/bgm/ElDorado.mp3',
-		'audio/bgm/存亡之战.mp3',
-		'audio/bgm/MainTitle.mp3',
-		'image/achievement/tips_reward.png',
-		'image/bgm/0.png',
-		'image/bgm/1.png',
-		'image/bgm/2.png',
-		'image/bgm/3.png',
-		'image/bgm/4.png',
-		'image/bgm/5.png',
-		'image/bgm/6.png',
-		'image/bgm/7.png',
-		'image/bgm/8.png',
-		'image/bgm/z0.png',
-		'image/bgm/z1.png',
-		'image/bgm/z2.png',
-		'image/bgm/z3.png',
+		'image/card/fr_card_xzst.png',
+		'image/card/pretty/fr_card_xzst.jpg',
+		'image/card/pretty/fr_card_xzst.bmp',
+		'image/card/pretty/fr_card_xzst.webp',
+		'image/card/pretty/fr_card_xzst.png',
+		'image/lutou/fr_derk.jpg',
+		'image/character/fr_derk.jpg',
+		'image/character/fr_thunder.jpg',
+		'image/lutou/fr_thunder.jpg',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

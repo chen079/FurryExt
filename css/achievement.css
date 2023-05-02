@@ -26,6 +26,17 @@
     overflow: hidden;
 }
 
+.fr-achiWindow-countReward {
+    width: auto;
+    height: 6%;
+    top: 15%;
+    right: 20%;
+    display: block;
+    font-size: 4vh;
+    font-family: 'xinwei';
+}
+
+
 .fr-achiWindow-tips {
     background-size: 100% 100%;
     width: 6%;
@@ -66,6 +77,46 @@
     top: calc(13.33%);
     width: calc(83.976%);
     height: calc(76.13%);
+}
+
+.fr-achiWindow-reward {
+    display: block;
+    -webkit-transform-origin: left top;
+    transform-origin: left top;
+    left: calc(8.177%);
+    top: calc(35%);
+    width: calc(83.976%);
+    height: calc(30%);
+}
+
+.fr-achiWindow-rewardinner {
+    display: block;
+    width: calc(90%);
+    height: calc(100%);
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 55%;
+    box-shadow: none;
+    text-shadow: none;
+    color: black;
+    font-family: 'yuanli';
+    overflow-x: scroll;
+}
+
+.fr-achiWindow-rewarditem {
+    display: block;
+    width: calc(20%);
+    height: calc(90%);
+    top:calc(5%);
+    left:calc(1%)
+}
+
+.fr-achiWindow-rewardicon {
+    display: block;
+    width: calc(90%);
+    height: calc(60%);
+    left:calc(5%);
+    top:calc(5%)
 }
 
 .fr-achiWindow-textinner {

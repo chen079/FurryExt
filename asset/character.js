@@ -5,9 +5,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore', 'fr_francium', 'fr_nanci',],
         connect: true,//该武将包是否可以联机（必填）
         character: {
-            //'fr_thunder':['male','wei',4,[],[]],
-            'fr_mouse': ['female', 'qun', 4, ['mouse_bm'], []],
-            //'fr_lamas':['male','wei',4,[],[]],
+            'fr_thunder': ['male', 'wei', 4, ['thunder_fz', 'thunder_lj'], []],
+            'fr_mouse': ['female', 'qun', 4, ['mouse_bm'], ['unseen']],
+            'fr_lamas': ['male', 'wei', 4, ['lamas_zj'], []],
             'fr_blam': ['male', 'qun', 4, ['blame_jj'], ['unseen']],
             //'fr_aoeslat':['male','wei',4,[],[]],
             'fr_neises': ['male', 'fr_g_dragon', 15, ['neises_bm'], ['unseen']],
@@ -16,7 +16,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['des:西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——奥尔斯拉特，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。']],
             'fr_rasali': ['male', 'shen', 3, ['rasali_ly', 'rasali_hq'], ['unseen', 'des:那萨利，和那舒一样，是瓦尔亚那大陆信仰中的神明之一，执掌着阴间的善灵收集和引导工作。<br>他的责任是寻找那些有着良善灵魂的人们，以便在他们离开世界之前引领他们前往冥界，让他们的灵魂在冥界得到永恒的安息。那萨利是一位仁慈而有担当的神明，他深知自己肩负的责任，努力工作以确保每个良善的灵魂都能得到引领。他深知冥界对于那些有着良善灵魂的人意味着什么，因此他不惜一切代价来保护他们。']],
             'fr_nashu': ['male', 'shen', 4, ['nashu_th', 'nashu_sg'], ['des:那舒，是瓦尔亚那大陆信仰中的神明，他是阴间的统治者，负责管理和收割那些邪恶的灵魂。在瓦尔亚那大陆的历史中，那舒一直是一个神秘而的存在。<br>传说中，当一个人死后，他的灵魂会被送到那舒的阴间，经过他的审判和选择，才能得到永恒的归宿。因此，那舒在人们的心目中拥有着无上的权威和力量，被视为神圣不可侵犯的存在。<br>那舒的力量和能力是源于他所收割的灵魂。每当他收割一个灵魂，他就可以从中吸取力量，增强自己的能力。随着收割的灵魂数量的增加，那舒的力量也会逐渐增强，变得越来越不可战胜。']],
-            'fr_derk': ['male', 'jin', 4, ['derk_ly'], []],
+            'fr_derk': ['male', 'jin', 4, ['derk_ly', 'derk_liuyan'], []],
             'fr_crow': ['male', 'wei', 3, ['crow_my', 'crow_mc', 'crow_td'], ['unseen']],
             'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['unseen', 'fobidai', 'des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
             'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], ['unseen']],
@@ -46,10 +46,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_klif": ["male", "jin", 3, ["krif_zl", "krif_lj"], []],
             "fr_milis": ["male", "wei", 3, ["mislee_jx", "mislee_tj", "mislee_zr"], []],
             "fr_alas": ["male", "shu", 4, ["olas_fh", "olas_bx"], []],
-            "fr_kesaya": ["male", "wu", 2, ["kesaya_xs", "kesaya_zw"], ["des:隐匿者"]],
+            "fr_kesaya": ["male", "wu", 2, ["kesaya_zw", "kesaya_wy", "kesaya_ax"], ["des:隐匿者"]],
             "fr_ken": ["male", "fr_g_ji", 4, ["ken_jj", "ken_yn", "ken_pb"], []],
             "fr_west": ["male", "qun", 3, ["west_pz", "west_sx", "west_jh"], []],
-            "fr_lions": ["male", "shu", 4, ["lions_hr", "lion_ms"], []],
+            "fr_lions": ["male", "shu", 4, ["lions_ms", "lions_jj", "lions_hr"], ['zhu']],
             "fr_milite": ["male", "fr_g_dragon", 7, ["milite_sz", "milite_yj"], []],
             "fr_jackson": ["male", "wu", 3, ["jackson_eb", "jackson_tm", "site_qj"], []],
             "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ["des:檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。"]],
@@ -58,7 +58,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_oert": ["male", "shen", 4, ["oert_lh", "oert_wy"], ["des:轮回之神欧尔特，不像其他的神那样高高在上。据传，欧尔特曾在瓦尔亚娜大陆最重要的节日“火灵日”，亲自来到瓦尔亚娜大陆的一座山峰上为瓦尔亚娜的百姓祈福，并参加兽人族的祭典活动。而受他惠顾的小贩说到：“神灵大人最喜欢我们家的丸子。”虽然真假未可知。"]],
             "fr_rest": ["male", "shu", 3, ["rest_qf", "rest_nb"], ["des:瑞斯特，生于人鱼之海附近，虽说当地兽人族与鱼人族的关系并不融洽，但瑞斯特算是少有的与两族同时交好的人，其目前在二者之间经商。"]],
             "fr_krikt": ["male", "qun", 4, ["krikt_th", "krikt_ly"], ["des:科里科特，「连破」剑法大师米亚之徒。修习其赠与的「两仪」剑法。其剑术诡谲多变，剑术有着极强的爆发性。其剑法之转换，时而如同狂风骤雨般快速无比，时而如同狂涛骇浪般凶猛无匹，时而如同清泉溪涧般缓慢温柔细腻，时而如同秋风扫落叶般冷酷无情。世人皆赞之，有诗云：“霍如羿射九日落，矫如群帝骖龙翔。来如雷霆收震怒，罢如江海凝清光。”", 'unseen']],
-            "fr_tery": ["male", "jin", "3/6", ["tery_hx", "lust_ly"], ['unseen', "des:特瑞，出生于迦奈尔联邦，其能力极为罕见，虽在大量禁魔矿脉附近，却依然能够释放魔法，其能够从其他人释放的魔法中解析咒文，并快速学习。但其能力仍有限制，其对于不使用魔法或魔法能力过强者无法复制。"]],
+            "fr_tery": ["male", "jin", "3/6", ["tery_hx"], ['unseen', "des:特瑞，出生于迦奈尔联邦，其能力极为罕见，虽在大量禁魔矿脉附近，却依然能够释放魔法，其能够从其他人释放的魔法中解析咒文，并快速学习。但其能力仍有限制，其对于不使用魔法或魔法能力过强者无法复制。"]],
             "fr_sisk": ["male", "shu", 4, ["sisk_hz", "sisk_cs", "sisk_dm"], ["des:西斯科，罕见的狮兽人与吸血鬼的后代。拥有极其强力的身体素质与高超的种族天赋。后来被科亚所救，加入了「流亡者」雇佣兵团。其对血液极为敏感，些许的血腥味也会导致其进入狂暴。"]],
             "fr_lens": ["male", "fr_g_dragon", 3, ["lens_yl", "lens_rj"], ["des:元素法师"]],
             "fr_milism": ["male", "wei", 4, ["milism_ql", "milism_th", "milism_gn"], ["des:米里森，虎兽人与狮兽人的后代，就读于「魔法学院」。尤善水性，拥有水元素魔法天赋。而且能够转移他人的疼痛到自己，被誉为「治愈魔法师」。"]],
@@ -68,7 +68,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_kersm": ["male", "wei", 4, ["kersm_my", "kersm_jq"], ["des:科尔森，「流亡者」佣兵团的经理，与「赏金公会」进行任务对接。虽然科尔森看起来十分和善，但所有佣兵团的人都知道，科尔森是最不能惹的人。其特殊能力未知，但据说十分强力，能够与十级法师平手。"]],
             "fr_kert": ["male", "shu", 4, ["kert_lp", "kert_jl"], ["des:枪械大师"]],
             "fr_keya": ["male", "qun", 4, ["kaye_jy", "kaye_yj"], ["zhu"]],
-            "fr_lust": ["male", "shu", 3, ["lust_ly", "lust_tq"], ["des:福瑞之王"]],
+            "fr_lust": ["male", "shu", 4, ["lust_fy", "lust_zb"], ["des:福瑞之王"]],
             "fr_klier": ["male", "qun", 3, ["kelaier_dh", "kelaier_ty"], []],
             "fr_faers": ["male", "shen", 4, ["faers_hc", "faers_sb", "faers_yl"], ['unseen', "zhu", "des:法斯，或名法尔斯，兽人中最主要的神祇之一，代表了永恒与变换，是动与静的同一。法尔斯常以胡狼的形象示人，对任何物种都报以绝对的平衡。守护平衡是他的使命。但是在精灵族的预言集「瓦尔亚娜大百科」中其被预言是毁灭兽人王国的罪魁祸首。"]],
             "fr_aroncy": ["male", "wei", 4, ["aroncy_jw"], []],
@@ -127,6 +127,221 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'thunder_lj': {
+                enable: 'phaseUse',
+                filterCard: true,
+                selectCard: 1,
+                usable: 1,
+                content: function () {
+                    'step 0'
+                    event.targets = game.filterPlayer(current => current != player)
+                    event.targets.sortBySeat(player)
+                    event.total = []
+                    event.num = 0
+                    event.cards = cards
+                    'step 1'
+                    event.target = event.targets.shift()
+                    event.target.chooseToRespond('请打出一张点数为' + get.cnNumber(get.number(event.cards[0])) + '或花色为' + get.suit(event.cards[0]) + '的牌，否则' + get.translation(player) + '对你造成1点伤害。', function (card) {
+                        return get.number(card) == get.number(event.cards[0]) || get.suit(card) == get.suit(event.cards[0])
+                    })
+                    'step 2'
+                    if (result.bool) {
+                        event.cards = result.cards
+                        event.total.push(event.cards[0])
+                    } else {
+                        event.target.damage(player, 'thunder')
+                        event.num++
+                    }
+                    'step 3'
+                    if (event.targets.length) {
+                        game.delay()
+                        event.goto(1)
+                    } else {
+                        if (event.total.length && event.num > 0) {
+                            player.chooseCardButton('获得其中至多' + get.cnNumber(event.num) + '张牌', [1, event.num], event.total)
+                                .set('ai', function (button) {
+                                    get.useful(button.link);
+                                })
+                        } else {
+                            event.finish()
+                        }
+                    }
+                    'step 4'
+                    if (result.bool) {
+                        player.gain(result.links, 'gain2')
+                    }
+                },
+                ai: {
+                    order: 7,
+                    result: {
+                        player: 2,
+                        target: -2,
+                    }
+                },
+                group: 'thunder_lj_defend',
+                subSkill: {
+                    defend: {
+                        trigger: {
+                            source: 'damageEnd'
+                        },
+                        filter: function (event, player) {
+                            return event.nature == 'thunder' && event.num > 0
+                        },
+                        check: function (event, player) {
+                            return get.attitude(player, event.player) > 0
+                        },
+                        content: function () {
+                            trigger.player.recover()
+                            trigger.player.draw()
+                        }
+                    }
+                }
+            },
+            'thunder_fz': {
+                trigger: {
+                    player: "damageEnd",
+                    source: "damageEnd"
+                },
+                filter: function (event) {
+                    if (event._notrigger.contains(event.player)) return false;
+                    return event.num && event.source && event.player &&
+                        event.player.isAlive() && event.source.isAlive() && event.source != event.player;
+                },
+                check: function (event, player) {
+                    if (player.isPhaseUsing()) return true;
+                    if (event.player == player) return get.attitude(player, event.source) > -3;
+                    return get.attitude(player, event.player) > -3;
+                },
+                logTarget: function (event, player) {
+                    if (event.player == player) return event.source;
+                    return event.player;
+                },
+                preHidden: true,
+                frequent: true,
+                content: function () {
+                    'step 0'
+                    event.num = trigger.num
+                    'step 1'
+                    var target = trigger.player == player ? trigger.source : trigger.player
+                    player.draw(1)
+                    target.draw(1)
+                    player.discardPlayerCard(target, get.prompt('thunder_fz')).set('ai', function (button) {
+                        if (!_status.event.att) return 0;
+                        if (get.position(button.link) == 'e') {
+                            if (get.subtype(button.link) == 'equip2') return 2 * get.value(button.link);
+                            return get.value(button.link);
+                        }
+                        return 1;
+                    }).set('att', get.attitude(player, target) <= 0)
+                    'step 2'
+                    event.num--
+                    "step 3"
+                    game.delay();
+                    "step 4"
+                    if (event.num) {
+                        player.chooseBool(get.prompt2('thunder_fz', lib.skill.wangxi.logTarget(trigger, player)))
+                    } else event.finish();
+                    'step 5'
+                    if (result.bool) {
+                        player.logSkill('thunder_fz', lib.skill.wangxi.logTarget(trigger, player));
+                        event.goto(1);
+                    }
+                },
+                ai: {
+                    maixie: true,
+                    "maixie_hp": true,
+                },
+            },
+            "lamas_zj": {
+                group: ["lamas_zj_1", "lamas_zj_2"],
+                trigger: {
+                    player: "phaseZhunbeiBegin",
+                },
+                direct: true,
+                content: function () {
+                    "step 0"
+                    event.num = Math.ceil(game.players.length / 2)
+                    'step 1'
+                    player.chooseTarget(get.prompt2(event.name), 1, function (card, player, target) {
+                        return target.countCards('hej') > 0
+                    }, function (target) {
+                        var player = _status.event.player;
+                        return get.effect(target, { name: 'guohe_copy2' }, player, player);
+                    });
+                    "step 2"
+                    if (result.bool) {
+                        event.target = result.targets[0];
+                        player.choosePlayerCard('hej', [1, event.num], event.target, true).set('prompt', '选择' + get.translation(event.target) + '的至多' + get.cnNumber(event.num) + '张牌');
+                    } else {
+                        event.finish();
+                    }
+                    "step 3"
+                    if (result.bool) {
+                        event.num -= result.cards.length
+                        player.addToExpansion(result.cards, event.target, 'give').gaintag.add('lamas_zj');
+                        if (event.num) {
+                            event.goto(1);
+                        }
+                    }
+                },
+                intro: {
+                    content: "expansion",
+                    markcount: "expansion",
+                },
+                onremove: function (player) {
+                    var cards = player.getExpansions('lamas_zj');
+                    if (cards.length) player.loseToDiscardpile(cards);
+                },
+                ai: {
+                    threaten: 2,
+                },
+                subSkill: {
+                    1: {
+                        enable: "chooseToUse",
+                        filter: function (event, player) {
+                            return player.getExpansions('lamas_zj').length > 0 && event.filterCard({ name: 'sha', isCard: true }, player, event);
+                        },
+                        direct: true,
+                        chooseButton: {
+                            dialog: function (event, player) {
+                                return ui.create.dialog('战尽', player.getExpansions('lamas_zj'), 'hidden');
+                            },
+                            backup: function (links, player) {
+                                return {
+                                    viewAs: { name: 'sha', isCard: true },
+                                    filterCard: () => false,
+                                    selectCard: -1,
+                                    card: links[0],
+                                    precontent: function () {
+                                        player.logSkill('lamas_zj');
+                                        player.loseToDiscardpile(lib.skill.lamas_zj_1_backup.card);
+                                        delete event.result.skill;
+                                    },
+                                };
+                            },
+                            prompt: () => '请选择【杀】的目标',
+                        },
+                        ai: {
+                            order: function () {
+                                return get.order({ name: 'sha' }) + 0.6;
+                            },
+                            result: {
+                                player: 1,
+                            },
+                        },
+                    },
+                    2: {
+                        trigger: {
+                            target: "shaBefore",
+                        },
+                        direct: true,
+                        content: function () {
+                            var cards = player.getExpansions('lamas_zj');
+                            if (cards.length) player.gain(cards, 'gain2');
+                        },
+                    }
+                }
+            },
             'mouse_bm': {
                 audio: 3,
                 trigger: {
@@ -290,23 +505,42 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                     clear: {
                         trigger: {
-                            player: ["die", "phaseBefore"],
+                            global: "phaseAfter",
+                            player: "die",
                         },
                         charlotte: true,
                         forced: true,
                         popup: false,
                         forceDie: true,
+                        filter: function (event, player) {
+                            if (event.name == 'die') return true;
+                            if (!lib.skill.mouse_bm.getKane(event.player).length) return false;
+                            if (event.player.additionalSkills['mouse_bm_' + player.playerid]) {
+                                return true;
+                            }
+                            return false;
+                        },
                         content: function () {
-                            game.countPlayer(current => {
-                                var skills = current.additionalSkills['mouse_bm_' + player.playerid];
-                                if (skills && skills.length) {
-                                    current.removeAdditionalSkill('mouse_bm_' + player.playerid);
-                                    for (var i of skills) {
-                                        current.removeMark(i, 1);
-                                        current.removeSkill(i);
+                            if (trigger.name == 'die') {
+                                game.countPlayer(current => {
+                                    var skills = current.additionalSkills['mouse_bm_' + player.playerid];
+                                    if (skills && skills.length) {
+                                        current.removeAdditionalSkill('mouse_bm_' + player.playerid);
+                                        for (var i of skills) {
+                                            current.removeSkill(i);
+                                            current.removeMark(i, 1);
+                                        }
                                     }
+                                });
+                            }
+                            else {
+                                var skills = trigger.player.additionalSkills['mouse_bm_' + player.playerid];
+                                trigger.player.removeAdditionalSkill('mouse_bm_' + player.playerid);
+                                for (var i of skills) {
+                                    trigger.player.removeMark(i, 1);
+                                    trigger.player.removeSkill(i);
                                 }
-                            });
+                            }
                         },
                         sub: true,
                     },
@@ -1039,6 +1273,35 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         trigger.player.damage((result.choice || 1), player, 'thunder')
                     }
                 }
+            },
+            'derk_liuyan': {
+                audio: 2,
+                enable: "phaseUse",
+                filter: function (event, player) {
+                    return player.countCards('he') > 1;
+                },
+                filterCard: true,
+                position: "he",
+                selectCard: [2, Infinity],
+                check: function (card) {
+                    if (ui.selected.cards.length > 1) return 0;
+                    return 4 - get.value(card);
+                },
+                content: function () {
+                    var num = 0;
+                    for (var i of cards) num += get.number(i, player);
+                    var numx = (num % 13 == 0 ? 13 : (num % 13));
+                    var card = get.cardPile2(function (card) {
+                        return get.number(card, false) == numx;
+                    });
+                    if (card) player.gain(card, 'gain2');
+                },
+                ai: {
+                    order: 1,
+                    result: {
+                        player: 1,
+                    },
+                },
             },
             'derk_ly': {
                 locked: false,
@@ -1773,6 +2036,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     })
                     'step 4'
                     var card1 = game.createCard(event.cardname, event.suit, 8, event.nature);
+                    card1.storage.owner = player
                     var target = result.targets[0]
                     target.equip(card1);
                     target.$draw(card1);
@@ -3462,163 +3726,148 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                 }
             },
-            'lust_tq': {
-                group: ["lust_tq_1", "lust_tq_2"],
-                subSkill: {
-                    "1": {
-                        trigger: {
-                            player: "damageBegin3",
-                        },
-                        direct: true,
-                        prompt: "当你即将受到伤害时，你可以弃置一张♥或♣手牌，将伤害转移给一名其他角色。",
-                        filter: function (event, player) {
-                            return player.countCards('h', { suit: 'heart' }) > 0 || player.countCards('h', { suit: 'club' }) > 0 && event.num > 0;
-                        },
-                        content: function () {
-                            "step 0"
-                            player.chooseCardTarget({
-                                filterCard: function (card, player) {
-                                    return get.suit(card) == 'heart' || get.suit(card) == 'club' && lib.filter.cardDiscardable(card, player);
-                                },
-                                filterTarget: function (card, player, target) {
-                                    return player != target;
-                                },
-                                ai1: function (card) {
-                                    return 10 - get.value(card);
-                                },
-                                ai2: function (target) {
-                                    var att = get.attitude(_status.event.player, target);
-                                    var trigger = _status.event.getTrigger();
-                                    var da = 0;
-                                    if (_status.event.player.hp == 1) {
-                                        da = 10;
-                                    }
-                                    if (trigger.num > 1) {
-                                        if (target.maxHp > 5 && target.hp > 1) return -att / 10 + da;
-                                        return -att + da;
-                                    }
-                                    var eff = get.damageEffect(target, trigger.source, target, trigger.nature);
-                                    if (att == 0) return 0.1 + da;
-                                    if (eff >= 0 && trigger.num == 1) {
-                                        return att + da;
-                                    }
-                                    if (target.hp == target.maxHp) return -att + da;
-                                    if (target.hp == 1) {
-                                        if (target.maxHp <= 4 && !target.hasSkillTag('maixie')) {
-                                            if (target.maxHp <= 3) {
-                                                return -att + da;
-                                            }
-                                            return -att / 2 + da;
-                                        }
-                                        return da;
-                                    }
-                                    if (target.hp == target.maxHp - 1) {
-                                        if (target.hp > 2 || target.hasSkillTag('maixie')) return att / 5 + da;
-                                        if (att > 0) return 0.02 + da;
-                                        return 0.05 + da;
-                                    }
-                                    return att / 2 + da;
-                                },
-                                prompt: get.prompt2('lust_tq')
-                            });
-                            "step 1"
-                            if (result.bool) {
-                                player.logSkill(event.name, result.targets);
-                                trigger.player = result.targets[0];
-                                player.discard(result.cards[0]);
+            'lust_zb': {
+                trigger: {
+                    player: ["chooseToRespondBegin", "chooseToUseBegin"],
+                },
+                unique: true,
+                zhuSkill: true,
+                filter: function (event, player) {
+                    if (event.responded) return false;
+                    if (!event.filterCard({ name: 'shan' }, player, event)) return false;
+                    return player.isMinHandcard() || player.isMinHp()
+                },
+                frequent: true,
+                usable: 1,
+                content: function () {
+                    "step 0"
+                    trigger.untrigger();
+                    trigger.responded = true;
+                    trigger.result = { bool: true, card: { name: 'shan' } }
+                },
+                ai: {
+                    respondShan: true,
+                    effect: {
+                        target: function (card, player, target, effect) {
+                            if (get.tag(card, 'respondShan') && effect < 0) {
+                                if (target.countCards('h') >= 2) return 0.5;
                             }
                         },
-                        ai: {
-                            "maixie_defend": true,
-                            effect: {
-                                target: function (card, player, target) {
-                                    if (player.hasSkillTag('jueqing', false, target)) return;
-                                    if (get.tag(card, 'damage') && target.countCards('h') > 1) return 0.7;
-                                },
-                            },
-                            threaten: function (player, target) {
-                                if (target.countCards('h') == 0) return 2;
-                            },
-                        },
-                        sub: true,
                     },
-                    "2": {
-                        trigger: {
-                            target: "useCardToTarget",
+                },
+            },
+            'lust_fy': {
+                enable: "phaseUse",
+                usable: 1,
+                preHidden: true,
+                filterCard: true,
+                filterTarget: function (card, player, target) {
+                    return target != player && target.countCards('he') > 0;
+                },
+                content: function () {
+                    "step 0"
+                    player.choosePlayerCard('hej', target, true);
+                    "step 1"
+                    if (result.bool && result.links && result.links.length) {
+                        var card = result.links[0];
+                        var cardx = get.autoViewAs({ name: 'sha' }, [card]);
+                        target.useCard(cardx, [card], player, false)
+                    }
+                },
+                ai: {
+                    order: 8,
+                    result: {
+                        target: -1,
+                        player: function (player, target) {
+                            if (player.hasSkillTag('maixie') || player.countCards('h', 'shan') > 0) {
+                                return get.effect(target, { name: 'guohe_copy2' }, player, player)
+                            }
+                            return -1
                         },
-                        prompt: "当你成为【杀】的目标时，你可以令一名有手牌的其他角色正面朝上交给你一张牌。若此牌不为【闪】，则该角色也成为此【杀】的额外目标。",
-                        direct: true,
-                        filter: function (event, player) {
-                            return event.card.name == 'sha';
+                        expose: 0.2,
+                        effect: {
+                            target: function (card, player, target) {
+                                if (card.name != 'sha') return;
+                                var players = game.filterPlayer();
+                                if (get.attitude(player, target) <= 0) {
+                                    for (var i = 0; i < players.length; i++) {
+                                        var target2 = players[i];
+                                        if (player != target2 && target != target2 && player.canUse(card, target2, false) &&
+                                            get.effect(target2, { name: 'shacopy', nature: card.nature, suit: card.suit }, player, target) > 0 &&
+                                            get.effect(target2, { name: 'shacopy', nature: card.nature, suit: card.suit }, player, player) < 0) {
+                                            if (target.hp == target.maxHp) return 0.3;
+                                            return 0.6;
+                                        }
+                                    }
+                                } else {
+                                    for (var i = 0; i < players.length; i++) {
+                                        var target2 = players[i];
+                                        if (player != target2 && target != target2 && player.canUse(card, target2, false) &&
+                                            get.effect(target2, { name: 'shacopy', nature: card.nature, suit: card.suit }, player, player) > 0) {
+                                            if (player.canUse(card, target2)) return;
+                                            if (target.hp == target.maxHp) return [0, 1];
+                                            return [0, 0];
+                                        }
+                                    }
+                                }
+                            },
                         },
+                    },
+                },
+                group: "lust_fy_1",
+                subSkill: {
+                    1: {
                         content: function () {
                             "step 0"
-                            player.chooseTarget(get.prompt2('lust_tq'), function (card, player, target) {
+                            player.chooseTarget(get.prompt2('lust_fy'), function (card, player, target) {
                                 return target != player && !_status.event.targets.contains(target) && _status.event.playerx.canUse('sha', target, false) && target.countCards('h');
                             }).set('ai', function (target) {
                                 var trigger = _status.event.getTrigger();
                                 var player = _status.event.player;
                                 return get.effect(target, trigger.card, trigger.player, player) + 0.1;
                             }).set('targets', trigger.targets).set('playerx', trigger.player);
-                            "step 1"
+                            'step 1'
                             if (result.bool) {
-                                var target = result.targets[0];
-                                player.logSkill('lust_tq', target);
-                                event.target = target;
-                                target.chooseCard('交给' + get.translation(player) +
-                                    '一张牌，若此牌不为【闪】，则也成为此杀的额外目标', true).set('ai', function (card) {
+                                event.target = result.targets[0];
+                                player.logSkill('lust_fy', event.target);
+                                event.target.chooseCard('选择' + get.translation(player) +
+                                    '一张牌，若此牌不为' + get.translation(player) + '选择的花色，则也成为此【杀】的额外目标', true).set('ai', function (card) {
                                         return -get.value(card, player, 'raw');
                                     }).set('sourcex', player);
                                 game.delay();
-                            }
-                            else {
+                            } else {
                                 event.finish();
                             }
                             "step 2"
+                            event.card = result.cards[0]
+                            var next = player.chooseButton(['请选择一种花色', [lib.suit.map(i => ['', '', 'lukai_' + i]), 'vcard']], 1, true)
+                            next.set('ai', button => {
+                                return Math.random;
+                            });
+                            'step 3'
                             if (result.bool) {
-                                player.gain(result.cards, event.target, 'give');
-                                if (get.name(result.cards[0]) != 'shan') {
+                                var suit = result.links[0][2].slice(6);
+                                target.give(event.card, player, 'give');
+                                if (get.suit(event.card) != suit) {
                                     trigger.getParent().targets.push(event.target);
                                     trigger.getParent().triggeredTargets2.push(event.target);
+                                    if (event.target.countCards('h') >= player.countCards('h')) trigger.directHit.push(event.target);
                                     game.log(event.target, '成为了额外目标');
                                 }
                                 game.delay();
                             }
                         },
-                        ai: {
-                            expose: 0.2,
-                            effect: {
-                                target: function (card, player, target) {
-                                    if (card.name != 'sha') return;
-                                    var players = game.filterPlayer();
-                                    if (get.attitude(player, target) <= 0) {
-                                        for (var i = 0; i < players.length; i++) {
-                                            var target2 = players[i];
-                                            if (player != target2 && target != target2 && player.canUse(card, target2, false) &&
-                                                get.effect(target2, { name: 'shacopy', nature: card.nature, suit: card.suit }, player, target) > 0 &&
-                                                get.effect(target2, { name: 'shacopy', nature: card.nature, suit: card.suit }, player, player) < 0) {
-                                                if (target.hp == target.maxHp) return 0.3;
-                                                return 0.6;
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        for (var i = 0; i < players.length; i++) {
-                                            var target2 = players[i];
-                                            if (player != target2 && target != target2 && player.canUse(card, target2, false) &&
-                                                get.effect(target2, { name: 'shacopy', nature: card.nature, suit: card.suit }, player, player) > 0) {
-                                                if (player.canUse(card, target2)) return;
-                                                if (target.hp == target.maxHp) return [0, 1];
-                                                return [0, 0];
-                                            }
-                                        }
-                                    }
-                                },
-                            },
+                        trigger: {
+                            target: "useCardToTarget",
                         },
-                        sub: true,
-                    },
-                },
+                        direct: true,
+                        filter: function (event, player) {
+                            return event.card.name == 'sha' && game.hasPlayer(function (current) {
+                                return current != player && current != event.source
+                            }) && game.players.length > 2;
+                        },
+                    }
+                }
             },
             'horn_ll': {
                 qianghua: true,
@@ -4344,28 +4593,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         sub: true,
                     },
-                },
-            },
-            'lust_ly': {
-                enable: "phaseUse",
-                usable: 1,
-                filterCard: true,
-                filterTarget: function (card, player, target) {
-                    return target != player;
-                },
-                content: function () {
-                    "step 0"
-                    if (target.countCards('h', "sha") == 0) {
-                        target.useCard({ name: 'sha', isCard: true }, player)
-                        event.finish()
-                        return;
-                    }
-                    "step 1"
-                    player.chooseCardButton(target, target.getCards('h'), true).set('filterButton', function (button) {
-                        return get.name(button.link) == 'sha';
-                    });
-                    "step 2"
-                    target.useCard(result.links[0], player)
                 },
             },
             "kelaier_ty": {
@@ -5587,6 +5814,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.addSkill(result.control);
                     player.popup(result.control);
                     game.log(player, '获得技能', '【' + get.translation(result.control) + '】');
+                    trigger.source.removeSkill(result.control)
+                    game.log(trigger.source, '失去技能', '【' + get.translation(result.control) + '】')
                 },
             },
             "lens_yl": {
@@ -6810,6 +7039,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (player.countCards('h') == 0) return false;
                     return true;
                 },
+                unique: true,
+                zhuSkill: true,
                 filterTarget: function (card, player, target) {
                     return target != player && target.countCards('h') > 0 && target.hp > 0 && target.hp <= player.maxHp;
                 },
@@ -6852,19 +7083,39 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     threaten: 2,
                 },
             },
-            "lion_ms": {
+            "lions_ms": {
                 enable: "phaseUse",
                 usable: 1,
                 filter: function (event, player) {
                     return player.countCards('he') > 0;
                 },
+                mod: {
+                    targetInRange: function (card, player, target) {
+                        if (target.hasSkill('lions_ms_1')) {
+                            return true;
+                        }
+                    }
+                },
                 filterTarget: function (card, player, target) {
                     return target != player && !target.hasSkill('lions_ms_1');
                 },
-                filterCard: true,
-                position: "he",
+                filterCard: function (card) {
+                    var suit = get.suit(card);
+                    for (var i = 0; i < ui.selected.cards.length; i++) {
+                        if (get.suit(ui.selected.cards[i]) == suit) return false;
+                    }
+                    return true;
+                },
+                complexCard: true,
+                selectCard: [1, 4],
                 check: function (card) {
-                    return 8 - get.value(card);
+                    return 8 - get.value(card)
+                },
+                selectTarget: function () {
+                    return ui.selected.cards.length
+                },
+                contentBefore: function () {
+                    player.draw(cards.length)
                 },
                 content: function () {
                     'step 0'
@@ -7129,7 +7380,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                 },
             },
-            "kesaya_xs": {
+            /*"kesaya_xs": {
                 init: function (player, skill) {
                     player.addSkillBlocker(skill);
                     player.addSkill('kesaya_wy')
@@ -7145,12 +7396,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 skillBlocker: function (skill, player) {
                     return (player.isHealthy() && skill == 'kesaya_ax') || (!player.isHealthy() && skill == 'kesaya_wy')
                 },
-            },
+            },*/
             "kesaya_ax": {
                 audio: "ext:福瑞拓展:2",
                 firstDo: true,
                 trigger: {
                     player: "useCard1",
+                },
+                init: function (player) {
+                    player.frFenfa('kesaya_ax')
+                },
+                fenfa: function (player) {
+                    return [-Infinity, player.maxHp - 1]
                 },
                 forced: true,
                 filter: function (event, player) {
@@ -7188,23 +7445,26 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
             },
             "kesaya_wy": {
+                init: function (player) {
+                    player.frFenfa('kesaya_wy')
+                },
+                fenfa: function (player) {
+                    return player.maxHp
+                },
+                trigger: {
+                    player: "phaseDiscardBefore",
+                },
+                forced: true,
+                content: function () {
+                    trigger.cancel();
+                },
                 mod: {
                     targetEnabled: function (card, player, target, now) {
                         if (card.name == 'sha') return false;
                     },
                 },
-                group: ["kesaya_wy_1", "kesaya_wy_2"],
+                group: ["kesaya_wy_2"],
                 subSkill: {
-                    "1": {
-                        trigger: {
-                            player: "phaseDiscardBefore",
-                        },
-                        forced: true,
-                        content: function () {
-                            trigger.cancel();
-                        },
-                        sub: true,
-                    },
                     "2": {
                         trigger: {
                             global: "useCard1",
@@ -8338,20 +8598,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     "1": {
                         forced: true,
                         trigger: {
-                            player: ["gameDrawAfter", "changeHp"],
+                            player: ["gameDrawAfter", "changeHp", 'loseMaxHp', 'gainMaxHp'],
                         },
                         filter: function (event, player) {
-                            if (player.maxHp != 2) {
-                                return true
-                            }
+                            return player.maxHp != 2
                         },
                         content: function () {
-                            var a = player.maxHp - 2
-                            if (a > 0) {
-                                player.loseMaxHp(a)
-                            } else {
-                                player.gainMaxHp(-a)
-                            }
+                            player.maxHp = 2
+                            player.update()
                         },
                         sub: true,
                     },
@@ -14060,6 +14314,30 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                 },
             },
+            "lions_jj": {
+                trigger: {
+                    player: "useCardToPlayered",
+                },
+                forced: true,
+                locked: false,
+                filter: function (event, player) {
+                    return event.card.name == 'sha';
+                },
+                content: function () {
+                    'step 0'
+                    trigger.target.chooseToRespond('请打出一张【杀】，否则此【杀】对你伤害+1', { name: 'sha' })
+                    'step 1'
+                    if (!result.bool) {
+                        var id = trigger.target.playerid;
+                        var map = trigger.getParent().customArgs;
+                        if (!map[id]) map[id] = {};
+                        if (typeof map[id].extraDamage != 'number') {
+                            map[id].extraDamage = 0;
+                        }
+                        map[id].extraDamage++;
+                    }
+                }
+            },
             "zenia_ld": {
                 trigger: {
                     player: "useCard",
@@ -17761,8 +18039,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'thunder_lj': "流雷",
+            'thunder_lj_info': "出牌阶段限一次，你可以弃置一张手牌，令所有其他角色打出一张与上一名以此法打出或弃置的牌点数或花色相同的牌，否则你对其造成1点雷电伤害，此技能结算完毕后，你获得其他角色至多X张因此技能打出的牌（X为因此技能受到伤害的角色数）。当你造成雷属性伤害后，你可以令目标角色回复1点体力并摸一张牌。",
+            'thunder_fz': '奋决',
+            'thunder_fz_info': '当你受到其他角色造成的1点伤害，或当你对其他角色造成伤害1点伤害后，你可以与该角色各摸一张牌，然后你弃置该角色一张牌。',
+            "lamas_zj": '战尽',
+            "lamas_zj_info": "准备阶段，你可以将任意角色区域内的总计X张牌置于你的武将牌上称为“战”（X存活角色数的一半并向上取整）；当你成为【杀】的目标时，你获得你武将牌上的所有“战”；你可以移去一张“战”，然后视为使用一张普通【杀】。",
             "mouse_bm": "八门",
-            "mouse_bm_info": "锁定技。①游戏开始时，你获得“八门”各1枚，称为“奇门”。②出牌阶段开始时，你选择一名没有“奇门”的其他角色。你交给其1枚“奇门”，且令其获得对应效果，然后你可以重复此流程。③你的回合开始前或当你死亡时，移去场上所有你交出的“奇门”。④回合开始时，若你没有“奇门”你死亡。",
+            "mouse_bm_info": "锁定技。①游戏开始时，你获得“八门”各1枚，称为“奇门”。②出牌阶段开始时，你选择一名没有“奇门”的其他角色。你交给其1枚“奇门”，且令其获得对应效果，然后你可以重复此流程。③当你死亡时，移去场上所有你交出的“奇门”。④一名角色回合结束时，若其有你给出的“奇门”，你移除之。⑤回合开始时，若你没有“奇门”你死亡。",
             "mouse_bm_kaimen": "开门",
             "mouse_bm_kaimen_info": "锁定技。①摸牌阶段，你多摸四张牌。②你使用【杀】的次数上限+1。",
             "mouse_bm_xiumen": '休门',
@@ -17803,6 +18087,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'zhan_zb_info': '一名角色的回合开始时，若你的体力上限大于该角色体力值，你可以失去任意点体力上限并对该角色造成等量的雷电伤害。',
             'derk_ly': '连语',
             'derk_ly_info': '当你使用牌时，若此牌的点数与你使用的前两张牌的点数和对13取余（若整除则视为K）相等，你摸两张牌；锁定技，你使用与你上一张使用牌的颜色相同的牌无次数限制。',
+            'derk_liuyan': '流言',
+            'derk_liuyan_info': '出牌阶段，你可以弃置至少两张牌，然后从牌堆中获得一张点数为X的牌（X为这些牌的点数和对13取余，若整除则视为K）。',
             'crow_td': '天妒',
             'crow_td_info': '你的判定牌生效后，你可以获得此牌。',
             'crow_my': '藐意',
@@ -17921,12 +18207,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "faers_sb_info": "出牌阶段限一次，你可以弃置你的全部手牌。",
             "kelaier_dh": "定花",
             "kelaier_dh_info": "出牌阶段限一次，你可以弃置一张牌并选择一名角色，然后进行判定。若如此做，直到其下个出牌阶段开始前，该角色获得一点护甲。若判定结果为黑色，该角色摸两张牌，然后直到其下个出牌阶段开始前，其区域内所有的♠都视为♣；若结果为红色，该角色回复一点体力，然后直到其下个出牌阶段开始前，其区域内所有的♦都视为♥。",
-            "lust_ly": "戮引",
-            "lust_ly_info": "出牌阶段限一次，你可以弃置一张牌并选择一名其他角色，若其有【杀】，你可以观看其手牌并选择其中一张【杀】，然后其对你使用此【杀】；否则，其视为对你使用一张【杀】。",
+            "tery_ly": "戮引",
+            "tery_ly_info": "出牌阶段限一次，你可以弃置一张牌并选择一名其他角色，若其有【杀】，你可以观看其手牌并选择其中一张【杀】，然后其对你使用此【杀】；否则，其视为对你使用一张【杀】。",
             "kelaier_ty": "同弈",
             "kelaier_ty_info": "出牌阶段限一次，你可以弃置一张手牌并选择一名其他角色，然后进行一次判定。直到该角色回合结束，若结果为红色，该角色不能使用基本牌，若结果为黑色，该角色不能使用锦囊牌。",
-            "lust_tq": "脱壳",
-            "lust_tq_info": "当你即将受到伤害时，你可以弃置一张♥或♣手牌，将伤害转移给一名其他角色。当你成为【杀】的目标时，你可以令一名有手牌的其他角色正面朝上交给你一张牌。若此牌不为【闪】，则该角色也成为此【杀】的额外目标。",
+            "lust_fy": "锋移",
+            "lust_fy_info": "出牌阶段限一次，你可以弃置一张牌，然后将一名其他角色区域内的一张牌当【杀】对你使用。当你成为【杀】的目标时，你可以令另一名有手牌的其他角色选择一张牌，然后你选择一种花色并令其将选择的牌正面朝上交给你，若此牌花色与你声明的花色不同，则该角色也成为此【杀】的额外目标，若该角色的手牌数不小于你，其不可响应此【杀】。",
+            "lust_zb": "政变",
+            "lust_zb_info": "主公技。每回合限一次，当你需要使用或打出一张【闪】时，若你的手牌数或体力值为全场最少，你可以视为使用或打出之。",
             "kaye_jy": "急援",
             "kaye_jy_info": "出牌阶段限一次，你可以弃置一张手牌并选择一名角色，若如此做，该角色获得〖守护〗直到其回合结束；若该角色为你，则改为获得〖守护〗直到你的下个回合开始。你不能连续指定同一角色。",
             "kaye_shouhu": "守护",
@@ -18012,9 +18300,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "milite_sz": "重斩",
             "milite_sz_info": "当你使用【杀】时，若你不在【杀】的目标的攻击范围内，此杀不可被响应。",
             "lions_hr": "魂落",
-            "lions_hr_info": "濒死阶段，你可以与一名体力值不超过你的体力上限的角色拼点，若你赢，你失去一点体力上限并与该角色交换体力值；若你没赢，你立即死亡",
-            "lion_ms": "梦升",
-            "lion_ms_info": "出牌阶段限一次，你可以弃置一张牌并令一名其他角色打出一张闪，否则该角色不能使用或打出卡牌直到其受到伤害或下一回合结束",
+            "lions_hr_info": "主公技。濒死阶段，你可以与一名体力值不超过你的体力上限的角色拼点，若你赢，你失去一点体力上限并与该角色交换体力值；若你没赢，你立即死亡",
+            "lions_ms": "陷梦",
+            "lions_ms_info": "出牌阶段限一次，你可以弃置任意张花色不同牌并摸等量的牌，然后令等量其他角色各打出一张【闪】，否则该角色不能使用或打出牌直到其受到伤害或下一回合结束；你对其使用牌无距离限制。",
+            "lions_jj": "惊觉",
+            "lions_jj_info": "当你使用【杀】指定目标后，目标须打出一张【杀】，否则此【杀】对其造成的伤害+1。",
             "milite_yj": "疑计",
             "milite_yj_info": "每回合限两次，其他角色摸牌后，你可以观看其摸到的牌，若其中有【杀】，则视为你对其使用一张【杀】，若其中没有【杀】，则视为其对你使用一张【杀】（计入出杀次数）",
             "jackson_eb": "纵沙",
@@ -18030,9 +18320,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "kesaya_xs": "缔湮",
             "kesaya_xs_info": "锁定技，若你未受伤，则你视为拥有技能〖无影〗；否则，你视为拥有技能〖暗袭〗。",
             "kesaya_ax": "暗袭",
-            "kesaya_ax_info": "锁定技，你使用【杀】无次数限制，且不可被响应。",
+            "kesaya_ax_info": get.introduce('fenfa') + "(-∞, maxHp)，锁定技，你使用【杀】无次数限制，且不可被响应。",
             "kesaya_wy": "无影",
-            "kesaya_wy_info": "锁定技，①你不能成为【杀】的目标；②弃牌阶段开始时，你跳过此阶段。③黑色锦囊牌对你无效。",
+            "kesaya_wy_info": get.introduce('fenfa') + "[maxHp, +∞)，锁定技，①你不能成为【杀】的目标；②弃牌阶段开始时，你跳过此阶段。③黑色锦囊牌对你无效。",
             "olas_fh": "破空",
             "olas_fh_info": "当你使用一张杀指定目标后，你可以打出至多X张【杀】（X为目标角色体力上限的两倍），若如此做，目标需额外打出等量的【闪】，每少打出一张【闪】，此杀的伤害+1。",
             "olas_bx": "缴械",
@@ -18070,7 +18360,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "yada_by": "辩言",
             "yada_by_info": "出牌阶段，你可以与一名其他角色拼点，若你赢，你可以获得该角色各区域的一张牌；若你没赢，本回合你不能对自己使用牌且此技能失效。",
             "wes_ts": "同生",
-            "wes_ts_info": "锁定技。一轮游戏开始时，你可以指定一名其他角色，该角色获得〖反馈〗，并令除你与其以外的角色指定该角色为目标时，该角色将目标转移给你。",
+            "wes_ts_info": "锁定技。一轮游戏开始时，你可以指定一名其他角色，该角色获得〖反馈〗直到你下一次发动此技能，并令除你与其以外的角色指定该角色为目标时，该角色将目标转移给你。",
             "wes_gs": "共死",
             "wes_gs_info": "当你受到来源不为你与〖同生〗指定的角色的伤害时，你可以令伤害来源<font color=\"purple\">视为</font>对被〖同生〗指定的角色造成<font color=\"purple\">过</font>X次1点同属性伤害（X为此次伤害值）。",
             "wes_lt": "缓释",
@@ -18502,6 +18792,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            'fr_lamas': '战技如神',
             'fr_mouse': '奇门八卦',
             'fr_blam': '如入幻境之刃',
             'fr_nashu': '恶魂使者',

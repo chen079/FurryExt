@@ -1,7 +1,8 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
-		'fr_mouse':'奇门遁甲，唯破万法...',
+		'fr_lamas': '我会战斗到最后一刻！',
+		'fr_mouse': '奇门遁甲，唯破万法...',
 		'fr_nashu': '邪恶的灵魂，呵呵，不过是我的盘中餐...',
 		'fr_rasali': '唯有善良，方为出路。',
 		'fr_zhan': "枷锁是困不住我的，只会让我更加强大！",
@@ -119,14 +120,42 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//成就列表
 	lib.fr_achievement = {
 		character: {
+			'还不可以认输！': {
+				level: 6,
+				info: '使用希尔在一局游戏中累计脱离10次濒死状态',
+				extra: '绝望中，仍存有一线生机！',
+				progress: 1
+			},
+			'哈尔斯的高徒': {
+				level: 7,
+				info: '在二人对局中利用老朱然，在你的回合开始时场上存在0血僵尸（不为老周泰或你）',
+				extra: '只有猛兽才能拿下的成就！',
+				progress: 1
+			},
+			'人鱼狂流': {
+				level: 6,
+				info: '使用瑞斯特当内奸赢得一局身份局游戏',
+				extra: '让大海将你们埋葬！',
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_mouse')
+				},
+				rewardInfo: '奖励：解锁角色——缪斯',
+				progress: 1
+			},
 			'压榨童工': {
 				level: 5,
-				info: '使用塔尔斯在一局内使得一名角色装备着5张点数为8的装备',
+				info: '使用塔尔斯在一局内使得一名角色装备5张点数为8的装备',
 				extra: '这也太累了...',
 				reward: function () {
 					game.frAchi.unlockCharacter('fr_zeta')
 				},
 				rewardInfo: '奖励：解锁角色——泽塔',
+				progress: 1
+			},
+			'你在造假吗？': {
+				level: 2,
+				info: '装备一张点数为8的装备，但不是塔尔斯打造的。',
+				extra: '不付专利费的，见一个炸一个！',
 				progress: 1
 			},
 			"连破之刃": {
@@ -315,6 +344,9 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			if (game.me && game.me.name && game.me.name.indexOf('fr_') == 0 && game.me.group) {
 				try {
 					game.frAchi.addProgress(lib.characterTitle[game.me.name], 'character');
+					if (game.me.identity == 'nei' && (game.me.name == 'fr_rest' || game.me.name1 == 'fr_rest' || game.me.name2 == 'fr_rest') && !game.frAchi.hasAchi('人鱼狂流', 'character')) {
+						game.frAchi.addProgress('人鱼狂流', 'character');
+					}
 				} catch (e) {
 					console.log(e);
 					game.print(e);
@@ -401,6 +433,9 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			if (!lib.config.frAchiNew) {
 				this.reset();
 				game.saveConfig('frAchiNew', true);
+			}
+			if (this.amount() == this.amountOfGained() + 1) {
+				if (!this.hasAchi('超级肝帝', 'special')) this.addProgress('超级肝帝', 'special')
 			}
 			this.inited = true;
 		},
@@ -1161,7 +1196,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 	};
 	lib.skill["_fr_achi_压榨童工"] = {
 		trigger: {
-			global: ["equipAfter", 'gainAfter', 'loseAfter', 'cardMove', 'useCardAfter']
+			global: "equipAfter"
 		},
 		firstDo: true,
 		priority: 6,
@@ -1179,6 +1214,46 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			game.frAchi.addProgress('压榨童工', 'character');
 		}
 	};
+	lib.skill["_fr_achi_你在造假吗？"] = {
+		trigger: {
+			player: ["equipAfter"]
+		},
+		firstDo: true,
+		priority: 6,
+		forced: true,
+		popup: false,
+		filter: function (event, player) {
+			if (game.me != player) return false;
+			if (game.frAchi.hasAchi('你在造假吗？', 'character')) return false;
+			return (!event.cards[0].storage.ownner || get.name(event.card.storage.ownner) != 'fr_tiers') && get.type(event.cards[0]) == 'equip' && get.number(event.cards[0]) == 8
+		},
+		content: function () {
+			game.frAchi.addProgress('你在造假吗？', 'character');
+		}
+	};
+	lib.skill["_fr_achi_还不可以认输！"] = {
+		trigger: {
+			player: "dyingAfter",
+		},
+		filter: function (event, player) {
+			return player.isAlive();
+		},
+		firstDo: true,
+		priority: 6,
+		forced: true,
+		popup: false,
+		filter: function (event, player) {
+			if (game.me != player) return false;
+			if (game.frAchi.hasAchi('你还不可以认输！', 'character')) return false;
+			if (player.name != 'fr_sier' && player.name1 != 'fr_sier' && player.name2 != 'fr_sier') return false
+			return true
+		},
+		content: function () {
+			if (!player.storage.dying) player.storage.dying = 0
+			player.storage.dying += 1
+			if (player.storage.dying >= 10) game.frAchi.addProgress('还不可以认输！', 'character');
+		},
+	};
 	lib.skill["_fr_achi_叠最厚的甲"] = {
 		trigger: { player: "changeHujiaAfter" },
 		firstDo: true,
@@ -1192,6 +1267,25 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		},
 		content: function () {
 			game.frAchi.addProgress('叠最厚的甲', 'game');
+		}
+	};
+	lib.skill["_fr_achi_哈尔斯的高徒"] = {
+		trigger: { player: "phaseBegin" },
+		firstDo: true,
+		priority: 6,
+		forced: true,
+		popup: false,
+		filter: function (event, player) {
+			if (game.me != player) return false;
+			if (player.hujia < 9) return false;
+			if (game.frAchi.hasAchi('哈尔斯的高徒', 'character')) return false
+			if (game.me.next.name != 'old_zhuran') return false
+			return game.hasPlayer(function (current) {
+				return current != player && current.hp <= 0 && current.isAlive() && !current.isDying() && current.name != 'old_zhoutai'
+			})
+		},
+		content: function () {
+			game.frAchi.addProgress('哈尔斯的高徒', 'character');
 		}
 	};
 	lib.skill["_fr_achi_黑客入侵"] = {

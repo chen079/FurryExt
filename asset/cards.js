@@ -4,6 +4,60 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         name: 'furryCard',//卡包命名
         connect: true,//卡包是否可以联机
         card: {
+            'fr_card_xzst': {
+                fullskin: true,
+                image: 'ext:福瑞拓展/image/card/fr_card_xzst.png',
+                type: "trick",
+                savable: function (card, player, target) {
+                    return player != target
+                },
+                filterTarget: function (card, player, target) {
+                    return target != player
+                },
+                global: "g_fr_card_xzst",
+                content: function () {
+                    'step 0'
+                    var next = player.chooseControl()
+                    next.set('choiceList', ['弃置一张手牌（不足则全弃置）并令' + get.translation(target) + '摸两张牌。', '受到1点伤害并视为失去1点体力并令' + get.translation(target) + '回复1点体力。'])
+                    next.set('ai', function () {
+                        if (get.attitude(player, target) > 0) {
+                            if (player.hp >= 2 && target.hp <= 1) return 0
+                            if (player.countCards('h') > player.hp) return 1
+                            if (player.hasSkillTag('maixie') && player.hp >= 2) return 0
+                        }
+                        return 1
+                    })
+                    'step 1'
+                    if (result.index == 0) {
+                        player.chooseToDiscard(1, 'h', true)
+                        target.draw(2)
+                    } else {
+                        player.damage()
+                        player.fakeLoseHp()
+                        target.recover()
+                    }
+                },
+                ai: {
+                    basic: {
+                        order: 1,
+                        useful: [6.5, 4, 3, 2],
+                        value: [6.5, 4, 3, 2],
+                    },
+                    result: {
+                        target: 2,
+                        player: -0.5
+                    },
+                    tag: {
+                        draw: 2,
+                        damage: 1,
+                        loseCard: 1,
+                        gain: 1,
+                        recover: 1,
+                        save: 1,
+                    },
+                },
+                selectTarget: 1,
+            },
             'fr_equip2_yyxl': {
                 image: 'ext:福瑞拓展/image/card/fr_equip2_yyxl.png',
                 fullskin: true,
@@ -1223,19 +1277,19 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 },
                 content: function () {
                     'step 0'
-                    event.index=[]
+                    event.index = []
                     'step 1'
                     player.chooseControl('宫', '商', '角', '清角', '徵', '羽', '变宫', 'cancel2').set('ai', function () {
                         return 'cancel2'
                     })
                     'step 2'
                     if (result.control == 'cancel2') {
-                        if(event.index.toString() === [1, 1, 5, 5, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1].toString()){
-                            if(!game.frAchi.hasAchi('你会弹琴吗？','special')) game.frAchi.addProgress('你会弹琴吗？','special')
+                        if (event.index.toString() === [1, 1, 5, 5, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1].toString()) {
+                            if (!game.frAchi.hasAchi('你会弹琴吗？', 'special')) game.frAchi.addProgress('你会弹琴吗？', 'special')
                         }
                         event.finish()
-                    }else{
-                        event.index.push(result.index+1)
+                    } else {
+                        event.index.push(result.index + 1)
                     }
                     if (result.control == '宫') {
                         game.frPlayAudio('gong')
@@ -1487,8 +1541,29 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 },
                 forced: true,
                 popup: false,
+            },
+            'g_fr_card_xzst': {
+                trigger: {
+                    global: ["damageEnd"]
+                },
+                forceDie: true,
+                direct: true,
+                filter: function (event, player) {
+                    if (!event.player.isAlive()) return false;
+                    if (!lib.filter.targetEnabled({ name: 'fr_card_xzst' }, player, event.player)) return false;
+                    if (event._notrigger.contains(event.player)) return false;
+                    return player.hasUsableCard('fr_card_xzst');
+                },
+                content: function () {
+                    'step 0'
+                    var next = player.chooseToUse(get.prompt('fr_card_xzst', trigger.player).replace(/发动/, '使用'), function (card, player) {
+                        if (card.name != 'fr_card_xzst') return false;
+                        return lib.filter.cardEnabled(card, player, 'forceEnable');
+                    }, trigger.player, -1)
+                    next.targetRequired = true;
+                },
             }
-        },//技能
+        },
         translate: {
             //技能
             'mhlq_skill': '鸣鸿龙雀',
@@ -1505,6 +1580,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
+            'fr_card_xzst': '雪中送炭',
+            'fr_card_xzst_info': '任意一名其他角色受到伤害后，或处于濒死状态时，你对其使用，你选择一项：1.弃置一张手牌（不足则全弃）并令该角色摸两张牌，2.受到1点伤害并视为失去1点体力，然后令该角色回复1点体力。',
             'fr_equip2_yyxl': '影夜项链',
             'fr_equip2_yyxl_info': '锁定技。①其他角色指定你为【杀】的目标时，你令该角色非锁定技失效直到此【杀】结算完毕。②当你失去装备区内的【影夜项链】时，你摸两张牌。',
             'fr_equip1_mhlq': '鸣鸿龙雀',
@@ -1542,6 +1619,10 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_zhcz_info": "出牌阶段，对一名角色使用，该角色展示X张手牌（X为其手牌数的一半并向下取整），然后你选择一项：1.重铸其展示的所有牌，2.重铸其未展示的所有牌。",
         },
         list: [
+            ['heart', '5', 'fr_card_xzst'],
+            ['heart', '7', 'fr_card_xzst'],
+            ['diamond', '13', 'fr_card_xzst'],
+            ['diamond', '1', 'fr_card_xzst'],
             ['spade', '5', 'fr_card_zfxd'],
             ['club', '11', 'fr_card_zfxd'],
             ['heart', '11', 'fr_card_cmhc'],

@@ -170,36 +170,22 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     var Furry_update = [
                         '/Character/',
                         '/redoCharacter/',
-                        '/Card/',
-                        '修正nulia点击取消依然失去体力的bug',
-                        '修正了祭蹈在人少时的bug',
-                        'tails新增翻面效果',
-                        '修改诸多技能描述',
-                        '新增成就系统',
-                        '继续修复bugs',
-                        '修正了 tails的部分错误',
-                        '新卡牌：鸣鸿龙雀',
-                        '新卡牌：影夜项链',
-                        '为所有卡牌增加手杀版本美化',
-                        '鸣谢清单新增一堆人',
-                        '修复低版本无名杀无法运行的bug',
-                        '新卡牌：影夜项链 将时机设置为 指定目标时',
-                        '为所有卡牌增加手杀版本美化',
-                        '鸣谢清单新增一堆人',
-                        '修复低版本无名杀无法运行的bug',
-                        '新角色 展',
-                        '新增bgm选项，请在菜单选取',
-                        '修复了刃狼和阿拉安的永动机',
-                        '新角色 那舒、让萨利、布兰',
-                        '新增成就奖励系统。',
-                        '新增部分有趣的特殊成就',
-                        '部分角色需要通过完成成就解锁。'
+                        '更新成就奖励菜单',
+                        '修复米亚成就无法完成的bug',
+                        '专辑重绘封面',
+                        '新人物 缪斯',
+                        '修复肝帝成就无法完成的bug',
+                        '福瑞拓展2.2.0.0正式版更新',
+                        '新卡牌 雪中送炭',
+                        '重做武将：卢森特，克萨亚',
+                        '新武将 拉马斯',
+                        '新概念 奋发技'
                     ];
                     //更新武将
-                    var Furry_players = ['fr_derk', 'fr_crow', 'fr_zhan', 'fr_rasali', 'fr_nashu'];
-                    var Furry_redoplayers = ['fr_tails', 'fr_yinhu'];
+                    var Furry_players = ['fr_lamas', 'fr_mouse', 'fr_thunder'];
+                    var Furry_redoplayers = ['fr_lust', 'fr_kesaya', 'fr_lions', 'fr_derk'];
                     //更新卡牌
-                    var Furry_cards = ['fr_equip1_mhlq', 'fr_equip2_yyxl'];
+                    var Furry_cards = ['fr_card_xzst'];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
                     for (var i = 0; i < Furry_update.length; i++) {
                         if (Furry_update[i] == '/Character/') {
@@ -891,6 +877,31 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     });
                 }
             };
+            //---------------------------------------奋发技------------------------------------------//
+            lib.element.player.frFenfa = function (skillname) {
+                var info = lib.skill[skillname];
+                if (!info) return;
+                if (!info.fenfa) return;
+                if (info.fenfa) {
+                    info.skillBlocker = function (skill, player) {
+                        var range;
+                        if (typeof info.fenfa === 'function') {
+                            range = get.select(info.fenfa(player));
+                        } else {
+                            range = get.select(info.fenfa);
+                        }
+                        if (range[0] == range[1]) {
+                            return skill == skillname && !(player.hp == range[0])
+                        } else {
+                            return skill == skillname && !(player.hp >= range[0] && player.hp <= range[1])
+                        }
+                    }
+                    info.onremove = function (player, skill) {
+                        player.removeSkillBlocker(skill);
+                    }
+                    this.addSkillBlocker(skillname);
+                }
+            }
             // ---------------------------------------自定义函数：改变原画------------------------------------------//
             lib.element.player.setfrAvatar = function (name, name2, video, fakeme) {
                 var node
@@ -927,24 +938,112 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (history.length <= num) return null;
                 return history[history.length - num - 1];
             }
-            // ---------------------------------------自定义函数：视为伤害------------------------------------------//
-            lib.element.player.fakeDamage = function () {
-                var next = game.createEvent('damage');
+            // ---------------------------------------自定义函数：视为回复------------------------------------------//
+            lib.element.player.fakeRecover = function () {
+                var next = game.createEvent('recover');
                 next.player = this;
                 var nocard, nosource;
                 var event = _status.event;
                 for (var i = 0; i < arguments.length; i++) {
-                    if (typeof arguments[i] == 'number') {
-                        next.num = arguments[i];
-                    }
-                    else if (get.itemtype(arguments[i]) == 'player') {
-                        next.source = arguments[i];
-                    }
-                    else if (get.itemtype(arguments[i]) == 'cards') {
+                    if (get.itemtype(arguments[i]) == 'cards') {
                         next.cards = arguments[i].slice(0);
                     }
                     else if (get.itemtype(arguments[i]) == 'card') {
                         next.card = arguments[i];
+                    }
+                    else if (get.itemtype(arguments[i]) == 'player') {
+                        next.source = arguments[i];
+                    }
+                    else if (typeof arguments[i] == 'object' && arguments[i] && arguments[i].name) {
+                        next.card = arguments[i];
+                    }
+                    else if (typeof arguments[i] == 'number') {
+                        next.num = arguments[i];
+                    }
+                    else if (arguments[i] == 'nocard') {
+                        nocard = true;
+                    }
+                    else if (arguments[i] == 'nosource') {
+                        nosource = true;
+                    }
+                }
+                if (next.card == undefined && !nocard) next.card = event.card;
+                if (next.cards == undefined && !nocard) next.cards = event.cards;
+                if (next.source == undefined && !nosource) next.source = event.player;
+                if (next.num == undefined) next.num = 1;
+                if (next.num <= 0) _status.event.next.remove(next);
+                next.setContent('fakeRecover');
+                return next;
+            }
+            lib.element.content.fakeRecover = function () {
+                if (lib.config.background_audio) {
+                    game.playAudio('effect', 'recover');
+                }
+                game.broadcast(function () {
+                    if (lib.config.background_audio) {
+                        game.playAudio('effect', 'recover');
+                    }
+                });
+                if (num > player.maxHp - player.hp) {
+                    num = player.maxHp - player.hp;
+                    event.num = num;
+                }
+                if (num > 0) {
+                    game.broadcastAll(function (player) {
+                        if (lib.config.animation && !lib.config.low_performance) {
+                            player.$recover();
+                        }
+                    }, player);
+                    player.$damagepop(num, 'wood');
+                    game.log(player, '视为回复了' + get.cnNumber(num) + '点体力')
+                }
+            }
+            // ---------------------------------------自定义函数：视为流失体力------------------------------------------//
+            lib.element.player.fakeLoseHp = function (num) {
+                var next = game.createEvent('loseHp');
+                next.num = num;
+                next.player = this;
+                if (next.num == undefined) next.num = 1;
+                next.setContent('fakeLoseHp');
+                return next;
+            }
+            lib.element.content.fakeLoseHp = function () {
+                "step 0"
+                if (lib.config.background_audio) {
+                    game.playAudio('effect', 'loseHp');
+                }
+                game.broadcast(function () {
+                    if (lib.config.background_audio) {
+                        game.playAudio('effect', 'loseHp');
+                    }
+                });
+                game.log(player, '视为失去了' + get.cnNumber(num) + '点体力')
+                "step 1"
+                if (player.hp <= 0) {
+                    game.delayx();
+                    event._dyinged = true;
+                    player.dying(event);
+                }
+            }
+            // ---------------------------------------自定义函数：视为伤害------------------------------------------//
+            lib.element.player.fakeDamage = function () {
+                var next = game.createEvent('damage');
+                //next.forceDie=true;
+                next.player = this;
+                var nocard, nosource;
+                var event = _status.event;
+                for (var i = 0; i < arguments.length; i++) {
+                    if (get.itemtype(arguments[i]) == 'cards') {
+                        next.cards = arguments[i].slice(0);
+                    }
+                    else if (get.itemtype(arguments[i]) == 'card') {
+                        next.card = arguments[i];
+                    }
+                    else if (typeof arguments[i] == 'number') {
+                        next.num = arguments[i];
+                    }
+                    else if (get.itemtype(arguments[i]) == 'player') {
+                        next.source = arguments[i];
                     }
                     else if (typeof arguments[i] == 'object' && arguments[i] && arguments[i].name) {
                         next.card = arguments[i];
@@ -979,7 +1078,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (num != this.num) this.change_history.push(this.num - num);
                     if (this.num <= 0) {
                         delete this.filterStop;
-                        this.trigger('damageZero');
                         this.finish();
                         this._triggered = null;
                         return true;
@@ -988,9 +1086,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 return next;
             };
             lib.element.content.fakeDamage = function () {
-                "step 0"
+                'step 0'
                 event.forceDie = true;
-                "step 1"
+                'step 1'
                 if (lib.config.background_audio) {
                     game.playAudio('effect', 'damage' + (num > 1 ? '2' : ''));
                 }
@@ -1005,19 +1103,19 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (event.nature) str += get.translation(event.nature) + '属性';
                 str += '伤害';
                 game.log(player, str);
-                var psl = player.stat.length - 1
-                if (player.stat[psl].damaged == undefined) {
-                    player.stat[psl].damaged = num;
-                } else {
-                    player.stat[psl].damaged += num;
+                if (player.stat[player.stat.length - 1].damaged == undefined) {
+                    player.stat[player.stat.length - 1].damaged = num;
+                }
+                else {
+                    player.stat[player.stat.length - 1].damaged += num;
                 }
                 if (source) {
-                    var ssl = source.stat.length - 1
                     source.getHistory('sourceDamage').push(event);
-                    if (source.stat[ssl].damage == undefined) {
-                        source.stat[ssl].damage = num;
-                    } else {
-                        source.stat[ssl].damage += num;
+                    if (source.stat[source.stat.length - 1].damage == undefined) {
+                        source.stat[source.stat.length - 1].damage = num;
+                    }
+                    else {
+                        source.stat[source.stat.length - 1].damage += num;
                     }
                 }
                 player.getHistory('damage').push(event);
@@ -1027,29 +1125,63 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         if (lib.config.animation && !lib.config.low_performance) {
                             if (nature == 'fire') {
                                 player.$fire();
-                            } else if (nature == 'thunder') {
+                            }
+                            else if (nature == 'thunder') {
                                 player.$thunder();
                             }
                         }
                     }, event.nature, player);
-                    var numf = Math.max(0, num);
-                    player.$damagepop(-numf, event.nature);
+                    var numx = Math.max(0, num - player.hujia);
+                    player.$damagepop(-numx, event.nature);
                 }
-                if (!event.notrigger) {
-                    if (num == 0) {
-                        event.trigger('damageZero');
-                        event._triggered = null;
-                    }
-                    else event.trigger('damage');
-                }
-                "step 3"
+                'step 2'
                 if (player.hp <= 0 && player.isAlive()) {
                     game.delayx();
                     event._dyinged = true;
                     player.dying(event);
                 }
-                "step 4"
-                if (!event.notrigger) event.trigger('damageSource');
+                if (source && lib.config.border_style == 'auto') {
+                    var dnum = 0;
+                    for (var j = 0; j < source.stat.length; j++) {
+                        if (source.stat[j].damage != undefined) dnum += source.stat[j].damage;
+                    }
+                    if (dnum >= 2) {
+                        if (lib.config.autoborder_start == 'silver') {
+                            dnum += 4;
+                        }
+                        else if (lib.config.autoborder_start == 'gold') {
+                            dnum += 8;
+                        }
+                    }
+                    if (lib.config.autoborder_count == 'damage') {
+                        source.node.framebg.dataset.decoration = '';
+                        if (dnum >= 10) {
+                            source.node.framebg.dataset.auto = 'gold';
+                            if (dnum >= 12) source.node.framebg.dataset.decoration = 'gold';
+                        }
+                        else if (dnum >= 6) {
+                            source.node.framebg.dataset.auto = 'silver';
+                            if (dnum >= 8) source.node.framebg.dataset.decoration = 'silver';
+                        }
+                        else if (dnum >= 2) {
+                            source.node.framebg.dataset.auto = 'bronze';
+                            if (dnum >= 4) source.node.framebg.dataset.decoration = 'bronze';
+                        }
+                        if (dnum >= 2) {
+                            source.classList.add('topcount');
+                        }
+                    }
+                    else if (lib.config.autoborder_count == 'mix') {
+                        source.node.framebg.dataset.decoration = '';
+                        switch (source.node.framebg.dataset.auto) {
+                            case 'bronze': if (dnum >= 4) source.node.framebg.dataset.decoration = 'bronze'; break;
+                            case 'silver': if (dnum >= 8) source.node.framebg.dataset.decoration = 'silver'; break;
+                            case 'gold': if (dnum >= 12) source.node.framebg.dataset.decoration = 'gold'; break;
+                        }
+                    }
+                }
+                'step 3'
+                event.trigger('damageSource');
             };
             //---------------------------------------设置：武将评级------------------------------------------//
             lib.rank.rarity.junk.addArray(game.furryrank[0]);
@@ -1129,7 +1261,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             'fr_card_xysx.png', 'fr_card_xysx.webp', 'fr_card_yxys.jpg', 'fr_card_yxys.bmp', 'fr_card_xysx.bmp', 'fr_card_yxys.png', 'fr_card_yxys.webp', 'fr_card_zfxd.jpg', 'fr_card_zfxd.bmp',
                             'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp', 'fr_card_zh.bmp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp', 'fr_card_zhcz.bmp',
                             'fr_equip1_syzg.jpg', 'fr_equip1_syzg.bmp', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp', 'fr_equip5_wxpp.bmp', 'fr_card_scfm.png',
-                            'fr_card_scfm.webp', 'fr_card_scfm.jpg', 'fr_card_scfm.bmp', 'fr_equip1_mhlq.bmp', 'fr_equip1_mhlq.jpg', 'fr_equip1_mhlq.webp', 'fr_equip1_mhlq.png', 'fr_equip2_yyxl.png', 'fr_equip2_yyxl.bmp', 'fr_equip2_yyxl.webp', 'fr_equip2_yyxl.jpg'
+                            'fr_card_scfm.webp', 'fr_card_scfm.jpg', 'fr_card_scfm.bmp', 'fr_equip1_mhlq.bmp', 'fr_equip1_mhlq.jpg', 'fr_equip1_mhlq.webp', 'fr_equip1_mhlq.png', 'fr_equip2_yyxl.png', 'fr_equip2_yyxl.bmp', 'fr_equip2_yyxl.webp', 'fr_equip2_yyxl.jpg',
+                            'fr_card_xzst.png', 'fr_card_xzst.bmp', 'fr_card_xzst.webp', 'fr_card_xzst.jpg',
                         ];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
@@ -1609,9 +1742,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     ui.create.system("福瑞成就", function () {
                         if (typeof window.openfrAchievement == 'function') {
                             window.openfrAchievement();
-                            if ((game.frAchi.amount() == game.frAchi.amountOfGained() + 1) && !game.frAchi.hasAchi('超级肝帝', 'special')) {
-                                game.frAchi.addProgress('超级肝帝', 'special')
-                            }
                         } else {
                             alert("错误：您似乎没有正常导入福瑞拓展扩展文件");
                         }
@@ -1628,6 +1758,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             });
             //------------------------------------------说明------------------------------------------//
             var introduce = {
+                'fenfa': {
+                    name: '奋发技',
+                    info: '<li>奋发技是一类特殊的技能标签，<li>奋发技后的括号，代表在当你的体力值处于该区间内时，此技能有效，否则此技能失效，<li>若括号内只有一个值，则代表单个点，如[2]代表[2,2]，<li>maxHp指代玩家最大体力值。'
+                },
                 'zhinang': {
                     name: '智囊',
                     info: '<li>智囊：一些武将的技能允许他们以一些方式获得专属锦囊，同时还会允许他们做出第二选择——智囊。<li>智囊为固定的三种通常牌库里有的普通锦囊。这些武将在获得专属锦囊时可以选择获取专属锦囊，或者获取智囊中的锦囊之一。<li>线下可由面杀玩家自行约定选取的三张锦囊，线上暂定为过河拆桥、无懈可击、无中生有。'
@@ -3085,7 +3219,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.2.0.2",
+            version: "2.2.0.3",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })
