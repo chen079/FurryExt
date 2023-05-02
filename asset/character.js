@@ -141,7 +141,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     event.cards = cards
                     'step 1'
                     event.target = event.targets.shift()
-                    event.target.chooseToRespond('请打出一张点数为' + get.cnNumber(get.number(event.cards[0])) + '或花色为' + get.suit(event.cards[0]) + '的牌，否则' + get.translation(player) + '对你造成1点伤害。', function (card) {
+                    event.target.chooseToRespond('请打出一张点数为' + get.number(event.cards[0]) + '或花色为' + get.translation(get.suit(event.cards[0])) + '的牌，否则' + get.translation(player) + '对你造成1点伤害。', function (card) {
                         return get.number(card) == get.number(event.cards[0]) || get.suit(card) == get.suit(event.cards[0])
                     })
                     'step 2'
