@@ -181,6 +181,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 group: 'thunder_lj_defend',
                 subSkill: {
                     defend: {
+                        lastDo:true,
                         trigger: {
                             source: 'damageEnd'
                         },
