@@ -34,6 +34,7 @@
 		'image/character/fr_derk.jpg',
 		'image/character/fr_thunder.jpg',
 		'image/lutou/fr_thunder.jpg',
+		'image/biaoqian/mark_furry.png',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

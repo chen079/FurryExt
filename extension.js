@@ -139,8 +139,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         name: "福瑞拓展",
         editable: false,
         content: function (config, pack) {
-            //---------------------------------------初始化势力------------------------------------------//
-            lib.arenaReady.push(() => {
+            lib.arenaReady.push(function () {
+                //---------------------------------------初始化势力------------------------------------------//
                 if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
                     setTimeout(() => {
                         lib.groupnature.fr_g_dragon = 'fr_g_dragon'
@@ -185,7 +185,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     var Furry_players = ['fr_lamas', 'fr_mouse', 'fr_thunder'];
                     var Furry_redoplayers = ['fr_lust', 'fr_kesaya', 'fr_lions', 'fr_derk'];
                     //更新卡牌
-                    var Furry_cards = ['fr_card_xzst'];
+                    var Furry_cards = [];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
                     for (var i = 0; i < Furry_update.length; i++) {
                         if (Furry_update[i] == '/Character/') {
@@ -228,6 +228,150 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     });
                 },
             };
+            lib.arenaReady.push(function () {
+                //---------------------------------------武将标签------------------------------------------//
+                if (lib.config.extensions && lib.config.extensions.contains('十周年UI') && lib.config['extension_十周年UI_enable']) {
+                    if (lib.config['extension_十周年UI_showJieMark']) {
+                        lib.fr_playerinit = lib.element.player.init;
+                        lib.element.player.init = function (character, character2, skill) {
+                            var fc={
+                                'fr_thunder': '兰德',
+                                'fr_mouse': '缪斯',
+                                'fr_lamas': '拉马斯',
+                                'fr_blam': '布兰',
+                                'fr_aoeslat': '奥尔斯拉特',
+                                'fr_neises': '内瑟斯',
+                                'fr_tails': '塔尔斯',
+                                'fr_dier': '戴尔',
+                                "fr_bosswore": "沃尔",
+                                'fr_francium': '弗兰西亚',
+                                'fr_nanci': '南辞',
+                                'fr_shark': '沙克',
+                                "fr_kmjia": "卡米加",
+                                "fr_liona": "里欧纳",
+                                "fr_ala": "阿拉安",
+                                "fr_tiger": "泰格尔",
+                                'fr_linyan': "林&炎",
+                                "fr_bossfaers": "恒神法斯",
+                                "fr_bosshars": "纵神哈尔",
+                                "fr_horn": "霍恩",
+                                "fr_qima": "奇玛",
+                                "fr_zhongyu": "忠与",
+                                "fr_hynea": "哈尼亚",
+                                "fr_hyperner": "催眠者",
+                                "fr_wore": "沃尔",
+                                "fr_tiers": "缇尔斯",
+                                "fr_yifeng": "弈风",
+                                "fr_hars": "哈尔斯",
+                                "fr_wes": "维斯",
+                                "fr_muyada": "慕达亚",
+                                "fr_yada": "亚达",
+                                "fr_muli": "穆里",
+                                "fr_muliy": "穆里耶",
+                                "fr_sier": "希尔",
+                                "fr_klif": "克里夫",
+                                "fr_milis": "弥斯利",
+                                "fr_alas": "奥拉斯",
+                                "fr_kesaya": "克萨亚",
+                                "fr_ken": "科恩",
+                                "fr_west": "威斯特",
+                                "fr_lions": "莱恩斯",
+                                "fr_milite": "米利特",
+                                "fr_jackson": "赛特",
+                                "fr_jiejie": "檞界",
+                                "fr_sayisu": "萨伊苏",
+                                "fr_telina": "特丽娜",
+                                "fr_oert": "欧尔特",
+                                "fr_rest": "瑞斯特",
+                                "fr_krikt": "科里克特",
+                                "fr_tery": "特瑞",
+                                "fr_sisk": "西斯科",
+                                "fr_lens": "雷恩斯",
+                                "fr_milism": "米里森",
+                                "fr_miya": "米亚",
+                                "fr_skry": "斯克瑞",
+                                "fr_lusiya": "卢西亚",
+                                "fr_kersm": "科尔森",
+                                "fr_kert": "柯尔特",
+                                "fr_keya": "科亚",
+                                "fr_lust": "卢森特",
+                                "fr_klier": "克莱尔",
+                                "fr_faers": "法斯",
+                                "fr_aroncy": "艾伦希",
+                                "fr_lint": "林特",
+                                "fr_berg": "伯格",
+                                "fr_xit": "希特",
+                                "fr_markn": "马克恩",
+                                "fr_morly": "莫雷",
+                                "fr_marxya": "马尔西亚",
+                                "fr_yas_klin": "亚瑟克林",
+                                "fr_dog": "多戈",
+                                "fr_muen": "牧恩",
+                                "fr_patxi": "帕茨希",
+                                "fr_glit": "格里特",
+                                "fr_nore": "诺尔",
+                                "fr_bofeng": "迟风",
+                                "fr_ciyu": "迟雨",
+                                "fr_delta": "德尔塔",
+                                "fr_edmon": "埃德蒙",
+                                "fr_mika": "米卡",
+                                "fr_peter_likes": "皮特莱克",
+                                "fr_dmoa": "多默尔",
+                                "fr_nulia": "怒力亚",
+                                "fr_terlk": "特尔里克",
+                                "fr_verb": "韦贝尔",
+                                "fr_taber": "塔贝尔",
+                                "fr_yinhu": "寅虎",
+                                "fr_dragon": "德拉贡",
+                                "fr_terz": "特兹",
+                                "fr_jet": "杰特",
+                                "fr_slen": "萨冷",
+                                "fr_paers": "帕尔斯",
+                                "fr_nier": "尼尔",
+                                "fr_pluvia": "普鲁维亚",
+                                "fr_ventus": "凡图斯",
+                                "fr_knier": "科妮尔",
+                                "fr_zenia": "泽妮雅",
+                                "fr_lamost": "拉莫斯特",
+                                "fr_kasaers": "卡萨尔斯",
+                                "fr_yifa": "弈法",
+                                "fr_jgby": "吉岡邦彦",
+                                "fr_xiaomo": "小默",
+                                "fr_adward": "安德华",
+                                "fr_fate": "法特",
+                                "fr_liya": "莉亚",
+                                "fr_laays": "拉亚斯",
+                                "fr_sam": "山",
+                                "fr_ham": "海",
+                                "fr_mala": "马拉尔",
+                                "fr_bossmala": "马拉尔",
+                                "fr_zeta": "泽塔",
+                                "fr_fox": "狐克斯",
+                                "fr_molis": "莫莉斯",
+                                "fr_shisan": "拾弎",
+                                "fr_bladewolf": '刃狼',
+                                'fr_crow': '克劳',
+                                'fr_derk': '德克',
+                                'fr_nashu': '那舒',
+                                'fr_rasali': '让萨利',
+                                'fr_sheep': '西普',
+                                'fr_zhan': '展',
+                            }
+                            var player = lib.fr_playerinit.apply(this, arguments);
+                            if (character && fc[character]) {
+                                if (this.$jieMark == undefined) {
+                                    this.$jieMark = dui.element.create('jie-mark', this);
+                                } else {
+                                    this.appendChild(this.$jieMark);
+                                };
+                                this.$jieMark.style.backgroundImage = 'url("' + lib.assetURL + "extension/福瑞拓展/image/biaoqian/mark_furry.png" + '")';
+                                return this;
+                            };
+                            return this;
+                        };
+                    };
+                };
+            })
             //---------------------------------------定义新属性伤害------------------------------------------//
             lib.translate.mad = '<font color=#d17367>狂</font>';
             lib.nature.add('mad');
@@ -1637,6 +1781,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             lib.perfectPair.fr_wore = ['fr_tiers']
             lib.perfectPair.fr_miya = ['db_fr_krikt']
             lib.perfectPair.sheep = ['fr_bladewolf']
+            // ---------------------------------------游戏开始时加载------------------------------------------//	
+            lib.skill._gameStart = {
+                charlotte: true,
+                ruleSkill: true,
+                trigger: { global: ['roundStart', 'phaseBefore'] },
+                filter: function () { return !game._started; },
+                direct: true,
+                priority: 1000,
+                content: function () { game._started = true; },
+            };
         }, precontent: function (furryPack) {
             //---------------------------------------设置：背景图片------------------------------------------//
             game.frBackground_Picture = function () {
