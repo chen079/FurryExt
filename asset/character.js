@@ -123,7 +123,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_bosshars": ["male", "shen", 7, ["hars_sz", "hars_sj", "muen_tx", "muen_jb", "xiaomo_sj", "xiaomo_ld"], ['unseen', "boss", "bossallowed"]],
             "fr_zeta": ["male", "fr_g_dragon", 4, ["zeta_gz", "zeta_fg"], ['unseen']],
             "fr_fox": ["male", "shu", 4, ["fox_hm"], []],
-            "fr_molis": ["female", "wei", 3, ["molis_hs", "molis_dx", "molis_sy"], []],
+            "fr_molis": ["female", "wei", 3, ["molis_hs", "molis_dx"], []],
             "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
@@ -181,12 +181,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 group: 'thunder_lj_defend',
                 subSkill: {
                     defend: {
-                        lastDo:true,
+                        lastDo: true,
                         trigger: {
                             source: 'damageEnd'
                         },
+                        prompt2: function (event, player) {
+                            return '令' + get.translation(event.player) + '回复1点体力并摸一张牌。'
+                        },
                         filter: function (event, player) {
-                            return event.nature == 'thunder' && event.num > 0
+                            return event.nature == 'thunder' && event.num > 0 && event.player.isAlive()
                         },
                         check: function (event, player) {
                             return get.attitude(player, event.player) > 0
@@ -218,7 +221,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     return event.player;
                 },
                 preHidden: true,
-                frequent: true,
                 content: function () {
                     'step 0'
                     event.num = trigger.num
@@ -226,7 +228,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     var target = trigger.player == player ? trigger.source : trigger.player
                     player.draw(1)
                     target.draw(1)
-                    player.discardPlayerCard(target, get.prompt('thunder_fz')).set('ai', function (button) {
+                    player.discardPlayerCard(target, get.prompt2('thunder_fz')).set('ai', function (button) {
                         if (!_status.event.att) return 0;
                         if (get.position(button.link) == 'e') {
                             if (get.subtype(button.link) == 'equip2') return 2 * get.value(button.link);
