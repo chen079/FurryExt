@@ -21,11 +21,11 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     next.set('choiceList', ['弃置一张手牌（不足则全弃置）并令' + get.translation(target) + '摸两张牌。', '受到1点伤害并视为失去1点体力并令' + get.translation(target) + '回复1点体力。'])
                     next.set('ai', function () {
                         if (get.attitude(player, target) > 0) {
-                            if (player.hp >= 2 && target.hp <= 1) return 0
-                            if (player.countCards('h') > player.hp) return 1
-                            if (player.hasSkillTag('maixie') && player.hp >= 2) return 0
+                            if (player.hp >= 2 && target.hp <= 1) return 1
+                            if (player.countCards('h') > player.hp) return 0
+                            if (player.hasSkillTag('maixie') && player.hp >= 2) return 1
                         }
-                        return 1
+                        return 0
                     })
                     'step 1'
                     if (result.index == 0) {
