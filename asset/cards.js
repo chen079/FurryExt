@@ -24,6 +24,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             if (player.hp >= 2 && target.hp <= 1) return 1
                             if (player.countCards('h') > player.hp) return 0
                             if (player.hasSkillTag('maixie') && player.hp >= 2) return 1
+                            if (player.countCards('h') == 0 && target.hp > 1) return 0
                         }
                         return 0
                     })
