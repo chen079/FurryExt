@@ -5,12 +5,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore', 'fr_francium', 'fr_nanci',],
         connect: true,//该武将包是否可以联机（必填）
         character: {
-            'fr_thunder': ['male', 'wei', 4, ['thunder_fz', 'thunder_lj'], []],
+            'fr_ming': ['male', 'qun', 4, [], ['unseen']],
+            'fr_death': ['male', 'shen', 4, ['death_sy', 'death_sl', 'death_sp'], []],
+            'fr_dolina': ['male', 'qun', 3, ['dolina_wy', 'dolina_sl', 'dolina_qj'], []],
+            'fr_thunder': ['male', 'wei', 4, ['thunder_fz', 'thunder_lj'], ['unseen']],
             'fr_mouse': ['female', 'qun', 4, ['mouse_bm'], ['unseen']],
             'fr_lamas': ['male', 'wei', 4, ['lamas_zj'], []],
             'fr_blam': ['male', 'qun', 4, ['blame_jj'], ['unseen']],
-            //'fr_aoeslat':['male','wei',4,[],[]],
-            'fr_neises': ['male', 'fr_g_dragon', 15, ['neises_bm'], ['unseen']],
+            'fr_aoeslat': ['male', 'wei', 4, ['aoeslat_aq', 'aoeslat_cf', 'aoeslat_yj'], ['unseen']],
+            'fr_neises': ['male', 'fr_g_dragon', 15, ['limiya_ch'], ['unseen']],
             'fr_tails': ['male', 'qun', 3, ['tails_jd', 'tails_qx'], []],
             'fr_zhan': ['male', 'qun', 3, ['zhan_sf', 'zhan_jf'], ['unseen']],
             'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['des:西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——奥尔斯拉特，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。']],
@@ -37,22 +40,22 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_tiers": ["female", "qun", 3, ["tiers_qp", "tiers_kh"], ["des:缇尔斯，生活在迦奈尔联邦，由于联邦周围大量禁魔矿石的影响，此处无法施展魔法，故此处的主要研究方向为科技。缇尔斯幼时丧父，与母亲相依为命，后进入联邦军队，在服役5年后因在与矮人的战争中负伤，回到家乡科马修养。"]],
             "fr_yifeng": ["male", "wei", 3, ["kref_yz", "yifeng_ml"], ['unseen', "des:弈风，《瓦尔亚那百科》中曾参加了万灵之森保卫战的大英雄弈霜的后代，是弈法的哥哥，与弈法共同居住在万灵之森外围的不知名小村落中。弈风生性沉稳，不喜言辞，与弈法截然相反。据传，其拥有一把能够逆转因果的弓，名曰霜月，通体泛着银月丝绸般的光芒。被弓箭射中者，若其行径正义，心无不端，则平安无事，而若其为邪恶之辈，将会遭受最为严峻的痛苦，直至其为罪行忏悔。"]],
             "fr_hars": ["male", "shen", 4, ["hars_sj", 'hars_hr'], ["des:哈尔斯，兽人的智慧之神。其拥有惑人心魄的能力。根据矮人族与部分兽人族内部记录。哈尔斯能够直接降临到任何一人身上，据此观察世界。而被降临的人则被称为「神降者」。由于任何人都有可能成为「神降者」。因此，哈尔斯的眼线遍布整个大陆，而其本人也被称为「全知之神」。"]],
-            "fr_wes": ["male", "jin", 3, ["wes_ts", "wes_gs", "wes_lt"], ["des:维斯，生活在克拉北部的小镇米拉亚纳行省，毗邻吸血鬼禁区。由于附近丰富的魔力资源影响，维斯从小便表现出了强烈的魔法亲和性，其能力能够转移其他人受到的伤害。由于其能力的特殊性，自小其就被送往当地教会培养。"]],
-            "fr_muyada": ["male", "qun", 4, ["mudaya_bz", "mudaya_wh"], ["des:慕达亚，克拉最大的黑帮集团——希尔特黑帮的首领，其作风狠辣，言出必行，故拥有众多拥趸。其下产业遍布大陆各处，但最大的产业是与侏儒合作的武器锻造。"]],
+            "fr_wes": ["male", "jin", 3, ["wes_ts", "wes_gs", "wes_lt"], ['unseen', "des:维斯，生活在克拉北部的小镇米拉亚纳行省，毗邻吸血鬼禁区。由于附近丰富的魔力资源影响，维斯从小便表现出了强烈的魔法亲和性，其能力能够转移其他人受到的伤害。由于其能力的特殊性，自小其就被送往当地教会培养。"]],
+            "fr_muyada": ["male", "qun", 4, ["mudaya_bz", "mudaya_wh"], ['unseen', "des:慕达亚，克拉最大的黑帮集团——希尔特黑帮的首领，其作风狠辣，言出必行，故拥有众多拥趸。其下产业遍布大陆各处，但最大的产业是与侏儒合作的武器锻造。"]],
             "fr_yada": ["male", "wei", 4, ["yada_by", "yada_jh", "yada_fs"], ["des:出生于克拉，后因种种原因前往人类聚集地柯拉。"]],
-            "fr_muli": ["male", "qun", 4, ["muli_cm", "muli_yl"], []],
+            "fr_muli": ["male", "qun", 4, ["muli_cm", "muli_yl"], ['unseen']],
             "fr_muliy": ["male", "wu", 3, ["mliy_lf", "mliy_hx"], []],
             "fr_sier": ["male", "shu", 3, ["sier_xl", "sier_fh", 'sier_ql'], []],
-            "fr_klif": ["male", "jin", 3, ["krif_zl", "krif_lj"], []],
+            "fr_klif": ["male", "jin", 3, ["krif_zl", "krif_lj"], ['unseen']],
             "fr_milis": ["male", "wei", 3, ["mislee_jx", "mislee_tj", "mislee_zr"], []],
             "fr_alas": ["male", "shu", 4, ["olas_fh", "olas_bx"], []],
             "fr_kesaya": ["male", "wu", 2, ["kesaya_zw", "kesaya_wy", "kesaya_ax"], ["des:隐匿者"]],
-            "fr_ken": ["male", "fr_g_ji", 4, ["ken_jj", "ken_yn", "ken_pb"], []],
+            "fr_ken": ["male", "fr_g_ji", 4, ["ken_jj", "ken_yn", "ken_pb"], ['unseen']],
             "fr_west": ["male", "qun", 3, ["west_pz", "west_sx", "west_jh"], []],
             "fr_lions": ["male", "shu", 4, ["lions_ms", "lions_jj", "lions_hr"], ['zhu']],
             "fr_milite": ["male", "fr_g_dragon", 7, ["milite_sz", "milite_yj"], []],
             "fr_jackson": ["male", "wu", 3, ["jackson_eb", "jackson_tm", "site_qj"], []],
-            "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ["des:檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。"]],
+            "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ['unseen', "des:檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。"]],
             "fr_sayisu": ["female", "fr_g_dragon", 3, ["sayisu_fp", "sayisu_fj"], []],
             "fr_telina": ["female", "wu", 3, ["telina_hs", "telina_th"], ["des:特丽娜拥有特殊的「未来视」能力，她能够预知近至下一秒，远至数年的所有事件。在「瓦尔亚那百科全书」完成编写后，精灵族就在寻找拥有预言能力的人。因此特丽娜成为第一个受邀进入万灵之森的兽人。"]],
             "fr_oert": ["male", "shen", 4, ["oert_lh", "oert_wy"], ["des:轮回之神欧尔特，不像其他的神那样高高在上。据传，欧尔特曾在瓦尔亚娜大陆最重要的节日“火灵日”，亲自来到瓦尔亚娜大陆的一座山峰上为瓦尔亚娜的百姓祈福，并参加兽人族的祭典活动。而受他惠顾的小贩说到：“神灵大人最喜欢我们家的丸子。”虽然真假未可知。"]],
@@ -127,6 +130,518 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'death_sp': {
+                trigger: {
+                    source: "damageEnd",
+                },
+                forced: true,
+                filter: function (event, player) {
+                    var num = 0;
+                    for (var j = 0; j < player.stat.length; j++) {
+                        if (player.stat[j].damage != undefined) num += player.stat[j].damage;
+                    }
+                    return num >= 6
+                },
+                juexingji: true,
+                skillAnimation: true,
+                mark: true,
+                intro: {
+                    mark: function (dialog, storage, player) {
+                        var num = 0;
+                        if (player.stat) {
+                            for (var j = 0; j < player.stat.length; j++) {
+                                if (player.stat[j].damage != undefined) num += player.stat[j].damage;
+                            }
+                        }
+                        dialog.addText('已累计造成' + get.cnNumber(num) + '点伤害')
+                    }
+                },
+                content: function () {
+                    player.loseMaxHp()
+                    player.awakenSkill('death_sp')
+                    player.addSkill('death_sp_g')
+                },
+                subSkill: {
+                    'g': {
+                        charlotte: true,
+                        mark: true,
+                        marktext: "双镰",
+                        intro: {
+                            content: "①每回合限一次，当你对其他角色造成伤害时，你可以令此伤害+1并获得该角色的一张牌。②每回合限一次，当你不因此技能使用【杀】指定目标后，你可以视为对其使用一张【杀】。",
+                            name: "双镰·改",
+                        },
+                        sub: true,
+                    },
+                    'a':{
+                    }
+                }
+            },
+            'death_sl': {
+                trigger: {
+                    source: "damageBegin2"
+                },
+                prompt2: function(){
+                    var player=_status.event.player
+                    if(player.hasSkill('death_sp_g')){
+                        return '每回合限一次，当你对一名其他角色造成伤害时，你可以令此次伤害+1并获得该角色一张牌。'
+                    }
+                    return '每回合限一次，当你对“猎物”造成伤害时，你可以执行一项：1.令此次伤害+1、2.令该角色弃置两张牌、3.背水：你失去1点体力。'
+                },
+                usable: 1,
+                filter:function(event,player){
+                    if(player.hasSkill('death_sp_g')){
+                        return event.player!=player
+                    }else{
+                        return event.player==player.storage.death_sy
+                    }
+                },
+                check: function (event, player) {
+                    return get.attitude(player, event.player) < 0
+                },
+                content: function () {
+                    'step 0'
+                    if (player.hasSkill('death_sp_g')) {
+                        trigger.num += 1
+                        player.gainPlayerCard(trigger.player, 'h', true)
+                        event.finish()
+                    }
+                    'step 1'
+                    player.chooseControl().set('choiceList', ['①令此次对' + get.translation(trigger.player) + '造成的伤害+1', '②令' + get.translation(trigger.player) + '弃置两张牌', '③背水：失去1点体力'])
+                    'step 2'
+                    if (result.index == 0) {
+                        trigger.num += 1
+                    } else if (result.index == 1) {
+                        trigger.player.chooseToDiscard('he', 2, true)
+                    } else {
+                        trigger.num += 1
+                        trigger.player.chooseToDiscard('he', 2, true)
+                        player.loseHp()
+                    }
+                },
+                derivation:"death_sp_a",
+                group: 'death_sl_double',
+                subSkill: {
+                    double: {
+                        trigger: {
+                            player: "useCardToPlayered",
+                        },
+                        prompt2: '当你不因此技能使用【杀】指定目标后，你可以视为对其使用一张【杀】。',
+                        check: function (event, player) {
+                            return get.attitude(player, event.target) < 0
+                        },
+                        filter: function (event, player) {
+                            return event.card.name == 'sha' && event.getParent(2).name != 'death_sl_double'
+                        },
+                        content: function () {
+                            player.useCard({ name: 'sha' }, trigger.target)
+                        }
+                    }
+                }
+            },
+            'death_sy': {
+                trigger: {
+                    global: ["phaseBefore", "die"],
+                    player: "enterGame",
+                },
+                mark: true,
+                intro: {
+                    content: '$被死亡盯上了'
+                },
+                filter: function (event, player) {
+                    if (event.name == 'die') {
+                        return event.player == player.storage.death_sy
+                    } else {
+                        return event.name != 'phase' || game.phaseNumber == 0;
+                    }
+                },
+                forced: true,
+                mod: {
+                    targetInRange: function (card, player, target) {
+                        if (target == player.storage.death_sy) {
+                            return true;
+                        }
+                    },
+                },
+                content: function () {
+                    'step 0'
+                    player.chooseTarget('选择你的猎物', function (card, target, player) {
+                        return target != player && player.storage.death_sy != target
+                    }, true)
+                    'step 1'
+                    if (result.bool) {
+                        player.storage.death_sy = result.targets[0]
+                    }
+                },
+                group: "death_sy_begin",
+                subSkill: {
+                    begin: {
+                        trigger: {
+                            global: "phaseAfter"
+                        },
+                        filter: function (event, player) {
+                            return event.player == player.storage.death_sy
+                        },
+                        forced: true,
+                        content: function () {
+                            "step 0"
+                            if (trigger.player.next != player) {
+                                game.broadcastAll(function (target1, target2) {
+                                    game.swapSeat(target1, target2);
+                                }, player, trigger.player.next);
+                            } else {
+                                player.insertPhase();
+                            }
+                        }
+                    },
+                }
+            },
+            'limiya_ch': {
+                enable: 'phaseUse',
+                usbale: 1,
+                content: function () {
+                    'step 0'
+                    event.types = []
+                    for (var i of lib.inpile) {
+                        if (!event.types.contains(get.type2(i))) event.types.push(get.type2(i))
+                    }
+                    if (player.isUnderControl()) {
+                        game.swapPlayerAuto(player);
+                    }
+                    event.colors = ['red', 'black']
+                    var color = get.transarry(event.colors)
+                    var type = get.transarry(event.types)
+                    var dialog = ui.create.dialog('<span style="font-family=shousha;font-size:18px"><storage>求知</storage></span>', 'hidden');
+                    dialog.addText('选择颜色：');
+                    dialog.add([color, 'tdnodes']);
+                    dialog.addText('选择牌的类型：');
+                    dialog.add([type, 'tdnodes']);
+                    var chooseButton = player.chooseButton(dialog, 2, true)
+                    chooseButton.set('ai', function (button) {
+                        return 1 + Math.random()
+                    }).set('filterButton', function (button) {
+                        for (var i = 0; i < ui.selected.buttons.length; i++) {
+                            if (color.contains(ui.selected.buttons[i].link) && color.contains(button.link) || type.contains(ui.selected.buttons[i].link) && type.contains(button.link)) {
+                                return false
+                            }
+                        }
+                        return true
+                    })
+                    'step 1'
+                    var color = event.colors.find(function (item) {
+                        return get.translation(item) == result.links[0];
+                    });
+                    var type = event.types.find(function (item) {
+                        return get.translation(item) == result.links[1];
+                    });
+                    var card = get.cardPile(function (card) {
+                        return get.color(card) == color && get.type2(card) == type;
+                    });
+                    if (card) {
+                        player.gain(card, 'gain2')
+                    } else {
+                        player.draw()
+                    }
+                }
+            },
+            'dolina_wy': {
+                trigger: {
+                    player: "damageBegin2"
+                },
+                forced: true,
+                filter: function (event, player) {
+                    return event.source && event.num > 0
+                },
+                content: function () {
+                    'step 0'
+                    var card = get.cards()[0];
+                    event.card = card;
+                    player.showCards(card, get.translation(player) + '发动了【威仪】')
+                    'step 1'
+                    var eff = get.damageEffect(player, trigger.source, player, trigger.nature)
+                    trigger.source.chooseToDiscard('he', '请弃置一张' + get.translation(get.type2(event.card)) + '牌，否则取消此次伤害', function (card) {
+                        return get.type2(card) == get.type2(event.card)
+                    }).set('ai', function (card) {
+                        if (_status.event.eff > 0) {
+                            return 10 - get.value(card);
+                        }
+                        return 0;
+                    }).set('eff', eff);
+                    'step 2'
+                    if (!result.bool) {
+                        trigger.cancel()
+                    }
+                    player.loseToDiscardpile(card)
+                }
+            },
+            'dolina_sl': {
+                trigger: {
+                    global: "gameStart"
+                },
+                init: function (player) {
+                    if (!player.storage.dolina_sl) player.storage.dolina_sl = [[], [], []]
+                },
+                forced: true,
+                content: function () {
+                    for (var i of lib.inpile) {
+                        var card = { name: i, isCard: true };
+                        if (get.tag(card, 'damage')) {
+                            if (get.type(i) == 'trick') {
+                                player.storage.dolina_sl[0].push(['锦囊', '', i])
+                            }
+                        };
+                    }
+                    player.storage.dolina_sl[0].push(['基本', '', 'sha']);
+                    for (var j of lib.inpile_nature) player.storage.dolina_sl[0].push(['基本', '', 'sha', j]);
+                    player.storage.dolina_sl[1] = player.storage.dolina_sl[0].slice(0)
+                },
+                group: "dolina_sl_use",
+                subSkill: {
+                    use: {
+                        enable: "phaseUse",
+                        direct: true,
+                        filter: function (event, player) {
+                            return player.storage.dolina_sl[1].length > 0 && player.countCards('hes') > 0
+                        },
+                        chooseButton: {
+                            dialog: function (event, player) {
+                                return ui.create.dialog('噬浪', [player.storage.dolina_sl[1], 'vcard']);
+                            },
+                            filter: function (button, player) {
+                                return lib.filter.filterCard({ name: button.link[2] }, player, _status.event.getParent());
+                            },
+                            check: function (button) {
+                                var player = _status.event.player;
+                                return player.getUseValue({ name: button.link[2] });
+                            },
+                            backup: function (links, player) {
+                                return {
+                                    filterCard: true,
+                                    selectCard: 1,
+                                    check: function (card) {
+                                        if (ui.selected.cards.length) return 0;
+                                        return 7 - get.value(card);
+                                    },
+                                    position: 'hes',
+                                    popname: true,
+                                    viewAs: {
+                                        name: links[0][2],
+                                        nature: links[0][3]
+                                    },
+                                    onuse: function (result, player) {
+                                        var recode = [get.translation(get.type2(result.card)), '', get.name(result.card)]
+                                        if (result.card.nature) recode.push(result.card.nature)
+                                        let index = player.storage.dolina_sl[1].findIndex(subArr => JSON.stringify(subArr) === JSON.stringify(recode));
+                                        // 如果找到了子数组 recode，则将其从 A 中删除
+                                        if (index !== -1) {
+                                            player.storage.dolina_sl[1].splice(index, 1);
+                                        }
+                                        player.storage.dolina_sl[2].push(recode)
+                                        if (!player.storage.dolina_qj && player.storage.dolina_sl[1].length == 0 && player.hasSkill('dolina_qj')) {
+                                            var next = game.createEvent('dolina_qj', false);
+                                            next.player = player;
+                                            next.setContent(lib.skill.dolina_qj.content);
+                                        }
+                                    },
+                                }
+                            },
+                            prompt: function (links, player) {
+                                return '将一张牌当作' + get.translation(links[0][3]) + get.translation(links[0][2]) + '使用';
+                            },
+                        },
+                        ai: {
+                            order: 6,
+                            result: {
+                                player: 2,
+                            },
+                        },
+                    }
+                },
+            },
+            'dolina_qj': {
+                init: function (player) {
+                    if (!player.storage.dolina_qj) player.storage.dolina_qj = false
+                },
+                forced: true,
+                unique: true,
+                juexingji: true,
+                skillAnimation: true,
+                animationColor: "metal",
+                content: function () {
+                    'step 0'
+                    player.awakenSkill('dolina_qj')
+                    player.logSkill('dolina_qj')
+                    'step 1'
+                    player.recover(player.getDamagedHp())
+                    player.addSkill('dolina_fh')
+                },
+                derivation: 'dolina_fh'
+            },
+            'dolina_fh': {
+                enable: "phaseUse",
+                usable: 1,
+                filter: function (event, player) {
+                    return player.storage.dolina_sl[2].length
+                },
+                content: function () {
+                    'step 0'
+                    var choice = ['流失体力']
+                    if (player.countCards('h')) {
+                        choice.push('弃置手牌')
+                    }
+                    player.chooseControl(choice).set('ai', function () {
+                        if (choice.contains('弃置手牌')) {
+                            return '弃置手牌'
+                        } else {
+                            return '流失体力'
+                        }
+                    })
+                    'step 1'
+                    if (result.control == '流失体力') {
+                        event.num = player.hp
+                    } else {
+                        event.num = player.countCards('h')
+                    }
+                    event.name1 = result.control
+                    'step 2'
+                    player.chooseNumber([1, event.num], Math.floor(player.storage.dolina_sl[2].length / 2))
+                        .set("prompt", get.prompt2('dolina_fh'))
+                        .set("ai", function (player, _event) {
+                            return Math.min(event.num, Math.floor(player.storage.dolina_sl[2].length / 2)) - 1
+                        })
+                        .set('forced', true)
+                    'step 3'
+                    event.num = result.choice
+                    if (event.name1 == '流失体力') {
+                        player.loseHp(event.num)
+                        player.draw()
+                    } else {
+                        player.chooseToDiscard(event.num, 'h', true)
+                        player.recover()
+                    }
+                    'step 4'
+                    event.dialog = ui.create.dialog('分海', [player.storage.dolina_sl[2], 'vcard'])
+                    player.chooseButton(2 * event.num).set('ai', function (button) {
+                        return Math.random();
+                    }).set('forced', true)
+                        .set('dialog', event.dialog)
+                        .set('prompt2', '恢复' + get.cnNumber(2 * event.num) + '个记录')
+                    'step 5'
+                    event.dialog.close()
+                    for (var i of result.links) {
+                        let index = player.storage.dolina_sl[2].findIndex(subArr => JSON.stringify(subArr) === JSON.stringify(i));
+                        if (index !== -1) {
+                            player.storage.dolina_sl[2].splice(index, 1);
+                        }
+                        player.storage.dolina_sl[1].push(i)
+                    }
+                },
+                ai: {
+                    result: {
+                        player: 2
+                    },
+                    order: 4,
+                }
+            },
+            'aoeslat_aq': {
+                trigger: {
+                    player: "useCard2",
+                },
+                filter: function (event, player) {
+                    var card = event.card, info = get.info(card);
+                    var evt = player.getLastUsed(1)
+                    if (evt && evt.targets) {
+                        var targets = evt.targets
+                        if (info.allowMultiple == false) return false;
+                        if (event.targets && !info.multitarget) {
+                            return event.targets && game.hasPlayer(function (target) {
+                                return targets.contains(target) && !event.targets.contains(target) && lib.filter.targetEnabled2(card, player, target);
+                            });
+                        }
+                    }
+                    return false;
+                },
+                direct: true,
+                content: function () {
+                    'step 0'
+                    var evt = player.getLastUsed(1)
+                    var targets = evt.targets
+                    player.chooseTarget([1, 2], get.prompt('aoeslat_aq'), '为' + get.translation(trigger.card) + '额外指定至多两名你本回合内使用的上一张牌的目标为目标', function (card, player, target) {
+                        var evt = _status.event.getTrigger();
+                        return targets.contains(target) && !evt.targets.contains(target) && lib.filter.targetEnabled2(evt.card, player, target);
+                    }).set('ai', function (target) {
+                        return get.effect(target, _status.event.getTrigger().card, _status.event.player);
+                    });
+                    'step 1'
+                    if (result.bool) {
+                        var targets = result.targets;
+                        player.logSkill('aoeslat_aq', targets);
+                        player.line(targets, trigger.card.nature);
+                        trigger.targets.addArray(targets);
+                    }
+                },
+            },
+            "aoeslat_cf": {
+                trigger: {
+                    player: "phaseDrawBegin2",
+                },
+                filter: function (event, player) {
+                    return !event.numFixed
+                },
+                prompt: function (event, player) {
+                    return '【奢繁】：是否多摸' + get.cnNumber(Math.ceil(game.players.length / 2) + 1) + '张牌？';
+                },
+                content: function () {
+                    var num = Math.ceil(game.players.length / 2) + 1
+                    trigger.num += num;
+                    player.addTempSkill('aoeslat_cf_1');
+                },
+                group: "aoeslat_cf_2",
+                subSkill: {
+                    1: {
+                        trigger: {
+                            player: "useCard",
+                        },
+                        forced: true,
+                        filter: function (event, player) {
+                            if (player.countCards('he') == 0) return false;
+                            if (event.card.name == 'sha') return true;
+                            return get.type(event.card) == 'trick';
+                        },
+                        autodelay: true,
+                        content: function () {
+                            player.chooseToDiscard(true, 'he');
+                        },
+                    },
+                    2: {
+                        trigger: {
+                            player: "phaseUseBegin"
+                        },
+                        direct: true,
+                        content: function () {
+                            player.chooseUseTarget('fr_card_djlj', true);
+                        }
+                    }
+                }
+            },
+            "aoeslat_yj": {
+                trigger: {
+                    player: "damageBegin3",
+                },
+                filter: function (event, player) {
+                    return event.card && ((event.card.name == 'sha' && !player.countCards('he')) || (event.card.name != 'sha' && !player.countCards('h')));
+                },
+                forced: true,
+                content: function () {
+                    trigger.num++;
+                },
+                ai: {
+                    effect: {
+                        target: function (card, player, target, current) {
+                            if (card.name == 'sha' && !target.countCards('he')) return [1, -2];
+                        },
+                    },
+                },
+            },
             'thunder_lj': {
                 enable: 'phaseUse',
                 filterCard: true,
@@ -182,6 +697,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 subSkill: {
                     defend: {
                         lastDo: true,
+                        usabel: 2,
                         trigger: {
                             source: 'damageEnd'
                         },
@@ -987,12 +1503,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 content: function () {
                     'step 0'
                     player.addToExpansion(get.cards(4), 'draw').gaintag.add('rasali_ly');
-                    if (!player.countCards('h')) player.draw()
                     'step 1'
                     var cards = player.getExpansions('rasali_ly');
-                    if (!cards.length || !player.countCards('h')) {
+                    if (!cards.length) {
                         event.finish();
                         return;
+                    } else if (!player.countCards('h')) {
+                        event.goto(3)
                     }
                     var next = player.chooseToMove('对' + get.translation(trigger.player) + '发动【灵引】：交换“引”和手牌？');
                     next.set('list', [
@@ -1034,6 +1551,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         player.discard(cards)
                         player.line(trigger.player)
                         trigger.player.die()
+                        if (player.countCards('h') == 0 && game.me == player && (player.name == 'fr_rasali' || player.name2 == 'fr_rasali' || player.name2 == 'fr_rasali') && !game.frAchi.hasAchi('神仙难救', 'character')) {
+                            game.frAchi.addProgress('神仙难救', 'character')
+                        }
                     }
                     if (color.length == 1) {
                         trigger.player.recover(1 - trigger.player.hp)
@@ -1093,7 +1613,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 onremove: function (player, skill) {
                     player.removeSkillBlocker(skill);
                 },
-                charlotte: true,
                 locked: true,
                 skillBlocker: function (skill, player) {
                     return skill != 'zhan_sf' && skill != 'zhan_jf' && !lib.skill[skill].charlotte;
@@ -1260,20 +1779,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 content: function () {
                     'step 0'
-                    if (player.maxHp > 1) {
-                        player.chooseNumber(1, player.maxHp, player.maxHp)
-                            .set("prompt", get.prompt(event.name))
-                            .set("prompt2", get.translation(`${event.name}_info`))
-                            .set("ai", function (player, _event) {
-                                return Math.min(trigger.player.hp - 1, player.getDamagedHp() - 1)
-                            })
-                    } else {
-                        player.chooseBool(get.prompt2(event.name)).set("ai", (..._args) => false)
-                    }
+                    player.chooseNumber([1, player.maxHp], player.maxHp)
+                        .set("prompt", get.prompt2(event.name))
+                        .set("ai", function (player, _event) {
+                            if (trigger.player.isUnknown()) return 1
+                            return Math.min(trigger.player.hp, player.getDamagedHp())
+                        })
                     'step 1'
                     if (result.bool) {
-                        player.loseMaxHp(result.choice || 1)
-                        trigger.player.damage((result.choice || 1), player, 'thunder')
+                        player.loseMaxHp(result.choice)
+                        trigger.player.damage(result.choice, player, 'thunder')
                     }
                 }
             },
@@ -1344,7 +1859,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         if (evt && evt1 && evt.card && evt1.card) {
                             var value = (get.number(evt.card, false) + get.number(evt1.card, false)) % 13
                             value = value == 0 ? 13 : value
-                            return get.cardnum(value)
+                            return get.strNumber(value)
                         }
                         return
                     },
@@ -1358,7 +1873,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         if (evt && evt.card && evt1 && evt1.card) {
                             var value = (get.number(evt.card, false) + get.number(evt1.card, false)) % 13
                             value = value == 0 ? 13 : value
-                            dialog.addText('当你使用点数为' + get.cardnum(value) + '的牌时，你摸两张牌')
+                            dialog.addText('当你使用点数为' + get.strNumber(value) + '的牌时，你摸两张牌')
                         }
                     }
                 },
@@ -1886,7 +2401,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 content: function () {
                     'step 0'
-                    if (player.storage.bladewolf_rh <= 0) event.finish()
+                    if (player.storage.bladewolf_rh <= 0) {
+                        if (!game.frAchi.hasAchi('拆弹成功', 'character') && game.hasPlayer(function (current) {
+                            return current.name == 'fr_bladewolf'
+                        })) {
+                            game.frAchi.addProgress('拆弹成功', 'character')
+                        }
+                        event.finish()
+                    }
                     'step 1'
                     player.chooseTarget(1, '请选择你要分配伤害的目标，你目前可以分配' + player.storage.bladewolf_rh + '点伤害', function (card, player, target) {
                         return target != player
@@ -1897,27 +2419,22 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 2'
                     if (result.bool) {
                         event.target = result.targets[0]
-                        if (player.storage.bladewolf_rh > 1) {
-                            player.chooseNumber(1, player.storage.bladewolf_rh, player.storage.bladewolf_rh)
-                                .set("prompt", get.prompt(event.name))
-                                .set("prompt2", get.translation(`${event.name}_info`))
-                                .set("ai", function (player, _event) {
-                                    return Math.min(event.target.hp - 1, player.storage.bladewolf_rh - 1)
-                                })
-                                .set('forceDie', true)
-                                .set("goon", player.storage.bladewolf_rh);
-                        } else {
-                            player.chooseBool(get.prompt2(event.name)).set("ai", (..._args) => true).set('forceDie', true)
-                        }
+                        player.chooseNumber([1, player.storage.bladewolf_rh], player.storage.bladewolf_rh)
+                            .set("prompt", get.prompt2('bladewolf_rh'))
+                            .set("ai", function (player, _event) {
+                                if (event.target.isUnknown()) return 1
+                                return Math.min(event.target.hp, player.storage.bladewolf_rh)
+                            })
+                            .set('forceDie', true)
                     } else {
                         event.finish()
                     }
                     'step 3'
                     if (result.bool) {
-                        if ((result.choice || 1) >= 15 && game.me == player && !game.frAchi.hasAchi('链式反应', 'character') && (player.name == 'fr_bladewolf' || player.name1 == 'fr_bladewolf' || player.name2 == 'fr_bladewolf')) {
+                        if (result.choice >= 15 && game.me == player && !game.frAchi.hasAchi('链式反应', 'character') && (player.name == 'fr_bladewolf' || player.name1 == 'fr_bladewolf' || player.name2 == 'fr_bladewolf')) {
                             game.frAchi.addProgress('链式反应', 'character')
                         }
-                        event.target.damage((result.choice || 1), player, 'fire')
+                        event.target.damage(result.choice, player, 'fire')
                         player.storage.bladewolf_rh -= result.choice
                     }
                     'step 4'
@@ -2228,7 +2745,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         }
                         if (event.mes == 'fr_card_zhuanyi') {
                             var str
-                            if (player.countCards('e', { subtype: 'equip1' }) > 0) player.discard(player.getCards('e', { subtype: 'equip1' }))
                             if (player.next != player.previous) {
                                 str = '与你的上家（' + get.translation(player.previous) + '）或你的下家（' + get.translation(player.next) + '）交换位置'
                             } else {
@@ -2257,7 +2773,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     'step 4'
                     event.temptarget = result.targets[0]
-                    player.turnOver()
                     game.broadcastAll(function (target1, target2) {
                         game.swapSeat(target1, target2);
                     }, player, event.temptarget);
@@ -2265,11 +2780,24 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (num > 0) {
                         player.chooseToDiscard('h', num, true)
                     }
+                    if (player.countCards('e', function (card) {
+                        return get.subtype(card) == 'equip1'
+                    }) > 0) {
+                        player.draw(num)
+                    }
                     'step 5'
                     if (event.temptarget.countCards('e') > 0) {
                         player.gainPlayerCard(event.temptarget, 'e').set('ai', function (button) {
                             var card = button.link;
                             return get.value(card);
+                        }).set('filterButton', function (button) {
+                            var card = button.link;
+                            if (event.temptarget.countCards('e', function (card) {
+                                return get.subtype(card) == 'equip1'
+                            }) > 0) {
+                                return get.subtype(card) == 'equip1'
+                            }
+                            return true
                         });
                     } else {
                         event.finish()
@@ -3154,6 +3682,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             player: "loseAfter",
                             global: "loseAsyncAfter",
                         },
+                        charlotte: true,
                         forced: true,
                         filter: function (event, player) {
                             if (event.type != 'discard' || event.getlx === false || event.getParent('phaseDiscard').player != player || !player.storage.kamijia_sx_unuse.source || !player.storage.kamijia_sx_unuse.source.isIn()) return false;
@@ -4872,6 +5401,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: ["damageBefore"],
                 },
+                charlotte: true,
                 init: function (player, skill) {
                     player.addSkillBlocker(skill);
                     player.storage.kaye_shouhu = 0
@@ -4956,6 +5486,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             source: "damageBefore",
                             player: 'damageBegin4'
                         },
+                        charlotte: true,
                         filter: function (event, player) {
                             if (event.player != player) {
                                 return player.storage.kaye_yj_one < 4
@@ -18042,10 +18573,32 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'death_sp': "审判",
+            'death_sp_info': "觉醒技，当你累计造成不少于6点伤害时，你失去1点体力上限并修改〖双镰〗。",
+            'death_sp_a':"双镰·改",
+            'death_sp_a_info':"①每回合限一次，当你对其他角色造成伤害时，你可以令此伤害+1并获得该角色的一张牌。②当你不因此技能使用【杀】指定目标后，你可以视为对其使用一张【杀】。",
+            'death_sy': "随影",
+            'death_sy_info': "锁定技。游戏开始时，你选择一名其他角色称为”猎物“，当其回合结束后，若其下家不为你，你与该角色的下家交换位置，否则，你执行一个额外的回合；你对“猎物”使用牌无距离限制，且当其死亡时，你可以重新选择一名其他角色称为“猎物”。",
+            'death_sl': "双镰",
+            'death_sl_info': "①每回合限一次，当你对“猎物”造成伤害时，你可以执行一项：1.令此次伤害+1、2.令该角色弃置两张牌、3.背水：你失去1点体力；②当你不因此技能使用【杀】指定目标后，你可以视为对目标使用一张【杀】。",
+            'dolina_qj': '权聚',
+            'dolina_qj_info': "觉醒技，当你删除了〖噬浪〗中的所有记录后，你将体力值调整至体力上限，并获得〖分海〗。",
+            'dolina_fh': '分海',
+            'dolina_fh_info': "出牌阶段限一次，你可以失去体力/弃置手牌恢复两倍数量的〖噬浪〗的记录然后摸一张牌/回复1点体力。",
+            'dolina_sl': '噬浪',
+            'dolina_sl_info': '游戏开始时，你记录牌堆中带有伤害标签的牌名；出牌阶段，你可以删除一个记录牌将一张手牌当成此牌使用。',
+            'dolina_wy': "威仪",
+            'dolina_wy_info': "锁定技，当你受到一名角色造成的伤害时，你亮出牌堆顶的一张牌，然后其须弃置与此牌类型相同的一张牌，否则其取消此次伤害。",
+            'aoeslat_yj': '怨积',
+            'aoeslat_yj_info': '锁定技，当你受到牌造成的伤害时，若此伤害是【杀】造成的且你没有牌，或此伤害不是【杀】造成的且你没有手牌，则此伤害+1。',
+            'aoeslat_cf': '奢繁',
+            'aoeslat_cf_info': '摸牌阶段开始时，你可以多摸X+1张牌（X为场上的角色数的一半并向上取整），若如此做，当你于你的回合内使用基本牌或普通锦囊牌时，你弃置一张牌。出牌阶段开始时，你视为对所有角色使用一张【弹尽粮绝】。',
+            'aoeslat_aq': '傲权',
+            'aoeslat_aq_info': "你使用有目标的基本牌或普通锦囊牌时，你可以额外指定至多两名你本回合内使用的上一张牌的目标为目标",
             'thunder_lj': "流雷",
-            'thunder_lj_info': "出牌阶段限一次，你可以弃置一张手牌，令所有其他角色打出一张与上一名以此法打出或弃置的牌点数或花色相同的牌，否则你对其造成1点雷电伤害，此技能结算完毕后，你获得其他角色至多X张因此技能打出的牌（X为因此技能受到伤害的角色数）。当你造成雷属性伤害后，你可以令目标角色回复1点体力并摸一张牌。",
+            'thunder_lj_info': "出牌阶段限一次，你可以弃置一张手牌，令所有其他角色打出一张与上一名以此法打出或弃置的牌点数或花色相同的牌，否则你对其造成1点雷电伤害，此技能结算完毕后，你获得其他角色至多X张因此技能打出的牌（X为因此技能受到伤害的角色数）。每回合限两次，当你造成雷属性伤害后，你可以令目标角色回复1点体力并摸一张牌。",
             'thunder_fz': '奋决',
-            'thunder_fz_info': '当你受到其他角色造成的1点伤害，或当你对其他角色造成伤害1点伤害后，你可以与该角色各摸一张牌，然后你弃置该角色一张牌。',
+            'thunder_fz_info': '当你受到其他角色造成的1点伤害，或当你对其他角色造成伤害1点伤害后，你可以与该角色各摸一张牌，然后你可以弃置该角色一张牌。',
             "lamas_zj": '战尽',
             "lamas_zj_info": "准备阶段，你可以将任意角色区域内的总计X张牌置于你的武将牌上称为“战”（X存活角色数的一半并向上取整）；当你成为【杀】的目标时，你获得你武将牌上的所有“战”；你可以移去一张“战”，然后视为使用一张普通【杀】。",
             "mouse_bm": "八门",
@@ -18077,7 +18630,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'rasali_hq': '魂牵',
             'rasali_hq_info': '每回合限一次，当你对其他角色造成伤害后，你可失去1点体力，然后对该角色造成X点伤害。此伤害结算结束后，其回复X点体力（X为其体力值）。',
             'rasali_ly': '灵引',
-            'rasali_ly_info': '每回合限一次，一名角色进入濒死状态前，若你没有手牌，你可以摸一张牌；然后你将牌堆顶的四张牌置于你的武将牌上称为“引”，你可以等量交换你的“引”和手牌，交换完成后，你依次执行以下的选项：<li>①若“引”的花色均不同，你弃置所有“引”并令该角色立即死亡，<li>②若“引”的颜色均相同，你交给该角色所有“引”并令该角色将体力值回复至1点，然后该角色弃置两张手牌，<li>③若“引”的花色均相同，该角色回复1点体力值并摸两张牌，然后该角色获得1个“善”标记，<li>④若你的武将牌上有“引”，获得的所有“引”然后弃置两张手牌。</li>一名有“善”的角色受到伤害时，其移去1个“善”然后免除此次伤害，若此伤害有来源，你对该伤害来源造成1点伤害。',
+            'rasali_ly_info': '每回合限一次，一名角色进入濒死状态前，你可以将牌堆顶的四张牌置于你的武将牌上称为“引”，然后你可以等量交换你的“引”和手牌，交换完成后，你依次执行以下的选项：<li>①若“引”的花色均不同，你弃置所有“引”并令该角色立即死亡，<li>②若“引”的颜色均相同，你交给该角色所有“引”并令该角色将体力值回复至1点，然后该角色弃置两张手牌，<li>③若“引”的花色均相同，该角色回复1点体力值并摸两张牌，然后该角色获得1个“善”标记，<li>④若你的武将牌上有“引”，获得的所有“引”然后弃置两张手牌。</li>一名有“善”的角色受到伤害时，其移去1个“善”然后免除此次伤害，若此伤害有来源，你对该伤害来源造成1点伤害。',
             "fr_elin": "厄临",
             "fr_elin_info": "锁定技，你的判定会朝向对你不利的方向倾斜。",
             'zhan_sf': '束缚',
@@ -18111,7 +18664,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'tails_qx': '巧械',
             'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同颜色的牌，销毁场上任意名角色的各至多一张颜色与你弃置牌相同的、点数为8的装备牌，对其各造成1点火焰伤害。',
             'tails_jd': '机动',
-            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:与上家或下家交换座位并翻面且将手牌弃至两张（若你有武器牌则弃置之），可获得其一张装备区的牌并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
+            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:与上家或下家交换座位并将手牌弃至两张，若你有武器牌则你摸X张牌（X为你弃置的牌数），然后你可获得其一张装备区的牌（武器牌优先）并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
             'dier_xy': '夕炎',
             'dier_xy_info': '锁定技，当你使用【杀】指定目标后，你获得该角色的一张牌。',
             'dier_sb': '守宝',
@@ -18644,6 +19197,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "wore_bossty_info": "锁定技，你的阶段不会被跳过，你每回合能受到伤害、流失体力、失去体力上限的总和至多为游戏轮数",
 
             //武将
+            'fr_ming': "鸣",
+            'fr_death': "迪斯",
+            'fr_dolina': "多林",
             'fr_thunder': '兰德',
             'fr_mouse': '缪斯',
             'fr_lamas': '拉马斯',
@@ -18795,6 +19351,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            'fr_death': "死亡使者",
+            'fr_aoeslat': '暴戾君王',
+            'fr_thunder': '雷光跃动',
             'fr_lamas': '战技如神',
             'fr_mouse': '奇门八卦',
             'fr_blam': '如入幻境之刃',

@@ -318,3 +318,124 @@
     font-family: 'xinwei';
     font-size: 3vh;
 }
+
+.fr-rewardWindow-score {
+    background-size: 100% 100%;
+    display: block;
+    left: 10%;
+    top: 22%;
+    width: 40%;
+    height: 10%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(29, 2, 0);
+    font-size: xx-large;
+    font-family: 'yuanli';
+}
+
+.fr-rewardWindow-reward {
+    display: block;
+    left: 18%;
+    top: 33%;
+    width: 60%;
+    height: 35%;
+    overflow-x: auto;
+}
+
+.fr-rewardWindow-progress {
+    top:6%;
+    left:0;
+    height: 1%;
+    /* border-radius: 3px; */
+    background: #e2d703;
+}
+
+.fr-rewardWindow-progress2 {
+    right: 0;
+    height: 100%;
+    /* border-radius: 3px; */
+    background: #50514d;
+}
+
+.fr-rewardWindow-lit {
+    top: 0;
+    width: 4%;
+    height: 15%;   
+    background-size: cover;
+    background-image: url('../image/achievement/lit.png');
+}
+
+.fr-rewardWindow-num {
+    top: 14%;
+    width: 4%;
+    height: 8%;
+    text-align: center;
+    font-family: 'yuanli';
+    font-size: xx-large;
+    color:rgb(72, 53, 53);
+}
+
+.fr-rewardWindow-frame {
+    top: 27%;
+    width: 16%;
+    height: 48%;  
+    background-size: cover;
+    background-image: url('../image/achievement/frame.png');
+}
+
+.fr-rewardWindow-rwd {
+    top: 10%;
+    right: 10%;
+    width: 80%;
+    height: 83%;  
+    background-size: cover;
+    z-index: 5;
+}
+
+.fr-rewardWindow-button {
+    top: 82%;
+    width: 13%;
+    height: 11%;  
+    background-size: 100% 100%;
+    background-image: url('../image/achievement/receive.png');
+}
+
+.fr-rewardWindow-arrow {
+    top: 46%;
+    left: 13%;
+    width: 4%;
+    height: 10%;  
+    display: none;
+    background-size: 100% 100%;
+    background-image: url('image/achievement/arrow.png');
+    transform: rotate(180deg);
+}
+
+.fr-rewardWindow-arrow2 {
+    top: 46%;
+    right: 15%;
+    width: 4%;
+    height: 10%;  
+    background-size: 100% 100%;
+    background-image: url('../image/achievement/arrow.png');
+}
+
+.fr-rewardWindow-lock {
+    top: 70%;
+    left: 70%;
+    width: 30%;
+    height: 30%;  
+    background-image: url('../image/achievement/lock.png');
+    background-size: cover;
+}
+
+.fr-rewardWindow-type {
+    top:-5%;
+    left: 66%;
+    width: 34%;
+    height: 50%;
+    background-size: 100% 100%;
+    background-image: url('../image/achievement/character.png');
+}

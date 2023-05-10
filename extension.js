@@ -169,21 +169,26 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //更新告示
                     var Furry_update = [
                         '/Character/',
-                        '/redoCharacter/',
-                        '更新成就奖励菜单',
-                        '修复米亚成就无法完成的bug',
-                        '专辑重绘封面',
-                        '新人物 缪斯',
-                        '修复肝帝成就无法完成的bug',
-                        '福瑞拓展2.2.0.0正式版更新',
-                        '新卡牌 雪中送炭',
                         '重做武将：卢森特，克萨亚',
                         '新武将 拉马斯',
-                        '新概念 奋发技'
+                        '新概念 奋发技',
+                        '德克人物原画重置',
+                        '新卡牌 雪中送炭',
+                        '重置 卢森特 技能',
+                        '重置 莱恩斯 技能',
+                        '新增成就 人与狂流、你在造假吗？、还不可以认输！、哈尔斯的高徒',
+                        '德克 新增技能',
+                        '新角色 多林',
+                        '新角色 迪斯',
+                        '新系统 成就奖励',
+                        '新成就 拆弹成功、虚争空言，不如击而破之、神仙难救',
+                        '修改 tails 转移选项',
+                        '修改 rasali 灵引技能',
+                        '修改 zhan 的部分标记错误',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_lamas', 'fr_mouse', 'fr_thunder'];
-                    var Furry_redoplayers = ['fr_lust', 'fr_kesaya', 'fr_lions', 'fr_derk'];
+                    var Furry_players = ['fr_dolina', 'fr_death'];
+                    var Furry_redoplayers = [];
                     //更新卡牌
                     var Furry_cards = [];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
@@ -234,131 +239,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (lib.config['extension_十周年UI_showJieMark']) {
                         lib.fr_playerinit = lib.element.player.init;
                         lib.element.player.init = function (character, character2, skill) {
-                            var fc={
-                                'fr_thunder': '兰德',
-                                'fr_mouse': '缪斯',
-                                'fr_lamas': '拉马斯',
-                                'fr_blam': '布兰',
-                                'fr_aoeslat': '奥尔斯拉特',
-                                'fr_neises': '内瑟斯',
-                                'fr_tails': '塔尔斯',
-                                'fr_dier': '戴尔',
-                                "fr_bosswore": "沃尔",
-                                'fr_francium': '弗兰西亚',
-                                'fr_nanci': '南辞',
-                                'fr_shark': '沙克',
-                                "fr_kmjia": "卡米加",
-                                "fr_liona": "里欧纳",
-                                "fr_ala": "阿拉安",
-                                "fr_tiger": "泰格尔",
-                                'fr_linyan': "林&炎",
-                                "fr_bossfaers": "恒神法斯",
-                                "fr_bosshars": "纵神哈尔",
-                                "fr_horn": "霍恩",
-                                "fr_qima": "奇玛",
-                                "fr_zhongyu": "忠与",
-                                "fr_hynea": "哈尼亚",
-                                "fr_hyperner": "催眠者",
-                                "fr_wore": "沃尔",
-                                "fr_tiers": "缇尔斯",
-                                "fr_yifeng": "弈风",
-                                "fr_hars": "哈尔斯",
-                                "fr_wes": "维斯",
-                                "fr_muyada": "慕达亚",
-                                "fr_yada": "亚达",
-                                "fr_muli": "穆里",
-                                "fr_muliy": "穆里耶",
-                                "fr_sier": "希尔",
-                                "fr_klif": "克里夫",
-                                "fr_milis": "弥斯利",
-                                "fr_alas": "奥拉斯",
-                                "fr_kesaya": "克萨亚",
-                                "fr_ken": "科恩",
-                                "fr_west": "威斯特",
-                                "fr_lions": "莱恩斯",
-                                "fr_milite": "米利特",
-                                "fr_jackson": "赛特",
-                                "fr_jiejie": "檞界",
-                                "fr_sayisu": "萨伊苏",
-                                "fr_telina": "特丽娜",
-                                "fr_oert": "欧尔特",
-                                "fr_rest": "瑞斯特",
-                                "fr_krikt": "科里克特",
-                                "fr_tery": "特瑞",
-                                "fr_sisk": "西斯科",
-                                "fr_lens": "雷恩斯",
-                                "fr_milism": "米里森",
-                                "fr_miya": "米亚",
-                                "fr_skry": "斯克瑞",
-                                "fr_lusiya": "卢西亚",
-                                "fr_kersm": "科尔森",
-                                "fr_kert": "柯尔特",
-                                "fr_keya": "科亚",
-                                "fr_lust": "卢森特",
-                                "fr_klier": "克莱尔",
-                                "fr_faers": "法斯",
-                                "fr_aroncy": "艾伦希",
-                                "fr_lint": "林特",
-                                "fr_berg": "伯格",
-                                "fr_xit": "希特",
-                                "fr_markn": "马克恩",
-                                "fr_morly": "莫雷",
-                                "fr_marxya": "马尔西亚",
-                                "fr_yas_klin": "亚瑟克林",
-                                "fr_dog": "多戈",
-                                "fr_muen": "牧恩",
-                                "fr_patxi": "帕茨希",
-                                "fr_glit": "格里特",
-                                "fr_nore": "诺尔",
-                                "fr_bofeng": "迟风",
-                                "fr_ciyu": "迟雨",
-                                "fr_delta": "德尔塔",
-                                "fr_edmon": "埃德蒙",
-                                "fr_mika": "米卡",
-                                "fr_peter_likes": "皮特莱克",
-                                "fr_dmoa": "多默尔",
-                                "fr_nulia": "怒力亚",
-                                "fr_terlk": "特尔里克",
-                                "fr_verb": "韦贝尔",
-                                "fr_taber": "塔贝尔",
-                                "fr_yinhu": "寅虎",
-                                "fr_dragon": "德拉贡",
-                                "fr_terz": "特兹",
-                                "fr_jet": "杰特",
-                                "fr_slen": "萨冷",
-                                "fr_paers": "帕尔斯",
-                                "fr_nier": "尼尔",
-                                "fr_pluvia": "普鲁维亚",
-                                "fr_ventus": "凡图斯",
-                                "fr_knier": "科妮尔",
-                                "fr_zenia": "泽妮雅",
-                                "fr_lamost": "拉莫斯特",
-                                "fr_kasaers": "卡萨尔斯",
-                                "fr_yifa": "弈法",
-                                "fr_jgby": "吉岡邦彦",
-                                "fr_xiaomo": "小默",
-                                "fr_adward": "安德华",
-                                "fr_fate": "法特",
-                                "fr_liya": "莉亚",
-                                "fr_laays": "拉亚斯",
-                                "fr_sam": "山",
-                                "fr_ham": "海",
-                                "fr_mala": "马拉尔",
-                                "fr_bossmala": "马拉尔",
-                                "fr_zeta": "泽塔",
-                                "fr_fox": "狐克斯",
-                                "fr_molis": "莫莉斯",
-                                "fr_shisan": "拾弎",
-                                "fr_bladewolf": '刃狼',
-                                'fr_crow': '克劳',
-                                'fr_derk': '德克',
-                                'fr_nashu': '那舒',
-                                'fr_rasali': '让萨利',
-                                'fr_sheep': '西普',
-                                'fr_zhan': '展',
-                            }
                             var player = lib.fr_playerinit.apply(this, arguments);
-                            if (character && fc[character]) {
+                            if (character && lib.characterPack.furryPack[character]) {
                                 if (this.$jieMark == undefined) {
                                     this.$jieMark = dui.element.create('jie-mark', this);
                                 } else {
@@ -424,6 +306,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             player: "recoverEnd",
                         },
+                        charlotte:true,
                         forced: true,
                         content: function () {
                             var num = player.countMark('fr_mad')
@@ -457,17 +340,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             }
             //---------------------------------------自定义函数：选择数量------------------------------------------//
-            lib.element.player.chooseNumber = function chooseNumber(min, max, ...options) {
+            lib.element.player.chooseNumber = function chooseNumber(range, ...options) {
                 let next = game.createEvent("chooseNumber");
-                let begin, prompt, prompt2, transform = {}, forced, filter;
+                let begin, transform = {}, forced, filter;
 
                 for (const item of options) {
                     if (typeof item === "number") {
                         begin = item;
                     }
                     else if (typeof item === "string") {
-                        if (!prompt) prompt = item;
-                        else if (!prompt2) prompt2 = item;
+                        get.evtprompt(next,item);
                     }
                     else if (typeof item === "object") {
                         transform = item;
@@ -479,10 +361,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         filter = item;
                     }
                 }
-
-                if (!min || !max) return;
-                if (min == max) return;
-                [min, max] = [Math.min(min, max), Math.max(min, max)];
+                if (!range) return;
+                range=get.select(range)
+                let max=range[1],min=range[0]
                 if (!begin || begin < min) begin = min;
                 if (begin && begin > max) begin = max;
 
@@ -492,12 +373,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 next.set("num", begin);
                 next.set("show", transform);
 
-                if (prompt) next.set("prompt", prompt);
-                if (prompt2) next.set("prompt2", prompt2);
                 if (forced) next.set("forced", forced);
                 if (filter) next.set("filter", filter);
 
-                next.setContent("chooseNumber");
+                next._args = [min, max, ...options];
+                next.setContent('chooseNumber');
+
+                next._set.length = 0;
 
                 return next;
             };
@@ -517,15 +399,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         pluss: ui.create.control("++", () => { }),
                         plusss: ui.create.control("+++", () => { }),
                         max: ui.create.control("最大", () => { }),
-                        clear: ui.create.control("确认", () => {
-                            if (isInput) {
-
-                            }
-                            else {
-                                event.result = { bool: true, choice: event.num };
-                                game.resume();
-                            }
-                        })
+                        clear: ui.create.control("确认", () => { })
                     };
 
                     if (event.forced) {
@@ -639,7 +513,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     };
 
                     const doShow = () => {
-                        event.controls.num.textContent = (Reflect.get(event.show, event.num) != null ? Reflect.get(event.show, event.num) : event.num).toString();
+                        event.controls.num.textContent = (Reflect.get(event.show, event.num) !== undefined ? Reflect.get(event.show, event.num) : event.num).toString();
                         if (event.controls.num.classList.contains("disabled")) event.controls.num.classList.remove("disabled");
                     };
 
@@ -736,6 +610,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
                             event._div = div;
                             event._input = input;
+                            if (event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.remove("disabled");
                         }
                     })
 
@@ -747,9 +622,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     }
 
-                    event.controls.cancel.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(_num =>
-                        true, bool => { bool }));
-                    event.controls.clear.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(num =>
+                    if (event.controls.cancel) event.controls.cancel.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(_num =>
+                        true, bool => ({ bool })));
+                    if (event.controls.clear) event.controls.clear.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(num =>
                         num >= event.min && num <= event.max, bool => {
                             if (typeof bool === "number") {
                                 event.num = bool;
@@ -761,7 +636,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                 }
                                 let text = document.createElement("span");
                                 text.style.color = "#FF3333";
-                                text.style.fontFamily = "12px";
+                                text.style.fontFamily = "7px";
                                 text.textContent = "请输入符合要求的数字！";
                                 event._div.append(text);
                                 event.controls.clear._setTimeout = setTimeout(() => {
@@ -1792,6 +1667,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 content: function () { game._started = true; },
             };
         }, precontent: function (furryPack) {
+            //---------------------------------------自动开启武将------------------------------------------//
+            if ((!lib.config.characters.contains('furryPack') || !lib.config.cards.contains('furryCard')) && !lib.config.extension_福瑞拓展_autoOpenPack) {
+                lib.config.characters.push('furryPack')
+                lib.config.cards.push('furryCard')
+                game.saveConfig('characters', lib.config.characters)
+                game.saveConfig('cards', lib.config.cards)
+                game.saveConfig('extension_福瑞拓展_autoOpenPack', true)
+            }
             //---------------------------------------设置：背景图片------------------------------------------//
             game.frBackground_Picture = function () {
                 var temp = lib.config['extension_福瑞拓展_Background_Picture'];
@@ -1867,11 +1750,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
             //珍贵
             var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_hars"
-                , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark']
+                , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark', 'fr_lamas']
             //史诗
             var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
                 "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow']
+                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow', 'fr_thunder']
             //传说
             var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
                 "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium', 'fr_zhan', 'fr_rasali', 'fr_nashu']
@@ -2020,15 +1903,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 return null;
             };
-            //点击提示 参考自活动武将
-            game.getPhone = function () {
-                //获取浏览器navigator对象的userAgent属性（浏览器用于HTTP请求的用户代理头的值）
-                var info = navigator.userAgent;
-                //通过正则表达式的test方法判断是否包含“Mobile”字符串
-                var isPhone = /mobile|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i.test(info);
-                //如果包含“Mobile”（是手机设备）则返回true
-                return isPhone;
-            };
             game.switchfrBgm = function (name) {
                 if (lib.config.qhly_enableCharacterMusic || lib.config.qhly_currentMusic != 'system') {
                     if (game.qhly_switchBgm) {
@@ -2120,27 +1994,95 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 ui.window.appendChild(audio);
                 return audio;
             };
-            //------------------------------------------自定义get函数------------------------------------------//
-            get.cardnum = function (num) {
-                var cardnum
-                switch (num) {
-                    case 11: cardnum = 'J'; break;
-                    case 12: cardnum = 'Q'; break;
-                    case 13: cardnum = 'K'; break;
-                    case 1: cardnum = 'A'; break;
-                    default: cardnum = num
+            //------------------------------------------r宝的doMultiEvents函数------------------------------------------//
+            game.doMultiEvents = function () {
+                let next = game.createEvent("doMultiEvents", false);
+                next.events = [];
+                next.add = function (item) {
+                    if (typeof item == "function") {
+                        this.events.push(item);
+                    } else if (typeof item == "object") {
+                        let evt = item;
+                        if (Array.isArray(evt)) {
+                            if (typeof evt[i] == "function") {
+                                let args = Array.from(evt).slice(1);
+                                evt = (result, results) => evt[0].apply(null, [result, results].concat(args));
+                            } else {
+                                let args = Array.from(evt).slice(2);
+                                evt = evt[0][evt[1]].apply(evt[0], args);
+                            }
+                        }
+                        _status.event.next.remove(evt);
+                        this.events.push(evt);
+                    }
                 }
-                return cardnum
+                for (let i = 0; i < arguments.length; ++i) {
+                    next.add(arguments[i]);
+                }
+                next.setContent("doMultiEvents");
+                return next;
             }
+            lib.element.content.doMultiEvents = function (event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result) {
+                "step 0"
+                event.result = [];
+                "step 1"
+                if (!event.events.length) event.finish();
+                "step 2"
+                let current = event.events.shift();
+                if (typeof current == "function") {
+                    current(event.result.length > 0 ? event.result[event.result.length - 1] : undefined, event.result);
+                }
+                else {
+                    event.next.push(current);
+                }
+                "step 3"
+                event.result.push(result);
+                event.goto(1);
+            }
+            //------------------------------------------r宝的addResults函数------------------------------------------//
+            game.addResult = function () {
+                const args = Array.from(arguments), event = args[0], items = args.slice(1);
+                let evt = event;
+                if (event.name != "addResult") {
+                    evt = game.createEvent("addResult", false);
+                    evt.origin = event;
+                    _status.event.next.remove(event);
+                    evt.map = new Map();
+                    evt.add = function (items) {
+                        for (let i = 0; i < items.length; ++i) {
+                            if (typeof items[i] == "object") {
+                                for (const name in items[i]) evt.map.set(name, items[i][name]);
+                            }
+                            else evt.map.set(items[i], items[++i]);
+                        }
+                    }
+                    evt.setContent("addResult");
+                }
+                evt.add(items);
+                return evt;
+            }
+            lib.element.content.addResult = function (event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result) {
+                "step 0"
+                event.next.add(event.origin);
+                "step 1"
+                event.result = result;
+                for (const item of event.map) {
+                    event.result[item[0]] = event.result[item[1]];
+                }
+                "step 2"
+                event.map.clear();
+            }
+            //------------------------------------------自定义get函数------------------------------------------//
             get.FrskillTips = function (tipname, id) {
                 const frtip = ui.create.div('.Fr-frtips', document.body);
+                var isPhone = /mobile|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i.test(navigator.userAgent);
                 frtip.style.zIndex = 998;
                 const skilltip = ui.create.div('.Fr-skilltip', frtip);
                 skilltip.innerHTML = tipname;
                 var herf = document.getElementById(id);
                 if (herf) {
                     var left = herf.getBoundingClientRect().left;
-                    if (game.getPhone()) left += herf.offsetParent.offsetLeft;
+                    if (isPhone) left += herf.offsetParent.offsetLeft;
                     left += document.body.offsetWidth * 0.15;
                     skilltip.style.left = left + 'px';
                     skilltip.style.top = (herf.getBoundingClientRect().top + 30) + 'px';
@@ -2156,6 +2098,18 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 let temp = (Math.random() * 9 + 1) * 100000
                 let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:get.FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
                 return link;
+            }
+            //------------------------------------------获取翻译数组------------------------------------------//
+            get.transarry=function(arr){
+                if(Array.isArray(arr)){
+                    var list=[]
+                    for(var i of arr){
+                        list.push(get.translation(i))
+                    }
+                }else{
+                    return get.translation(arr)
+                }
+                return list
             }
             //------------------------------------------自定义window函数------------------------------------------//
             window.furry_import = function (func) {
@@ -3373,7 +3327,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.2.0.3",
+            version: "2.2.0.4",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })

@@ -50,7 +50,6 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     },
                     tag: {
                         draw: 2,
-                        damage: 1,
                         loseCard: 1,
                         gain: 1,
                         recover: 1,
@@ -602,8 +601,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     for (var i = 0; i < list.length; i++) {
                         choiceList.push(get.translation(list[i] + '_card_config'))
                     }
-                    if (player.isUnderControl()) {
-                        game.swapPlayerAuto(player);
+                    if (target.isUnderControl()) {
+                        game.swapPlayerAuto(target);
                     }
                     if (event.isMine()) {
                         var dialog = ui.create.dialog('forcebutton');

@@ -1,6 +1,8 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
+		'fr_aoeslat': "不过是几条人命而已，哪有我的享乐重要，哈哈哈哈！",
+		'fr_thunder': '所谓雷电，不过是玩具罢了...',
 		'fr_lamas': '我会战斗到最后一刻！',
 		'fr_mouse': '奇门遁甲，唯破万法...',
 		'fr_nashu': '邪恶的灵魂，呵呵，不过是我的盘中餐...',
@@ -120,6 +122,24 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//成就列表
 	lib.fr_achievement = {
 		character: {
+			'拆弹成功': {
+				level: 7,
+				info: '场上有一只刃狼，且其发动【融毁】时没有融毁标记。',
+				extra: "好像有什么东西坏掉啦...",
+				progress: 1,
+			},
+			'虚争空言，不如击而破之！': {
+				level: 4,
+				info: '使用德克连续使用4张【杀】，且为回合内使用的前四张牌',
+				extra: "rua啊！(咆哮)",
+				progress: 1,
+			},
+			'神仙难救': {
+				level: 5,
+				info: '使用让萨利，发动技能令另一名角色强制死亡，且发动时你没有手牌',
+				extra: "啊！对不起，我的队友！",
+				progress: 1,
+			},
 			'还不可以认输！': {
 				level: 6,
 				info: '使用希尔在一局游戏中累计脱离10次濒死状态',
@@ -197,9 +217,9 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				info: "使用檞界累计发动三次〖断破〗。",
 				extra: "剑光如我，斩尽牛杂！",
 				reward: function () {
-					game.frAchi.unlockCharacter('fr_crow', 'fr_liona')
+					game.frAchi.unlockCharacter('fr_liona')
 				},
-				rewardInfo: '奖励：解锁角色——克劳、里欧那',
+				rewardInfo: '奖励：解锁角色——里欧那',
 				progress: 3
 			},
 		},
@@ -262,12 +282,6 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				extra: '谱子不会是网上找的罢...',
 				progress: 1,
 			},
-			"超级肝帝": {
-				level: 7,
-				info: "解锁除此成就外的所有成就。",
-				extra: '你是肝帝，还是黑客？',
-				progress: 1,
-			},
 		}
 		/*
 		"成就名称":{
@@ -290,6 +304,126 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//本局内已完成的成就
 	lib.fr_hasDoneAchievement = [
 	];
+	//关闭选择的皮肤
+	lib.lockedSkin = {
+		'fr_yifeng': '异界之花',
+		'fr_jackson': "树影斑驳",
+		'fr_molis': "碾碎时光",
+		'fr_tiers': "战场蔷薇"
+	}
+	for (let name in lib.lockedSkin) {
+		if (!lib.config[lib.lockedSkin[name] + '_unlock'] && lib.config.qhly_skinset.skin[name] && lib.config.qhly_skinset.skin[name] == lib.lockedSkin[name] + '.jpg') lib.config.qhly_skinset.skin[name] = null;
+	}
+	lib.fr_achievementRewards = {
+		10: {
+			id: 'fr_thunder',
+			name: '武将：兰德',
+			info: '感受闪电的力量吧。<br>兰德，来自迦奈尔联邦，后来发现了其操纵闪电的能力。',
+			type: 'character'
+		},
+		20: {
+			id: 'fr_aoeslat',
+			name: '武将：奥尔斯拉特',
+			info: '这王国，谁不是我的子民？<br>奥尔斯拉特，克拉王国著名的暴君，后被卢森特推翻。',
+			type: 'character'
+		},
+		15: {
+			id: "碾碎时光",
+			name: "皮肤：碾碎时光<br>品质：精品",
+			info: "与你一起踏碎了时光...",
+			type: "skin"
+		},
+		30: {
+			id: 'fr_shark',
+			name: '武将：沙克',
+			info: '让我看看你的能力...<br>沙克，生活在人鱼之海，拥有特殊的能够盗取其他人力量的能力。',
+			type: 'character'
+		},
+		40: {
+			id: 'fr_ken',
+			name: '武将：科恩',
+			info: '让我保护你！<br>科恩，来自于迦奈尔联邦的机器人，与刃狼和西普等来自同一厂家。',
+			type: 'character'
+		},
+		45: {
+			id: '战场蔷薇',
+			name: '皮肤：战场蔷薇<br>品质：精品',
+			info: '我于杀戮之中盛放，亦如黎明中的花朵。',
+			type: 'skin'
+		},
+		50: {
+			id: 'fr_jiejie',
+			name: '武将：檞界',
+			info: lib.fr_winnerSay['fr_jiejie'],
+			type: 'character'
+		},
+		60: {
+			id: 'fr_crow',
+			name: '武将：克劳',
+			info: lib.fr_winnerSay['fr_crow'],
+			type: 'character'
+		},
+		70: {
+			id: "异界之花",
+			name: "皮肤：异界之花<br>品质：传说",
+			info: "花随风落，影随雨生",
+			type: "skin"
+		},
+		80: {
+			id: 'fr_wes',
+			name: '武将：维斯',
+			info: lib.fr_winnerSay['fr_wes'],
+			type: 'character'
+		},
+		85: {
+			id: '休闲时光',
+			name: '皮肤：休闲时光<br>品质：史诗',
+			info: '来休息一下吧！',
+			type: 'skin'
+		},
+		90: {
+			id: 'fr_muyada',
+			name: '武将：慕达亚',
+			info: lib.fr_winnerSay['fr_muyada'],
+			type: 'character'
+		},
+		95: {
+			id: '死亡降临',
+			name: '皮肤：死亡降临<br>品质：传说',
+			info: '感受沉重的死亡吧',
+			type: 'skin'
+		},
+		100: {
+			id: 'fr_muli',
+			name: '武将：穆里',
+			info: lib.fr_winnerSay['fr_muli'],
+			type: 'character'
+		},
+		110: {
+			id: 'fr_klif',
+			name: '武将：克里夫',
+			info: lib.fr_winnerSay['fr_klif'],
+			type: 'character'
+		},
+		120: {
+			id: '树影斑驳',
+			name: '皮肤：树影斑驳<br>品质：史诗',
+			info: '不是很强的武将...',
+			type: 'skin'
+		},
+		130: {
+			id: 'fr_ming',
+			name: '武将：鸣',
+			info: '不是很强的武将...',
+			type: 'character'
+		},
+		/* 获得奖励需要的点数:{
+			id:'奖励的id' 用于储存是否获得该奖励
+			name:'奖励名称',
+			info:'奖励描述',
+			type:'奖励类型' 目前支持character或skin
+		} */
+	};
 	//胜利画面
 	game.fr_winnerPlay = function (name, group) {
 		var background = ui.create.div('.frw-background', document.body);
@@ -415,14 +549,16 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 						case 'fr_qima': reward = function () { game.frAchi.unlockCard(['spade', '4', 'fr_equip2_yyxl']) }; rewardInfo = '奖励：解锁新卡牌——影夜项链'; break;
 						case 'fr_liya': reward = function () { game.frAchi.unlockCard(['heart', "7", 'fr_equip5_wxpp']) }; rewardInfo = '奖励：解锁新卡牌——忘弦琵琶'; break;
 					}
-					lib.fr_achievement['character'][lib.characterTitle[name]] = {
-						name: lib.characterTitle[name],
-						info: "使用" + lib.translate[name] + "获得一场胜利。",
-						level: level,
-						reward: reward,
-						rewardInfo: rewardInfo,
-						extra: lib.fr_winnerSay[name]
-					};
+					if (!lib.characterPack.furryPack[name][4].contains('unseen')) {
+						lib.fr_achievement['character'][lib.characterTitle[name]] = {
+							name: lib.characterTitle[name],
+							info: "使用" + lib.translate[name] + "获得一场胜利。",
+							level: level,
+							reward: reward,
+							rewardInfo: rewardInfo,
+							extra: lib.fr_winnerSay[name]
+						};
+					}
 				};
 				for (let name in furryPack) {
 					if (!lib.characterTitle[name]) continue;
@@ -433,9 +569,6 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			if (!lib.config.frAchiNew) {
 				this.reset();
 				game.saveConfig('frAchiNew', true);
-			}
-			if (this.amount() == this.amountOfGained() + 1) {
-				if (!this.hasAchi('超级肝帝', 'special')) this.addProgress('超级肝帝', 'special')
 			}
 			this.inited = true;
 		},
@@ -768,25 +901,24 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			//显示已得成就分数
 			var scoreSheet = ui.create.div('.fr-bookWindow-scoreSheet', ui.create.div('.fr-bookWindow-scoreSheet-bk', bk));
 			scoreSheet.innerHTML = this.calculateScore();
-
+			//打开成就奖励
 			var button_reward = ui.create.div('.fr-bookWindow-openReward', bk);
 			button_reward.listen(function () {
+				// alert("这个卷轴居然是印上去的！？\n看来这个部分还没做完，以后再来看吧。");
 				bookWindow.delete();
 				game.resume2();
 				lib.onresize.remove(resize);
-				game.frAchi.openrewardView('reward');
+				game.frAchi.openAchievementRewardsPage();
 			});
 		},
-		//打开奖励框体
-		openrewardView: function (type) {
-			if (!type) type = 'reward';
-			game.frAchi.thisType = type;
+		//打开成就奖励视窗
+		openAchievementRewardsPage: function () {
 			game.pause2();
 			//覆盖图层
-			var achiWindow = ui.create.div('.fr-achiWindow');
-			document.body.appendChild(achiWindow);
+			var rewardWindow = ui.create.div('.fr-achiWindow');
+			document.body.appendChild(rewardWindow);
 			//背景图层
-			var bk = ui.create.div('.fr-achiWindow-bk', achiWindow);
+			var bk = ui.create.div('.fr-achiWindow-bk', rewardWindow);
 			var setSize = function () {
 				var screenWidth = ui.window.offsetWidth;
 				var screenHeight = ui.window.offsetHeight;
@@ -807,13 +939,11 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			var resize = function () {
 				setTimeout(setSize, 500);
 			};
-			//界面提示标签
-			ui.create.div('.fr-achiWindow-tips', bk).setBackgroundImage('extension/福瑞拓展/image/achievement/tips_' + type + '.png');
 			//退出按钮
 			var exit = ui.create.div('.fr-achiWindow-return', bk);
 			lib.onresize.push(resize);
 			exit.listen(function () {
-				achiWindow.delete();
+				rewardWindow.delete();
 				delete game.frAchi.hideLevel;
 				delete game.frAchi.thisType;
 				game.resume2();
@@ -821,55 +951,120 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				game.frAchi.openAchievementMainPage();
 				//game.playXwAudio('xwjh_voc_cjdianji',null,true);
 			});
-			//成就文本内容
-			var content = ui.create.div('.fr-achiWindow-textinner', ui.create.div('.fr-achiWindow-text', bk));
-			lib.setScroll(content);
-			//函数方法
-			var state = {
-				refreshList: function () {
-					var text = "";
-					var isFirst = true;
-					//界面提示标签
-					ui.create.div('.fr-achiWindow-tips', bk).setBackgroundImage('extension/福瑞拓展/image/achievement/tips_reward.png');
-					var reward = lib.config.achiReward
-					var rewardlist = []
-					for (var j = 0; j < reward.character.length; j++) {
-						let name = reward.character[j]
-						rewardlist.push([name, lib.characterTitle[name], '武将'])
-					}
-					for (var i = 0; i < reward.card.length; i++) {
-						let card = reward.card[i][2]
-						if (!rewardlist.contains(reward.card[i][2])) {
-							rewardlist.push([card, '', '卡牌'])
-						}
-					}
-					for (var name of rewardlist) {
-						//首项不加分割线
-						if (isFirst) {
-							isFirst = false;
-						} else {
-							text += "<br><p align='center'><img src=" + lib.assetURL + "extension/福瑞拓展/image/achievement/splitLine.png></p><br>";
-						}
-						//<--
-						//显示成就名
-						text += "<span style=\"color:black;font-family:行书szs;font-size:55px;\">&nbsp;";
-						text += get.translation(name[0])
-						text += "</span>&nbsp;&nbsp;&nbsp;";
-						if (name[2] == '武将') {
-							text += "<br><br><span style='font-size:22px;'>&nbsp;&nbsp;<b>◆";
-							text += lib.fr_winnerSay[name[0]]
-							text += "</b></span>";
-						}
-						text += "<br><br><span style='font-size:22px;'>&nbsp;&nbsp;";
-						text += '已解锁:&nbsp;' + name[2] + '&nbsp;——' + name[1] + '&nbsp' + get.translation(name[0])
-						text += "</span>";
-						text += '</p>';
-					}
-					text += "<br><br><br><br><br><br><br>";
-					content.innerHTML = text;
+			//成就奖励书签
+			ui.create.div('.fr-achiWindow-tips', bk).setBackgroundImage('extension/福瑞拓展/image/achievement/tips_reward.png');
+			//显示已得成就分数
+			var scoreText = ui.create.div('.fr-rewardWindow-score', bk);
+			var score = this.calculateScore();
+			scoreText.innerHTML = "成就总积分：" + score;
+			//成就奖励进度图层
+			var reward = ui.create.div('.fr-rewardWindow-reward', bk);
+			reward.addEventListener('wheel', function (event) {
+				event.preventDefault();
+				reward.scrollLeft += event.deltaY;
+				if (arrow) {
+					if (reward.scrollLeft == 0) arrow.style.display = 'none';
+					else arrow.style.display = 'inline';
 				}
-			};
-			state.refreshList();
+				if (arrow2) {
+					if (Math.abs(reward.scrollLeft - reward.scrollWidth + reward.clientWidth) <= reward.clientWidth / 20) arrow2.style.display = 'none';
+					else arrow2.style.display = 'inline';
+				}
+			});
+			// lib.setScroll(reward);
+			//进度条
+			var max = Math.max(...Object.keys(lib.fr_achievementRewards));//目前支持的最大成就点数
+			var interval = 0.3;//设置没两个框之间的间隔占奖励进度图层的横向百分比
+			var progress = ui.create.div('.fr-rewardWindow-progress', reward);
+			progress.style.width = max * interval * 10 + '%';
+			if (max > score) {
+				var progress2 = ui.create.div('.fr-rewardWindow-progress2', progress);
+				progress2.style.width = (100 * (max - score) / max) + '%';
+			}
+			//好看的箭头
+			var arrow = ui.create.div('.fr-rewardWindow-arrow', bk), arrow2 = ui.create.div('.fr-rewardWindow-arrow2', bk);
+			//解锁星，框，领取
+			for (var i = 10; i <= max; i += 5) {
+				if (!lib.fr_achievementRewards[i]) continue;
+				var star = ui.create.div('.fr-rewardWindow-lit', reward);
+				star.style.left = i * interval * 10 - 3 + '%';
+				var num = ui.create.div('.fr-rewardWindow-num', reward);
+				num.style.left = i * interval * 10 - 3 + '%';
+				num.innerHTML = i;
+				var frame = ui.create.div('.fr-rewardWindow-frame', reward);
+				frame.style.left = i * interval * 10 - 8 + '%';
+				var item = lib.fr_achievementRewards[i];
+				var rwd = ui.create.div('.fr-rewardWindow-rwd', frame);
+				rwd.style.backgroundImage = "url('" + lib.assetURL + "extension/福瑞拓展/image/reward/reward_" + item.id + ".png')";
+				var button = ui.create.div('.fr-rewardWindow-button', reward);
+				button.style.left = i * interval * 10 - 6 + '%';
+				var type = ui.create.div('.fr-rewardWindow-type', rwd)
+				type.style.backgroundImage = "url('" + lib.assetURL + "extension/福瑞拓展/image/achievement/" + item.type + ".png')";
+				rwd._item = item;
+				button._item = item;
+				//信息框
+				var rwd_info = ui.create.div('.Fr-skilltip');
+				rwd_info.style.transition = 'left 0s,top 0s,opacity .3s';
+				rwd_info.style.width = '250px';
+				rwd_info.style['pointer-events'] = 'none';
+				rwd_info.style['text-align'] = 'left';
+				rwd_info.style.animation = 'fadeShow .3s';
+				rwd_info.style['-webkit-animation'] = 'fadeShow .3s';
+				rwd_info.style['z-index'] = 10000;
+				rwd_info.style['backgroundColor'] = '#241b1bd9';
+				rwd_info.style['border'] = '#4f493f 3px solid';
+				rwd_info.style['border-radius'] = '10px';
+				rwd.onmouseover = function (event) {
+					var item = this._item;
+					if (item == undefined) return;
+					var str = '';
+					str += '<span style="font-family:shousha;"><span style="color:#bca979;font-size:18px;font-weight:600">'
+						+ item.name + '</span><br>';
+					str += item.info + '</span>';
+					rwd_info.innerHTML = str;
+					bk.appendChild(rwd_info);
+					// rwd_info.hide();
+					rwd_info.style.left = (event.clientX / game.documentZoom + 70 + document.body.scrollLeft) + 'px';
+					rwd_info.style.top = (event.clientY / game.documentZoom + 60 + document.body.scrollTop) + 'px';
+					if (rwd_info.offsetTop + rwd_info.offsetHeight > ui.window.offsetTop + ui.window.offsetHeight) {
+						rwd_info.style.top = (event.clientY / game.documentZoom + document.body.scrollTop - rwd_info.offsetHeight) + 'px';
+					};
+					rwd_info.show();
+				};
+				rwd.onmousemove = function (event) {
+					rwd_info.style.left = (event.clientX / game.documentZoom + 70 + document.body.scrollLeft) + 'px';
+					rwd_info.style.top = (event.clientY / game.documentZoom + 60 + document.body.scrollTop) + 'px';
+					if (rwd_info.offsetTop + rwd_info.offsetHeight > ui.window.offsetTop + ui.window.offsetHeight) {
+						rwd_info.style.top = (event.clientY / game.documentZoom + document.body.scrollTop - rwd_info.offsetHeight) + 'px';
+					};
+				};
+				rwd.onmouseout = function () {
+					rwd_info.hide();
+				};
+				if (i <= score) {
+					if ((item.type == 'character' && lib.config.achiReward.character.contains(item.id)) || (item.type == 'skin' && (lib.config[item.id + '_unlock'] == true))) button.style.backgroundImage = "url('" + lib.assetURL + "extension/福瑞拓展/image/achievement/received.png')";
+					else {
+						button.onclick = function () {
+							if (this._item) {
+								var item = this._item;
+								this.style.backgroundImage = "url('" + lib.assetURL + "extension/福瑞拓展/image/achievement/received.png')";
+								this.onclick = undefined;
+								if (item.type == 'character') game.frAchi.unlockCharacter(item.id)
+								if (item.type == 'skin') {
+									game.saveConfig(item.id + '_unlock', true)
+									alert('已领取皮肤：' + item.id)
+								}
+							} else alert('领取失败了，好像出了什么问题……')
+						}
+					}
+				} else {
+					star.style.backgroundImage = "url('" + lib.assetURL + "extension/福瑞拓展/image/achievement/unlit.png')";
+					frame.style.filter = 'grayscale(100%)';
+					rwd.style.filter = 'grayscale(100%)';
+					button.style.filter = 'grayscale(100%)';
+					var lock = ui.create.div('.fr-rewardWindow-lock', rwd);
+				}
+			}
 		},
 		//打开成就视窗
 		openAchievementView: function (type) {
@@ -1235,9 +1430,6 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		trigger: {
 			player: "dyingAfter",
 		},
-		filter: function (event, player) {
-			return player.isAlive();
-		},
 		firstDo: true,
 		priority: 6,
 		forced: true,
@@ -1246,12 +1438,30 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			if (game.me != player) return false;
 			if (game.frAchi.hasAchi('你还不可以认输！', 'character')) return false;
 			if (player.name != 'fr_sier' && player.name1 != 'fr_sier' && player.name2 != 'fr_sier') return false
-			return true
+			return player.isAlive()
 		},
 		content: function () {
 			if (!player.storage.dying) player.storage.dying = 0
 			player.storage.dying += 1
 			if (player.storage.dying >= 10) game.frAchi.addProgress('还不可以认输！', 'character');
+		},
+	};
+	lib.skill["_fr_achi_虚争空言，不如击而破之！"] = {
+		trigger: {
+			player: "useCardAfter",
+		},
+		firstDo: true,
+		priority: 6,
+		forced: true,
+		popup: false,
+		filter: function (event, player) {
+			if (game.me != player) return false;
+			if (game.frAchi.hasAchi('虚争空言，不如击而破之！', 'character')) return false;
+			if (player.name != 'fr_derk' && player.name1 != 'fr_derk' && player.name2 != 'fr_derk') return false
+			return player.countUsed('sha', true) == player.countUsed() && player.countUsed() == 4
+		},
+		content: function () {
+			game.frAchi.addProgress('虚争空言，不如击而破之！', 'character');
 		},
 	};
 	lib.skill["_fr_achi_叠最厚的甲"] = {
@@ -1281,7 +1491,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			if (game.frAchi.hasAchi('哈尔斯的高徒', 'character')) return false
 			if (game.me.next.name != 'old_zhuran') return false
 			return game.hasPlayer(function (current) {
-				return current != player && current.hp <= 0 && current.isAlive() && !current.isDying() && current.name != 'old_zhoutai'
+				return current != player && current.hp <= 0 && current.name != 'old_zhoutai' && current.name == 'old_zhuran'
 			})
 		},
 		content: function () {
