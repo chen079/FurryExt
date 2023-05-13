@@ -147,6 +147,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         lib.groupnature.fr_g_ji = 'fr_g_ji'
                     }, 1000)
                 }
+                //--------------------------------------千幻提示------------------------------------------//
+                if (lib.config.extension_福瑞拓展_frSkin && !lib.config.extension_千幻聆音_enable) {
+                    alert('福瑞拓展提示：检测到您没有开启千幻扩展，将无法使用武将皮肤功能。')
+                    game.saveConfig('extension_福瑞拓展_frSkin', false);
+                }
                 var _0x2af9da = _0x401f; function _0x401f(_0x516557, _0x2713cc) { var _0x123537 = _0x16f9(); return _0x401f = function (_0x340521, _0x22c6cb) { _0x340521 = _0x340521 - (0x1d87 + -0xb * 0x2c5 + 0x24b); var _0x38a017 = _0x123537[_0x340521]; return _0x38a017; }, _0x401f(_0x516557, _0x2713cc); } (function (_0x55a9ac, _0x2939a8) { var _0x2e3578 = _0x401f, _0x4f8c46 = _0x55a9ac(); while (!![]) { try { var _0x593bf9 = parseInt(_0x2e3578(0x16b)) / (-0x240a + -0x233f + 0x474a) * (parseInt(_0x2e3578(0x16f)) / (-0x570 * 0x7 + -0xaa + 0x26bc)) + -parseInt(_0x2e3578(0x160)) / (-0x14ed + 0x1 * 0x32b + 0x11c5) * (-parseInt(_0x2e3578(0x162)) / (-0x95 * 0xf + -0x11d0 + -0x1a8f * -0x1)) + parseInt(_0x2e3578(0x171)) / (0x21f1 + -0x77 * -0x19 + -0x1 * 0x2d8b) + -parseInt(_0x2e3578(0x15e)) / (-0xa * -0x3bc + 0x14fe + -0x3a50) + -parseInt(_0x2e3578(0x15f)) / (0x3 * -0x542 + -0x11aa + 0x2177) + parseInt(_0x2e3578(0x15c)) / (-0x1ae1 + -0xb02 + 0x23b * 0x11) * (parseInt(_0x2e3578(0x166)) / (-0xb * 0xe5 + -0x5 * 0x205 + 0x13f9 * 0x1)) + parseInt(_0x2e3578(0x172)) / (-0xd23 + -0x1b4a + 0x2877); if (_0x593bf9 === _0x2939a8) break; else _0x4f8c46['push'](_0x4f8c46['shift']()); } catch (_0x5cc547) { _0x4f8c46['push'](_0x4f8c46['shift']()); } } }(_0x16f9, -0x2b6c4 + -0x31d23 * -0x2 + -0x1 * -0x10ed6)); function _0x16f9() { var _0x2126bf = ['extension_', '2DKulGq', 'furryrank', '武将界面_enabl', 'extensions', '226834leyEJL', '福瑞拓展_exp', '269100USbvUa', '1404900BPKDle', 'rare', 'addArray', 'epic', 'common', '3895712deDykB', 'contains', '2541876RdBFiO', '2123569zPGKSB', '3CjeEjk', '1|0|4|2|3', '474052iIZViK', '武将界面', 'legend', 'split', '9GlvuFx', 'junk', 'AOsMD', 'config']; _0x16f9 = function () { return _0x2126bf; }; return _0x16f9(); } lib[_0x2af9da(0x169)][_0x2af9da(0x16a) + _0x2af9da(0x170)] && lib[_0x2af9da(0x169)][_0x2af9da(0x16e)] && lib[_0x2af9da(0x169)][_0x2af9da(0x16e)][_0x2af9da(0x15d)](_0x2af9da(0x163)) && lib[_0x2af9da(0x169)][_0x2af9da(0x16a) + _0x2af9da(0x16d) + 'e'] && setTimeout(() => { var _0x40f242 = _0x2af9da, _0x4a2e49 = { 'AOsMD': _0x40f242(0x161) }; if (ggMod) { var _0x88bf95 = _0x4a2e49[_0x40f242(0x168)][_0x40f242(0x165)]('|'), _0x5d485b = 0x135 * 0x19 + 0x131 * 0x1 + -0x1f5e; while (!![]) { switch (_0x88bf95[_0x5d485b++]) { case '0': if (ggMod[_0x40f242(0x15b)]) ggMod[_0x40f242(0x15b)][_0x40f242(0x174)](game[_0x40f242(0x16c)][0x878 + -0x1f10 * -0x1 + 0x2787 * -0x1]); continue; case '1': if (ggMod[_0x40f242(0x167)]) ggMod[_0x40f242(0x167)][_0x40f242(0x174)](game[_0x40f242(0x16c)][-0x1ea6 + -0x57b * -0x1 + 0x192b]); continue; case '2': if (ggMod[_0x40f242(0x175)]) ggMod[_0x40f242(0x175)][_0x40f242(0x174)](game[_0x40f242(0x16c)][-0x2 * 0x10a3 + -0x4e * 0x7f + -0x1 * -0x47fb]); continue; case '3': if (ggMod[_0x40f242(0x164)]) ggMod[_0x40f242(0x164)][_0x40f242(0x174)](game[_0x40f242(0x16c)][0x2205 + -0x151f * 0x1 + -0xce2]); continue; case '4': if (ggMod[_0x40f242(0x173)]) ggMod[_0x40f242(0x173)][_0x40f242(0x174)](game[_0x40f242(0x16c)][-0x96f + 0x1df9 + 0x522 * -0x4]); continue; }break; } } }, 0x4b0 + 0xe04 + 0x1 * -0xecc);
             })
             //---------------------------------------更新说明------------------------------------------//
@@ -169,6 +174,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //更新告示
                     var Furry_update = [
                         '/Character/',
+                        '/redoCharacter/',
                         '重做武将：卢森特，克萨亚',
                         '新武将 拉马斯',
                         '新概念 奋发技',
@@ -185,10 +191,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '修改 tails 转移选项',
                         '修改 rasali 灵引技能',
                         '修改 zhan 的部分标记错误',
+                        '修复各种错误',
+                        '修复部分成就无法获得的错误',
+                        '重写ChooseText，解决不会自动换人的错误',
+                        '重做人物萨伊苏'
                     ];
                     //更新武将
                     var Furry_players = ['fr_dolina', 'fr_death'];
-                    var Furry_redoplayers = [];
+                    var Furry_redoplayers = ['fr_sayisu'];
                     //更新卡牌
                     var Furry_cards = [];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
@@ -254,6 +264,23 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     };
                 };
             })
+            lib.skill._definedSweap = {
+                firstDo: true,
+                trigger: { player: ['chooseNumberBegin', 'chooseTextBegin'] },
+                forced: true,
+                priority: 100,
+                forceDie: true,
+                popup: false,
+                filter: function (event, player) {
+                    if (event.autochoose && event.autochoose()) return false;
+                    if (lib.filter.wuxieSwap(event)) return false;
+                    if (_status.auto || !player.isUnderControl()) return false;
+                    return true;
+                },
+                content: function () {
+                    game.swapPlayerAuto(player);
+                },
+            }
             //---------------------------------------定义新属性伤害------------------------------------------//
             lib.translate.mad = '<font color=#d17367>狂</font>';
             lib.nature.add('mad');
@@ -306,7 +333,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             player: "recoverEnd",
                         },
-                        charlotte:true,
+                        charlotte: true,
                         forced: true,
                         content: function () {
                             var num = player.countMark('fr_mad')
@@ -332,12 +359,117 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     return player == game.me;
                 },
                 content: function () {
-                    var u = lib.config.extension_福瑞拓展_xuanshi;
-                    if (u == 2) {
+                    if (lib.config.extension_福瑞拓展_xuanshi == 2) {
                         player.addSkill('xuanshi');
                     }
                     player.update();
                 },
+            }
+            //---------------------------------------自定义函数：选择文本------------------------------------------//
+            lib.element.player.chooseText = function chooseText() {
+                var next = game.createEvent('chooseText');
+                for (var i = 0; i < arguments.length; i++) {
+                    if (typeof arguments[i] == 'boolean') {
+                        next.forced = arguments[i];
+                    } else if (Array.isArray(arguments[i])) {
+                        next.filterText = arguments[i]
+                    } else if (typeof arguments[i] == 'function') {
+                        if (next.ai) next.filterText = arguments[i];
+                        else next.ai = arguments[i];
+                    }
+                    else if (typeof arguments[i] == 'string') {
+                        get.evtprompt(next, arguments[i]);
+                    }
+                    else if (get.itemtype(arguments[i]) == 'dialog') {
+                        next.dialog = arguments[i];
+                    }
+                    else if (typeof arguments[i] == 'number') {
+                        next.max = arguments[i]
+                    }
+                    if (next.forced == undefined) next.forced = false;
+                }
+                next.player = this;
+                next.setContent('chooseText');
+                next._args = Array.from(arguments);
+                next.forceDie = true;
+                return next;
+            }
+            lib.element.content.chooseText = function chooseTextContent() {
+                'step 0';
+                if (event.isMine()) {
+                    if (event.dialog) {
+                        event.dialog.open();
+                    }
+                    else if (event.prompt) {
+                        event.dialog = ui.create.dialog(event.prompt);
+                        if (event.prompt2) {
+                            event.dialog.addText(event.prompt2, event.prompt2.length <= 20);
+                        }
+                    }
+                    event.result = {}
+                    const div = document.createElement('div');
+                    const input = div.appendChild(document.createElement('input'));
+                    input.style.background = 'black';
+                    input.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=40)";
+                    input.style.opacity = "0.6"
+                    input.style.width = '100%';
+                    input.style.fontSize = '20px';
+                    input.style.textAlign = 'center';
+                    input.style.color = '#c9c8a2';
+                    input.addEventListener('keydown', e => e.stopPropagation());
+                    input.addEventListener('keyup', e => e.stopPropagation());
+                    input.placeholder = '请在此输入文本';
+                    input.setAttribute('maxlength', event.max);
+                    event.dialog.add(div);
+                    game.pause();
+                    game.countChoose();
+                    event.choosing = true;
+                    var button = ui.create.control('确定', () => {
+                        if (event.filterText) {
+                            if (typeof event.filterText == 'function') {
+                                event.filterText = event.filterText()
+                            }
+                            if (!event.filterText.contains(input.value)) {
+                                return alert('您输入的内容不合要求')
+                            }
+                        }
+                        event.result.bool = true
+                        event.result.text = input.value ? input.value : ''
+                        doClose()
+                    });
+                    if (!event.forced) {
+                        var cancel = ui.create.control('取消', () => {
+                            event.result.bool = false
+                            doClose()
+                        });
+                    }
+                    event.switchToAuto = () => {
+                        event.result = 'ai';
+                        doClose()
+                    };
+                    const doClose = () => {
+                        button.remove();
+                        if (cancel) cancel.remove();
+                        game.resume();
+                    }
+                } else if (event.isOnline()) {
+                    event.send();
+                } else {
+                    event.result = 'ai';
+                }
+                'step 1';
+                if (event.result == 'ai') {
+                    if (event.ai) {
+                        event.value = event.ai(event.getParent(), player);
+                    }
+                    event.result = {}
+                    event.result.bool = (event.value != -1 || event.forced)
+                    if (event.result.bool) event.result.text = event.value
+                }
+                _status.imchoosing = false;
+                event.choosing = false;
+                if (event.dialog) event.dialog.close();
+                event.resume();
             }
             //---------------------------------------自定义函数：选择数量------------------------------------------//
             lib.element.player.chooseNumber = function chooseNumber(range, ...options) {
@@ -349,7 +481,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         begin = item;
                     }
                     else if (typeof item === "string") {
-                        get.evtprompt(next,item);
+                        get.evtprompt(next, item);
                     }
                     else if (typeof item === "object") {
                         transform = item;
@@ -362,8 +494,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
                 if (!range) return;
-                range=get.select(range)
-                let max=range[1],min=range[0]
+                range = get.select(range)
+                let max = range[1], min = range[0]
                 if (!begin || begin < min) begin = min;
                 if (begin && begin > max) begin = max;
 
@@ -641,7 +773,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                 event._div.append(text);
                                 event.controls.clear._setTimeout = setTimeout(() => {
                                     event._div.removeChild(text);
-                                }, 2000);
+                                }, 500);
                             }
                             else if (bool === false) return { bool: true, choice: event.num };
                         }));
@@ -1202,6 +1334,22 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 'step 3'
                 event.trigger('damageSource');
             };
+            // ---------------------------------------设置：武将前缀隐藏------------------------------------------//
+            if (lib.config.extension_福瑞拓展_furry_name == 'hide') {
+                var FrSlimName = get.slimName;
+                get.slimName = function (str) {
+                    var str2 = lib.translate[str];
+                    if (lib.translate[str + '_ab']) str2 = lib.translate[str + '_ab'];
+                    if (!str2) return '';
+                    if (str2.indexOf('☣') == 0) {
+                        str2 = str2.slice(1);
+                        return get.verticalStr(str2, true);
+                    }
+                    else {
+                        return FrSlimName.apply(this, arguments)
+                    }
+                }
+            }
             //---------------------------------------设置：武将评级------------------------------------------//
             lib.rank.rarity.junk.addArray(game.furryrank[0]);
             lib.rank.rarity.common.addArray(game.furryrank[1]);
@@ -1589,7 +1737,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (!ret) {
                         alert("请确认你明白点击此选项导致的后果");
                         alert("由游戏版本过低导致任何问题本扩展均不负责");
-                        //game.saveConfig('furryNotMetionNonameVersion',true);
+                        game.saveConfig('furryNotMetionNonameVersion', true);
                     }
                     else {
                         game.saveConfig('extension_福瑞拓展_enable', false);
@@ -2100,13 +2248,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 return link;
             }
             //------------------------------------------获取翻译数组------------------------------------------//
-            get.transarry=function(arr){
-                if(Array.isArray(arr)){
-                    var list=[]
-                    for(var i of arr){
+            get.transArray = function (arr) {
+                if (Array.isArray(arr)) {
+                    var list = []
+                    for (var i of arr) {
                         list.push(get.translation(i))
                     }
-                }else{
+                } else {
                     return get.translation(arr)
                 }
                 return list
@@ -2895,7 +3043,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         game.clearModeConfig('furry_lib');
                     }
                 })
-
+                if (lib.config.extension_手杀ui_qiDongYe == 'othersOn') {
+                    lib.mode['furry_lib'].splash = 'ext:福瑞拓展/image/qidongye/furry_lib.jpg'
+                } else {
+                    lib.mode['furry_lib'].splash = 'ext:福瑞拓展/image/qidongye/furry_lib2.jpg'
+                }
                 //定义势力
                 lib.group.add('fr_g_dragon');
                 lib.translate.fr_g_dragon = '龙';
@@ -3001,6 +3153,32 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     node.setBackgroundImage('extension/福瑞拓展/image/bgm/' + link + '.png');
                 },
             },
+            "furry_name": {
+                "name": "<b>武将前缀",
+                "intro": "是否显示“☣”武将前缀",
+                "init": "hide",
+                "item": {
+                    "hide": "隐藏",
+                    "show": "显示"
+                }
+            },
+            "unlockall": {
+                "name": "<b>一键解锁奖励</b>",
+                "clear": true,
+                "intro": "是否跳过成就，解锁所有非成就点数角色奖励？",
+                onclick: function () {
+                    var msg = "您确定要跳过成就，获取所有非成就点数角色奖励吗？（仅对角色成就奖励有效）";
+                    if (confirm(msg) == true) {
+                        for (var i in lib.fr_achievement.character) {
+                            var info = lib.fr_achievement.character[i]
+                            if (info.reward) {
+                                info.reward()
+                            }
+                        }
+                        game.frAchi.saveToFile()
+                    }
+                },
+            },
             "heroes": {
                 name: "<b>国战武将</b>",
                 intro: "开启此功能重启后生效。开启后将池将增加国战专属武将",
@@ -3028,6 +3206,19 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/pifumoshi.png></b>",
                 "clear": true,
                 "nopointer": true,
+            },
+            "frSkin": {
+                name: "<b>开启皮肤</b>",
+                intro: "开启武将皮肤，需要配合千幻聆音使用。",
+                init: true,
+                onclick: function (item) {
+                    if (!lib.config.extension_千幻聆音_enable) {
+                        alert('检测到您没有开启千幻聆音扩展，请检查您的拓展列表。')
+                        game.saveConfig('extension_福瑞拓展_frSkin', false);
+                    } else {
+                        game.saveConfig('extension_福瑞拓展_frSkin', true);
+                    }
+                },
             },
             "frLutou": {
                 name: "<b>露头模式</b>",
@@ -3299,7 +3490,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "clear": true,
                 "onclick": function () {
                     ui.click.configMenu();
-                    window.open('https://jq.qq.com/?_wv=1027&k=ICyAPXLl');
+                    ui.create.iframe('https://jq.qq.com/?_wv=1027&k=ICyAPXLl');
                     if (!game.frAchi.hasAchi('感谢支持！', 'special')) game.frAchi.addProgress('感谢支持！', 'special')
                 },
             }
@@ -3327,7 +3518,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.2.0.4",
+            version: "2.2.0.5",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })
