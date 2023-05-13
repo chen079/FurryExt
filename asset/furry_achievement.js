@@ -311,8 +311,10 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		'fr_molis': "碾碎时光",
 		'fr_tiers': "战场蔷薇"
 	}
-	for (let name in lib.lockedSkin) {
-		if (!lib.config[lib.lockedSkin[name] + '_unlock'] && lib.config.qhly_skinset.skin[name] && lib.config.qhly_skinset.skin[name] == lib.lockedSkin[name] + '.jpg') lib.config.qhly_skinset.skin[name] = null;
+	if(lib.config.extension_千幻聆音_enable){
+		for (let name in lib.lockedSkin) {
+			if (!lib.config[lib.lockedSkin[name] + '_unlock'] && lib.config.qhly_skinset.skin[name] && lib.config.qhly_skinset.skin[name] == lib.lockedSkin[name] + '.jpg') lib.config.qhly_skinset.skin[name] = null;
+		}
 	}
 	lib.fr_achievementRewards = {
 		10: {
@@ -574,21 +576,18 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		},
 		//保存存档文件
 		saveToFile: function () {
-			var data = JSON.stringify({
-				frAchiStorage: lib.config.frAchiStorage,
-				achiReward: lib.config.achiReward
-			});
-			var path = 'extension/福瑞拓展';
-			var fileName = 'save.json';
-			game.ensureDirectory(path, function () {
-				game.writeFile(data, path, fileName, function (err) {
+			game.ensureDirectory('extension/福瑞拓展', function () {
+				game.writeFile(JSON.stringify({
+					frAchiStorage: lib.config.frAchiStorage,
+					achiReward: lib.config.achiReward
+				}), 'extension/福瑞拓展', 'save.json', function (err) {
 					if (err) {
 						console.log('成就存档保存错误:', err);
 					} else {
 						console.log('成就存档已保存');
 					}
 				});
-			}, fileName);
+			}, 'save.json');
 		},
 		getAll: function () {
 			var types = new Set(['character', 'special', 'game']);

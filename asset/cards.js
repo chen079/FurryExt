@@ -279,7 +279,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             return -1
                         },
                     },
-                    order: 1.2,
+                    order: 7,
                 },
                 tag: {
                     multitarget: 1,
@@ -550,17 +550,16 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 },
                 selectTarget: 1,
                 content: function () {
-                    target.addTempSkill('card_sx', { player: "phaseAfter" })
-                    target.addSkill('card_sx_add')
+                    target.addSkill('card_sx')
                 },
                 ai: {
                     tag: {
                         norepeat: 1,
                     },
                     basic: {
-                        order: 7.2,
+                        order: 6,
                         useful: [2, 1],
-                        value: 7,
+                        value: 3,
                     },
                     result: {
                         target: function (player, target, storage) {
@@ -601,44 +600,26 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     for (var i = 0; i < list.length; i++) {
                         choiceList.push(get.translation(list[i] + '_card_config'))
                     }
-                    if (target.isUnderControl()) {
-                        game.swapPlayerAuto(target);
-                    }
-                    if (event.isMine()) {
-                        var dialog = ui.create.dialog('forcebutton');
-                        dialog.add('选择一个卡牌包');
-                        var clickItem = function () {
-                            _status.event._result = this.link;
-                            dialog.close();
-                            game.resume();
-                        };
-                        for (var i = 0; i < choiceList.length; i++) {
-                            var item = dialog.add('<div class="popup pointerdiv" style="width:100%;display:inline-block"><div class="skill">【' + choiceList[i] + '】</div><div style="text-align:center">点击选择>>>      </div></div>');
-                            item.firstChild.addEventListener('click', clickItem);
-                            item.firstChild.link = event.list[i];
-                        }
-                        dialog.add(ui.create.div('.placeholder'));
-                        event.switchToAuto = function () {
-                            event._result = list.randomGet()
-                            dialog.close();
-                            game.resume();
-                        };
-                        _status.imchoosing = true;
-                        game.pause();
-                    } else {
-                        event._result = list.randomGet();
-                    }
+                    var dialog = ui.create.dialog('forcebutton', 'hidden');
+                    dialog.add('选择一个卡牌包');
+                    dialog.add([choiceList, 'tdnodes']);
+                    var chooseButton = target.chooseButton(1, true, dialog)
+                    chooseButton.set('ai', function () {
+                        return Math.random()
+                    })
                     'step 1'
-                    _status.imchoosing = false;
                     var list = []
-                    for (var i = 0; i < lib.cardPack[result].length; i++) {
-                        if (lib.cardPack[result][i] == 'fr_card_zh' || lib.cardPack[result][i] == 'gw_tunshi' || lib.cardPack[result][i] == 'fr_card_lyzq') continue
-                        var name = lib.cardPack[result][i]
+                    var choice = event.list.find(function (item) {
+                        return get.translation(item + '_card_config') == result.links[0];
+                    });
+                    for (var i = 0; i < lib.cardPack[choice].length; i++) {
+                        if (lib.cardPack[choice][i] == 'fr_card_zh' || lib.cardPack[choice][i] == 'gw_tunshi' || lib.cardPack[choice][i] == 'fr_card_lyzq') continue
+                        var name = lib.cardPack[choice][i]
                         var type = get.type(name)
                         list.push([type, '', name])
                     }
                     event.list = list
-                    game.log(target, '选择了', get.translation(result + '_card_config'))
+                    game.log(target, '选择了', get.translation(choice + '_card_config'))
                     'step 2'
                     target.chooseButton(['选择所需的卡牌', [event.list, 'vcard']], true).set('ai', function (button) {
                         return Math.random();
@@ -942,140 +923,39 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 modTarget: true,
                 content: function () {
                     "step 0"
-                    ui.clear();
-                    if (event.created) return;
-                    event.created = true;
-                    if (event.isMine()) {
-                        var node = ui.create.div('.add_skill');
-                        event.node = node;
-                        event.node.style.zIndex = "9999";
-                        event.node.style.background = 'black';
-                        event.node.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=50)";
-                        event.node.style.opacity = "0.7"
-                        event.node.style.width = '400px';
-                        event.node.style.height = '30px';
-                        event.node.style.lineHeight = '30px';
-                        event.node.style.fontFamily = 'xinwei';
-                        event.node.style.fontSize = '30px';
-                        event.node.style.padding = '10px';
-                        event.node.style.left = 'calc(50% - 200px)';
-                        event.node.style.top = 'calc(50% - 20px)';
-                        event.node.style.whiteSpace = 'nowrap';
-                        event.node.innerHTML = '请在此输入技能名称';
-                        event.node.contentEditable = true;
-                        event.node.style.webkitUserSelect = 'text';
-                        event.node.style.textAlign = 'center';
-                        var skillName = function (e) {
-                            var skills = [];
-                            for (var i in lib.character) {
-                                for (var j = 0; j < lib.character[i][3].length; j++) {
-                                    if (target.hasSkill(lib.character[i][3][j])) continue;
-                                    var info = lib.skill[lib.character[i][3][j]];
-                                    if (info) {
-                                        var name = event.node.innerText;
-                                        if (num) {
-                                            if (get.translation(lib.character[i][3][j]) != name) continue;
-                                            skills.add(lib.character[i][3][j]);
-                                        } else {
-                                            if (get.translation(lib.character[i][3][j]) != name || (info.fixed || info.yunlvSkill || info.qianghua || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable))) continue;
-                                            skills.add(lib.character[i][3][j]);
-                                        }
-                                    }
-                                }
-                            }
-                            if (skills.length) {
-                                ui.window.removeChild(event.node);
-                                ui.window.removeChild(text);
-                                button.close()
-                                event.node.innerHTML = '';
-                                event.skills = skills
-                                game.resume();
-                                return
-                            }
-                            else {
-                                var name = event.node.innerText;
-                                alert(((name.length == 0 || name == '请在此输入技能名称') ? '请先输入技能名称' : name + '不是一个可用的技能，请重新输入'));
-                                //ui.clear();
-                                event.node.innerHTML = '';
-                                return;
-                            }
-                        };
-                        ui.window.appendChild(event.node);
-                        event.node.onfocus = function () {
-                            event.node.innerHTML = '';
-                        };
-                        event.node.onkeydown = function (e) {
-                            e.stopPropagation();
-                            if (e.keyCode == 13) {
-                                skillName();
-                                setTimeout(function () {
-                                    event.node.innerHTML = '';
-                                }, 10);
-                            };
-                        };
-                        var text = ui.create.div();
-                        text.style.zIndex = "9999"
-                        text.style.width = '400px';
-                        text.style.height = '30px';
-                        text.style.lineHeight = '30px';
-                        text.style.fontFamily = '黑体';
-                        text.style.fontSize = '20px';
-                        text.style.padding = '10px';
-                        text.style.left = 'calc(50% - 200px)';
-                        text.style.top = 'calc(50% - 80px)';
-                        text.innerText = '请声明一个技能名称';
-                        text.style.color = "white"
-                        text.style.textAlign = 'center';
-                        ui.window.appendChild(text);
-                        var button = ui.create.control('确定', () => skillName())
-                        for (var i in lib.element.event) {
-                            event.parent[i] = lib.element.event[i];
-                        }
-                        event.parent.custom = {
-                            add: {},
-                            replace: {}
-                        }
-                        game.pause();
-                    } else {
-                        var skills = [];
-                        for (var i in lib.character) {
-                            for (var j = 0; j < lib.character[i][3].length; j++) {
-                                if (target.hasSkill(lib.character[i][3][j])) continue;
-                                var info = lib.skill[lib.character[i][3][j]];
-                                if (num) {
-                                    if (info && (info.forced || info.mod || info.locked)) {
-                                        skills.add(lib.character[i][3][j]);
-                                    }
-                                } else {
-                                    if (info && (info.forced || info.mod || info.locked) && !(info.fixed || info.yunlvSkill || info.qianghua || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable))) {
-                                        skills.add(lib.character[i][3][j]);
-                                    }
-                                }
+                    event.skills = [];
+                    for (var i in lib.character) {
+                        for (var j = 0; j < lib.character[i][3].length; j++) {
+                            if (target.hasSkill(lib.character[i][3][j])) continue;
+                            var info = lib.skill[lib.character[i][3][j]];
+                            if (info && !(info.fixed || info.yunlvSkill || info.qianghua || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || info.unique)) {
+                                event.skills.add(lib.character[i][3][j]);
                             }
                         }
-                        var skills2 = skills.randomGet();
-                        target.addTempSkill(skills2);
-                        target.popup(skills2);
-                        game.log(target, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-                        event.finish()
                     }
+                    target.chooseText(6, true, '请声明一个技能', get.transArray(event.skills)).set('ai', function () {
+                        return get.translation(event.skills.randomGet())
+                    })
                     "step 1"
-                    if (event.skills.length == 1) {
-                        var skills2 = event.skills[0]
+                    event.choice = event.skills.filter(function (item) {
+                        return get.translation(item) == result.text
+                    })
+                    if (event.choice.length == 1) {
+                        var skills2 = event.choice[0]
                         target.addTempSkill(skills2);
                         target.popup(skills2);
                         game.log(target, '声明了', '#g' + '【' + get.translation(skills2) + '】');
                         event.finish()
                     } else {
                         var list = []
-                        var skills = event.skills
+                        var skills = event.choice
                         for (var i = 0; i < skills.length; i++) {
                             list.push(get.translation(skills[i] + '_info'))
                         }
                         target.chooseControl().set('choiceList', list).set('prompt', '选择〖' + get.translation(skills[0]) + '〗的版本')
                     }
                     "step 2"
-                    var skills2 = event.skills[result.index]
+                    var skills2 = event.choice[result.index]
                     target.addTempSkill(skills2);
                     target.popup(skills2);
                     game.log(target, '声明了', '#g' + '【' + get.translation(skills2) + '】');
@@ -1316,6 +1196,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             player: "phaseBegin"
                         },
                         direct: true,
+                        charlotte: true,
                         content: function () {
                             'step 0'
                             var vioce = ['宫声', '商声', '角声', '徵声', '羽声']
@@ -1345,6 +1226,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             player: "phaseDrawBegin2",
                         },
+                        charlotte: true,
                         equipSkill: true,
                         direct: true,
                         filter: function (event, player) {
@@ -1361,6 +1243,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     shang: {
+                        charlotte: true,
                         equipSkill: true,
                         onremove: function (player) {
                             player.unmarkSkill('wxpp_skill')
@@ -1372,6 +1255,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     jue: {
+                        charlotte: true,
                         equipSkill: true,
                         trigger: {
                             player: "phaseDiscardBefore",
@@ -1385,6 +1269,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     zhi: {
+                        charlotte: true,
                         equipSkill: true,
                         trigger: {
                             player: "phaseJieshuBegin",
@@ -1398,6 +1283,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         },
                     },
                     yu: {
+                        charlotte: true,
                         equipSkill: true,
                         trigger: {
                             player: "phaseEnd"
@@ -1460,50 +1346,16 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "card_sx": {
                 audio: "ext:福瑞拓展:2",
                 trigger: {
-                    player: "phaseUseAfter",
+                    player: "phaseAfter",
                 },
-                frequent: true,
-                filter: function (event, player) {
-                    if (!player.hasSkill('card_sx_add')) return true
-                    return false
-                },
-                onremove: function (player) {
-                    player.removeSkill('card_sx_add');
-                },
+                charlotte: true,
+                forced: true,
                 content: function () {
-                    player.draw(3)
-                    var next = player.phaseUse();
-                    event.next.remove(next);
-                    trigger.next.push(next);
-                },
-                group: ["card_sx_clean", "card_sx_mark"],
-                subSkill: {
-                    add: {
-                        sub: true,
-                    },
-                    mark: {
-                        trigger: {
-                            player: "phaseUseBegin",
-                        },
-                        forced: true,
-                        audio: false,
-                        popup: false,
-                        content: function () {
-                            player.addSkill('card_sx_add')
-                        },
-                        sub: true,
-                    },
-                    clean: {
-                        trigger: {
-                            source: "dieAfter",
-                        },
-                        forced: true,
-                        audio: false,
-                        content: function () {
-                            player.removeSkill('card_sx_add');
-                        },
-                        sub: true,
-                    },
+                    player.removeSkill('card_sx')
+                    if (player.getStat().kill > 0) {
+                        player.draw(3)
+                        player.insertPhase();
+                    }
                 },
             },
             'yy_skill': {
@@ -1548,6 +1400,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 },
                 forceDie: true,
                 direct: true,
+                charlotte: true,
                 filter: function (event, player) {
                     if (!event.player.isAlive()) return false;
                     if (!lib.filter.targetEnabled({ name: 'fr_card_xzst' }, player, event.player)) return false;
@@ -1571,7 +1424,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             'card_djlj': '弹尽粮绝',
             'card_djlj_info': '锁定技，①摸牌阶段额定摸牌数-1，②使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
             "card_sx": "嗜血",
-            "card_sx_info": "出牌阶段结束后，若你于此阶段杀死过其他角色，你摸三张牌并额外执行一个出牌阶段。",
+            "card_sx_info": "你的回合结束时，你移除此技能，然后若本回合内你杀死过其他角色，你摸三张牌并执行一个额外的回合。",
             'yy_skill': '影夜项链',
             'yy_skill_info': '锁定技。①其他角色指定你为【杀】的目标时，你令该角色非锁定技失效直到此【杀】结算完毕。②当你失去装备区内的【影夜项链】时，你摸两张牌。',
             "sy_skill": "霜月之弓",
@@ -1606,7 +1459,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_ttbl": "投桃报李",
             "fr_card_ttbl_info": "出牌阶段，对攻击范围内的一名角色使用，你获得其X张手牌（X为该角色的手牌数且至多为5），然后你交给该角色等量的手牌。",
             "fr_card_yxys": "野性药水",
-            "fr_card_yxys_info": "出牌阶段对一名角色使用，该角色获得技能〖嗜血〗直到其回合结束。<li>〖嗜血〗：出牌阶段结束后，若你于此阶段杀死过其他角色，你摸三张牌并额外执行一个出牌阶段。</li>",
+            "fr_card_yxys_info": "出牌阶段对一名角色使用，该角色获得技能〖嗜血〗。<li>〖嗜血〗：你的回合结束时，你移除此技能，然后若本回合内你杀死过其他角色，你摸三张牌并执行一个额外的回合。</li>",
             "fr_card_gzbj": "寡众不均",
             "fr_card_gzbj_info": "出牌阶段对所有角色使用，所有目标将手牌数调整至X（X为场上所有玩家手牌数的平均值并向下取整）。",
             "fr_equip1_syzg": "霜月之弓",
