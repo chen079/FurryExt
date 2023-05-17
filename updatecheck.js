@@ -27,6 +27,8 @@
 		'extension.js',
 		'image/qidongye/furry_lib.jpg',
 		'image/qidongye/furry_lib2.jpg',
+		'json/idiom.json',
+		'json/poems.json'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
