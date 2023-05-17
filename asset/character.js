@@ -5,7 +5,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore', 'fr_francium', 'fr_nanci',],
         connect: true,//该武将包是否可以联机（必填）
         character: {
-            'fr_ming': ['male', 'qun', 4, [], ['unseen']],
+            'fr_wind': ['male', 'wu', 4, ['wind_fy'], []],
+            'fr_ming': ['male', 'qun', 4, ['ming_yc','ming_yy'], ['unseen']],
             'fr_death': ['male', 'shen', 4, ['death_sy', 'death_sl', 'death_sp'], []],
             'fr_dolina': ['male', 'qun', 3, ['dolina_wy', 'dolina_sl', 'dolina_qj'], []],
             'fr_thunder': ['male', 'wei', 4, ['thunder_fz', 'thunder_lj'], ['unseen']],
@@ -13,7 +14,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'fr_lamas': ['male', 'wei', 4, ['lamas_zj'], []],
             'fr_blam': ['male', 'qun', 4, ['blame_jj'], ['unseen']],
             'fr_aoeslat': ['male', 'wei', 4, ['aoeslat_aq', 'aoeslat_cf', 'aoeslat_yj'], ['unseen']],
-            'fr_neises': ['male', 'fr_g_dragon', 15, ['neises_try'], ['unseen']],
+            'fr_neises': ['male', 'fr_g_dragon', 3, ['ming_yy'], ['unseen']],
             'fr_tails': ['male', 'qun', 3, ['tails_jd', 'tails_qx'], []],
             'fr_zhan': ['male', 'qun', 3, ['zhan_sf', 'zhan_jf'], ['unseen']],
             'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['des:西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——奥尔斯拉特，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。']],
@@ -130,6 +131,264 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
         },
         skill: {
+            'ming_yy': {
+                trigger: {
+                    player: "useCardToPlayered",
+                },
+                mark: true,
+                intro: {
+                    markcount:()=>undefined,
+                    mark: function (dialog, storage, player) {
+                        dialog.addText('已经使用过的诗')
+                        dialog.addText( player.storage.ming_yy[1])
+                    }
+                },
+                forced: true,
+                usable:2,
+                locked: false,
+                filter: function (event, player) {
+                    return event.card.name == 'sha';
+                },
+                init: function (player) {
+                    if (!player.storage.ming_yy) {
+                        player.storage.ming_yy = [{}, []]
+                    }
+                    game.loadFromFile('extension/福瑞拓展/json/poems.json', player.storage.ming_yy[0], function (error, data) {
+                        if (error) {
+                            alert(error);
+                        } else {
+                            console.log(data);
+                        }
+                    });
+                },
+                content: function () {
+                    'step 0'
+                    player.chooseText().set('prompt', get.prompt2('ming_yy')).set('ai',function(){
+                        var title=Object.keys(player.storage.ming_yy[0])
+                        title=title.randomGet()
+                        return player.storage.ming_yy[0][title]["poem"].randomGet()
+                    })
+                    'step 1'
+                    if (result.bool) {
+                        event.bool = false
+                        for (var i in player.storage.ming_yy[0]) {
+                            if (!player.storage.ming_yy[1].contains(i) && player.storage.ming_yy[0][i]['poem'].contains(result.text)) {
+                                player.storage.ming_yy[1].push(i)
+                                event.bool = true
+                                event.title = i
+                                event.author = player.storage.ming_yy[0][i]['author']
+                                break;
+                            }
+                        }
+                    } else {
+                        event.finish()
+                    }
+                    'step 2'
+                    if (event.bool) {
+                        game.log(player, '背诵了', '#g' + event.author, '写的', '#g《' + event.title + '》', '中的一句')
+                        var choices = ['你摸两张牌', '令此【杀】对' + get.translation(trigger.target) + '的伤害+1']
+                        var control = ['摸牌', '加伤']
+                        if (trigger.target.countCards('h') != 0) {
+                            choices.push('弃置' + get.translation(trigger.target) + '两张牌')
+                            control.push('弃牌')
+                        }
+                        if (trigger.target.countCards('hej') != 0) {
+                            choices.push('获得' + get.translation(trigger.target) + '区域内的一张牌')
+                            control.push('拿牌')
+                        }
+                        player.chooseControl(control, 'cancel2').set('choiceList', choices).set('ai',function(){
+                            var player=_status.event.player
+                            if(get.attitude(player,trigger.target)>0){
+                                return 'cancel2'
+                            }else{
+                                return control.randomGet()
+                            }
+                        })
+                    } else {
+                        game.log('你背诵的不是唐诗三百首中的诗或背诵错误！（记得检查标点符号是否打全）')
+                    }
+                    'step 3'
+                    if (result.control == '摸牌') {
+                        player.draw(2)
+                    } else if (result.control == '加伤') {
+                        var id = trigger.target.playerid;
+                        var map = trigger.getParent().customArgs;
+                        if (!map[id]) map[id] = {};
+                        if (typeof map[id].extraDamage != 'number') {
+                            map[id].extraDamage = 0;
+                        }
+                        map[id].extraDamage++;
+                    }else if(result.control=='弃牌'){
+                        player.discardPlayerCard(trigger.target,'he',2,true)
+                    }else if(result.control=='拿牌'){
+                        player.gainPlayerCard(trigger.target,'hej',1,true)
+                    }
+                }
+            },
+            'ming_yc': {
+                enable: "phaseUse",
+                direct: true,
+                usable: 1,
+                init: function (player) {
+                    if (!player.storage.ming_yc) {
+                        player.storage.ming_yc = {
+                            'lib': [],
+                            'used': [],
+                            'last': ''
+                        };
+                    }
+                    game.loadFromFile('extension/福瑞拓展/json/idiom.json', player.storage.ming_yc.lib, function (error, data) {
+                        if (error) {
+                            alert(error);
+                        } else {
+                            console.log(data);
+                        }
+                    });
+                },
+                mark: true,
+                intro: {
+                    markcount:function(storage, player){
+                        return player.storage.ming_yc.used.length
+                    },
+                    mark: function (dialog, storage, player) {
+                        dialog.addText('已经使用过的成语')
+                        dialog.addText(player.storage.ming_yc.used)
+                    }
+                },
+                content: function () {
+                    'step 0'
+                    event.ainum = 0
+                    'step 1'
+                    player.chooseText().set('prompt', '是否发动【语出】').set('prompt2', player.storage.ming_yc.last == '' ? get.translation('ming_yc_info') : '你的上一个成语为：' + player.storage.ming_yc.last + '，请输入一个以“' + player.storage.ming_yc.last.charAt(player.storage.ming_yc.last.length - 1) + '”开头的成语。').set('ai', function () {
+                        if (event.ainum == 0) {
+                            return player.storage.ming_yc.lib.randomGet()
+                        } else if (event.ainum < 6) {
+                            var word=player.storage.ming_yc.lib.find(function (item) {
+                                return item.charAt(0) == player.storage.ming_yc.last.charAt(player.storage.ming_yc.last.length - 1) && !player.storage.ming_yc.used.contains(item)
+                            })
+                            if(word){
+                                return word
+                            }else{
+                                return player.storage.ming_yc.lib.randomGet()
+                            }
+                        } else {
+                            return player.storage.ming_yc.lib.randomGet()
+                        }
+                    })
+                    'step 2'
+                    if (result.bool) {
+                        event.ainum++
+                        if (player.storage.ming_yc.lib.contains(result.text) && !player.storage.ming_yc.used.contains(result.text)) {
+                            if (!player.storage.ming_yc.last || player.storage.ming_yc.last.charAt(player.storage.ming_yc.last.length - 1) == result.text.charAt(0)) {
+                                player.draw()
+                                player.storage.ming_yc.last = result.text
+                                player.storage.ming_yc.used.push(result.text)
+                                game.log(player, '接龙的成语为：' + player.storage.ming_yc.last)
+                                game.delay()
+                                event.goto(1)
+                            } else {
+                                game.log(player, '输入错误')
+                                player.storage.ming_yc.last = ''
+                            }
+                        } else if (player.storage.ming_yc.used.contains(result.text)) {
+                            game.log(player, '输入的内容已经使用过。')
+                            player.storage.ming_yc.last = ''
+                        } else {
+                            game.log(player, '输入错误')
+                            player.storage.ming_yc.last = ''
+                        }
+                    }
+                },
+                ai: {
+                    order: 12,
+                    result: {
+                        player: 1,
+                    },
+                },
+            },
+            'wind_fy': {
+                trigger: {
+                    global: ["phaseJieshuBegin","phaseZhunbeiBegin"],
+                },
+                mark: true,
+                intro: {
+                    markcount: () => undefined,
+                    mark: function (dialog, storage, player) {
+                        dialog.addText('当前技能效果为：')
+                        dialog.addText((player.storage.wind_fy[0] ? '准备阶段' : '一名角色的结束阶段') + '你可以令' + (player.storage.wind_fy[1] ? '自己' : '一名其他角色') + (player.storage.wind_fy[2] ? '摸' : '弃置') + '一张牌')
+                    }
+                },
+                direct: true,
+                init: function (player) {
+                    if (!player.storage.wind_fy) player.storage.wind_fy = [true, true, true]
+                },
+                filter: function (event, player) {
+                    var trigger = player.storage.wind_fy[0] ? 'phaseZhunbei' : 'phaseJieshu'
+                    if (event.name != trigger) return false
+                    return true
+                },
+                content: function () {
+                    'step 0'
+                    player.chooseTarget('【风吟】：是否选择令' + (player.storage.wind_fy[1] ? "自己" : "一名其他角色") + (player.storage.wind_fy[2] ? "摸" : "弃置") + "一张牌")
+                        .set('filterTarget', function (card, player, target) {
+                            if (player.storage.wind_fy[1]) {
+                                return target == player
+                            } else {
+                                if (!player.storage.wind_fy[2]) {
+                                    return target != player && target.countCards('he') > 0
+                                }
+                                return target != player
+                            }
+                        }).set('ai', function (target) {
+                            var player = _status.event.player
+                            var att = get.attitude(player, target)
+                            if (player.storage.wind_fy[2]) {
+                                return att
+                            } else {
+                                return -att
+                            }
+                        })
+                    'step 1'
+                    if (result.bool) {
+                        var target = result.targets[0]
+                        if (player.storage.wind_fy[2]) {
+                            target.draw(1)
+                        } else {
+                            target.chooseToDiscard(1, true)
+                        }
+                    } else {
+                        event.finish()
+                    }
+                },
+                group: "wind_fy_change",
+                subSkill: {
+                    change: {
+                        trigger: {
+                            player: "wind_fyAfter"
+                        },
+                        direct: true,
+                        content: function () {
+                            'step 0'
+                            player.chooseControl('时', '象', '效').set('prompt', get.prompt2('wind_fy')).set('ai', function () {
+                                var player = _status.event.player
+                                if (player.storage.wind_fy[1] && player.storage.wind_fy[2]) {
+                                    return '时'
+                                } else if (player.storage.wind_fy[1] && !player.storage.wind_fy[2]) {
+                                    return '效'
+                                } else if (!player.storage.wind_fy[1] && !game.hasPlayer(function (current) {
+                                    return get.attitude(player, current) > 0 && player.storage.wind_fy[2]
+                                })) {
+                                    return ['象', '效'].randomGet()
+                                } else {
+                                    return '象'
+                                }
+                            })
+                            'step 1'
+                            player.storage.wind_fy[result.index] = !player.storage.wind_fy[result.index]
+                        }
+                    }
+                }
+            },
             'death_sp': {
                 trigger: {
                     source: "damageEnd",
@@ -283,7 +542,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         },
                         charlotte: true,
                         skillBlocker: function (skill, player) {
-                            return _status.currentPhase == player.storage.death_sy && !lib.skill[skill].charlotte;
+                            return _status.currentPhase == player.storage.death_sy && !lib.skill[skill].charlotte && skill != 'death_sy_useless';
                         },
                         mark: true,
                         intro: {
@@ -750,7 +1009,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player: "damageEnd",
                     source: "damageEnd"
                 },
-                frequent:true,
+                frequent: true,
                 content: function () {
                     'step 0'
                     event.num = trigger.num
@@ -2791,10 +3050,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (num > 0) {
                         player.chooseToDiscard('h', num, true)
                     }
-                    if (player.countCards('e', function (card) {
+                    var ec = player.getCards('e', function (card) {
                         return get.subtype(card) == 'equip1'
-                    }) > 0) {
-                        player.draw(num)
+                    })
+                    if (ec.length) {
+                        player.loseToDiscardpile(ec);
+                        player.draw(ec.length);
                     }
                     'step 5'
                     if (event.temptarget.countCards('e') > 0) {
@@ -16656,7 +16917,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 direct: true,
                 content: function () {
                     'step 0'
-                    player.chooseNumber([1,4],Math.min(3, player.countCards('he'))).set('prompt', get.prompt('sayisu_fj')).set('prompt2', '妄行：将X张牌置于武将牌上').set('ai', function () {
+                    player.chooseNumber([1, 4], Math.min(3, player.countCards('he'))).set('prompt', get.prompt('sayisu_fj')).set('prompt2', '妄行：将X张牌置于武将牌上').set('ai', function () {
                         var player = _status.event.player;
                         if (player.maxHp > 3) return 3;
                         return Math.min(3, player.countCards('he'));
@@ -16670,22 +16931,22 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         player.$gain2(cards, false);
                         game.log(player, '将', cards, '放到了武将牌上');
                         player.loseToSpecial(cards, 'sayisu_fj').visible = true;
-                    }else event.finish();
+                    } else event.finish();
                     'step 2'
                     player.markSkill('sayisu_fj');
                     game.delayx();
                 },
-                group:"sayisu_fj_gain",
-                subSkill:{
-                    gain:{
-                        trigger:{
-                            player:"phaseJieshuBegin"
+                group: "sayisu_fj_gain",
+                subSkill: {
+                    gain: {
+                        trigger: {
+                            player: "phaseJieshuBegin"
                         },
-                        filter:function(event,player){
-                            return player.isMinHandcard()&&player.maxHp<5
+                        filter: function (event, player) {
+                            return player.isMinHandcard() && player.maxHp < 5
                         },
-                        forced:true,
-                        content:function(){
+                        forced: true,
+                        content: function () {
                             player.gainMaxHp()
                             player.recover()
                         }
@@ -18396,6 +18657,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'ming_yc': "语出",
+            'ming_yc_info': "出牌阶段限一次，你可以进行一次“成语接龙”（不可使用你输入过的成语），然后每当你成功接龙一次，你摸一张牌并重复此流程。",
+            'ming_yy': '吟咏',
+            'ming_yy_info': "锁定技，每回合限两次，当你使用【杀】指定目标后，你可以背诵唐诗三百首中的任意一首诗的任意一句（诗名不可重复），如若此做，你选择一项：<li>1.摸两张牌，<li>2.弃置目标角色两张牌，<li>3.获得目标角色一张牌，<li>4.令此【杀】对目标角色的伤害+1。",
+            'wind_fy': "风吟",
+            "wind_fy_info": "游戏开始时，你获得<br>“时”：<li>正：一名角色的准备阶段；<li>反：一名角色的结束阶段，</li>“象”：<li>正：自己；<li>反：一名其他角色，</li>“效”：<li>正：摸一张牌；<li>反：弃置一张牌，</li>三枚标记，并均视为正面。然后此技能的效果为时-象-效的组合，当此技能结算完毕后，你将一枚标记反转。",
             'death_sy_useless': '恐惧',
             'death_sy_useless_info': '将你标记为“猎物”的角色的回合内，你的技能无效。',
             'death_sp': "审判",
@@ -18487,7 +18754,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'tails_qx': '巧械',
             'tails_qx_info': '①其他角色回合结束时，若你本回合未成为过牌的目标，你摸一张牌并可“' + get.introduce('dazao') + '”一次，然后令一名角色使用之。②准备阶段，你可以弃置两张同颜色的牌，销毁场上任意名角色的各至多一张颜色与你弃置牌相同的、点数为8的装备牌，对其各造成1点火焰伤害。',
             'tails_jd': '机动',
-            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:与上家或下家交换座位并将手牌弃至两张，若你有武器牌则你摸X张牌（X为你弃置的牌数），然后你可获得其一张装备区的牌（武器牌优先）并可使用之;<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
+            'tails_jd_info': '每回合限两次。你使用牌指定或成为唯一目标时，可与对方（不为自己）“' + get.introduce('mouyi') + '”：<li>转移（打出【杀】）:与上家或下家交换座位并将手牌弃至两张，若你有武器牌则重铸你的武器牌，然后你可获得其一张装备区的牌（武器牌优先）并可使用之；<li>冲刺（打出【闪】）：对方重铸所有手牌，若你装备区有牌则全部重铸并对对方造成1点伤害。</li>若“谋弈”成功则此牌无效，否则你重铸所有手牌。',
             'dier_xy': '夕炎',
             'dier_xy_info': '锁定技，当你使用【杀】指定目标后，你获得该角色的一张牌。',
             'dier_sb': '守宝',
@@ -19020,130 +19287,131 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "wore_bossty_info": "锁定技，你的阶段不会被跳过，你每回合能受到伤害、失去体力、失去体力上限的总和至多为游戏轮数",
 
             //武将
-            "fr_ming": "☣鸣",
-            "fr_death": "☣迪斯",
-            "fr_dolina": "☣多林",
-            "fr_thunder": "☣兰德",
-            "fr_mouse": "☣缪斯",
-            "fr_lamas": "☣拉马斯",
-            "fr_blam": "☣布兰",
-            "fr_aoeslat": "☣奥尔斯拉特",
-            "fr_neises": "☣内瑟斯",
-            "fr_tails": "☣塔尔斯",
-            "fr_dier": "☣戴尔",
-            "fr_bosswore": "☣沃尔",
-            "fr_francium": "☣弗兰西亚",
-            "fr_nanci": "☣南辞",
-            "fr_shark": "☣沙克",
-            "fr_kmjia": "☣卡米加",
-            "fr_liona": "☣里欧纳",
-            "fr_ala": "☣阿拉安",
-            "fr_tiger": "☣泰格尔",
-            "fr_linyan": "☣林&炎",
-            "fr_bossfaers": "☣恒神法斯",
-            "fr_bosshars": "☣纵神哈尔",
-            "fr_horn": "☣霍恩",
-            "fr_qima": "☣奇玛",
-            "fr_zhongyu": "☣忠与",
-            "fr_hynea": "☣哈尼亚",
-            "fr_hyperner": "☣催眠者",
-            "fr_wore": "☣沃尔",
-            "fr_tiers": "☣缇尔斯",
-            "fr_yifeng": "☣弈风",
-            "fr_hars": "☣哈尔斯",
-            "fr_wes": "☣维斯",
-            "fr_muyada": "☣慕达亚",
-            "fr_yada": "☣亚达",
-            "fr_muli": "☣穆里",
-            "fr_muliy": "☣穆里耶",
-            "fr_sier": "☣希尔",
-            "fr_klif": "☣克里夫",
-            "fr_milis": "☣弥斯利",
-            "fr_alas": "☣奥拉斯",
-            "fr_kesaya": "☣克萨亚",
-            "fr_ken": "☣科恩",
-            "fr_west": "☣威斯特",
-            "fr_lions": "☣莱恩斯",
-            "fr_milite": "☣米利特",
-            "fr_jackson": "☣赛特",
-            "fr_jiejie": "☣檞界",
-            "fr_sayisu": "☣萨伊苏",
-            "fr_telina": "☣特丽娜",
-            "fr_oert": "☣欧尔特",
-            "fr_rest": "☣瑞斯特",
-            "fr_krikt": "☣科里克特",
-            "fr_tery": "☣特瑞",
-            "fr_sisk": "☣西斯科",
-            "fr_lens": "☣雷恩斯",
-            "fr_milism": "☣米里森",
-            "fr_miya": "☣米亚",
-            "fr_skry": "☣斯克瑞",
-            "fr_lusiya": "☣卢西亚",
-            "fr_kersm": "☣科尔森",
-            "fr_kert": "☣柯尔特",
-            "fr_keya": "☣科亚",
-            "fr_lust": "☣卢森特",
-            "fr_klier": "☣克莱尔",
-            "fr_faers": "☣法斯",
-            "fr_aroncy": "☣艾伦希",
-            "fr_lint": "☣林特",
-            "fr_berg": "☣伯格",
-            "fr_xit": "☣希特",
-            "fr_markn": "☣马克恩",
-            "fr_morly": "☣莫雷",
-            "fr_marxya": "☣马尔西亚",
-            "fr_yas_klin": "☣亚瑟克林",
-            "fr_dog": "☣多戈",
-            "fr_muen": "☣牧恩",
-            "fr_patxi": "☣帕茨希",
-            "fr_glit": "☣格里特",
-            "fr_nore": "☣诺尔",
-            "fr_bofeng": "☣迟风",
-            "fr_ciyu": "☣迟雨",
-            "fr_delta": "☣德尔塔",
-            "fr_edmon": "☣埃德蒙",
-            "fr_mika": "☣米卡",
-            "fr_peter_likes": "☣皮特莱克",
-            "fr_dmoa": "☣多默尔",
-            "fr_nulia": "☣怒力亚",
-            "fr_terlk": "☣特尔里克",
-            "fr_verb": "☣韦贝尔",
-            "fr_taber": "☣塔贝尔",
-            "fr_yinhu": "☣寅虎",
-            "fr_dragon": "☣德拉贡",
-            "fr_terz": "☣特兹",
-            "fr_jet": "☣杰特",
-            "fr_slen": "☣萨冷",
-            "fr_paers": "☣帕尔斯",
-            "fr_nier": "☣尼尔",
-            "fr_pluvia": "☣普鲁维亚",
-            "fr_ventus": "☣凡图斯",
-            "fr_knier": "☣科妮尔",
-            "fr_zenia": "☣泽妮雅",
-            "fr_lamost": "☣拉莫斯特",
-            "fr_kasaers": "☣卡萨尔斯",
-            "fr_yifa": "☣弈法",
-            "fr_jgby": "☣吉岡邦彦",
-            "fr_xiaomo": "☣小默",
-            "fr_adward": "☣安德华",
-            "fr_fate": "☣法特",
-            "fr_liya": "☣莉亚",
-            "fr_laays": "☣拉亚斯",
-            "fr_sam": "☣山",
-            "fr_ham": "☣海",
-            "fr_mala": "☣马拉尔",
-            "fr_bossmala": "☣马拉尔",
-            "fr_zeta": "☣泽塔",
-            "fr_fox": "☣狐克斯",
-            "fr_molis": "☣莫莉斯",
-            "fr_shisan": "☣拾弎",
-            "fr_bladewolf": "☣刃狼",
-            "fr_crow": "☣克劳",
-            "fr_derk": "☣德克",
-            "fr_nashu": "☣那舒",
-            "fr_rasali": "☣让萨利",
-            "fr_sheep": "☣西普",
-            "fr_zhan": "☣展",
+            'fr_wind': "✡温迪",
+            "fr_ming": "✡鸣",
+            "fr_death": "✡迪斯",
+            "fr_dolina": "✡多林",
+            "fr_thunder": "✡兰德",
+            "fr_mouse": "✡缪斯",
+            "fr_lamas": "✡拉马斯",
+            "fr_blam": "✡布兰",
+            "fr_aoeslat": "✡奥尔斯拉特",
+            "fr_neises": "✡内瑟斯",
+            "fr_tails": "✡塔尔斯",
+            "fr_dier": "✡戴尔",
+            "fr_bosswore": "✡沃尔",
+            "fr_francium": "✡弗兰西亚",
+            "fr_nanci": "✡南辞",
+            "fr_shark": "✡沙克",
+            "fr_kmjia": "✡卡米加",
+            "fr_liona": "✡里欧纳",
+            "fr_ala": "✡阿拉安",
+            "fr_tiger": "✡泰格尔",
+            "fr_linyan": "✡林&炎",
+            "fr_bossfaers": "✡恒神法斯",
+            "fr_bosshars": "✡纵神哈尔",
+            "fr_horn": "✡霍恩",
+            "fr_qima": "✡奇玛",
+            "fr_zhongyu": "✡忠与",
+            "fr_hynea": "✡哈尼亚",
+            "fr_hyperner": "✡催眠者",
+            "fr_wore": "✡沃尔",
+            "fr_tiers": "✡缇尔斯",
+            "fr_yifeng": "✡弈风",
+            "fr_hars": "✡哈尔斯",
+            "fr_wes": "✡维斯",
+            "fr_muyada": "✡慕达亚",
+            "fr_yada": "✡亚达",
+            "fr_muli": "✡穆里",
+            "fr_muliy": "✡穆里耶",
+            "fr_sier": "✡希尔",
+            "fr_klif": "✡克里夫",
+            "fr_milis": "✡弥斯利",
+            "fr_alas": "✡奥拉斯",
+            "fr_kesaya": "✡克萨亚",
+            "fr_ken": "✡科恩",
+            "fr_west": "✡威斯特",
+            "fr_lions": "✡莱恩斯",
+            "fr_milite": "✡米利特",
+            "fr_jackson": "✡赛特",
+            "fr_jiejie": "✡檞界",
+            "fr_sayisu": "✡萨伊苏",
+            "fr_telina": "✡特丽娜",
+            "fr_oert": "✡欧尔特",
+            "fr_rest": "✡瑞斯特",
+            "fr_krikt": "✡科里克特",
+            "fr_tery": "✡特瑞",
+            "fr_sisk": "✡西斯科",
+            "fr_lens": "✡雷恩斯",
+            "fr_milism": "✡米里森",
+            "fr_miya": "✡米亚",
+            "fr_skry": "✡斯克瑞",
+            "fr_lusiya": "✡卢西亚",
+            "fr_kersm": "✡科尔森",
+            "fr_kert": "✡柯尔特",
+            "fr_keya": "✡科亚",
+            "fr_lust": "✡卢森特",
+            "fr_klier": "✡克莱尔",
+            "fr_faers": "✡法斯",
+            "fr_aroncy": "✡艾伦希",
+            "fr_lint": "✡林特",
+            "fr_berg": "✡伯格",
+            "fr_xit": "✡希特",
+            "fr_markn": "✡马克恩",
+            "fr_morly": "✡莫雷",
+            "fr_marxya": "✡马尔西亚",
+            "fr_yas_klin": "✡亚瑟克林",
+            "fr_dog": "✡多戈",
+            "fr_muen": "✡牧恩",
+            "fr_patxi": "✡帕茨希",
+            "fr_glit": "✡格里特",
+            "fr_nore": "✡诺尔",
+            "fr_bofeng": "✡迟风",
+            "fr_ciyu": "✡迟雨",
+            "fr_delta": "✡德尔塔",
+            "fr_edmon": "✡埃德蒙",
+            "fr_mika": "✡米卡",
+            "fr_peter_likes": "✡皮特莱克",
+            "fr_dmoa": "✡多默尔",
+            "fr_nulia": "✡怒力亚",
+            "fr_terlk": "✡特尔里克",
+            "fr_verb": "✡韦贝尔",
+            "fr_taber": "✡塔贝尔",
+            "fr_yinhu": "✡寅虎",
+            "fr_dragon": "✡德拉贡",
+            "fr_terz": "✡特兹",
+            "fr_jet": "✡杰特",
+            "fr_slen": "✡萨冷",
+            "fr_paers": "✡帕尔斯",
+            "fr_nier": "✡尼尔",
+            "fr_pluvia": "✡普鲁维亚",
+            "fr_ventus": "✡凡图斯",
+            "fr_knier": "✡科妮尔",
+            "fr_zenia": "✡泽妮雅",
+            "fr_lamost": "✡拉莫斯特",
+            "fr_kasaers": "✡卡萨尔斯",
+            "fr_yifa": "✡弈法",
+            "fr_jgby": "✡吉岡邦彦",
+            "fr_xiaomo": "✡小默",
+            "fr_adward": "✡安德华",
+            "fr_fate": "✡法特",
+            "fr_liya": "✡莉亚",
+            "fr_laays": "✡拉亚斯",
+            "fr_sam": "✡山",
+            "fr_ham": "✡海",
+            "fr_mala": "✡马拉尔",
+            "fr_bossmala": "✡马拉尔",
+            "fr_zeta": "✡泽塔",
+            "fr_fox": "✡狐克斯",
+            "fr_molis": "✡莫莉斯",
+            "fr_shisan": "✡拾弎",
+            "fr_bladewolf": "✡刃狼",
+            "fr_crow": "✡克劳",
+            "fr_derk": "✡德克",
+            "fr_nashu": "✡那舒",
+            "fr_rasali": "✡让萨利",
+            "fr_sheep": "✡西普",
+            "fr_zhan": "✡展",
 
             //分类
             'wanling': "万灵之森",
@@ -19174,6 +19442,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            'fr_wind': '且听风吟',
+            'fr_ming': "能言善辩",
             'fr_death': "死亡使者",
             'fr_aoeslat': '暴戾君王',
             'fr_thunder': '雷光跃动',

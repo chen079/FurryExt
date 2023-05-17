@@ -1,6 +1,9 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
+		
+		'fr_ming':"语出如剑，可伤人心。",
+		'fr_death':"我喜欢死亡的味道...",
 		'fr_aoeslat': "不过是几条人命而已，哪有我的享乐重要，哈哈哈哈！",
 		'fr_thunder': '所谓雷电，不过是玩具罢了...',
 		'fr_lamas': '我会战斗到最后一刻！',
@@ -416,7 +419,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		130: {
 			id: 'fr_ming',
 			name: '武将：鸣',
-			info: '不是很强的武将...',
+			info: lib.fr_winnerSay['fr_ming'],
 			type: 'character'
 		},
 		/* 获得奖励需要的点数:{

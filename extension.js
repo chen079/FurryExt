@@ -197,7 +197,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '重做人物萨伊苏'
                     ];
                     //更新武将
-                    var Furry_players = ['fr_dolina', 'fr_death'];
+                    var Furry_players = ['fr_dolina', 'fr_death','fr_wind','fr_ming'];
                     var Furry_redoplayers = ['fr_sayisu'];
                     //更新卡牌
                     var Furry_cards = [];
@@ -264,6 +264,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     };
                 };
             })
+            //此处内容由钫酸酱制作，若有需要请联系作者...
             lib.skill._definedSweap = {
                 firstDo: true,
                 trigger: { player: ['chooseNumberBegin', 'chooseTextBegin'] },
@@ -366,6 +367,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             }
             //---------------------------------------自定义函数：选择文本------------------------------------------//
+            //此处内容由钫酸酱制作，若有需要请联系作者
             lib.element.player.chooseText = function chooseText() {
                 var next = game.createEvent('chooseText');
                 for (var i = 0; i < arguments.length; i++) {
@@ -1341,7 +1343,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     var str2 = lib.translate[str];
                     if (lib.translate[str + '_ab']) str2 = lib.translate[str + '_ab'];
                     if (!str2) return '';
-                    if (str2.indexOf('☣') == 0) {
+                    if (str2.indexOf('✡') == 0) {
                         str2 = str2.slice(1);
                         return get.verticalStr(str2, true);
                     }
@@ -1860,6 +1862,41 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }, Timeout); /*Timeout*/
                     _status.Background_Picture_Timeout2 = Timeout;
                 };
+            };
+            //此处内容由钫酸酱制作，若有需要请联系作者...
+            game.loadFromFile = function (filePath, targetObject, callback) {
+                // 读取配置文件
+                game.readFile(filePath, function (data) {
+                    try {
+                        // 解析配置文件内容
+                        var isBuffer = (data instanceof ArrayBuffer);
+                        var config;
+                        if (isBuffer) {
+                            var decoder = new TextDecoder("UTF-8");
+                            var decodedData = decoder.decode(data);
+                            config = JSON.parse(decodedData);
+                        } else {
+                            config = JSON.parse(data);
+                        }
+
+                        if (Array.isArray(config)) {
+                            targetObject.length = 0; // 清空目标对象的内容
+                            Array.prototype.push.apply(targetObject, config); // 将配置文件内容逐个添加到目标对象（数组）中
+                        } else {
+                            // 将配置文件内容赋值给目标对象的属性
+                            for (var key in config) {
+                                if (config.hasOwnProperty(key)) {
+                                    targetObject[key] = config[key];
+                                }
+                            }
+                        }
+                        callback(null, targetObject);
+                    } catch (err) {
+                        callback('未找到正确的 JSON 文件', null);
+                    }
+                }, function (err) {
+                    callback('未找到正确的 JSON 文件', null);
+                });
             };
             //---------------------------------------设置：背景音乐------------------------------------------//
             game.frplayBackgroundMusic = function () {
@@ -3155,7 +3192,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             },
             "furry_name": {
                 "name": "<b>武将前缀",
-                "intro": "是否显示“☣”武将前缀",
+                "intro": "是否显示“✡”武将前缀",
                 "init": "hide",
                 "item": {
                     "hide": "隐藏",
@@ -3518,7 +3555,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
             diskURL: "",
             forumURL: "",
-            version: "2.2.0.5",
+            version: "2.2.0.6",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })
