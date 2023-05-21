@@ -194,10 +194,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '修复各种错误',
                         '修复部分成就无法获得的错误',
                         '重写ChooseText，解决不会自动换人的错误',
-                        '重做人物萨伊苏'
+                        '重做人物萨伊苏',
+                        '新人物：鸣、温迪',
+                        '新函数：chooseText',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_dolina', 'fr_death','fr_wind','fr_ming'];
+                    var Furry_players = ['fr_dolina', 'fr_death', 'fr_wind', 'fr_ming'];
                     var Furry_redoplayers = ['fr_sayisu'];
                     //更新卡牌
                     var Furry_cards = [];
@@ -243,6 +245,60 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     });
                 },
             };
+            //---------------------------------------一言------------------------------------------//
+            async function getExtensionNode(name, waitms, times) {
+                if (!waitms) waitms = 50;
+                if (!times) times = 20;
+                const menuBar_1 = await new Promise(resolve => {
+                    const interval = setInterval(resolve_1 => {
+                        if (!ui.menuContainer || !ui.menuContainer.firstElementChild)
+                            return;
+                        const menu = ui.menuContainer.firstElementChild;
+                        const menuBar = menu.querySelector(".menu-tab");
+                        if (!menuBar)
+                            return;
+                        clearInterval(interval);
+                        resolve_1(menuBar);
+                    }, waitms, resolve);
+                });
+                return await new Promise((resolve_2, reject) => {
+                    const extDivList = Array.from(menuBar_1.childNodes[4]._link.childNodes[0].childNodes);
+                    const callback = (i_1, waitms_1, resolve_3, reject_1) => {
+                        if (i_1 > times)
+                            return reject_1(new Error("Cannot find the extension"));
+                        const filterArray = extDivList.filter(div => div.innerHTML == name);
+                        if (!filterArray.length)
+                            return setTimeout(i_1 + 1, waitms_1, resolve_3, reject_1);
+                        const leftBar = filterArray[0], rightBar = leftBar.link;
+                        resolve_3([leftBar, rightBar]);
+                    };
+                    setTimeout(callback, waitms, 1, waitms, resolve_2, reject);
+                });
+            }
+            getExtensionNode("福瑞拓展")
+                .then(([leftBar, rightBar]) => {
+                    const divElements = rightBar.getElementsByClassName('config')
+                    let spanElement;
+                    let hisElement
+                    for (let i = 0; i < divElements.length; i++) {
+                        spanElement = divElements[i].querySelector('div#yiyan')
+                        hisElement = divElements[i].querySelector('div#history')
+                        if (spanElement && hisElement) {
+                            break;
+                        }
+                    }
+                    var hisday = game.historyday.result.randomGet()
+                    hisElement.innerHTML = '<li>历史上的今天：' + hisday.date + ' ' + hisday.title + '</li>'
+                    spanElement.innerHTML = '每日一言：<br><div>&nbsp&nbsp&nbsp&nbsp' + game.hitokoto.hitokoto + '</div><br><div style="display: flex; justify-content: flex-end;">———' + game.hitokoto.from + "&nbsp&nbsp</div>"
+                    spanElement.style.border = 'double'
+                    spanElement.style.borderRadius = '3px'
+                    spanElement.style.width = '100%'
+                    leftBar.innerHTML = "<div id='furry' style='animation: flicker 1.5s infinite alternate;'>福瑞拓展</div>"
+                    leftBar.setBackgroundImage('extension/福瑞拓展/image/background/wall.png')
+                })
+                .catch(error => {
+                    console.error(error);
+                });
             lib.arenaReady.push(function () {
                 //---------------------------------------武将标签------------------------------------------//
                 if (lib.config.extensions && lib.config.extensions.contains('十周年UI') && lib.config['extension_十周年UI_enable']) {
@@ -283,7 +339,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             }
             //---------------------------------------定义新属性伤害------------------------------------------//
-            lib.translate.mad = '<font color=#d17367>狂</font>';
+            lib.translate.mad = '狂';
             lib.nature.add('mad');
             lib.linked.add('mad');
             lib.skill._define_damage = {
@@ -305,6 +361,39 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     trigger.player.update();
                 },
             }
+            // ---------------------------------------狂【杀】------------------------------------------//
+            lib.card.sha.nature.push('mad');
+            lib.translate.fr_basic_madsha = "狂杀";
+            lib.translate.fr_basic_madshatag = "狂";
+
+            var FrCardInit = lib.element.card.init;
+            lib.element.card.init = function () {
+                var ret = FrCardInit.apply(this, arguments);
+                if (ret.name == 'sha' && ret.nature == 'mad') {
+                    if (lib.config['extension_十周年UI_enable'] && lib.config.extension_十周年UI_cardPrettify != 'off') {
+                        ret.style.backgroundImage = 'url("' + lib.assetURL + "extension/十周年UI/image/card/fr_basic_madsha." + lib.config.extension_十周年UI_cardPrettify + '")';
+                    }
+                    ret.$name.innerText = "狂杀"
+                }
+                return ret;
+            };
+
+            var FrTranslation = get.translation;
+            get.translation = function (str, arg) {
+                var tran = FrTranslation.apply(this, arguments);
+                if (tran == '杀' && str && str.nature == 'mad') {
+                    tran = '狂' + tran;
+                }
+                return tran;
+            };
+
+            var FrShaPrompt = lib.card.sha.cardPrompt;
+            lib.card.sha.cardPrompt = function (card) {
+                if (card.name == 'sha' && card.nature == 'mad') {
+                    return '出牌阶段，对一名其他角色使用。其须使用一张【闪】。否则你对其造成1点狂属性伤害。';
+                }
+                return FrShaPrompt.apply(this, arguments);
+            };
             //---------------------------------------属性效果------------------------------------------//
             lib.skill.fr_mad = {
                 forced: true,
@@ -325,7 +414,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 intro: {
                     name: "疯狂",
                     mark: function (dialog, storage, player) {
-                        dialog.addText("结束阶段，你随机弃置" + get.cnNumber(player.countMark('fr_mad')) + "张牌；当你回复体力后，你移除此技能。");
+                        dialog.addText("结束阶段，你随机弃置" + get.cnNumber(player.countMark('fr_mad')) + "张牌；当你回复体力后，你移除此标记。");
                     },
                 },
                 group: "fr_mad_remove",
@@ -1431,7 +1520,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             'fr_card_zfxd.png', 'fr_card_zfxd.webp', 'fr_card_zh.jpg', 'fr_card_zh.png', 'fr_card_zh.webp', 'fr_card_zh.bmp', 'fr_card_zhcz.jpg', 'fr_card_zhcz.png', 'fr_card_zhcz.webp', 'fr_card_zhcz.bmp',
                             'fr_equip1_syzg.jpg', 'fr_equip1_syzg.bmp', 'fr_equip1_syzg.png', 'fr_equip1_syzg.webp', 'fr_equip5_wxpp.jpg', 'fr_equip5_wxpp.png', 'fr_equip5_wxpp.webp', 'fr_equip5_wxpp.bmp', 'fr_card_scfm.png',
                             'fr_card_scfm.webp', 'fr_card_scfm.jpg', 'fr_card_scfm.bmp', 'fr_equip1_mhlq.bmp', 'fr_equip1_mhlq.jpg', 'fr_equip1_mhlq.webp', 'fr_equip1_mhlq.png', 'fr_equip2_yyxl.png', 'fr_equip2_yyxl.bmp', 'fr_equip2_yyxl.webp', 'fr_equip2_yyxl.jpg',
-                            'fr_card_xzst.png', 'fr_card_xzst.bmp', 'fr_card_xzst.webp', 'fr_card_xzst.jpg',
+                            'fr_card_xzst.png', 'fr_card_xzst.bmp', 'fr_card_xzst.webp', 'fr_card_xzst.jpg', 'fr_basic_madsha.jpg', 'fr_basic_madsha.png', 'fr_basic_madsha.webp', 'fr_basic_madsha.bmp',
                         ];
                         for (let i = 0; i < furryCardFiles.length; i++) {
                             if (!files.contains(furryCardFiles[i])) {
@@ -1817,6 +1906,34 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 content: function () { game._started = true; },
             };
         }, precontent: function (furryPack) {
+            //---------------------------------------一言------------------------------------------//
+            fetch("https://v1.hitokoto.cn/")
+                .then((respond) => respond.json())
+                .then((hitokoto) => {
+                    game.hitokoto = hitokoto;
+                })
+                .catch((error) => {
+                    game.hitokoto = {
+                        hitokoto: "您的网络或配置错误，无法获取一言内容。",
+                        from: '钫酸酱',
+                    }
+                    console.error(error);
+                });
+            //---------------------------------------历史上的今天------------------------------------------//
+            fetch("https://api.oick.cn/lishi/api.php")
+                .then((result) => result.json())
+                .then((data) => { game.historyday = data })
+                .catch((error) => {
+                    var date = new Date()
+                    var datestr = `${date.getMonth() < 10 ? '0' : ''}${date.getMonth()}/ ${date.getDate()}`
+                    game.historyday = {
+                        day: datestr,
+                        result: {
+                            date: `${date.getFullYear()}年${date.getMonth()}月${date.getDate()}日`,
+                            title: '您的网络出错了...'
+                        }
+                    }
+                })
             //---------------------------------------自动开启武将------------------------------------------//
             if ((!lib.config.characters.contains('furryPack') || !lib.config.cards.contains('furryCard')) && !lib.config.extension_福瑞拓展_autoOpenPack) {
                 lib.config.characters.push('furryPack')
@@ -3120,7 +3237,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 },
             },
-
             'new_inpile_title': {
                 "name": "<b><p align=center><img style=width:200px src=" + lib.assetURL + "extension/福瑞拓展/image/others/youxitiaozheng.png></b>",
                 "clear": true,
@@ -3552,10 +3668,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             },
             intro: "<li>(｡･∀･)ﾉﾞ嗨，" + lib.config.connect_nickname + "！欢迎游玩福瑞拓展！<li>图片来自网络，若有侵权请联系作者删除<li><font color=\"red\">点击底部彩色字体可直接加入群聊</font><li>👇下方为QQ群二维码<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup.png></img>",
-            author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img>",
+            author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.2.0.6",
+            version: "2.2.0.7",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })

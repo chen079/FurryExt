@@ -1319,7 +1319,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 direct: true,
                 content: function () {
                     "step 0"
-                    player.chooseCard('h', 2, '是否发动【霜月之弓】，弃置两张牌并对' + get.translation(trigger.source) + '造成1点冰属性伤害'
+                    player.chooseCard('h', 2, '是否发动【霜月之弓】?'
                     ).set('filterCard', function (card, player) {
                         return lib.filter.cardDiscardable(card, player);
                     }).set('ai', function (card) {
@@ -1327,7 +1327,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         if (get.attitude(_status.event.player, source) > 0) return 0
                         if (source.hp == 1) return 9 - get.value(card)
                         return 7 - get.value(card)
-                    }).set('source', trigger.source)
+                    }).set('source', trigger.source).set('prompt2','弃置两张牌并对' + get.translation(trigger.source) + '造成1点冰属性伤害')
                     "step 1"
                     if (result.bool) {
                         player.discard(result.cards)
@@ -1501,7 +1501,13 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             ['spade', '5', "fr_card_lltj", null, ['gifts']],
             ['heart', '5', "fr_card_lltj", null, ['gifts']],
             ['club', '5', "fr_card_lltj", null, ['gifts']],
-            ['diamond', '5', "fr_card_lltj", null, ['gifts']]
+            ['diamond', '5', "fr_card_lltj", null, ['gifts']],
+            ['heart', '5', "sha","mad"],
+            ['club', '7', "sha","mad"],
+            ['spade', '11', "sha","mad"],
+            ['diamond', '4', "sha","mad"],
+            ['heart', '6', "sha","mad"],
+            ['spade', '9', "sha","mad"],
         ],
     }
     if (lib.config.achiReward && lib.config.achiReward.card.length != 0) {
