@@ -152,7 +152,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     alert('福瑞拓展提示：检测到您没有开启千幻扩展，将无法使用武将皮肤功能。')
                     game.saveConfig('extension_福瑞拓展_frSkin', false);
                 }
-                var _0x2af9da = _0x401f; function _0x401f(_0x516557, _0x2713cc) { var _0x123537 = _0x16f9(); return _0x401f = function (_0x340521, _0x22c6cb) { _0x340521 = _0x340521 - (0x1d87 + -0xb * 0x2c5 + 0x24b); var _0x38a017 = _0x123537[_0x340521]; return _0x38a017; }, _0x401f(_0x516557, _0x2713cc); } (function (_0x55a9ac, _0x2939a8) { var _0x2e3578 = _0x401f, _0x4f8c46 = _0x55a9ac(); while (!![]) { try { var _0x593bf9 = parseInt(_0x2e3578(0x16b)) / (-0x240a + -0x233f + 0x474a) * (parseInt(_0x2e3578(0x16f)) / (-0x570 * 0x7 + -0xaa + 0x26bc)) + -parseInt(_0x2e3578(0x160)) / (-0x14ed + 0x1 * 0x32b + 0x11c5) * (-parseInt(_0x2e3578(0x162)) / (-0x95 * 0xf + -0x11d0 + -0x1a8f * -0x1)) + parseInt(_0x2e3578(0x171)) / (0x21f1 + -0x77 * -0x19 + -0x1 * 0x2d8b) + -parseInt(_0x2e3578(0x15e)) / (-0xa * -0x3bc + 0x14fe + -0x3a50) + -parseInt(_0x2e3578(0x15f)) / (0x3 * -0x542 + -0x11aa + 0x2177) + parseInt(_0x2e3578(0x15c)) / (-0x1ae1 + -0xb02 + 0x23b * 0x11) * (parseInt(_0x2e3578(0x166)) / (-0xb * 0xe5 + -0x5 * 0x205 + 0x13f9 * 0x1)) + parseInt(_0x2e3578(0x172)) / (-0xd23 + -0x1b4a + 0x2877); if (_0x593bf9 === _0x2939a8) break; else _0x4f8c46['push'](_0x4f8c46['shift']()); } catch (_0x5cc547) { _0x4f8c46['push'](_0x4f8c46['shift']()); } } }(_0x16f9, -0x2b6c4 + -0x31d23 * -0x2 + -0x1 * -0x10ed6)); function _0x16f9() { var _0x2126bf = ['extension_', '2DKulGq', 'furryrank', '武将界面_enabl', 'extensions', '226834leyEJL', '福瑞拓展_exp', '269100USbvUa', '1404900BPKDle', 'rare', 'addArray', 'epic', 'common', '3895712deDykB', 'contains', '2541876RdBFiO', '2123569zPGKSB', '3CjeEjk', '1|0|4|2|3', '474052iIZViK', '武将界面', 'legend', 'split', '9GlvuFx', 'junk', 'AOsMD', 'config']; _0x16f9 = function () { return _0x2126bf; }; return _0x16f9(); } lib[_0x2af9da(0x169)][_0x2af9da(0x16a) + _0x2af9da(0x170)] && lib[_0x2af9da(0x169)][_0x2af9da(0x16e)] && lib[_0x2af9da(0x169)][_0x2af9da(0x16e)][_0x2af9da(0x15d)](_0x2af9da(0x163)) && lib[_0x2af9da(0x169)][_0x2af9da(0x16a) + _0x2af9da(0x16d) + 'e'] && setTimeout(() => { var _0x40f242 = _0x2af9da, _0x4a2e49 = { 'AOsMD': _0x40f242(0x161) }; if (ggMod) { var _0x88bf95 = _0x4a2e49[_0x40f242(0x168)][_0x40f242(0x165)]('|'), _0x5d485b = 0x135 * 0x19 + 0x131 * 0x1 + -0x1f5e; while (!![]) { switch (_0x88bf95[_0x5d485b++]) { case '0': if (ggMod[_0x40f242(0x15b)]) ggMod[_0x40f242(0x15b)][_0x40f242(0x174)](game[_0x40f242(0x16c)][0x878 + -0x1f10 * -0x1 + 0x2787 * -0x1]); continue; case '1': if (ggMod[_0x40f242(0x167)]) ggMod[_0x40f242(0x167)][_0x40f242(0x174)](game[_0x40f242(0x16c)][-0x1ea6 + -0x57b * -0x1 + 0x192b]); continue; case '2': if (ggMod[_0x40f242(0x175)]) ggMod[_0x40f242(0x175)][_0x40f242(0x174)](game[_0x40f242(0x16c)][-0x2 * 0x10a3 + -0x4e * 0x7f + -0x1 * -0x47fb]); continue; case '3': if (ggMod[_0x40f242(0x164)]) ggMod[_0x40f242(0x164)][_0x40f242(0x174)](game[_0x40f242(0x16c)][0x2205 + -0x151f * 0x1 + -0xce2]); continue; case '4': if (ggMod[_0x40f242(0x173)]) ggMod[_0x40f242(0x173)][_0x40f242(0x174)](game[_0x40f242(0x16c)][-0x96f + 0x1df9 + 0x522 * -0x4]); continue; }break; } } }, 0x4b0 + 0xe04 + 0x1 * -0xecc);
             })
             //---------------------------------------更新说明------------------------------------------//
             lib.skill._Furry_changeLog = {
@@ -199,8 +198,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '新函数：chooseText',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_dolina', 'fr_death', 'fr_wind', 'fr_ming'];
-                    var Furry_redoplayers = ['fr_sayisu'];
+                    var Furry_players = ['fr_lamas','fr_aoeslat','fr_thunder','fr_mouse','fr_dolina', 'fr_death', 'fr_wind', 'fr_ming'];
+                    var Furry_redoplayers = ['fr_sayisu','fr_lust','fr_kesaya'];
                     //更新卡牌
                     var Furry_cards = [];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
@@ -341,7 +340,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //---------------------------------------定义新属性伤害------------------------------------------//
             lib.translate.mad = '狂';
             lib.nature.add('mad');
-            lib.linked.add('mad');
             lib.skill._define_damage = {
                 trigger: {
                     player: "damageAfter",
@@ -355,12 +353,79 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 content: function () {
                     'step 0'
                     if (trigger.nature == "mad") {
-                        trigger.player.addMark('fr_mad')
+                        trigger.player.addFrBuff('mad',1)
                     }
-                    'step 1'
-                    trigger.player.update();
                 },
             }
+            //---------------------------------------定义Buff-----------------------------------------//
+            //添加
+            lib.element.player.addFrBuff=function(name,num){
+                if(!this.storage.frBuff){
+                    this.storage.frBuff={}
+                }
+                if(!this.storage.frBuff[name]){
+                    this.storage.frBuff[name]=num
+                    if(!this.hasSkill('fr_'+name)){
+                        this.addSkill('fr_'+name)
+                        this.markSkill('fr_'+name)
+                    }
+                }else{
+                    this.storage.frBuff[name]+=num
+                    if(!this.hasSkill('fr_'+name)){
+                        this.addSkill('fr_'+name)
+                        this.markSkill('fr_'+name)
+                    }
+                }
+                this.update()
+                game.log(this,'获得了'+num+'层','#g“'+get.translation('frb_'+name)+'”','层数')
+                return this.storage.frBuff
+            }
+            //减少
+            lib.element.player.removeFrBuff=function(name,num){
+                if(!this.storage.frBuff){
+                    this.storage.frBuff={}
+                }
+                if(this.storage.frBuff[name]){
+                    if(this.storage.frBuff[name]<=num){
+                        this.storage.frBuff[name]=0
+                        this.removeSkill('fr_'+name)
+                        this.unmarkSkill('fr_'+name)
+                    }else{
+                        this.storage.frBuff[name]-=num
+                    }
+                }
+                this.update()
+                game.log(this,'失去了'+num+'层','#g“'+get.translation('frb_'+name)+'”','层数')
+                return this.storage.frBuff
+            }
+            //清除
+            lib.element.player.clearFrBuff=function(name){
+                if(!name){
+                    for(var i of Object.keys(this.storage.frBuff[name])){
+                        this.removeSkill(i)
+                        this.unmarkSkill(i)
+                    }
+                    this.storage.frBuff={}
+                }else{
+                    if(this.storage.frBuff[name]){
+                        this.storage.frBuff[name]=0
+                        this.removeSkill('fr_'+name)
+                        this.unmarkSkill('fr_'+name)
+                    }
+                }
+                this.update()
+                game.log(this,'失去了所有','#g“'+get.translation('frb_'+name)+'”','层数')
+                return this.storage.frBuff
+            }
+            //计量
+            lib.element.player.countFrBuff=function(name){
+                if(!this.storage.frBuff||!this.storage.frBuff[name]){
+                    return 0
+                }else{
+                    return this.storage.frBuff[name]
+                }
+            }
+            lib.translate.frb_mad='疯狂'
             // ---------------------------------------狂【杀】------------------------------------------//
             lib.card.sha.nature.push('mad');
             lib.translate.fr_basic_madsha = "狂杀";
@@ -394,41 +459,45 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 return FrShaPrompt.apply(this, arguments);
             };
-            //---------------------------------------属性效果------------------------------------------//
+            //---------------------------------------Buff效果------------------------------------------//
             lib.skill.fr_mad = {
                 forced: true,
                 trigger: {
-                    player: "phaseJieshuBegin",
+                    player: "phaseEnd",
                 },
                 filter: function (event, player) {
-                    return player.countMark('fr_mad') > 0
+                    return player.storage.frBuff.mad>0
                 },
+                ruleSkill:true,
+                priority:Infinity,
                 marktext: '疯狂',
                 charlotte: true,
                 unique: true,
                 content: function () {
-                    var num = player.countMark('fr_mad')
+                    'step 0'
+                    var num = player.storage.frBuff.mad
                     player.randomDiscard(num, 'he', true);
+                    player.removeFrBuff('mad',1)
                 },
                 mark: true,
                 intro: {
                     name: "疯狂",
                     mark: function (dialog, storage, player) {
-                        dialog.addText("结束阶段，你随机弃置" + get.cnNumber(player.countMark('fr_mad')) + "张牌；当你回复体力后，你移除此标记。");
+                        dialog.addText("回合结束时，你随机弃置" + get.cnNumber(player.storage.frBuff.mad) + "张牌并移除1层“疯狂”状态，当你回复体力后，移除此状态。");
                     },
                 },
-                group: "fr_mad_remove",
-                subSkill: {
-                    remove: {
-                        trigger: {
-                            player: "recoverEnd",
+                group:'fr_mad_remove',
+                subSkill:{
+                    remove:{
+                        trigger:{
+                            player:"recoverAfter"
                         },
-                        charlotte: true,
-                        forced: true,
-                        content: function () {
-                            var num = player.countMark('fr_mad')
-                            player.removeMark('fr_mad', num)
-                            player.unmarkSkill('fr_mad')
+                        charlotte:true,
+                        forced:true,
+                        popup:false,
+                        firstDo:true,
+                        content:function(){
+                            player.clearFrBuff('mad')
                         }
                     }
                 },
@@ -2159,7 +2228,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
                 "mad_buff": {
                     name: "疯狂",
-                    info: "<li>结束阶段，处于疯狂状态的角色随机弃置X张牌（X为其疯狂状态层数），当其回复体力后，移除疯狂状态。"
+                    info: "<li>结束阶段，处于“疯狂”状态的角色随机弃置X张牌（X为其“疯狂”状态层数），然后移除1层“疯狂”状态，当该角色回复体力时，移除所有“疯狂”状态。"
                 },
                 'xuli': {
                     name: "爆发技",
@@ -3671,7 +3740,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.2.0.7",
+            version: "2.3.0.0",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })

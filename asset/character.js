@@ -4994,20 +4994,25 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 skillAnimation: true,
                 animationColor: "thunder",
                 unique: true,
-                logTarget: function ($QUUSyLRg1, sjwjVa2) { return game["\x66\x69\x6c\x74\x65\x72\x50\x6c\x61\x79\x65\x72"](function (Z3) { return Z3["\x69\x73\x41\x6c\x69\x76\x65"]() && Z3 != sjwjVa2; }); },
+                logTarget: function (event,player) {
+                    return game.filterPlayer(function(current){
+                        return current!=player
+                    })
+                },
                 content: function () {
                     'step 0'
                     player.awakenSkill('qima_jm');
                     'step 1'
-                    player["\x72\x65\x63\x6f\x76\x65\x72"](2 - player["\x68\x70"])
-                    game["\x66\x69\x6c\x74\x65\x72\x50\x6c\x61\x79\x65\x72"](function (BWRagwwN1) {
-                        if (BWRagwwN1 != player) {
-                            for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) {
-                                lib["\x73\x6b\x69\x6c\x6c"][BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2]] = {}
+                    game.countPlayer(function(current){
+                        if(current!=player){
+                            var skills=current.skills
+                            for(var i of skills){
+                                current.removeSkill(i)
+                                current.unmarkSkill(i)
                             }
-                            for (var NvNswYJS2 = 0; NvNswYJS2 < BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"]["\x6c\x65\x6e\x67\x74\x68"]; NvNswYJS2++) {
-                                BWRagwwN1["\x75\x6e\x6d\x61\x72\x6b\x53\x6b\x69\x6c\x6c"](BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"][NvNswYJS2])
-                            } BWRagwwN1["\x73\x6b\x69\x6c\x6c\x73"] = []; BWRagwwN1["\x6d\x61\x78\x48\x70"] = 4; BWRagwwN1.hujia = 0; BWRagwwN1.update()
+                            current.skills=[]
+                            current.maxHp=4
+                            current.update()
                         }
                     })
                 },
@@ -5172,14 +5177,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 filter: function (event, player) {
                     return game.hasPlayer(function (current) {
-                        return current.countMark('fr_mad') > 0
+                        return current.countFrBuff('mad') > 0
                     })
                 },
                 direct: true,
                 content: function () {
                     'step 0'
                     var num = game.countPlayer(function (current) {
-                        return current.countMark('fr_mad') > 0
+                        return current.countFrBuff('mad') > 0
                     })
                     var str = '移去任意名角色的疯狂标记，'
                     if (trigger.name == 'phaseDraw') {
@@ -5195,15 +5200,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         var player = _status.event.player
                         return (get.attitude(player, target) - 2 * Math.random() + 1)
                     }).set('filterTarget', function (card, player, target) {
-                        return target.countMark('fr_mad') > 0
+                        return target.countFrBuff('mad') > 0
                     }).set('prompt2', str)
                     'step 1'
                     if (result.bool) {
                         var num = 0
                         for (var i = 0; i < result.targets.length; i++) {
-                            num += result.targets[i].countMark('fr_mad')
-                            result.targets[i].removeMark('fr_mad', result.targets[0].countMark('fr_mad'))
-                            result.targets[i].unmarkSkill('fr_mad')
+                            num += result.targets[i].countFrBuff('mad')
+                            result.targets[i].clearFrBuff('mad')
                         }
                         if (trigger.name == 'phaseDraw') {
                             trigger.num += num
@@ -18742,7 +18746,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'death_sp': "审判",
             'death_sp_info': "觉醒技，当你累计造成不少于6点伤害时，你失去1点体力上限并修改〖双镰①〗为：每回合限一次，当你对其他角色造成伤害时，你可以令此伤害+1并获得该角色的一张牌。",
             'death_sy': "随影",
-            'death_sy_info': "锁定技。①游戏开始时，你选择一名其他角色称为“猎物”并令其获得〖恐惧〗且你对其使用牌无距离限制，当其回合结束后，若其下家不为你，你与该角色的下家交换位置，否则，你执行一个额外的回合；②当“猎物”死亡时，你可以重新选择一名其他角色称为“猎物”并令其获得〖恐惧〗；",
+            'death_sy_info': "锁定技。①游戏开始时，你选择一名其他角色称为“猎物”并令其获得〖恐惧〗且你对其使用牌无距离限制，当其回合结束后，若其下家不为你，你与该角色的下家交换位置，否则，你执行一个额外的回合；②当“猎物”死亡时，你可以重新选择一名其他角色称为“猎物”并令其获得〖恐惧〗。",
             'death_sl': "双镰",
             'death_sl_info': "①每回合限一次，当你对“猎物”造成伤害时，你可以执行一项：1.令此次伤害+1；2.令该角色弃置两张牌；3.背水：你失去1点体力。②当你不因此技能使用【杀】指定目标后，你可以视为对目标使用一张【杀】。",
             'dolina_qj': '权聚',
@@ -18758,7 +18762,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'aoeslat_cf': '奢繁',
             'aoeslat_cf_info': '摸牌阶段开始时，你可以多摸X+1张牌（X为场上的角色数的一半并向上取整），若如此做，当你于你的回合内使用基本牌或普通锦囊牌时，你弃置一张牌。出牌阶段开始时，你视为对所有角色使用一张【弹尽粮绝】。',
             'aoeslat_aq': '傲权',
-            'aoeslat_aq_info': "你使用有目标的基本牌或普通锦囊牌时，你可以额外指定至多两名你本回合内使用的上一张牌的目标为目标",
+            'aoeslat_aq_info': "你使用有目标的基本牌或普通锦囊牌时，你可以额外指定至多两名你本回合内使用的上一张牌的目标为目标。",
             'thunder_lj': "流雷",
             'thunder_lj_info': "出牌阶段限一次，你可以弃置一张手牌，令所有其他角色打出一张与上一名以此法打出或弃置的牌点数或花色相同的牌，否则你对其造成1点雷电伤害，此技能结算完毕后，你获得其他角色至多X张因此技能打出的牌（X为未打出牌的角色数）。每回合限两次，当你造成雷属性伤害后，你可以令目标角色回复1点体力并摸一张牌。",
             'thunder_fz': '奋决',

@@ -1,7 +1,6 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
-		
 		'fr_ming':"语出如剑，可伤人心。",
 		'fr_death':"我喜欢死亡的味道...",
 		'fr_aoeslat': "不过是几条人命而已，哪有我的享乐重要，哈哈哈哈！",
