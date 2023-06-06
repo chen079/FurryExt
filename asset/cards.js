@@ -1376,7 +1376,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 },
                 mark: true,
                 intro: {
-                    content: '锁定技，①摸牌阶段额定摸牌数-1，②你使用牌结算完毕后，若此牌造成了伤害，摸一张牌。'
+                    content: '锁定技，①摸牌阶段额定摸牌数-1，②每回合限四次，你使用牌结算完毕后，若此牌造成了伤害，摸一张牌。'
                 },
                 marktext: '断粮',
                 silent: true,
@@ -1387,6 +1387,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         return evt.card == event.card;
                     }).length > 0;
                 },
+                usable:4,
                 content: function () {
                     if (trigger.name == 'phaseDraw') trigger.num--;
                     else player.draw();
@@ -1422,7 +1423,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             'mhlq_skill': '鸣鸿龙雀',
             'mhlq_skill_info': '锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害（时机同青釭剑）。',
             'card_djlj': '弹尽粮绝',
-            'card_djlj_info': '锁定技，①摸牌阶段额定摸牌数-1，②使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
+            'card_djlj_info': '锁定技，①摸牌阶段额定摸牌数-1，②每回合限四次，你使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
             "card_sx": "嗜血",
             "card_sx_info": "你的回合结束时，你移除此技能，然后若本回合内你杀死过其他角色，你摸三张牌并执行一个额外的回合。",
             'yy_skill': '影夜项链',
@@ -1445,7 +1446,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             'fr_card_scfm': '水草丰茂',
             'fr_card_scfm_info': '出牌阶段，对所有角色使用，目标角色摸一张牌。',
             'fr_card_djlj': '弹尽粮绝',
-            'fr_card_djlj_info': '出牌阶段，对所有未获得此牌效果的角色使用，目标角色获得以下效果直到其回合结束：①摸牌阶段额定摸牌数-1，②使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
+            'fr_card_djlj_info': '出牌阶段，对所有未获得此牌效果的角色使用，目标角色获得以下效果直到其回合结束：①摸牌阶段额定摸牌数-1，②每回合限四次，使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
             "fr_card_zfxd": '针锋相对',
             'fr_card_zfxd_info': "此牌可被重铸。出牌阶段，对一名角色使用。令其与你指定的另一名在其攻击范围内的角色各声明一张【杀】或【闪】；若二者都声明【杀】，二者各流失一点体力；若二者都声明【闪】，二者各弃置一张牌；否则，声明【杀】的角色摸两张牌并对声明【闪】的角色造成一点伤害。",
             "fr_card_cmhc": "筹谋划策",

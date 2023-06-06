@@ -438,7 +438,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (lib.config['extension_十周年UI_enable'] && lib.config.extension_十周年UI_cardPrettify != 'off') {
                         ret.style.backgroundImage = 'url("' + lib.assetURL + "extension/十周年UI/image/card/fr_basic_madsha." + lib.config.extension_十周年UI_cardPrettify + '")';
                     }
-                    ret.$name.innerText = "狂杀"
+                    if(ret.$name) ret.$name.innerHTML = "狂杀"
                 }
                 return ret;
             };
