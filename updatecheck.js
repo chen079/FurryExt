@@ -24,8 +24,6 @@
 		'extension.js',
 		'image/qidongye/furry_lib.jpg',
 		'image/qidongye/furry_lib2.jpg',
-		'json/idiom.json',
-		'json/poems.json',
 		'image/background/wall.png',
 		'image/card/pretty/fr_basic_madsha.bmp',
 		'image/card/pretty/fr_basic_madsha.jpg',

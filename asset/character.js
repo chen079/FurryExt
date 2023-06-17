@@ -5440,6 +5440,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         init: function (player) {
                             player.changeHujia(1);
                         },
+                        charlotte:true,
                         onremove: function (player) {
                             player.changeHujia(-1);
                         },
@@ -5456,6 +5457,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                     "2": {
                         forced: true,
+                        charlotte:true,
                         init: function (player) {
                             player.changeHujia(1);
                         },
