@@ -198,8 +198,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         '新函数：chooseText',
                     ];
                     //更新武将
-                    var Furry_players = ['fr_lamas','fr_aoeslat','fr_thunder','fr_mouse','fr_dolina', 'fr_death', 'fr_wind', 'fr_ming'];
-                    var Furry_redoplayers = ['fr_sayisu','fr_lust','fr_kesaya'];
+                    var Furry_players = ['fr_lamas', 'fr_aoeslat', 'fr_thunder', 'fr_mouse', 'fr_dolina', 'fr_death', 'fr_wind', 'fr_ming'];
+                    var Furry_redoplayers = ['fr_sayisu', 'fr_lust', 'fr_kesaya'];
                     //更新卡牌
                     var Furry_cards = [];
                     var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
@@ -353,79 +353,79 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 content: function () {
                     'step 0'
                     if (trigger.nature == "mad") {
-                        trigger.player.addFrBuff('mad',1)
+                        trigger.player.addFrBuff('mad', 1)
                     }
                 },
             }
             //---------------------------------------定义Buff-----------------------------------------//
             //添加
-            lib.element.player.addFrBuff=function(name,num){
-                if(!this.storage.frBuff){
-                    this.storage.frBuff={}
+            lib.element.player.addFrBuff = function (name, num) {
+                if (!this.storage.frBuff) {
+                    this.storage.frBuff = {}
                 }
-                if(!this.storage.frBuff[name]){
-                    this.storage.frBuff[name]=num
-                    if(!this.hasSkill('fr_'+name)){
-                        this.addSkill('fr_'+name)
-                        this.markSkill('fr_'+name)
+                if (!this.storage.frBuff[name]) {
+                    this.storage.frBuff[name] = num
+                    if (!this.hasSkill('fr_' + name)) {
+                        this.addSkill('fr_' + name)
+                        this.markSkill('fr_' + name)
                     }
-                }else{
-                    this.storage.frBuff[name]+=num
-                    if(!this.hasSkill('fr_'+name)){
-                        this.addSkill('fr_'+name)
-                        this.markSkill('fr_'+name)
+                } else {
+                    this.storage.frBuff[name] += num
+                    if (!this.hasSkill('fr_' + name)) {
+                        this.addSkill('fr_' + name)
+                        this.markSkill('fr_' + name)
                     }
                 }
                 this.update()
-                game.log(this,'获得了'+num+'层','#g“'+get.translation('frb_'+name)+'”','层数')
+                game.log(this, '获得了' + num + '层', '#g“' + get.translation('frb_' + name) + '”', '层数')
                 return this.storage.frBuff
             }
             //减少
-            lib.element.player.removeFrBuff=function(name,num){
-                if(!this.storage.frBuff){
-                    this.storage.frBuff={}
+            lib.element.player.removeFrBuff = function (name, num) {
+                if (!this.storage.frBuff) {
+                    this.storage.frBuff = {}
                 }
-                if(this.storage.frBuff[name]){
-                    if(this.storage.frBuff[name]<=num){
-                        this.storage.frBuff[name]=0
-                        this.removeSkill('fr_'+name)
-                        this.unmarkSkill('fr_'+name)
-                    }else{
-                        this.storage.frBuff[name]-=num
+                if (this.storage.frBuff[name]) {
+                    if (this.storage.frBuff[name] <= num) {
+                        this.storage.frBuff[name] = 0
+                        this.removeSkill('fr_' + name)
+                        this.unmarkSkill('fr_' + name)
+                    } else {
+                        this.storage.frBuff[name] -= num
                     }
                 }
                 this.update()
-                game.log(this,'失去了'+num+'层','#g“'+get.translation('frb_'+name)+'”','层数')
+                game.log(this, '失去了' + num + '层', '#g“' + get.translation('frb_' + name) + '”', '层数')
                 return this.storage.frBuff
             }
             //清除
-            lib.element.player.clearFrBuff=function(name){
-                if(!name){
-                    for(var i of Object.keys(this.storage.frBuff[name])){
+            lib.element.player.clearFrBuff = function (name) {
+                if (!name) {
+                    for (var i of Object.keys(this.storage.frBuff[name])) {
                         this.removeSkill(i)
                         this.unmarkSkill(i)
                     }
-                    this.storage.frBuff={}
-                }else{
-                    if(this.storage.frBuff[name]){
-                        this.storage.frBuff[name]=0
-                        this.removeSkill('fr_'+name)
-                        this.unmarkSkill('fr_'+name)
+                    this.storage.frBuff = {}
+                } else {
+                    if (this.storage.frBuff[name]) {
+                        this.storage.frBuff[name] = 0
+                        this.removeSkill('fr_' + name)
+                        this.unmarkSkill('fr_' + name)
                     }
                 }
                 this.update()
-                game.log(this,'失去了所有','#g“'+get.translation('frb_'+name)+'”','层数')
+                game.log(this, '失去了所有', '#g“' + get.translation('frb_' + name) + '”', '层数')
                 return this.storage.frBuff
             }
             //计量
-            lib.element.player.countFrBuff=function(name){
-                if(!this.storage.frBuff||!this.storage.frBuff[name]){
+            lib.element.player.countFrBuff = function (name) {
+                if (!this.storage.frBuff || !this.storage.frBuff[name]) {
                     return 0
-                }else{
+                } else {
                     return this.storage.frBuff[name]
                 }
             }
-            lib.translate.frb_mad='疯狂'
+            lib.translate.frb_mad = '疯狂'
             // ---------------------------------------狂【杀】------------------------------------------//
             lib.card.sha.nature.push('mad');
             lib.translate.fr_basic_madsha = "狂杀";
@@ -438,7 +438,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (lib.config['extension_十周年UI_enable'] && lib.config.extension_十周年UI_cardPrettify != 'off') {
                         ret.style.backgroundImage = 'url("' + lib.assetURL + "extension/十周年UI/image/card/fr_basic_madsha." + lib.config.extension_十周年UI_cardPrettify + '")';
                     }
-                    if(ret.$name) ret.$name.innerHTML = "狂杀"
+                    if (ret.$name) ret.$name.innerHTML = "狂杀"
                 }
                 return ret;
             };
@@ -466,10 +466,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     player: "phaseEnd",
                 },
                 filter: function (event, player) {
-                    return player.storage.frBuff.mad>0
+                    return player.storage.frBuff.mad > 0
                 },
-                ruleSkill:true,
-                priority:Infinity,
+                ruleSkill: true,
+                priority: Infinity,
                 marktext: '疯狂',
                 charlotte: true,
                 unique: true,
@@ -477,7 +477,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     'step 0'
                     var num = player.storage.frBuff.mad
                     player.randomDiscard(num, 'he', true);
-                    player.removeFrBuff('mad',1)
+                    player.removeFrBuff('mad', 1)
                 },
                 mark: true,
                 intro: {
@@ -486,17 +486,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         dialog.addText("回合结束时，你随机弃置" + get.cnNumber(player.storage.frBuff.mad) + "张牌并移除1层“疯狂”状态，当你回复体力后，移除此状态。");
                     },
                 },
-                group:'fr_mad_remove',
-                subSkill:{
-                    remove:{
-                        trigger:{
-                            player:"recoverAfter"
+                group: 'fr_mad_remove',
+                subSkill: {
+                    remove: {
+                        trigger: {
+                            player: "recoverAfter"
                         },
-                        charlotte:true,
-                        forced:true,
-                        popup:false,
-                        firstDo:true,
-                        content:function(){
+                        charlotte: true,
+                        forced: true,
+                        popup: false,
+                        firstDo: true,
+                        content: function () {
                             player.clearFrBuff('mad')
                         }
                     }
@@ -994,61 +994,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 event.resume();
             };
-            // ---------------------------------------发动技能函数------------------------------------------//
-            var FrLogSkill = lib.element.player.logSkill;
-            lib.element.player.logSkill = function (skillname) {
-                FrLogSkill.apply(this, arguments);
-                var next = game.createEvent('FrLogSkill');
-                next.player = this;
-                next.skill = skillname;
-                next.setContent('emptyEvent');
-            };
-            lib.element.player.FrGetName = function () {
-                if (this.name.lastIndexOf("_") == -1) {
-                    return this.name;
-                }
-                return this.name.slice(this.name.lastIndexOf("_") + 1);
-            };
-            lib.skill._Fr_useSkillAfter = {
-                popup: false,
-                forced: true,
-                trigger: {
-                    player: "useSkillBefore",
-                },
-                filter: function (event, player) {
-                    return true;
-                },
-                content: function () {
-                    var next = game.createEvent('FrLogSkill');
-                    next.player = player;
-                    next.skill = trigger.skill;
-                    next.setContent('emptyEvent');
-                }
-            };
-            // ---------------------------------------新增获得技能时机------------------------------------------//	
-            var originAddSkill = lib.element.player.addSkill;
-            lib.element.player.addSkill = function (skill, checkConflict, nobroadcast, addToSkills) {
-                originAddSkill.apply(this, arguments);
-                if (game._started) {
-                    var next = game.createEvent('addSkill');
-                    next.player = this;
-                    if (!Array.isArray(skill)) next.skill = skill;
-                    next.setContent('emptyEvent');
-                }
-                return skill;
-            }
-            // ---------------------------------------新增失去技能时机------------------------------------------//	
-            var originRemoveSkill = lib.element.player.removeSkill;
-            lib.element.player.removeSkill = function (skill) {
-                originRemoveSkill.apply(this, arguments);
-                if (game._started) {
-                    var next = game.createEvent('removeSkill');
-                    next.player = this;
-                    if (!Array.isArray(skill)) next.skill = skill;
-                    next.setContent('emptyEvent');
-                }
-                return skill;
-            }
             //---------------------------------------自定义函数：互变------------------------------------------//
             lib.skill.hubian = {
                 init: function (player) {
