@@ -5,8 +5,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore', 'fr_francium', 'fr_nanci',],
         connect: true,//该武将包是否可以联机（必填）
         character: {
+            'fr_lucifer':['male', 'wu', 3, [''], ['unseen']],
+            'fr_lans':['male', 'shu', 3, [''], ['unseen']],
             'fr_keste': ['male', 'wu', 4, ['keste_yg','keste_cs'], ['des:科斯特，迦奈尔联邦最年轻也是最年少有为的将军，曾经在与矮人族的战争——“矮人之心争夺战”中大获全胜，歼敌数万。其主导与矮人族签下的《斯兰条约》为迦奈尔联邦的贸易事业奠定了发展基础。因此，这位将军也被成为“尼拉特”将军——即矮人语中的“恶魔”。']],
-            'fr_neises': ['male', 'fr_g_dragon', 3, ['meet'], ['unseen']],
+            'fr_neises': ['male', 'fr_g_dragon', 3, [], ['unseen']],
             'fr_wind': ['male', 'wu', 4, ['wind_fy'], []],
             'fr_nine': ['male', 'shen', 3, ['nine_fw', 'nine_cj', 'nine_dx'], []],
             'fr_ming': ['male', 'qun', 3, ['ming_yc', 'ming_yy'], ['unseen']],
@@ -397,7 +399,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 subSkill: {
                     addMark: {
                         trigger: {
-                            player: ['phaseZhunbeiBefore', 'phaseJudgeBefore', 'phaseDrawBefore', 'phaseUseBefore', 'phaseDiscardBefore', 'phaseJieshuBefore']
+                            global: ['phaseZhunbeiBefore', 'phaseJudgeBefore', 'phaseDrawBefore', 'phaseUseBefore', 'phaseDiscardBefore', 'phaseJieshuBefore']
                         },
                         forced: true,
                         charlotte: true,
@@ -410,7 +412,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                     removeMark: {
                         trigger: {
-                            player: ['loseAfter', 'phaseZhunbeiAfter', 'phaseJudgeAfter', 'phaseDrawAfter', 'phaseUseAfter', 'phaseDiscardAfter', 'phaseJieshuAfter']
+                            global: ['loseAfter', 'phaseZhunbeiAfter', 'phaseJudgeAfter', 'phaseDrawAfter', 'phaseUseAfter', 'phaseDiscardAfter', 'phaseJieshuAfter']
                         },
                         forced: true,
                         charlotte: true,
@@ -19709,6 +19711,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "wore_bossty_info": "锁定技，你的阶段不会被跳过，你每回合能受到伤害、失去体力、失去体力上限的总和至多为游戏轮数",
 
             //武将
+            'fr_lans': '✡兰斯',
+            'fr_lucifer': '✡路西法',
             'fr_nine': '✡奈恩',
             'fr_keste': "✡科斯特",
             'fr_wind': "✡温迪",
