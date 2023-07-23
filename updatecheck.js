@@ -1,15 +1,13 @@
 (() => ({
 	// 扩展版本
-	version: "2.3.0.0",
+	version: "2.3.0.3",
 
 	// 扩展的上一个版本
-	oldversion: "2.2.0.7",
+	oldversion: "2.3.0.1",
 
 	// 更新内容汇总
 	changeLog: `
-	完善狂杀代码
-	更新冲刺、转移卡图
-	修改【弹尽粮绝】为每回合限四次
+	福瑞拓展常规更新
     `,
 
 	// 本次更新的所有文件(不包括文件夹)
@@ -22,13 +20,6 @@
 		'asset/drama.js',
 		'asset/furry_achievement.js',
 		'extension.js',
-		'image/qidongye/furry_lib.jpg',
-		'image/qidongye/furry_lib2.jpg',
-		'image/background/wall.png',
-		'image/card/pretty/fr_basic_madsha.bmp',
-		'image/card/pretty/fr_basic_madsha.jpg',
-		'image/card/pretty/fr_basic_madsha.png',
-		'image/card/pretty/fr_basic_madsha.webp',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

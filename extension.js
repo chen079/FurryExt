@@ -173,32 +173,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     //更新告示
                     var Furry_update = [
                         '/Character/',
-                        '/redoCharacter/',
-                        '重做武将：卢森特，克萨亚',
-                        '新武将 拉马斯',
-                        '新概念 奋发技',
-                        '德克人物原画重置',
-                        '新卡牌 雪中送炭',
-                        '重置 卢森特 技能',
-                        '重置 莱恩斯 技能',
-                        '新增成就 人与狂流、你在造假吗？、还不可以认输！、哈尔斯的高徒',
-                        '德克 新增技能',
-                        '新角色 多林',
-                        '新角色 迪斯',
-                        '新系统 成就奖励',
-                        '新成就 拆弹成功、虚争空言，不如击而破之、神仙难救',
-                        '修改 tails 转移选项',
-                        '修改 rasali 灵引技能',
-                        '修改 zhan 的部分标记错误',
-                        '修复各种错误',
-                        '修复部分成就无法获得的错误',
-                        '重写ChooseText，解决不会自动换人的错误',
-                        '重做人物萨伊苏',
-                        '新人物：鸣、温迪',
-                        '新函数：chooseText',
+                        '修复部分bug',
+                        '新武将 奈恩'
                     ];
                     //更新武将
-                    var Furry_players = ['fr_lamas', 'fr_aoeslat', 'fr_thunder', 'fr_mouse', 'fr_dolina', 'fr_death', 'fr_wind', 'fr_ming'];
+                    var Furry_players = ['fr_nine',];
                     var Furry_redoplayers = ['fr_sayisu', 'fr_lust', 'fr_kesaya'];
                     //更新卡牌
                     var Furry_cards = [];
@@ -360,6 +339,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //---------------------------------------定义Buff-----------------------------------------//
             //添加
             lib.element.player.addFrBuff = function (name, num) {
+                if(!num) num=1
                 if (!this.storage.frBuff) {
                     this.storage.frBuff = {}
                 }
@@ -414,7 +394,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
                 this.update()
-                game.log(this, '失去了所有', '#g“' + get.translation('frb_' + name) + '”', '层数')
+                game.log(this, '解除了', '#g“' + get.translation('frb_' + name) + '”', '状态')
                 return this.storage.frBuff
             }
             //计量
@@ -425,7 +405,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     return this.storage.frBuff[name]
                 }
             }
+            //拥有
+            lib.element.player.hasFrBuff=function(name){
+                if(this.countFrBuff()>0){
+                    return true
+                }else{
+                    return false
+                }
+            }
             lib.translate.frb_mad = '疯狂'
+            lib.translate.frb_sleep = '睡眠'
             // ---------------------------------------狂【杀】------------------------------------------//
             lib.card.sha.nature.push('mad');
             lib.translate.fr_basic_madsha = "狂杀";
@@ -506,6 +495,43 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         player: -1
                     }
                 }
+            }
+            lib.skill.fr_sleep={
+                mark: true,
+                charlotte: true,
+                unique: true,
+                marktext: '睡眠',
+                intro: {
+                    name:"睡眠",
+                    markcount:()=>undefined,
+                    content: "不能使用或打出手牌直到受到伤害或下一回合结束",
+                },
+                trigger: {
+                    player: ["damageEnd", "phaseEnd"],
+                },
+                forced: true,
+                popup: false,
+                content: function () {
+                    player.clearFrBuff('sleep');
+                },
+                mod: {
+                    cardEnabled: function () {
+                        return false;
+                    },
+                    cardUsable: function () {
+                        return false;
+                    },
+                    cardRespondable: function () {
+                        return false;
+                    },
+                    cardSavable: function () {
+                        return false;
+                    },
+                },
+                ai: {
+                    threaten: 0.6,
+                },
+                sub: true,
             }
             //---------------------------------------技能作弊------------------------------------------//
             lib.skill._xuanshi_item = {
@@ -1917,7 +1943,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 filter: function () { return !game._started; },
                 direct: true,
                 priority: 1000,
-                content: function () { game._started = true; },
+                content: function () {
+                    game._started = true;
+                },
             };
         }, precontent: function (furryPack) {
             //---------------------------------------一言------------------------------------------//
@@ -2070,10 +2098,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //史诗
             var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
                 "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow', 'fr_thunder']
+                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow', 'fr_thunder','fr_keste']
             //传说
             var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
-                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium', 'fr_zhan', 'fr_rasali', 'fr_nashu']
+                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium', 'fr_zhan', 'fr_rasali', 'fr_nashu','fr_nine']
             var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
             game.furryrank = furryrank
             //------------------------------------------载入css------------------------------------------//
@@ -2174,6 +2202,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 "mad_buff": {
                     name: "疯狂",
                     info: "<li>结束阶段，处于“疯狂”状态的角色随机弃置X张牌（X为其“疯狂”状态层数），然后移除1层“疯狂”状态，当该角色回复体力时，移除所有“疯狂”状态。"
+                },
+                "sleep_buff":{
+                    name:"睡眠",
+                    info:"<li>处于“睡眠”状态的角色不能够使用或打出牌直到其受到伤害或其下回合结束。"
                 },
                 'xuli': {
                     name: "爆发技",
@@ -3685,7 +3717,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.3.0.0",
+            version: "2.3.0.3",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })

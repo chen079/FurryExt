@@ -1,6 +1,9 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
+		'fr_nine':"我能保护自己，不靠任何人，就这样。",
+		'fr_keste':"我至今还未尝败绩...",
+		'fr_wind':"不要小看风的力量！",
 		'fr_ming':"语出如剑，可伤人心。",
 		'fr_death':"我喜欢死亡的味道...",
 		'fr_aoeslat': "不过是几条人命而已，哪有我的享乐重要，哈哈哈哈！",
@@ -228,7 +231,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		game: {
 			"叠最厚的甲": {
 				level: 4,
-				info: "获得第9点护甲。",
+				info: "获得第5点护甲。",
 				extra: "挨最毒的打",
 				progress: 1
 			},
@@ -250,6 +253,36 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			},
 		},
 		special: {
+			'斩断纵丝': {
+				level: 7,
+				info: '击败挑战模式“纵神哈尔”',
+				extra: "这一剑砍断束缚！",
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_hars')
+				},
+				rewardInfo: '奖励：解锁角色——哈尔',
+				progress: 1,
+			},
+			'屠神者': {
+				level: 7,
+				info: '击败挑战模式“马拉尔”',
+				extra: "就算是战神，我也杀给你看！",
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_mala')
+				},
+				rewardInfo: '奖励：解锁角色——马拉',
+				progress: 1,
+			},
+			'打碎永恒': {
+				level: 7,
+				info: '击败挑战模式“恒神法斯”',
+				extra: "停滞的时间也无法阻挡我！",
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_faers')
+				},
+				rewardInfo: '奖励：解锁角色——法斯',
+				progress: 1,
+			},
 			"你真的很无聊": {
 				level: 4,
 				info: "你是没事可干了嘛？",
@@ -479,6 +512,15 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 	var originGameOver = game.over;
 	game.over = function (ret) {
 		if (ret) {
+			if(lib.config.mode=='boss'){
+				var defeat=game.dead.filter(function(i){
+					return i.name.substring(0,7)=='fr_boss'
+				})
+				for(var i=0;i<defeat.length;i++){
+					if(defeat[i].name=='fr_bosshars'&&!game.frAchi.hasAchi('斩断纵丝', 'special')) game.frAchi.addProgress('斩断纵丝', 'special')
+					if(defeat[i].name=='fr_bossmala'&&!game.frAchi.hasAchi('屠神者', 'special')) game.frAchi.addProgress('屠神者', 'special')
+				}
+			}
 			if (game.me && game.me.name && game.me.name.indexOf('fr_') == 0 && game.me.group) {
 				try {
 					game.frAchi.addProgress(lib.characterTitle[game.me.name], 'character');
@@ -537,7 +579,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 					switch (name) {
 						case 'fr_pluvia': reward = function () { game.frAchi.unlockCharacter('fr_ventus') }; rewardInfo = '奖励：解锁角色——凡图斯'; break;
 						case 'fr_nashu': reward = function () { game.frAchi.unlockCharacter('fr_rasali') }; rewardInfo = '奖励：解锁角色——让萨利'; break;
-						case 'fr_sam': reward = function () { game.frAchi.unlockCharacter('fr_ham') }; rewardInfo = '奖励：解锁角色——海'; break;
+						case 'fr_sam': reward = function () { game.frAchi.unlockCharacter('fr_ham') }; rewardInfo = '奖励：解锁角色——“黑狼”'; break;
 						case 'fr_sheep': reward = function () { game.frAchi.unlockCharacter('fr_bladewolf') }; rewardInfo = '奖励：解锁角色——刃狼'; break;
 						case 'fr_bofeng': reward = function () { game.frAchi.unlockCharacter('fr_ciyu') }; rewardInfo = '奖励：解锁角色——迟雨'; break;
 						case 'fr_yifa': reward = function () { game.frAchi.unlockCharacter('fr_yifeng') }; rewardInfo = '奖励：解锁角色——弈风'; break;
@@ -545,8 +587,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 						case 'fr_tiers': reward = function () { game.frAchi.unlockCharacter('fr_wore') }; rewardInfo = '奖励：解锁角色——沃尔'; break;
 						case 'fr_francium': reward = function () { game.frAchi.unlockCharacter('fr_knier', 'fr_zenia') }; rewardInfo = '奖励：解锁角色——科妮尔、泽妮亚'; break;
 						case 'fr_hars': reward = function () { game.frAchi.unlockCharacter('fr_jet', 'fr_yinhu') }; rewardInfo = '奖励：解锁角色——杰特、寅虎'; break;
-						case 'fr_oert': reward = function () { game.frAchi.unlockCharacter('fr_faers') }; rewardInfo = '奖励：解锁角色——法斯'; break;
-						case 'fr_lens': reward = function () { game.frAchi.unlockCharacter('fr_mala', 'fr_dier') }; rewardInfo = '奖励：解锁角色——马拉、戴尔'; break;
+						case 'fr_lens': reward = function () { game.frAchi.unlockCharacter('fr_dier') }; rewardInfo = '奖励：解锁角色——戴尔'; break;
 						case 'fr_lions': reward = function () { game.frAchi.unlockCharacter('fr_lamost', 'fr_lint', 'fr_muen') }; rewardInfo = '奖励：解锁角色——拉莫斯特、林特、牧恩'; break;
 						case 'fr_yifeng': reward = function () { game.frAchi.unlockCard(['spade', "13", 'fr_equip1_syzg']) }; rewardInfo = '奖励：解锁新卡牌——霜月之弓'; break;
 						case 'fr_tiger': reward = function () { game.frAchi.unlockCard(['heart', '10', 'fr_equip1_mhlq']) }; rewardInfo = '奖励：解锁新卡牌——鸣鸿龙雀'; break;
@@ -1473,7 +1514,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		popup: false,
 		filter: function (event, player) {
 			if (game.me != player) return false;
-			if (player.hujia < 9) return false;
+			if (player.hujia < 5) return false;
 			return !game.frAchi.hasAchi('叠最厚的甲', 'game');
 		},
 		content: function () {
