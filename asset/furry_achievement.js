@@ -1,12 +1,12 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
-		'fr_nine':"我能保护自己，不靠任何人，就这样。",
-		'fr_keste':"我至今还未尝败绩...",
-		'fr_wind':"不要小看风的力量！",
-		'fr_ming':"语出如剑，可伤人心。",
-		'fr_death':"我喜欢死亡的味道...",
-		'fr_aoeslat': "不过是几条人命而已，哪有我的享乐重要，哈哈哈哈！",
+		'fr_nine': "我能保护自己，不靠任何人，就这样。",
+		'fr_keste': "我至今还未尝败绩...",
+		'fr_wind': "不要小看风的力量！",
+		'fr_ming': "语出如剑，可伤人心。",
+		'fr_death': "我喜欢死亡的味道...",
+		'fr_gairtelu': "不过是几条人命而已，哪有我的享乐重要，哈哈哈哈！",
 		'fr_thunder': '所谓雷电，不过是玩具罢了...',
 		'fr_lamas': '我会战斗到最后一刻！',
 		'fr_mouse': '奇门遁甲，唯破万法...',
@@ -17,7 +17,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		'fr_crow': '流言止于智者...',
 		'fr_tiers': "我于杀戮之中盛放！",
 		"fr_milis": '所铸兵刃，可破万法。',
-		"fr_lions": '魂起何处，梦落何归？',
+		"fr_huye": '魂起何处，梦落何归？',
 		"fr_xit": '智者，当以全身而退！',
 		"fr_nier": '智解万物，元生万象。',
 		"fr_laays": '今日何日，今时何时？以吾之血，饲世之厄。',
@@ -47,7 +47,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		'fr_shark': '这是合适的价钱。',
 		"fr_muyada": '你是要断手，还是要断首？',
 		"fr_marxya": '谨小慎微，攻无不克。',
-		"fr_muli": '我看你命不久矣。',
+		"fr_fengkn": '我看你命不久矣。',
 		"fr_alas": '不小心下手太重了，下辈子注意。',
 		"fr_ken": '让我来守护你！',
 		"fr_sisk": '鲜血的滋味，<br>&nbsp&nbsp如此甜美！',
@@ -59,7 +59,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		"fr_markn": '让我看看，你的未来...',
 		"fr_morly": '在我的枪弹里洗个澡吧！',
 		"fr_dog": '足智多谋？说的就是我！',
-		"fr_glit": '以牙还牙，以眼还眼！',
+		"fr_zeron": '以牙还牙，以眼还眼！',
 		"fr_edmon": '我成功守住了。',
 		"fr_mika": '在我的船上，没人能打败我！',
 		"fr_dmoa": '聆听为你送行的音乐吧。',
@@ -75,8 +75,8 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		"fr_lamost": '我仍记得，昔日繁花...',
 		"fr_fox": '不过是一场幻梦...',
 		"fr_zeta": '这可是我的拿手武器。',
-		"fr_ham": '哥哥，你该死了！',
-		"fr_sam": '弟弟，你悔改罢。',
+		"fr_blackwolf": '哥哥，你该死了！',
+		"fr_whitewolf": '弟弟，你悔改罢。',
 		'fr_tiger': '谁敢拦我？',
 		'fr_kmjia': '一切交给你了...',
 		"fr_liona": '全体将士，随我冲锋！',
@@ -124,30 +124,36 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		'fr_neises': '生与死轮回不止<br>&nbsp&nbsp我们生，他们死...'
 		//'':'',
 	};
+
+	//判断完成成就的角色是否是玩家且是否为成就需求角色
+	lib.element.player.isCharacter = function (name) {
+		return this.isUnderControl(true) && (this.name == name || this.name1 == name || this.name2 == name)
+	};
+	
 	//成就列表
 	lib.fr_achievement = {
 		character: {
 			'拆弹成功': {
 				level: 7,
-				info: '场上有一只刃狼，且其发动【融毁】时没有融毁标记。',
+				info: '场上有一只✡刃狼，且其发动【融毁】时没有融毁标记。',
 				extra: "好像有什么东西坏掉啦...",
 				progress: 1,
 			},
 			'虚争空言，不如击而破之！': {
 				level: 4,
-				info: '使用德克连续使用4张【杀】，且为回合内使用的前四张牌',
+				info: '使用✡德克连续使用4张【杀】，且为回合内使用的前四张牌',
 				extra: "rua啊！(咆哮)",
 				progress: 1,
 			},
 			'神仙难救': {
 				level: 5,
-				info: '使用让萨利，发动技能令另一名角色强制死亡，且发动时你没有手牌',
+				info: '使用✡让萨利，发动技能令另一名角色强制死亡，且发动时你没有手牌',
 				extra: "啊！对不起，我的队友！",
 				progress: 1,
 			},
 			'还不可以认输！': {
 				level: 6,
-				info: '使用希尔在一局游戏中累计脱离10次濒死状态',
+				info: '使用✡希尔在一局游戏中累计脱离10次濒死状态',
 				extra: '绝望中，仍存有一线生机！',
 				progress: 1
 			},
@@ -159,7 +165,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			},
 			'人鱼狂流': {
 				level: 6,
-				info: '使用瑞斯特当内奸赢得一局身份局游戏',
+				info: '使用✡瑞斯特当内奸赢得一局身份局游戏',
 				extra: '让大海将你们埋葬！',
 				reward: function () {
 					game.frAchi.unlockCharacter('fr_mouse')
@@ -169,7 +175,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			},
 			'压榨童工': {
 				level: 5,
-				info: '使用塔尔斯在一局内使得一名角色装备5张点数为8的装备',
+				info: '使用✡塔尔斯在一局内使得一名角色装备5张点数为8的装备',
 				extra: '这也太累了...',
 				reward: function () {
 					game.frAchi.unlockCharacter('fr_zeta')
@@ -179,13 +185,13 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			},
 			'你在造假吗？': {
 				level: 2,
-				info: '装备一张点数为8的装备，但不是塔尔斯打造的。',
+				info: '装备一张点数为8的装备，但不是✡塔尔斯打造的。',
 				extra: '不付专利费的，见一个炸一个！',
 				progress: 1
 			},
 			"连破之刃": {
 				level: 7,
-				info: "使用米亚造成一次8点及以上的伤害。",
+				info: "使用✡米亚造成一次8点及以上的伤害。",
 				extra: "一刀，一刀，一刀...",
 				reward: function () {
 					game.frAchi.unlockCharacter('fr_krikt')
@@ -195,7 +201,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			},
 			'天下归心': {
 				level: 5,
-				info: '使用努力亚作为主公进行一局八人及以上的军争局，并令存活的忠臣的数量大于游戏总人数的一半（向上取整）。',
+				info: '使用✡努力亚作为主公进行一局八人及以上的军争局，并令存活的忠臣的数量大于游戏总人数的一半（向上取整）。',
 				extra: '周公吐哺，天下归心。',
 				reward: function () {
 					game.frAchi.unlockCharacter('fr_francium')
@@ -204,7 +210,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			},
 			'链式反应': {
 				level: 5,
-				info: '使用刃狼对一名角色分配不少于15点伤害',
+				info: '使用✡刃狼对一名角色分配不少于15点伤害',
 				extra: '核弹大爆炸~~~',
 				reward: function () {
 					game.frAchi.unlockCharacter('fr_tery')
@@ -213,13 +219,13 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			},
 			'IQ:400': {
 				level: 5,
-				info: '使用塔尔斯的〖机动〗在一局游戏内，至少进行8次“谋弈”，且全部成功',
+				info: '使用✡塔尔斯的〖机动〗在一局游戏内，至少进行8次“谋弈”，且全部成功',
 				extra: '哈哈，猜的真准！',
 				progress: 1,
 			},
 			"当断则断": {
 				level: 7,
-				info: "使用檞界累计发动三次〖断破〗。",
+				info: "使用✡檞界累计发动三次〖断破〗。",
 				extra: "剑光如我，斩尽牛杂！",
 				reward: function () {
 					game.frAchi.unlockCharacter('fr_liona')
@@ -270,7 +276,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				reward: function () {
 					game.frAchi.unlockCharacter('fr_mala')
 				},
-				rewardInfo: '奖励：解锁角色——马拉',
+				rewardInfo: '奖励：解锁角色——马拉尔',
 				progress: 1,
 			},
 			'打碎永恒': {
@@ -281,6 +287,16 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 					game.frAchi.unlockCharacter('fr_faers')
 				},
 				rewardInfo: '奖励：解锁角色——法斯',
+				progress: 1,
+			},
+			'踏破轮回': {
+				level: 7,
+				info: '击败挑战模式“轮回使者”',
+				extra: "停滞的时间也无法阻挡我！",
+				reward: function () {
+					game.frAchi.unlockCharacter('fr_oert')
+				},
+				rewardInfo: '奖励：解锁角色——欧尔特',
 				progress: 1,
 			},
 			"你真的很无聊": {
@@ -346,7 +362,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		'fr_molis': "碾碎时光",
 		'fr_tiers': "战场蔷薇"
 	}
-	if(lib.config.extension_千幻聆音_enable){
+	if (lib.config.extension_千幻聆音_enable) {
 		for (let name in lib.lockedSkin) {
 			if (!lib.config[lib.lockedSkin[name] + '_unlock'] && lib.config.qhly_skinset.skin[name] && lib.config.qhly_skinset.skin[name] == lib.lockedSkin[name] + '.jpg') lib.config.qhly_skinset.skin[name] = null;
 		}
@@ -359,9 +375,9 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			type: 'character'
 		},
 		20: {
-			id: 'fr_aoeslat',
-			name: '武将：奥尔斯拉特',
-			info: '这王国，谁不是我的子民？<br>奥尔斯拉特，克拉王国著名的暴君，后被卢森特推翻。',
+			id: 'fr_gairtelu',
+			name: '武将：盖尔德鲁',
+			info: '这王国，谁不是我的子民？<br>盖尔德鲁，克拉王国著名的暴君，后被卢森特推翻。',
 			type: 'character'
 		},
 		15: {
@@ -431,9 +447,9 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			type: 'skin'
 		},
 		100: {
-			id: 'fr_muli',
-			name: '武将：穆里',
-			info: lib.fr_winnerSay['fr_muli'],
+			id: 'fr_fengkn',
+			name: '武将：冯·莱卡恩',
+			info: lib.fr_winnerSay['fr_fengkn'],
 			type: 'character'
 		},
 		110: {
@@ -512,15 +528,6 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 	var originGameOver = game.over;
 	game.over = function (ret) {
 		if (ret) {
-			if(lib.config.mode=='boss'){
-				var defeat=game.dead.filter(function(i){
-					return i.name.substring(0,7)=='fr_boss'
-				})
-				for(var i=0;i<defeat.length;i++){
-					if(defeat[i].name=='fr_bosshars'&&!game.frAchi.hasAchi('斩断纵丝', 'special')) game.frAchi.addProgress('斩断纵丝', 'special')
-					if(defeat[i].name=='fr_bossmala'&&!game.frAchi.hasAchi('屠神者', 'special')) game.frAchi.addProgress('屠神者', 'special')
-				}
-			}
 			if (game.me && game.me.name && game.me.name.indexOf('fr_') == 0 && game.me.group) {
 				try {
 					game.frAchi.addProgress(lib.characterTitle[game.me.name], 'character');
@@ -579,7 +586,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 					switch (name) {
 						case 'fr_pluvia': reward = function () { game.frAchi.unlockCharacter('fr_ventus') }; rewardInfo = '奖励：解锁角色——凡图斯'; break;
 						case 'fr_nashu': reward = function () { game.frAchi.unlockCharacter('fr_rasali') }; rewardInfo = '奖励：解锁角色——让萨利'; break;
-						case 'fr_sam': reward = function () { game.frAchi.unlockCharacter('fr_ham') }; rewardInfo = '奖励：解锁角色——“黑狼”'; break;
+						case 'fr_whitewolf': reward = function () { game.frAchi.unlockCharacter('fr_blackwolf') }; rewardInfo = '奖励：解锁角色——“黑狼”'; break;
 						case 'fr_sheep': reward = function () { game.frAchi.unlockCharacter('fr_bladewolf') }; rewardInfo = '奖励：解锁角色——刃狼'; break;
 						case 'fr_bofeng': reward = function () { game.frAchi.unlockCharacter('fr_ciyu') }; rewardInfo = '奖励：解锁角色——迟雨'; break;
 						case 'fr_yifa': reward = function () { game.frAchi.unlockCharacter('fr_yifeng') }; rewardInfo = '奖励：解锁角色——弈风'; break;
@@ -588,7 +595,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 						case 'fr_francium': reward = function () { game.frAchi.unlockCharacter('fr_knier', 'fr_zenia') }; rewardInfo = '奖励：解锁角色——科妮尔、泽妮亚'; break;
 						case 'fr_hars': reward = function () { game.frAchi.unlockCharacter('fr_jet', 'fr_yinhu') }; rewardInfo = '奖励：解锁角色——杰特、寅虎'; break;
 						case 'fr_lens': reward = function () { game.frAchi.unlockCharacter('fr_dier') }; rewardInfo = '奖励：解锁角色——戴尔'; break;
-						case 'fr_lions': reward = function () { game.frAchi.unlockCharacter('fr_lamost', 'fr_lint', 'fr_muen') }; rewardInfo = '奖励：解锁角色——拉莫斯特、林特、牧恩'; break;
+						case 'fr_huye': reward = function () { game.frAchi.unlockCharacter('fr_lamost', 'fr_lint', 'fr_muen') }; rewardInfo = '奖励：解锁角色——拉莫斯特、林特、牧恩'; break;
 						case 'fr_yifeng': reward = function () { game.frAchi.unlockCard(['spade', "13", 'fr_equip1_syzg']) }; rewardInfo = '奖励：解锁新卡牌——霜月之弓'; break;
 						case 'fr_tiger': reward = function () { game.frAchi.unlockCard(['heart', '10', 'fr_equip1_mhlq']) }; rewardInfo = '奖励：解锁新卡牌——鸣鸿龙雀'; break;
 						case 'fr_qima': reward = function () { game.frAchi.unlockCard(['spade', '4', 'fr_equip2_yyxl']) }; rewardInfo = '奖励：解锁新卡牌——影夜项链'; break;

@@ -216,17 +216,14 @@
     background-size: 100% 100% !important;
 }
 
-.qh-shousha-big-avatar[data-group='fr_g_dragon']>.qh-avatar-label {
-    background-image: url('../image/group/detail_fr_g_dragon.png');
-}
-
-.qh-shousha-big-avatar[data-group='fr_g_dragon']>.qh-avatar-label-other {
-    background-image: url('../image/group/detail_fr_g_dragon_other.png');
-}
-
 .player>.camp-wrap[data-camp='fr_g_dragon']>.camp-back {
     background: linear-gradient(to bottom, rgb(45, 45, 45), rgb(103, 103, 103));
 }
+
+.qhcamp-wrap[data-camp='fr_g_dragon']>.qhcamp-back {
+    background: linear-gradient(to bottom, rgb(45, 45, 45), rgb(103, 103, 103));
+}
+
 
 /*这里是机势力*/
 .button.character.newstyle>.identity[data-nature="fr_g_ji"] {
@@ -234,12 +231,9 @@
     background-size: 100% 100% !important;
 }
 
-.qh-shousha-big-avatar[data-group='fr_g_ji']>.qh-avatar-label {
-    background-image: url('../image/group/detail_fr_g_ji.png');
-}
 
-.qh-shousha-big-avatar[data-group='fr_g_ji']>.qh-avatar-label-other {
-    background-image: url('../image/group/detail_fr_g_ji_other.png');
+.qhcamp-wrap[data-camp='fr_g_ji']>.qhcamp-back {
+    background: linear-gradient(to bottom, rgb(96, 85, 158), rgb(106, 14, 212));
 }
 
 .player>.camp-wrap[data-camp='fr_g_ji']>.camp-back {

@@ -139,12 +139,24 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         name: "福瑞拓展",
         editable: false,
         content: function (config, pack) {
+            lib.onover.push(function (bool) {
+                if (bool && lib.config.mode == 'boss') {
+                    for (var i = 0; i < game.dead.length; i++) {
+                        if (game.dead[i].name == 'fr_bosshars' && !game.frAchi.hasAchi('斩断纵丝', 'special')) game.frAchi.addProgress('斩断纵丝', 'special')
+                        if (game.dead[i].name == 'fr_bossfaers' && !game.frAchi.hasAchi('打碎永恒', 'special')) game.frAchi.addProgress('打碎永恒', 'special')
+                        if (game.dead[i].name == 'fr_bossmala' && !game.frAchi.hasAchi('屠神者', 'special')) game.frAchi.addProgress('屠神者', 'special')
+                        if (game.dead[i].name == 'fr_bossoert' && !game.frAchi.hasAchi('踏破轮回', 'special')) game.frAchi.addProgress('踏破轮回', 'special')
+                    }
+                }
+            })
             lib.arenaReady.push(function () {
                 //---------------------------------------初始化势力------------------------------------------//
                 if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
                     setTimeout(() => {
                         lib.groupnature.fr_g_dragon = 'fr_g_dragon'
                         lib.groupnature.fr_g_ji = 'fr_g_ji'
+                        lib.qhly_groupimage['fr_g_dragon'] = 'extension/福瑞拓展/image/group/name_fr_g_dragon.png';
+                        lib.qhly_groupimage['key'] = 'extension/福瑞拓展/image/group/name_fr_g_ji.png';
                     }, 1000)
                 }
                 //--------------------------------------千幻提示------------------------------------------//
@@ -153,75 +165,65 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     game.saveConfig('extension_福瑞拓展_frSkin', false);
                 }
             })
-            //---------------------------------------更新说明------------------------------------------//
+            //---------------------------------------更新说明：参考活动武将------------------------------------------//
             lib.skill._Furry_changeLog = {
                 charlotte: true,
                 ruleSkill: true,
-                trigger: { global: ['chooseButtonBefore', 'gameStart', 'gameDrawAfter', 'phaseBefore'] },
+                trigger: {
+                    global: [/*'chooseButtonBefore',*/'gameStart', 'gameDrawAfter', 'phaseBefore']
+                },
                 filter: function (event, player) {
-                    if (event.name == 'chooseButton' && event.parent.name != 'chooseCharacter') return false;
+                    //if(event.name=='chooseButton'&&event.parent.name!='chooseCharacter') return false;
                     return !lib.config.extension_福瑞拓展_Frversion || lib.config.extension_福瑞拓展_Frversion != lib.extensionPack.福瑞拓展.version;
                 },
                 direct: true,
-                firstDo: true,
                 priority: Infinity,
                 content: function () {
-                    'step 0'
-                    //标记版本号
                     game.saveConfig('extension_福瑞拓展_Frversion', lib.extensionPack.福瑞拓展.version);
-                    'step 1'
-                    //更新告示
-                    var Furry_update = [
-                        '/Character/',
-                        '修复部分bug',
-                        '新武将 奈恩'
-                    ];
-                    //更新武将
-                    var Furry_players = ['fr_nine',];
-                    var Furry_redoplayers = ['fr_sayisu', 'fr_lust', 'fr_kesaya'];
-                    //更新卡牌
-                    var Furry_cards = [];
-                    var dialog = ui.create.dialog('<br>福瑞拓展' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
-                    for (var i = 0; i < Furry_update.length; i++) {
-                        if (Furry_update[i] == '/Character/') {
-                            dialog.addText('更新武将：');
-                            dialog.addSmall([Furry_players, 'character']);
-                        } else if (Furry_update[i] == '/redoCharacter/') {
-                            dialog.addText('更改武将：');
-                            dialog.addSmall([Furry_redoplayers, 'character']);
-                        }
-                        else if (Furry_update[i] == '/Card/') {
-                            var cards = Furry_cards.slice(0);
-                            for (var i = 0; i < cards.length; i++) {
-                                cards[i] = [get.translation(get.type(cards[i])), '', cards[i]];
-                            }
-                            dialog.addText('更新卡牌：');
-                            dialog.addSmall([cards, 'vcard']);
-                        } else if (Furry_update[i].indexOf('ti') != -1) {
-                            dialog.addText(Furry_update[i]);
-                        } else {
-                            var li = document.createElement('li');
-                            li.innerHTML = Furry_update[i];
-                            li.style.textAlign = 'left';
-                            li.style['lineHeight'] = '20px'
-                            li.style['paddingLeft'] = '10px'
-                            dialog.content.appendChild(li);
-                        }
-                    }
-                    dialog.open();
-                    var hidden = false;
-                    if (!ui.auto.classList.contains('hidden')) {
-                        ui.auto.hide();
-                        hidden = true;
-                    }
-                    game.pause();
-                    var control = ui.create.control('确定', function () {
-                        dialog.close();
-                        control.close();
-                        if (hidden) ui.auto.show();
-                        game.resume();
-                    });
+                    game.showFrChangeLog();
                 },
+            };
+            game.showFrChangeLog = function () {
+                //更新告示
+                var Furry_update = [
+                    '/setPlayer/',
+                    '修复部分bug',
+                    'To be continued...',
+                ];
+                //更新武将
+                var Furry_players = ['fr_nine', 'fr_keste', 'fr_guotang', 'fr_lucifer'];
+                var Furry_cards = ['fr_card_zhcz']
+                //加载
+                var dialog = ui.create.dialog(
+                    '福瑞拓展 ' + lib.extensionPack.福瑞拓展.version + ' 更新内容：', 'hidden');
+                for (var i = 0; i < Furry_update.length; i++) {
+                    if (Furry_update[i] == '/setPlayer/') {
+                        dialog.addText('更新角色：')
+                        dialog.addSmall([Furry_players, 'character']);
+                    }
+                    else if (Furry_update[i] == '/setCard/') {
+                        dialog.addText('更新卡牌：')
+                        dialog.addSmall([Furry_cards, 'vcard']);
+                    } else {
+                        var li = document.createElement('li');
+                        li.innerHTML = Furry_update[i];
+                        li.style.textAlign = 'left';
+                        dialog.content.appendChild(li);
+                    }
+                }
+                dialog.open();
+                var hidden = false;
+                if (!ui.auto.classList.contains('hidden')) {
+                    ui.auto.hide();
+                    hidden = true;
+                }
+                game.pause();
+                var control = ui.create.control('确定', function () {
+                    dialog.close();
+                    control.close();
+                    if (hidden) ui.auto.show();
+                    game.resume();
+                });
             };
             //---------------------------------------一言------------------------------------------//
             async function getExtensionNode(name, waitms, times) {
@@ -297,6 +299,22 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         };
                     };
                 };
+                //------------------------------------------设置：国战武将------------------------------------------//
+                if (lib.characterPack.mode_guozhan && lib.config.mode == 'guozhan') {
+                    lib.config.all.characters.push('furryGZPack');
+                    lib.translate['furryGZPack_character_config'] = "福瑞国战";// 包名翻译
+                    for (var i in lib.characterPack.furryGZPack) {
+                        lib.characterPack.mode_guozhan[i] = lib.characterPack.furryGZPack[i]
+                    }
+                }
+                if (lib.config.extension_福瑞拓展_Background_Music && lib.config.extension_福瑞拓展_Background_Music != "1") {
+                    game.frplayBackgroundMusic();
+                    ui.backgroundMusic.addEventListener('ended', game.frplayBackgroundMusic);
+                };
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if (lib.config.extension_福瑞拓展_Background_Picture && lib.config.extension_福瑞拓展_Background_Picture != "1") {
+                    game.frBackground_Picture();
+                };
             })
             //此处内容由钫酸酱制作，若有需要请联系作者...
             lib.skill._definedSweap = {
@@ -339,7 +357,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //---------------------------------------定义Buff-----------------------------------------//
             //添加
             lib.element.player.addFrBuff = function (name, num) {
-                if(!num) num=1
+                if (!num) num = 1
                 if (!this.storage.frBuff) {
                     this.storage.frBuff = {}
                 }
@@ -406,10 +424,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
             }
             //拥有
-            lib.element.player.hasFrBuff=function(name){
-                if(this.countFrBuff()>0){
+            lib.element.player.hasFrBuff = function (name) {
+                if (this.countFrBuff(name) > 0) {
                     return true
-                }else{
+                } else {
                     return false
                 }
             }
@@ -496,14 +514,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
             }
-            lib.skill.fr_sleep={
+            lib.skill.fr_sleep = {
                 mark: true,
                 charlotte: true,
                 unique: true,
                 marktext: '睡眠',
                 intro: {
-                    name:"睡眠",
-                    markcount:()=>undefined,
+                    name: "睡眠",
+                    markcount: () => undefined,
                     content: "不能使用或打出手牌直到受到伤害或下一回合结束",
                 },
                 trigger: {
@@ -551,9 +569,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             }
             //---------------------------------------自定义函数：选择文本------------------------------------------//
-            //此处内容由钫酸酱制作，若有需要请联系作者
+            //此处内容由钫酸酱制作，TAT
             lib.element.player.chooseText = function chooseText() {
                 var next = game.createEvent('chooseText');
+                if (arguments.length == 1 && get.objtype(arguments[0]) == 'object') {
+                    for (let key in object) next[key] = object[key]
+                }
                 for (var i = 0; i < arguments.length; i++) {
                     if (typeof arguments[i] == 'boolean') {
                         next.forced = arguments[i];
@@ -585,8 +606,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (event.isMine()) {
                     if (event.dialog) {
                         event.dialog.open();
-                    }
-                    else if (event.prompt) {
+                    } else {
+                        if (!event.prompt) event.prompt = '请在下方输入文本'
                         event.dialog = ui.create.dialog(event.prompt);
                         if (event.prompt2) {
                             event.dialog.addText(event.prompt2, event.prompt2.length <= 20);
@@ -612,12 +633,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     event.choosing = true;
                     var button = ui.create.control('确定', () => {
                         if (event.filterText) {
-                            if (typeof event.filterText == 'function') {
-                                event.filterText = event.filterText()
-                            }
-                            if (!event.filterText.contains(input.value)) {
-                                return alert('您输入的内容不合要求')
-                            }
+                            var ok
+                            if (typeof event.filterText == 'function') ok = event.filterText(input.value)
+                            else if (Array.isArray(event.filterText)) ok = event.filterText.contains(input.value)
+                            if (!ok) return alert('您输入的内容不符合要求')
                         }
                         event.result.bool = true
                         event.result.text = input.value ? input.value : ''
@@ -1019,6 +1038,157 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     }
                 }
                 event.resume();
+            };
+            //---------------------------------------自定义函数：按钮选项------------------------------------------//
+            //来自狂神大佬TAT
+            lib.element.player.chooseButtonControl = function (object) {
+                let next = game.createEvent('chooseButtonControl');
+                next.player = this;
+                if (arguments.length == 1 && get.objtype(arguments[0]) == 'object') {
+                    for (var key in object) next[key] = object[key];
+                }
+                else for (let arg of arguments) {
+                    //dialog
+                    if (get.itemtype(arg) == 'dialog') next.dialog = arg;
+                    else if (typeof arg == 'number') next.dialog = get.idDialog(arg);
+                    else if (Array.isArray(arg)) next.createDialog = arg;
+
+                    else if (typeof arg == 'boolean') {
+                        if (next.forced == undefined || next.forced == null) next.forced = arg;
+                        else next.multibutton = arg;
+                    }
+
+                    else if (typeof arg == 'function') {
+                        if (!next.control) next.control = arg;
+                        else next.processAI = arg;
+                    }
+                }
+
+                if (typeof next.dialog == 'number') {
+                    next.dialog = get.idDialog(next.dialog);
+                } else if (get.itemtype(next.dialog) == 'dialog') {
+                    next.closeDialog = true;
+                } else if (!next.dialog && Array.isArray(next.createDialog)) {
+                    next.dialog = ui.create.dialog.apply(this, next.createDialog);
+                    next.closeDialog = true;
+                }
+
+                if (typeof next.forced != 'boolean') next.forced = false;
+                if (typeof next.forced != 'boolean') next.multibutton = false;
+                if (next.isMine() == false && next.dialog) next.dialog.style.display = 'none';
+                if (!next.control) next.control = () => 'ok';
+                next.setContent('chooseButtonControl');
+                next._args = Array.from(arguments);
+                return next;
+            };
+            lib.element.content.chooseButtonControl = function () {
+                'step 0'
+                let chooseButton = function (event, player) {
+                    if (!event.result) event.result = {};
+                    event.forceMine = true;
+                    event.buttons = [];
+                    for (let button of event.dialog.buttons) {
+                        button.classList.add('pointerdiv');
+                        button.classList.add('selectable');
+                    }
+                    event.dialog.open();
+
+                    event.custom.replace.button = function (button) {
+                        if (!event.dialog.contains(button.parentNode)) return;
+                        if (button.classList.contains('unselectable')) return;
+
+                        if (button.classList.contains('selected')) {
+                            event.buttons.remove(button);
+                            button.classList.remove('selected');
+                            if (!event.multibutton) {
+                                for (let i of event.dialog.buttons) {
+                                    i.classList.remove('unselectable');
+                                }
+                            }
+                        } else {
+                            event.buttons.add(button);
+                            button.classList.add('selected');
+                            if (!event.multibutton) {
+                                for (let i of event.dialog.buttons) {
+                                    if (event.buttons.contains(i)) continue;
+                                    i.classList.add('unselectable');
+                                }
+                            }
+                        }
+
+                        event.controls.replacex();
+                    }
+
+                    event.custom.replace.window = function () {
+                        event.buttons = [];
+                        for (let i of event.dialog.buttons) {
+                            i.classList.remove('selected');
+                            i.classList.remove('unselectable');
+                        }
+                        event.controls.replacex();
+                    }
+
+                    event.controls = ui.create.control();
+                    event.controls.replacex = function () {
+                        let newControls, args = event.control(event.buttons);
+                        if (Array.isArray(args)) newControls = args;
+                        else if (args != undefined && args != null) newControls = [args];
+                        else newControls = [];
+
+                        if (event.multibutton) {
+                            if (newControls.contains('cancel2')) newControls.remove('cancel2');
+                            if (!event.forced) newControls.add('cancel2');
+                        }
+                        else if (!event.forced && !newControls.contains('cancel2')) {
+                            if (newControls.length == 0 || event.buttons.length == 0) newControls.add('cancel2');
+                        }
+
+                        this.style.opacity = newControls.length > 0 ? 1 : 0;
+
+                        newControls.push(function (control) {
+                            if (control == 'cancel2') event.result.bool = false;
+                            else {
+                                event.result.bool = true;
+                                event.result.buttons = event.buttons;
+                                event.result.links = event.buttons.map(button => button.link);
+                                event.result.control = control;
+                            }
+                            event.dialog.close();
+                            event.controls.close();
+                            game.resume();
+                            _status.imchoosing = false;
+                        });
+
+                        return this.replace.apply(this, newControls);
+                    }
+                    event.controls.replacex();
+                    game.pause();
+                    game.countChoose();
+                };
+
+                if (event.isMine()) chooseButton(event, player);
+                else if (event.isOnline()) {
+                    event.player.send(chooseButton, event, player);
+                    event.player.wait();
+                    game.pause();
+                } else {
+                    if (event.dialog && event.closeDialog) event.dialog.close();
+                    if (event.controls && event.closeDialog) event.controls.close();
+                    game.resume();
+                    _status.imchoosing = false;
+
+                    if (event.processAI) event.result = event.processAI(event, player);
+                    else if (!event.forced) event.result = { bool: false };
+                    else throw "processAI : " + event.getParent().name + "'s chooseButtonControl is forced";
+
+                    event.finish();
+                }
+
+                'step 1'
+                if (event.result.control == 'cancel2') {
+                    event.finish();
+                    return;
+                }
             };
             //---------------------------------------自定义函数：互变------------------------------------------//
             lib.skill.hubian = {
@@ -1508,21 +1678,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     },
                 };
             };
-            if (lib.config.extension_福瑞拓展_Background_Music && lib.config.extension_福瑞拓展_Background_Music != "1") {
-                lib.arenaReady.push(function () {
-                    //ui.backgroundMusic.autoplay=true;
-                    //ui.backgroundMusic.pause();
-                    game.frplayBackgroundMusic();
-                    ui.backgroundMusic.addEventListener('ended', game.frplayBackgroundMusic);
-                });
-            };
-            lib.fr_changeSkill = config.changeGroup;
-            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            if (lib.config.extension_福瑞拓展_Background_Picture && lib.config.extension_福瑞拓展_Background_Picture != "1") {
-                lib.arenaReady.push(function () {
-                    game.frBackground_Picture();
-                });
-            };
             //---------------------------------------设置：主内单挑音乐------------------------------------------//
             if (lib.config.extension_福瑞拓展_furry_zhuneimusic != 'z0') {
                 lib.skill._furry_zhuneibgm = {
@@ -1538,9 +1693,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     },
                     content: function () {
                         switch (lib.config.extension_福瑞拓展_furry_zhuneimusic) {
-                            case 'z1': str = 'Hopes And Dreams.mp3'; break;
-                            case 'z2': str = 'MEGALOVANIA.mp3'; break;
-                            case 'z3': str = 'ElDorado.mp3'; break;
+                            case 'z1': str = 'fr_bgm_Hopes And Dreams.mp3'; break;
+                            case 'z2': str = 'fr_bgm_MEGALOVANIA.mp3'; break;
+                            case 'z3': str = 'fr_bgm_ElDorado.mp3'; break;
                         }
                         ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + str
                         ui.backgroundMusic.loop = true;
@@ -1624,6 +1779,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     });
+
                     game.getFileList('extension/手杀ui/character/images', (folders, files) => {
                         const furryCardFiles = ['name2_fr_g_dragon.png', 'name2_fr_g_ji.png'];
                         for (let i = 0; i < furryCardFiles.length; i++) {
@@ -1637,6 +1793,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                 }
+
                 if (lib.config.extensions.contains('假装无敌') && lib.config['extension_假装无敌_enable']) {
                     game.getFileList('extension/假装无敌/images', (folders, files) => {
                         const furryCardFiles = ['border_fr_g_dragon.png', 'border_fr_g_ji.png'];
@@ -1667,6 +1824,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                 }
+
                 if (lib.config.extensions.contains('EngEX') && lib.config['extension_EngEX_enable']) {
                     game.getFileList('extension/EngEX/images/ass', (folders, files) => {
                         const furryCardFiles = ['fr_equip1_syzg.png', 'fr_equip5_wxpp.png', 'fr_equip1_mhlq.png', 'fr_equip2_yyxl.png'];
@@ -1681,6 +1839,23 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         }
                     });
                 }
+
+                /*//千幻支持
+                if (lib.config.extensions.contains('千幻聆音') && lib.config['extension_千幻聆音_enable']) {
+                    game.getFileList('extension/千幻聆音/theme/shousha', (folders, files) => {
+                        const furryCardFiles = ['detail_fr_g_dragon_other.png', 'detail_fr_g_dragon.png', 'detail_fr_g_ji_other.png', 'detail_fr_g_ji.png'];
+                        for (let i = 0; i < furryCardFiles.length; i++) {
+                            if (!files.contains(furryCardFiles[i])) {
+                                if (game.readFile && game.writeFile) {
+                                    game.readFile('extension/福瑞拓展/image/group/' + furryCardFiles[i], (data) => {
+                                        game.writeFile(data, 'extension/千幻聆音/theme/shousha', furryCardFiles[i], function () { });
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+                */
 
                 //动皮弧形边框
                 if (lib.config.extensions.contains('皮肤切换') && lib.config['extension_皮肤切换_enable']) {
@@ -1698,6 +1873,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     });
                 }
             }
+
             if (config.furry_onlineUpdate2) {
                 fetch('https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/updatecheck.js', {
                     method: 'GET',
@@ -1886,55 +2062,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     return savedFilter(i, libCharacter);
                 };
             }
-            //------------------------------------------设置：国战武将------------------------------------------//
-            if (lib.characterPack.mode_guozhan) {
-                if (config.heroes) {
-                    var url = lib.config.frLutou ? 'ext:福瑞拓展/image/lutou/' : 'ext:福瑞拓展/image/character/'
-                    lib.characterPack.mode_guozhan.fr_yifeng = ['male', 'wei', 3, ['kref_gzyz'], [url + 'fr_yifeng.jpg']]
-                    lib.characterPack.mode_guozhan.fr_yifa = ['female', 'wei', 3, ['yifa_xs'], [url + 'fr_yifa.jpg']]
-                    lib.characterPack.mode_guozhan.fr_sam = ['male', 'jin', 4, ['sam_wl'], [url + 'fr_sam.jpg']]
-                    lib.characterPack.mode_guozhan.fr_ham = ['male', 'jin', 4, ['ham_cy'], [url + 'fr_ham.jpg']]
-                    lib.characterPack.mode_guozhan.fr_bofeng = ['male', 'jin', 4, ['bofeng_aj'], [url + 'fr_bofeng.jpg']]
-                    lib.characterPack.mode_guozhan.fr_ciyu = ['male', 'jin', 3, ['ciyu_ss'], [url + 'fr_ciyu.jpg']]
-                    lib.characterPack.mode_guozhan.fr_wore = ['male', 'ye', 3, ['wore_gzhy'], [url + 'fr_wore.jpg']]
-                    lib.characterPack.mode_guozhan.fr_tiers = ['female', 'qun', 3, ['tiers_qp', 'tiers_kh'], [url + 'fr_tiers.jpg']]
-                    lib.characterPack.mode_guozhan.fr_miya = ['male', 'shu', 3, ['miya_gzks', 'miya_gzhz'], [url + 'fr_miya.jpg']]
-                    lib.characterPack.mode_guozhan.db_fr_krikt = ['male', 'shu', 3, ['krikt_gzly'], [url + 'fr_krikt.jpg', 'doublegroup:shu:qun']]
-                    lib.characterPack.mode_guozhan.fr_molis = ['female', 'wei', 3, ['molis_gzhs'], [url + 'fr_molis.jpg']]
-                    lib.characterPack.mode_guozhan.fr_taber = ['male', 'wu', 4, ['taber_sj'], [url + 'fr_taber.jpg']]
-                    lib.characterPack.mode_guozhan.fr_verb = ['male', 'wu', 4, ['verb_fs'], [url + 'fr_verb.jpg']]
-                    lib.characterPack.mode_guozhan.fr_mika = ['male', 'wei', 4, ['mika_lx'], [url + 'fr_mika.jpg']]
-                    lib.characterPack.mode_guozhan.fr_slen = ['male', 'wei', 3, ['slen_xj'], [url + 'fr_slen.jpg']]
-                    lib.characterPack.mode_guozhan.fr_fox = ['male', 'shu', 3, ['fox_hm'], [url + 'fr_fox.jpg']]
-                    lib.characterPack.mode_guozhan.fr_patxi = ['female', 'wu', 3, ['patxi_fs'], [url + 'fr_patxi.jpg']]
-                    lib.characterPack.mode_guozhan.fr_alas = ['male', 'shu', 4, ['olas_fh'], [url + 'fr_alas.jpg']]
-                    lib.characterPack.mode_guozhan.fr_west = ['male', 'qun', 3, ['west_pz', 'west_jh'], [url + 'fr_west.jpg']]
-                    lib.characterPack.mode_guozhan.fr_dmoa = ['male', 'qun', 3, ['dmoa_sx'], [url + 'fr_dmoa.jpg']]
-                    lib.characterPack.mode_guozhan.fr_adward = ['male', 'wei', 4, ['adward_yt'], [url + 'fr_adward.jpg']]
-                    lib.characterPack.mode_guozhan.fr_yas_klin = ['male', 'jin', 3, ['yas_klin_js'], [url + 'fr_yas_klin.jpg']]
-                    lib.characterPack.mode_guozhan.fr_muliy = ['male', 'wu', 3, ['mliy_hx'], [url + 'fr_muliy.jpg']]
-                    lib.characterPack.mode_guozhan.fr_zhongyu = ['male', 'shu', 3, ['zhongyu_ky'], [url + 'fr_zhongyu.jpg']]
-                    lib.characterPack.mode_guozhan.fr_hynea = ['male', 'ye', 3, ['hynea_cg', 'hynea_ds'], [url + 'fr_hynea.jpg']]
-                    lib.characterPack.mode_guozhan.fr_horn = ['male', 'wei', 3, ['horn_gzll', 'horn_ql', 'fr_qianghua'], [url + 'fr_horn.jpg']]
-                    lib.characterPack.mode_guozhan.fr_kert = ["male", "shu", 4, ["kert_lp", "kert_jl"], [url + 'fr_kert.jpg']]
-                    lib.characterPack.mode_guozhan.fr_lint = ["male", "shu", 4, ["lint_nd"], [url + 'fr_lint.jpg']]
-                    lib.characterPack.mode_guozhan.fr_liya = ["female", "wei", 3, ["liya_sz", "liya_sj"], [url + 'fr_liya.jpg']]
-                    lib.characterPack.mode_guozhan.fr_yada = ["male", "wei", 3, ["yada_by", "yada_fs"], [url + 'fr_yada.jpg']]
-                    lib.characterPack.mode_guozhan.fr_skry = ["male", "wu", 3, ["skery_gzds", "skery_yj"], [url + 'fr_skry.jpg']]
-                    lib.characterPack.mode_guozhan.fr_muyada = ["male", "qun", 3, ["mudaya_bz"], [url + 'fr_muyada.jpg']]
-                    lib.characterPack.mode_guozhan.fr_muli = ["male", "qun", 4, ["muli_cm", "muli_yl"], [url + 'fr_muli.jpg']]
-                    lib.characterPack.mode_guozhan.fr_sheep = ["female", "ye", 3, ["sheep_gzjf"], [url + 'fr_sheep.jpg']]
-                    lib.characterPack.mode_guozhan.fr_bladewolf = ["male", "qun", 4, ["bladewolf_rh",], [url + 'fr_bladewolf.jpg']]
-                }
-            }
-            //------------------------------------------国战：珠联璧合------------------------------------------//
-            lib.perfectPair.fr_taber = ['fr_verb']
-            lib.perfectPair.fr_yifeng = ['fr_yifa']
-            lib.perfectPair.fr_sam = ['fr_ham']
-            lib.perfectPair.fr_bofeng = ['fr_ciyu']
-            lib.perfectPair.fr_wore = ['fr_tiers']
-            lib.perfectPair.fr_miya = ['db_fr_krikt']
-            lib.perfectPair.sheep = ['fr_bladewolf']
             // ---------------------------------------游戏开始时加载------------------------------------------//	
             lib.skill._gameStart = {
                 charlotte: true,
@@ -2074,11 +2201,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 var item = {
                     "2": "furry_bgm_tavern.mp3",
                     "3": "furry_bgm_BattleAgainstATrueHero.mp3",
-                    "4": "MySunset.mp3",
-                    "5": "FarOut.mp3",
-                    "6": "BeethovenVirus.mp3",
-                    "7": "MainTitle.mp3",
-                    "8": "存亡之战.mp3"
+                    "4": "furry_bgm_MySunset.mp3",
+                    "5": "furry_bgm_FarOut.mp3",
+                    "6": "furry_bgm_BeethovenVirus.mp3",
+                    "7": "furry_bgm_MainTitle.mp3",
+                    "8": "furry_bgm_存亡之战.mp3"
                 };
                 if (item[temp]) {
                     ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + item[temp];
@@ -2089,19 +2216,19 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
             //---------------------------------------设置：武将评级------------------------------------------//
             //乐色
-            var furryjunk = ["fr_milis", "fr_lions", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala', 'fr_derk']
+            var furryjunk = ["fr_milis", "fr_huye", "fr_telina", "fr_xit", "fr_adward", "fr_nier", "fr_laays", 'fr_liya', 'fr_mala', 'fr_derk']
             //普通
-            var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_glit", "fr_edmon", "fr_muli",]
+            var furrycommon = ["fr_jiejie", "fr_sayisu", "fr_alas", "fr_muen", "fr_dog", "fr_pluvia", "fr_ventus", "fr_zenia", "fr_lamost", "fr_morly", "fr_zeron", "fr_edmon", "fr_muli",]
             //珍贵
             var furryrare = ["fr_yifeng", "fr_yada", "fr_muliy", "fr_sier", "fr_klif", "fr_west", "fr_milite", "fr_jackson", "fr_hars"
                 , "fr_rest", "fr_lens", "fr_kert", "fr_keya", "fr_klier", "fr_lint", "fr_patxi", "fr_nore", "fr_nulia", "fr_terlk", "fr_tiers", "fr_wore", "fr_hynea", 'fr_linyan', 'fr_shark', 'fr_lamas']
             //史诗
             var furryepic = ["fr_muyada", "fr_marxya", "fr_ken", "fr_oert", "fr_sisk", "fr_skry", "fr_lusiya", "fr_kersm", "fr_dier",
                 "fr_aroncy", "fr_berg", "fr_markn", "fr_mika", "fr_dmoa", "fr_verb", "fr_taber", "fr_dragon", "fr_jgby"
-                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_ham", "fr_sam", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow', 'fr_thunder','fr_keste']
+                , "fr_slen", "fr_paers", "fr_yifa", "fr_fate", "fr_fox", "fr_zeta", "fr_blackwolf", "fr_whitewolf", 'fr_horn', 'fr_tiger,', 'fr_kmjia', "fr_liona", "fr_ala", 'fr_crow', 'fr_thunder', 'fr_keste']
             //传说
             var furrylegend = ["fr_wes", "fr_kesaya", "fr_krikt", "fr_tery", "fr_milism", "fr_miya", "fr_lust", "fr_faers", "fr_yas_klin", "fr_bofeng", "fr_xiaomo", "fr_nanci", "fr_bladewolf", "fr_sheep", "fr_tails",
-                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium', 'fr_zhan', 'fr_rasali', 'fr_nashu','fr_nine']
+                "fr_ciyu", "fr_delta", "fr_peter_likes", "fr_yinhu", "fr_terz", "fr_jet", "fr_knier", "fr_kasaers", "fr_molis", "fr_shisan", "fr_zhongyu", 'fr_qima', 'fr_francium', 'fr_zhan', 'fr_rasali', 'fr_nashu', 'fr_nine']
             var furryrank = [furryjunk, furrycommon, furryrare, furryepic, furrylegend]
             game.furryrank = furryrank
             //------------------------------------------载入css------------------------------------------//
@@ -2139,6 +2266,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             });
             //------------------------------------------说明------------------------------------------//
             var introduce = {
+                'zhongshi': {
+                    name: "众势技",
+                    info: "<li>众势技是一类特殊的技能标签，拥有此标签的技能仅身份模式且你的身份为主公或反贼时可用。"
+                },
+                'qiyue': {
+                    name: '契约',
+                    info: "<li>签订契约：在指定位置召唤一个角色，该角色称你为“契主”，你称该角色为“契友”。"
+                },
                 'fenfa': {
                     name: '奋发技',
                     info: '<li>奋发技是一类特殊的技能标签，<li>奋发技后的括号，代表在当你的体力值处于该区间内时，此技能有效，否则此技能失效，<li>若括号内只有一个值，则代表单个点，如[2]代表[2,2]，<li>maxHp指代玩家最大体力值。'
@@ -2203,9 +2338,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     name: "疯狂",
                     info: "<li>结束阶段，处于“疯狂”状态的角色随机弃置X张牌（X为其“疯狂”状态层数），然后移除1层“疯狂”状态，当该角色回复体力时，移除所有“疯狂”状态。"
                 },
-                "sleep_buff":{
-                    name:"睡眠",
-                    info:"<li>处于“睡眠”状态的角色不能够使用或打出牌直到其受到伤害或其下回合结束。"
+                "sleep_buff": {
+                    name: "睡眠",
+                    info: "<li>处于“睡眠”状态的角色不能够使用或打出牌直到其受到伤害或其下回合结束。"
                 },
                 'xuli': {
                     name: "爆发技",
@@ -2502,6 +2637,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/drama.js', null)
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/cards.js', null);
                 lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/character.js', null);
+                lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/guozhan.js', null);
                 game.addMode('furry_lib', {
                     game: {
                         syncMenu: true,
@@ -2926,14 +3062,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                             ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(3) +
                                             ' </br>控制：' + game.frStars(4) + ' 辅助：' + game.frStars(0) +
                                             '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
-                                        ['fr_sam',
-                                            '</br><span class="bluetext">关联角色</span>：海<br>',
+                                        ['fr_whitewolf',
+                                            '</br><span class="bluetext">关联角色</span>：“黑狼”<br>',
                                             '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
                                             ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(6) +
                                             ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(5) +
                                             '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(5) + ' </br>'],
-                                        ['fr_ham',
-                                            '</br><span class="bluetext">关联角色</span>：山<br>',
+                                        ['fr_blackwolf',
+                                            '</br><span class="bluetext">关联角色</span>：“白狼”<br>',
                                             '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(5) +
                                             ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(2) +
                                             ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(0) +
@@ -3256,7 +3392,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.group.add('fr_g_ji');
                 lib.translate.fr_g_ji = '机';
                 lib.translate.fr_g_ji2 = '机';
-
                 lib.config.all.characters.push('furryPack');
                 lib.translate['furryPack_character_config'] = "<img style=width:100px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png>";// 包名翻译
                 //卡包（手牌）
@@ -3377,11 +3512,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         game.frAchi.saveToFile()
                     }
                 },
-            },
-            "heroes": {
-                name: "<b>国战武将</b>",
-                intro: "开启此功能重启后生效。开启后将池将增加国战专属武将",
-                init: false,
             },
             "ban_ai": {
                 "name": "<b>AI禁将</b>",
@@ -3717,7 +3847,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             author: "<span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.3.0.3",
+            version: "2.3.0.4",
         }, files: { "character": [], "card": [], "skill": [] }
     }
 })

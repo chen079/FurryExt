@@ -110,7 +110,7 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 avatar2: '吟游诗人',
             },
             {
-                say: '（山无奈的摸了摸口袋，回头喊道。）'
+                say: '（科亚无奈的摸了摸口袋，回头喊道。）'
             },
             {
                 say: '克莱尔，付一下钱！',
@@ -131,7 +131,7 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 avatar2: '吟游诗人',
             },
             {
-                say: "（山对克莱尔挥挥手，克莱尔又转身回去喝酒了。）"
+                say: "（科亚对克莱尔挥挥手，克莱尔又转身回去喝酒了。）"
             },
             {
                 say: '继续。',
@@ -161,17 +161,17 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 avatar2: "fr_sisk"
             },
             {
-                say: "（西斯科的声音突然在山耳畔响起）"
+                say: "（西斯科的声音突然在科亚耳畔响起）"
             },
             {
-                say: "（西斯科凑到到山耳畔，轻声说）"
+                say: "（西斯科凑到到科亚耳畔，轻声说）"
             },
             {
                 say: "团长，你叫我的事办好了。",
                 avatar2: "fr_sisk"
             },
             {
-                say: "（山点了点头）"
+                say: "（科亚点了点头）"
             },
             {
                 say: "这位客官说得对，那本预言集乃是精灵族的大贤者所著，可谓上可知天文，下可同鬼神。",
@@ -200,14 +200,14 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 avatar2: "fr_sisk"
             },
             {
-                say: "（吟游诗人正要说些什么，山打断了他）"
+                say: "（吟游诗人正要说些什么，科亚打断了他）"
             },
             {
                 say: "我们了解的够多了，和你聊的很开心，再见。",
                 avatar: "fr_keya"
             },
             {
-                say: "（山拉上克莱尔和西斯科离开了。）"
+                say: "（科亚拉上克莱尔和西斯科离开了。）"
             },
         ],
         '2': [
@@ -685,7 +685,7 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 avatar:'fr_keya'
             },
             {
-                say:'（说着，山将一枚铜币投入诗人面前的帽子里）',
+                say:'（说着，科亚将一枚铜币投入诗人面前的帽子里）',
                 fuc: function () {
                     game.frPlayJuqingAudio('Throw_coin')
                 },
@@ -738,7 +738,7 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 avatar:'fr_kert'
             },
             {
-                say:'（突兀的声音插了进来，山忍不住抬头看去）'
+                say:'（突兀的声音插了进来，科亚忍不住抬头看去）'
             },
             {
                 say:'柯尔特，你可算回来了！',
@@ -752,7 +752,7 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 avatar:'fr_klier'
             },
             {
-                say:'（山给了克莱尔一个眼刀，克莱尔安静了下来）'
+                say:'（科亚给了克莱尔一个眼刀，克莱尔安静了下来）'
             },
             {
                 say:'诗人听到西斯科的话后，沉思了一会儿，说道'
@@ -762,14 +762,14 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 avatar2: '吟游诗人',
             },
             {
-                say:'（山拍了拍诗人的肩膀）'
+                say:'（科亚拍了拍诗人的肩膀）'
             },
             {
                 say:'你什么时候变得这么正义了，再来点其他情报？',
                 avatar:'fr_keya'
             },
             {
-                say:"（山喝了口吧台上放着的酒）"
+                say:"（科亚喝了口吧台上放着的酒）"
             },
             {
                 say:'你知道最近在帝国附近出没的龙族嘛？',
@@ -788,13 +788,13 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 avatar:'fr_keya',
             },
             {
-                say:'（就在山还在和诗人说着什么的时候，一声巨响突然将酒馆的玻璃震碎）'
+                say:'（就在科亚还在和诗人说着什么的时候，一声巨响突然将酒馆的玻璃震碎）'
             },
             {
                 say:'（坐在酒馆里的人大部分是赏金工会的成员，他们纷纷举起武器，看向声音的来源。）'
             },
             {
-                say:'（山循声望去，只看到一双闪烁着金色的龙眸正紧盯着自己）'  
+                say:'（科亚循声望去，只看到一双闪烁着金色的龙眸正紧盯着自己）'  
             },
             {
                 say:'好久不见了，流浪者佣兵团',

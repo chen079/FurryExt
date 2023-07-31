@@ -21,8 +21,45 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
     };
     lib.qhlypkg.push({
         isExt: true,//是否是扩展，一般填true
+        fromExt: true,
         filterCharacter: function (name) {
             return name.indexOf('fr_') == 0;//判断此ID的武将是否属于此皮肤包
+        },
+        characterIntroduceExtra: function (name) {
+            var arr = [];
+            if (lib.fr_achievement && lib.fr_achievement['character']) {
+                for (var aname in lib.fr_achievement['character']) {
+                    var ach = lib.fr_achievement['character'][aname];
+                    if (ach && ach.info && ach.info.indexOf(get.translation(name)) >= 0) {
+                        arr.push({ name: '成就', func: 'characterChengjiu' });
+                        break;
+                    }
+                }
+            }
+            if (arr.length) return arr;
+        },
+        characterChengjiu: function (name) {
+            var achs = {};
+            if (lib.fr_achievement && lib.fr_achievement['character']) {
+                for (var aname in lib.fr_achievement['character']) {
+                    var ach = lib.fr_achievement['character'][aname];
+                    if (ach && ach.info && ach.info.indexOf(get.translation(name)) >= 0) {
+                        achs[aname] = ach;
+                    }
+                }
+            }
+            var str = "<br>";
+            for (var aname in achs) {
+                str += ("<br><b>" + aname + "</b>");
+                var ach = achs[aname];
+                str += "<br>" + ach.info;
+                str += "<br>" + ach.extra;
+                if (game.frAchi.hasAchi(aname, 'character')) {
+                    str += "（已完成）";
+                }
+                str += "<br>";
+            }
+            return str;
         },
         characterNameTranslate: function (name) {
             //这里根据武将ID返回其中文名字。
@@ -38,6 +75,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
             };
             return info[name];
         },
+        ssborder: '../../福瑞拓展/image/group/',//手杀边框
         characterInfo: function (name) {
             //这里可以返回角色资料。如不返回则显示get.characterIntro(name)。
         },
@@ -101,7 +139,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
                         }
                     }
                 },
-                'fr_dolina':{
+                'fr_dolina': {
                     '休闲时光': {
                         isLocked: function () {
                             return !lib.config.休闲时光_unlock;
@@ -118,7 +156,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
             if (!ret2) return;
             return ret2;
         },
-        prefix: 'extension/福瑞拓展/image/character', //原皮前缀，标识原皮肤的位置。
+        prefix: 'extension/福瑞拓展/image/character/', //原皮前缀，标识原皮肤的位置。
         lutouPrefix: 'extension/福瑞拓展/image/lutou/',//露头前缀，标识露头原皮肤位置
         isLutou: lib.config.frLutou,
         skin: {
@@ -130,5 +168,43 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
         skininfo: {
         },
         forbidEditTaici: false,
+    });
+    
+    if (!lib.qhlyMusic) {
+        lib.qhlyMusic = {};
+    }
+    var musics = {
+        "2": "Tarven",
+        "3": "Battle Against A True Hero",
+        "4": "My Sunset",
+        "5": "Far Out",
+        "6": "Beethoven Virus",
+        "7": "Main Title",
+        "8": "存亡之战",
+        "z1": "Hopes And Dreams",
+        "z2": "MEGALOVANIA",
+        "z3": "El Dorado"
+    };
+    for (var m in musics) {
+        var path = 'extension/福瑞拓展/audio/bgm/fr_bgm_' + m + ".mp3";
+        lib.qhlyMusic[path] = {
+            name: musics[m],
+            path: path
+        };
+    }
+
+    if (!lib.qhly_characterMusicMapper) {
+        lib.qhly_characterMusicMapper = [];
+    }
+
+    lib.qhly_characterMusicMapper.push(function (name) {
+        if (name.indexOf('fr_') != 0) return;
+        var map = {
+
+        };
+        if (!map[name]) {
+            map[name] = 'liesefen';
+        }
+        return 'extension/福瑞拓展/audio/bgm/fr_bgm_' + map[name] + '.mp3';
     });
 });
