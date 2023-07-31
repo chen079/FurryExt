@@ -164,6 +164,41 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     alert('福瑞拓展提示：检测到您没有开启千幻扩展，将无法使用武将皮肤功能。')
                     game.saveConfig('extension_福瑞拓展_frSkin', false);
                 }
+                //---------------------------------------武将标签------------------------------------------//
+                if (lib.config.extensions && lib.config.extensions.contains('十周年UI') && lib.config['extension_十周年UI_enable']) {
+                    if (lib.config['extension_十周年UI_showJieMark']) {
+                        lib.fr_playerinit = lib.element.player.init;
+                        lib.element.player.init = function (character, character2, skill) {
+                            var player = lib.fr_playerinit.apply(this, arguments);
+                            if (character && lib.characterPack.furryPack[character]) {
+                                if (this.$jieMark == undefined) {
+                                    this.$jieMark = dui.element.create('jie-mark', this);
+                                } else {
+                                    this.appendChild(this.$jieMark);
+                                };
+                                this.$jieMark.style.backgroundImage = 'url("' + lib.assetURL + "extension/福瑞拓展/image/biaoqian/mark_furry.png" + '")';
+                                return this;
+                            };
+                            return this;
+                        };
+                    };
+                };
+                //------------------------------------------设置：国战武将------------------------------------------//
+                if (lib.characterPack.mode_guozhan && lib.config.mode == 'guozhan') {
+                    lib.config.all.characters.push('furryGZPack');
+                    lib.translate['furryGZPack_character_config'] = "福瑞国战";// 包名翻译
+                    for (var i in lib.characterPack.furryGZPack) {
+                        lib.characterPack.mode_guozhan[i] = lib.characterPack.furryGZPack[i]
+                    }
+                }
+                if (lib.config.extension_福瑞拓展_Background_Music && lib.config.extension_福瑞拓展_Background_Music != "1") {
+                    game.frplayBackgroundMusic();
+                    ui.backgroundMusic.addEventListener('ended', game.frplayBackgroundMusic);
+                };
+                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if (lib.config.extension_福瑞拓展_Background_Picture && lib.config.extension_福瑞拓展_Background_Picture != "1") {
+                    game.frBackground_Picture();
+                };
             })
             //---------------------------------------更新说明：参考活动武将------------------------------------------//
             lib.skill._Furry_changeLog = {
@@ -188,6 +223,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 var Furry_update = [
                     '/setPlayer/',
                     '修复部分bug',
+                    '新武将：奈恩、科斯特、果糖、路西法、山熊（隐藏）',
+                    '修复DIYEditor的连接错误问题',
+                    '新增千幻手杀势力框支持',
+                    '新增千幻角色成就查看支持',
+                    '修复塔尔斯的音效错误',
+                    '修复米亚永动机',
+                    '修正bgm无法正常播放的错误',
                     'To be continued...',
                 ];
                 //更新武将
@@ -279,43 +321,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 .catch(error => {
                     console.error(error);
                 });
-            lib.arenaReady.push(function () {
-                //---------------------------------------武将标签------------------------------------------//
-                if (lib.config.extensions && lib.config.extensions.contains('十周年UI') && lib.config['extension_十周年UI_enable']) {
-                    if (lib.config['extension_十周年UI_showJieMark']) {
-                        lib.fr_playerinit = lib.element.player.init;
-                        lib.element.player.init = function (character, character2, skill) {
-                            var player = lib.fr_playerinit.apply(this, arguments);
-                            if (character && lib.characterPack.furryPack[character]) {
-                                if (this.$jieMark == undefined) {
-                                    this.$jieMark = dui.element.create('jie-mark', this);
-                                } else {
-                                    this.appendChild(this.$jieMark);
-                                };
-                                this.$jieMark.style.backgroundImage = 'url("' + lib.assetURL + "extension/福瑞拓展/image/biaoqian/mark_furry.png" + '")';
-                                return this;
-                            };
-                            return this;
-                        };
-                    };
-                };
-                //------------------------------------------设置：国战武将------------------------------------------//
-                if (lib.characterPack.mode_guozhan && lib.config.mode == 'guozhan') {
-                    lib.config.all.characters.push('furryGZPack');
-                    lib.translate['furryGZPack_character_config'] = "福瑞国战";// 包名翻译
-                    for (var i in lib.characterPack.furryGZPack) {
-                        lib.characterPack.mode_guozhan[i] = lib.characterPack.furryGZPack[i]
-                    }
-                }
-                if (lib.config.extension_福瑞拓展_Background_Music && lib.config.extension_福瑞拓展_Background_Music != "1") {
-                    game.frplayBackgroundMusic();
-                    ui.backgroundMusic.addEventListener('ended', game.frplayBackgroundMusic);
-                };
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                if (lib.config.extension_福瑞拓展_Background_Picture && lib.config.extension_福瑞拓展_Background_Picture != "1") {
-                    game.frBackground_Picture();
-                };
-            })
             //此处内容由钫酸酱制作，若有需要请联系作者...
             lib.skill._definedSweap = {
                 firstDo: true,
@@ -1039,13 +1044,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 event.resume();
             };
-            //---------------------------------------自定义函数：按钮选项------------------------------------------//
-            //来自狂神大佬TAT
+            //---------------------------------------自定义函数：chooseButtonControl------------------------------------------//
+            //此处内容由狂神制作，乐
             lib.element.player.chooseButtonControl = function (object) {
                 let next = game.createEvent('chooseButtonControl');
                 next.player = this;
                 if (arguments.length == 1 && get.objtype(arguments[0]) == 'object') {
-                    for (var key in object) next[key] = object[key];
+                    for (let key in object) next[key] = object[key];
                 }
                 else for (let arg of arguments) {
                     //dialog
@@ -1060,7 +1065,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
                     else if (typeof arg == 'function') {
                         if (!next.control) next.control = arg;
-                        else next.processAI = arg;
+                        else if (!next.processAI) next.processAI = arg;
+                        else next.filterButton = arg;
                     }
                 }
 
@@ -1077,6 +1083,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (typeof next.forced != 'boolean') next.multibutton = false;
                 if (next.isMine() == false && next.dialog) next.dialog.style.display = 'none';
                 if (!next.control) next.control = () => 'ok';
+                if (!next.filterButton) next.filterButton = () => true;
+
                 next.setContent('chooseButtonControl');
                 next._args = Array.from(arguments);
                 return next;
@@ -1097,22 +1105,22 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         if (!event.dialog.contains(button.parentNode)) return;
                         if (button.classList.contains('unselectable')) return;
 
+                        for (let i of event.dialog.buttons) i.classList.remove('unselectable');
+
                         if (button.classList.contains('selected')) {
                             event.buttons.remove(button);
                             button.classList.remove('selected');
-                            if (!event.multibutton) {
-                                for (let i of event.dialog.buttons) {
-                                    i.classList.remove('unselectable');
-                                }
+                            for (let i of event.dialog.buttons) {
+                                if (event.buttons.contains(i)) continue;
+                                if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
                             }
                         } else {
                             event.buttons.add(button);
                             button.classList.add('selected');
-                            if (!event.multibutton) {
-                                for (let i of event.dialog.buttons) {
-                                    if (event.buttons.contains(i)) continue;
-                                    i.classList.add('unselectable');
-                                }
+                            for (let i of event.dialog.buttons) {
+                                if (event.buttons.contains(i)) continue;
+                                if (!event.multibutton) i.classList.add('unselectable');
+                                else if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
                             }
                         }
 

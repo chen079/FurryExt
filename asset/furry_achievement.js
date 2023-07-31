@@ -1,6 +1,9 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
+		'fr_guotang':'',
+		'fr_lucifer':"万物有灵，语通人心。",
+		'fr_mountainbear':'我只要一掌就能让你灰飞烟灭，小矮子！',
 		'fr_nine': "我能保护自己，不靠任何人，就这样。",
 		'fr_keste': "我至今还未尝败绩...",
 		'fr_wind': "不要小看风的力量！",

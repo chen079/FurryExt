@@ -291,16 +291,31 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 charlotte: true,
                 unique: true,
                 forced: true,
-                filter: function (event, player) {
-                    return player.identity == 'zhu' || player.identity == 'fan'
-                },
-                init: function (player) {
-                    player.storage.lucifer_cc = game.addPlayer(player.getSeatNum() + 1, 'fr_mountainbear').getId()
-                    player.storage.lucifer_cc.setPosition()
-                },
                 content: function () {
                     'step 0'
+                    player.storage.lucifer_cc = game.addPlayer(player.getSeatNum() + 1, 'fr_mountainbear').getId()
+                    player.storage.lucifer_cc.setPosition()
+                    /*if(player.next.identity!='zhu'&&player.next.next!=player){
+                        player.storage.lucifer_cc=player.next
+                    }else if(player.next.identity=='zhu'&&player.next.next!=player){
+                        player.storage.lucifer_cc=player.next.next
+                    }else{
+                        event.finish()
+                    }*/
+                    'step 1'
                     var target = player.storage.lucifer_cc
+                    target.init('fr_mountainbear')
+                    target.update()
+                    if(player.identity=='zhu'){
+                        target.identity='zhong'
+                        target.setIdentity('zhong')
+                    }else if(player.identity=='fan'){
+                        target.identity='fan'
+                        target.setIdentity('fan')
+                    }else if(player.identity=='nei'){
+                        target.identity='nei'
+                        target.setIdentity('nei')
+                    }
                     target.storage.lucifer_cc = player
                     target._trueMe = player;
                     game.addGlobalSkill('autoswap');
@@ -19103,13 +19118,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         translate: {
             //技能
             'mountainbear_xj': '熊击',
-            'mountainbear_xj_info': '你使用牌不能指定你的“契主”为目标；当你使用【杀】时，你可以失去1点护甲然后选择一项：<li>令此【杀】伤害基数+1，<li>令此【杀】不可被响应，<li>背水：失去1点护甲并翻面。',
+            'mountainbear_xj_info': '当你使用【杀】时，你可以失去1点护甲然后选择一项：<li>令此【杀】伤害基数+1，<li>令此【杀】不可被响应，<li>背水：失去1点护甲并翻面。',
             'mountainbear_xs': '献生',
             'mountainbear_xs_info': '限定技，当你的“契主”进入濒死状态时，你可以交给其所有牌并与其交换体力值。',
             'lucifer_xz': "谐震",
             'lucifer_xz_info': "结束阶段，你可以令一名其他角色获得〖祝福〗直到其回合结束；当你受到伤害后，你可以令一名角色获得1点护甲。",
             'lucifer_cc': '传承',
-            'lucifer_cc_info': '游戏开始时，你与✡山熊签订“' + get.introduce('qiyue') + '”于你的下家；你的“契友”由你控制；当你死亡时，你的“契友”立即死亡。',
+            'lucifer_cc_info': '游戏开始时，你与✡山熊签订“' + get.introduce('qiyue') + '”于你的下家且与你身份相同（若你为主公，则其身份改为忠臣）；你的“契友”由你控制；当你死亡时，你的“契友”立即死亡。',
             'mountainbear_qy': "契守",
             'mountainbear_qy_info': "当你的“契主”成为不为你的【杀】的目标时，你可以将此【杀】转移给你。",
             'guotang_st': "兽土",
@@ -19910,6 +19925,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            'fr_mountainbear': '力透千钧',
+            'fr_lucfier': '万物通灵',
             'fr_guotang': '果糖含量',
             'fr_nine': '孤僻的天才',
             'fr_keste': '常胜将军',
