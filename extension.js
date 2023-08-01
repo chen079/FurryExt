@@ -191,11 +191,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         lib.characterPack.mode_guozhan[i] = lib.characterPack.furryGZPack[i]
                     }
                 }
+                //------------------------------------------设置：背景音乐------------------------------------------//
                 if (lib.config.extension_福瑞拓展_Background_Music && lib.config.extension_福瑞拓展_Background_Music != "1") {
                     game.frplayBackgroundMusic();
                     ui.backgroundMusic.addEventListener('ended', game.frplayBackgroundMusic);
                 };
-                ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                //------------------------------------------设置：背景图片------------------------------------------//
                 if (lib.config.extension_福瑞拓展_Background_Picture && lib.config.extension_福瑞拓展_Background_Picture != "1") {
                     game.frBackground_Picture();
                 };
@@ -324,7 +325,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //此处内容由钫酸酱制作，若有需要请联系作者...
             lib.skill._definedSweap = {
                 firstDo: true,
-                trigger: { player: ['chooseNumberBegin', 'chooseTextBegin'] },
+                trigger: { player: ['chooseNumberBegin', 'chooseTextBegin', 'chooseButtonControlBegin'] },
                 forced: true,
                 priority: 100,
                 forceDie: true,

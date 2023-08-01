@@ -145,7 +145,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 shaRelated: true,
                 direct: true,
                 filter: function (event, player) {
-                    return player.hujia>0
+                    return player.hujia>0&&event.target!=player
                 },
                 content: function () {
                     'step 0'
@@ -163,7 +163,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             if (player.hujia > 2) {
                                 return '背水'
                             } else {
-                                return '强命'
+                                return ['强命','加伤'].randomGet()
                             }
                         }).set('target', trigger.target)
                     'step 1'
@@ -193,20 +193,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.storage.mountainbear_xs = false;
                 },
                 filter: function (event, player) {
-                    if (player.storage.mountainbear_xs) return false;
+                    if (!player.storage.lucifer_cc||player.storage.mountainbear_xs) return false;
                     if (event.type == 'dying') {
                         if (player.storage.lucifer_cc != event.dying) return false;
                         return true;
                     }
                     return false;
-                },
-                onremove: function (player) {
-                    if (player == game.me) {
-                        if (!game.notMe) game.swapPlayerAuto(player._trueMe)
-                        else delete game.notMe;
-                        if (_status.auto) ui.click.auto();
-                    }
-                    delete player._trueMe;
                 },
                 content: function () {
                     'step 0'
