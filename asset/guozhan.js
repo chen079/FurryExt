@@ -28,7 +28,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             gz_fr_muliy: ['male', 'wu', 3, ['mliy_hx'], []],
             gz_fr_zhongyu: ['male', 'shu', 3, ['zhongyu_ky'], []],
             gz_fr_hynea: ['male', 'ye', 3, ['hynea_cg', 'hynea_ds'], []],
-            gz_fr_horn: ['male', 'wei', 3, ['horn_gzll', 'horn_ql', 'fr_qianghua'], []],
+            gz_fr_horn: ['male', 'wei', 3, ['horn_gzll', 'horn_ql', /* 'fr_qianghua' */], []],
             gz_fr_kert: ["male", "shu", 4, ["kert_lp", "kert_jl"], []],
             gz_fr_lint: ["male", "shu", 4, ["lint_nd"], []],
             gz_fr_liya: ["female", "wei", 3, ["liya_sz", "liya_sj"], []],

@@ -4,6 +4,70 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         name: 'furryCard',//卡包命名
         connect: true,//卡包是否可以联机
         card: {
+            'fr_equip1_shyl': {
+                fullskin: true,
+                image: 'ext:福瑞拓展/image/card/fr_equip1_shyl.png',
+                type: "equip",
+                subtype: "equip1",
+                distance: {
+                    attackFrom: -1,
+                },
+                ai: {
+                    equipValue: function (card, player) {
+                        return Math.min(2.5 + player.countCards('h', 'sha'), 4);
+                    },
+                    basic: {
+                        equipValue: 3.5,
+                        order: function (card, player) {
+                            if (player && player.hasSkillTag('reverseEquip')) {
+                                return 8.5 - get.equipValue(card, player) / 20;
+                            } else {
+                                return Math.min(7.2, 7 + get.equipValue(card, player) / 60);
+                            }
+                        },
+                        useful: 2,
+                        value: function (card, player, index, method) {
+                            if (player.isDisabled(get.subtype(card))) return 0.01;
+                            var value = 0;
+                            var info = get.info(card);
+                            var current = player.getEquip(info.subtype);
+                            if (current && card != current) {
+                                value = get.value(current, player);
+                            }
+                            var equipValue = info.ai.equipValue;
+                            if (equipValue == undefined) {
+                                equipValue = info.ai.basic.equipValue;
+                            }
+                            if (typeof equipValue == 'function') {
+                                if (method == 'raw') return equipValue(card, player);
+                                if (method == 'raw2') return equipValue(card, player) - value;
+                                return Math.max(0.1, equipValue(card, player) - value);
+                            }
+                            if (typeof equipValue != 'number') equipValue = 0;
+                            if (method == 'raw') return equipValue;
+                            if (method == 'raw2') return equipValue - value;
+                            return Math.max(0.1, equipValue - value);
+                        },
+                    },
+                    result: {
+                        target: function (player, target, card) {
+                            return get.equipResult(player, target, card.name);
+                        },
+                    },
+                },
+                skills: ["shyl_skill"],
+                enable: true,
+                selectTarget: -1,
+                filterTarget: function (card, player, target) {
+                    return target == player;
+                },
+                modTarget: true,
+                allowMultiple: false,
+                content: function () {
+                    if (cards.length && get.position(cards[0], true) == 'o') target.equip(cards[0]);
+                },
+                toself: true,
+            },
             'fr_card_xzst': {
                 fullskin: true,
                 image: 'ext:福瑞拓展/image/card/fr_card_xzst.png',
@@ -18,7 +82,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 content: function () {
                     'step 0'
                     var next = player.chooseControl()
-                    next.set('choiceList', ['弃置一张手牌（不足则全弃置）并令' + get.translation(target) + '摸两张牌。', '受到1点伤害并视为失去1点体力并令' + get.translation(target) + '回复1点体力。'])
+                    next.set('choiceList', ['弃置一张手牌（不足则不弃）并令' + get.translation(target) + '摸两张牌。', '受到1点伤害并视为失去1点体力并令' + get.translation(target) + '回复1点体力。'])
                     next.set('ai', function () {
                         if (get.attitude(player, target) > 0) {
                             if (player.hp >= 2 && target.hp <= 1) return 1
@@ -32,10 +96,14 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     if (result.index == 0) {
                         player.chooseToDiscard(1, 'h', true)
                         target.draw(2)
+                        event.finish()
                     } else {
+                        target.recover()
+                    }
+                    'step 2'
+                    if(!target.isDying()){
                         player.damage()
                         player.fakeLoseHp()
-                        target.recover()
                     }
                 },
                 ai: {
@@ -1136,6 +1204,24 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     content: "当前护甲已失效",
                 },
             },
+            'shyl_skill': {
+                equipSkill: true,
+                audio: 2,
+                trigger: {
+                    player: "shaMiss",
+                },
+                filter: function (event, player) {
+                    return event.targets.length == 1
+                },
+                usable: 1,
+                check: function (event, player) {
+                    return get.attitude(player, event.target) < 0;
+                },
+                logTarget: "target",
+                content: function () {
+                    player.useCard({ name: 'sha' }, trigger.target)
+                },
+            },
             'wxpp_skill': {
                 enable: "phaseUse",
                 equipSkill: true,
@@ -1155,39 +1241,43 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         dialog.addText(str[player.storage.wxpp_skill - 1]);
                     },
                 },
+                music:{
+                    '1155665':"一闪一闪亮晶晶～",
+                    '11556654433221':"满天都是小星星～",
+                    '114514':"你是一个一个一个......",
+                    '3345':"欢～乐～女～神～",
+                    '33455432':"圣～洁～美～丽～",
+                    '334554321123':"灿～烂～光～芒～",
+                    '334554321123322':"照～～～大～地～",
+                },
+                music_achieve:['11556654433221', '334554321123322'],
                 content: function () {
                     'step 0'
                     event.index = []
                     'step 1'
-                    player.chooseControl('宫', '商', '角', '清角', '徵', '羽', '变宫', 'cancel2').set('ai', function () {
-                        return 'cancel2'
-                    })
+                    player.chooseControl('宫', '商', '角', '清角', '徵', '羽', '变宫', 'cancel2').set('ai', ()=>'cancel2');
                     'step 2'
-                    if (result.control == 'cancel2') {
-                        if (event.index.toString() === [1, 1, 5, 5, 6, 6, 5, 4, 4, 3, 3, 2, 2, 1].toString()) {
-                            if (!game.frAchi.hasAchi('你会弹琴吗？', 'special')) game.frAchi.addProgress('你会弹琴吗？', 'special')
-                        }
-                        event.finish()
-                    } else {
-                        event.index.push(result.index + 1)
-                    }
-                    if (result.control == '宫') {
-                        game.frPlayAudio('gong')
-                    } else if (result.control == '商') {
-                        game.frPlayAudio('shang')
-                    } else if (result.control == '角') {
-                        game.frPlayAudio('jue')
-                    } else if (result.control == '徵') {
-                        game.frPlayAudio('zhi')
-                    } else if (result.control == '羽') {
-                        game.frPlayAudio('yu')
-                    } else if (result.control == '清角') {
-                        game.frPlayAudio('qingjue')
-                    } else if (result.control == '变宫') {
-                        game.frPlayAudio('biangong')
+                    event.index.push(result.index + 1);
+                    switch (result.control) {
+                        case '宫': game.frPlayAudio('gong'); break;
+                        case '商': game.frPlayAudio('shang'); break;
+                        case '角': game.frPlayAudio('jue'); break;
+                        case '清角': game.frPlayAudio('qingjue'); break;
+                        case '徵': game.frPlayAudio('zhi'); break;
+                        case '羽': game.frPlayAudio('yu'); break;
+                        case '变宫': game.frPlayAudio('biangong'); break;
+                        default: event.finish();
                     }
                     'step 3'
-                    event.goto(1)
+                    for(var i in lib.skill.wxpp_skill.music){
+                        if(event.index.join('').lastIndexOf(i) === Math.max(event.index.length-i.length,0)){
+                            player.$fullscreenpop(lib.skill.wxpp_skill.music[i],'soil',false,true);
+                            if(lib.skill.wxpp_skill.music_achieve.contains(i)&&!game.frAchi.hasAchi('你会弹琴吗？', 'special')){
+                                game.frAchi.addProgress('你会弹琴吗？', 'special')
+                            }
+                        }
+                    }
+                    event.goto(1);
                 },
                 group: "wxpp_skill_wxpp",
                 subSkill: {
@@ -1420,6 +1510,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'shyl_skill': "死魂幽镰",
+            'shyl_skill_info': '每回合限一次，当你的【杀】被【闪】抵消时，若此【杀】目标数为1，你可以视为对此【杀】的目标使用一张【杀】。',
             'mhlq_skill': '鸣鸿龙雀',
             'mhlq_skill_info': '锁定技，当你使用【杀】指定一名目标角色后，你令其失去所有护甲直到此【杀】被抵消或造成伤害（时机同青釭剑）。',
             'card_djlj': '弹尽粮绝',
@@ -1435,7 +1527,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
 
             //卡牌
             'fr_card_xzst': '雪中送炭',
-            'fr_card_xzst_info': '任意一名其他角色受到伤害后，或处于濒死状态时，你对其使用，你选择一项：1.弃置一张手牌（不足则全弃）并令该角色摸两张牌，2.受到1点伤害并视为失去1点体力，然后令该角色回复1点体力。',
+            'fr_card_xzst_info': '其他角色受到伤害后，或处于濒死状态时，你对其使用，你选择一项：1.弃置一张手牌（不足则不弃）并令该角色摸两张牌，2.令该角色回复1点体力，然后若该角色脱离了濒死状态，你受到1点无来源伤害并视为失去1点体力。',
             'fr_equip2_yyxl': '影夜项链',
             'fr_equip2_yyxl_info': '锁定技。①其他角色指定你为【杀】的目标时，你令该角色非锁定技失效直到此【杀】结算完毕。②当你失去装备区内的【影夜项链】时，你摸两张牌。',
             'fr_equip1_mhlq': '鸣鸿龙雀',
@@ -1465,6 +1557,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_gzbj_info": "出牌阶段对所有角色使用，所有目标将手牌数调整至X（X为场上所有玩家手牌数的平均值并向下取整）。",
             "fr_equip1_syzg": "霜月之弓",
             "fr_equip1_syzg_info": "当你或你攻击范围内的角色受到一名其他角色造成的非冰属性伤害后，你可以弃置两张牌，然后对伤害来源造成1点冰属性伤害。",
+            'fr_equip1_shyl': "死魂幽镰",
+            'fr_equip1_shyl_info': '每回合限一次，当你的【杀】被【闪】抵消时，若此【杀】目标数为1，你可以视为对此【杀】的目标使用一张【杀】。',
             "fr_card_lyzq": "凌月之球",
             "fr_card_lyzq_info": "出牌阶段，对你使用。你声明一个技能并获得之直到回合结束（觉醒技，限定技，主公技，隐匿技，使命技等特殊技能除外）。",
             "fr_card_zh": "召唤",
@@ -1473,6 +1567,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_zhcz_info": "出牌阶段，对一名角色使用，该角色展示X张手牌（X为其手牌数的一半并向下取整），然后你选择一项：1.重铸其展示的所有牌，2.重铸其未展示的所有牌。",
         },
         list: [
+            ['spade', '13', 'fr_equip1_shyl'],
             ['heart', '5', 'fr_card_xzst'],
             ['heart', '7', 'fr_card_xzst'],
             ['diamond', '13', 'fr_card_xzst'],
@@ -1503,12 +1598,12 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             ['heart', '5', "fr_card_lltj", null, ['gifts']],
             ['club', '5', "fr_card_lltj", null, ['gifts']],
             ['diamond', '5', "fr_card_lltj", null, ['gifts']],
-            ['heart', '5', "sha","mad"],
-            ['club', '7', "sha","mad"],
-            ['spade', '11', "sha","mad"],
-            ['diamond', '4', "sha","mad"],
-            ['heart', '6', "sha","mad"],
-            ['spade', '9', "sha","mad"],
+            ['heart', '5', "sha", "mad"],
+            ['club', '7', "sha", "mad"],
+            ['spade', '11', "sha", "mad"],
+            ['diamond', '4', "sha", "mad"],
+            ['heart', '6', "sha", "mad"],
+            ['spade', '9', "sha", "mad"],
         ],
     }
     if (lib.config.achiReward && lib.config.achiReward.card.length != 0) {

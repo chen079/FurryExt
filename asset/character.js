@@ -5,137 +5,137 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connectBanned: ['fr_terz', 'fr_zenia', 'fr_pluvia', 'fr_zhongyu', 'fr_wes', 'fr_jgby', 'fr_qima', 'fr_rest', 'fr_wore', 'fr_francium', 'fr_nanci',],
         connect: true,//该武将包是否可以联机（必填）
         character: {
-            'fr_mountainbear': ['male', 'qun', '3/3/4', ['mountainbear_xs', 'mountainbear_xj'], ['unseen','des:山熊，原本是居住在矮人之心洞穴周围的魔兽，后来被路西法的父亲打败，作为成年礼物送于路西法。路西法于其成年礼上通过强大的战斗技巧获得了山熊的认可，并与其签订了契约，经过多年的配合，二者已经能够达到通过思想交流的地步，可以说他们二者的性命已经通过“特拉克斯”而连接。由于山熊生性暴戾，在没有兽语者控制的情况下，可能会出现随意伤人的情况。']],
-            'fr_guotang': ['male', 'qun', 3, ['guotang_yl', 'guotang_xq', 'guotang_st'], []],
-            'fr_lucifer': ['male', 'wu', 3, ['lucifer_cc', 'lucifer_xz'], ['des:路西法，目前为居住在矮人之心洞穴附近的兽人部落首领。其部落信仰生命之神——“特拉克斯”，并获得了其传承的特殊能力。该能力使得其部落的勇士能够与动物沟通，甚至训练动物成为伙伴。拥有这种特殊能力的人在《瓦尔亚那》百科中称为“兽语者”。']],
-            'fr_lans': ['male', 'shu', 3, [''], ['unseen']],
-            'fr_keste': ['male', 'wu', 4, ['keste_yg', 'keste_wp'], ['des:科斯特，迦奈尔联邦最年轻也是最年少有为的将军，曾经在与矮人族的战争——“矮人之心争夺战”中大获全胜，歼敌数万。其主导与矮人族签下的《斯兰条约》为迦奈尔联邦的贸易事业奠定了发展基础。因此，这位将军也被成为“尼拉特”将军——即矮人语中的“恶魔”。']],
-            'fr_neises': ['male', 'fr_g_dragon', 3, ['puzzles'], ['unseen']],
-            'fr_wind': ['male', 'wu', 4, ['wind_fy'], []],
-            'fr_nine': ['male', 'shen', 3, ['nine_fw', 'nine_cj', 'nine_dx'], []],
-            'fr_ming': ['male', 'qun', 3, ['ming_yc', 'ming_yy'], ['unseen']],
-            'fr_death': ['male', 'shen', 4, ['death_sy', 'death_sl', 'death_sp'], []],
-            'fr_dolina': ['male', 'qun', 3, ['dolina_wy', 'dolina_sl', 'dolina_qj'], []],
-            'fr_thunder': ['male', 'wei', 4, ['thunder_fz', 'thunder_lj'], ['unseen']],
-            'fr_mouse': ['female', 'qun', 4, ['mouse_bm'], ['unseen']],
-            'fr_lamas': ['male', 'wei', 4, ['lamas_zj'], []],
-            'fr_blam': ['male', 'qun', 4, ['blame_jj'], ['unseen']],
-            'fr_gairtelu': ['male', 'wei', 4, ['gairtelu_aq', 'gairtelu_cf', 'gairtelu_yj'], ['unseen']],
-            'fr_tails': ['male', 'qun', 3, ['tails_jd', 'tails_qx'], []],
-            'fr_zhan': ['male', 'qun', 3, ['zhan_sf', 'zhan_jf'], ['unseen']],
-            'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['des:西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——盖尔德鲁，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。']],
-            'fr_rasali': ['male', 'shen', 3, ['rasali_ly', 'rasali_hq'], ['unseen', 'des:那萨利，和那舒一样，是瓦尔亚那大陆信仰中的神明之一，执掌着阴间的善灵收集和引导工作。<br>他的责任是寻找那些有着良善灵魂的人们，以便在他们离开世界之前引领他们前往冥界，让他们的灵魂在冥界得到永恒的安息。那萨利是一位仁慈而有担当的神明，他深知自己肩负的责任，努力工作以确保每个良善的灵魂都能得到引领。他深知冥界对于那些有着良善灵魂的人意味着什么，因此他不惜一切代价来保护他们。']],
-            'fr_nashu': ['male', 'shen', 4, ['nashu_th', 'nashu_sg'], ['des:那舒，是瓦尔亚那大陆信仰中的神明，他是阴间的统治者，负责管理和收割那些邪恶的灵魂。在瓦尔亚那大陆的历史中，那舒一直是一个神秘而的存在。<br>传说中，当一个人死后，他的灵魂会被送到那舒的阴间，经过他的审判和选择，才能得到永恒的归宿。因此，那舒在人们的心目中拥有着无上的权威和力量，被视为神圣不可侵犯的存在。<br>那舒的力量和能力是源于他所收割的灵魂。每当他收割一个灵魂，他就可以从中吸取力量，增强自己的能力。随着收割的灵魂数量的增加，那舒的力量也会逐渐增强，变得越来越不可战胜。']],
-            'fr_derk': ['male', 'jin', 4, ['derk_ly', 'derk_liuyan'], []],
-            'fr_crow': ['male', 'wei', 3, ['crow_my', 'crow_mc', 'crow_td'], ['unseen']],
-            'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['unseen', 'fobidai', 'des:刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。']],
-            'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], ['unseen']],
-            "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
-            'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], ['unseen']],
-            "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ["zhu"]],
-            "fr_ala": ["male", 'shu', 4, ['ala_dy', 'ala_gm'], ['des:奥拉，米兰寺的大弟子，在其二十四岁时出师，后四处游历。目前正在矮人之心洞穴附近修行。奥拉类似于林和炎的哥哥的存在，从小对他们多有照顾。']],
-            "fr_liona": ["male", 'wei', '4/5', ['liona_hz', 'liona_zz'], ['unseen', "zhu", 'des:里欧那，生活于兽人王国克拉的贵族家庭，从小就被作为一位战士培养。二十一岁时，在一次前往坷拉进行战斗的过程中，意外拯救了坷拉的公主，后二人暗生情愫。后来在一次战斗中下落不明。']],
-            'fr_nanci': ['female', 'qun', 3, ['nanci_tx', 'nanci_tj'], ['des:南辞，来自龙之谷外围，是稀少的狐人族后裔，其天生就拥有化形的能力，能够在人类与兽人的形态之间切换。其能够接收天界的能力并作用于自身。']],
-            "fr_shark": ["male", 'wei', 4, ['shark_yz'], ['des:沙克，来自人鱼之海的深部，其拥有一颗宝贵的珍珠，约一桅长，此珍珠能够映射出任意人的样貌，并使得拥有者获得相同的能力，据传其和凌月之球的制作者属于同一人。']],
-            "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], ['des:泰格尔，来自兽人王国坷拉西部的区域，该区域的人们习惯使用剑技。米亚和科里科特曾在修行时与其相遇，米亚与其切磋后指出其弱点并与其成为好友。']],
-            "fr_linyan": ["male", 'wu', 3, ['linyan_kr', 'linyan_ys'], ['des:林和炎是一对双胞胎，自幼时被父母遗弃，后被米兰寺收养。他们从小就生活于龙之谷外围的米兰寺中，与寺庙的主持相依为命。后来霍恩为了夺取寺庙中的宝物，设计毒杀了住持，而林与炎因外出而逃过一劫。']],
-            "fr_horn": ["male", "wei", 3, ['horn_ql', 'horn_ll', 'fr_qianghua'], ['des:霍恩，据传是来自深渊的恶魔，为了夺取米兰寺的珍贵宝物——豁免权杖，设计杀死了米兰寺的住持。霍恩不喜活物，他常常会放出致死的魔法，杀死周围的一切。']],
-            "fr_qima": ["male", "wu", 3, ['qima_jm', 'qima_dz'], ['forbidai', 'des:奇玛，生活在沃尔夫东侧的索尔山脉附近。小时候，其父亲曾给予其一个由未知矿石制作的颜色吊坠，并言此物会在其遭遇危险时拯救其于水火。奇玛在一次前往深渊寻找拯救其父亲的草药：“忘忧草”时被深渊的魔物抓伤眼部，导致其视力丧失。']],
-            "fr_zhongyu": ["male", "shu", 4, ["zhongyu_ky", "zhongyu_zb"], ['des:忠与，没有人知道其来处，但是在克拉的北部多有其传奇事迹，包括杀死了一只冰霜巨龙等等。人们不知道的是，忠与时刻与自己的内心作斗争，其内心有一只恶魔，当完全释放时，将给世界带来疯狂与灾难。']],
-            "fr_hynea": ["male", "qun", 4, ["hynea_cg", "hynea_ds", "hynea_rx"], []],
-            "fr_wore": ["male", "qun", 4, ["wore_hy"], ['unseen', "des:沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市"]],
-            "fr_tiers": ["female", "qun", 3, ["tiers_qp", "tiers_kh"], ["des:缇尔斯，生活在迦奈尔联邦，由于联邦周围大量禁魔矿石的影响，此处无法施展魔法，故此处的主要研究方向为科技。缇尔斯幼时丧父，与母亲相依为命，后进入联邦军队，在服役5年后因在与矮人的战争中负伤，回到家乡科马修养。"]],
-            "fr_yifeng": ["male", "wei", 3, ["kref_yz", "yifeng_ml"], ['unseen', "des:弈风，《瓦尔亚那百科》中曾参加了万灵之森保卫战的大英雄弈霜的后代，是弈法的哥哥，与弈法共同居住在万灵之森外围的不知名小村落中。弈风生性沉稳，不喜言辞，与弈法截然相反。据传，其拥有一把能够逆转因果的弓，名曰霜月，通体泛着银月丝绸般的光芒。被弓箭射中者，若其行径正义，心无不端，则平安无事，而若其为邪恶之辈，将会遭受最为严峻的痛苦，直至其为罪行忏悔。"]],
-            "fr_hars": ["male", "shen", 4, ["hars_sj", 'hars_hr'], ['unseen', "des:哈尔斯，兽人的智慧之神。其拥有惑人心魄的能力。根据矮人族与部分兽人族内部记录。哈尔斯能够直接降临到任何一人身上，据此观察世界。而被降临的人则被称为「神降者」。由于任何人都有可能成为「神降者」。因此，哈尔斯的眼线遍布整个大陆，而其本人也被称为「全知之神」。"]],
-            "fr_wes": ["male", "jin", 3, ["wes_ts", "wes_gs", "wes_lt"], ['unseen', "des:维斯，生活在克拉北部的小镇米拉亚纳行省，毗邻吸血鬼禁区。由于附近丰富的魔力资源影响，维斯从小便表现出了强烈的魔法亲和性，其能力能够转移其他人受到的伤害。由于其能力的特殊性，自小其就被送往当地教会培养。"]],
-            "fr_muyada": ["male", "qun", 4, ["mudaya_bz", "mudaya_wh"], ['unseen', "des:慕达亚，克拉最大的黑帮集团——希尔特黑帮的首领，其作风狠辣，言出必行，故拥有众多拥趸。其下产业遍布大陆各处，但最大的产业是与侏儒合作的武器锻造。"]],
-            "fr_yada": ["male", "wei", 4, ["yada_by", "yada_jh", "yada_fs"], ["des:出生于克拉，后因种种原因前往人类聚集地柯拉。"]],
-            "fr_fengkn": ["male", "qun", 4, ["muli_cm", "muli_yl"], ['unseen']],
-            "fr_muliy": ["male", "wu", 3, ["mliy_lf", "mliy_hx"], []],
-            "fr_sier": ["male", "shu", 3, ["sier_xl", "sier_fh", 'sier_ql'], []],
-            "fr_klif": ["male", "jin", 3, ["krif_zl", "krif_lj"], ['unseen']],
-            "fr_milis": ["male", "wei", 3, ["mislee_jx", "mislee_tj", "mislee_zr"], []],
-            "fr_alas": ["male", "shu", 4, ["olas_fh", "olas_bx"], []],
-            "fr_kesaya": ["male", "wu", 2, ["kesaya_zw", "kesaya_wy", "kesaya_ax"], ["des:隐匿者"]],
-            "fr_ken": ["male", "fr_g_ji", 4, ["ken_jj", "ken_yn", "ken_pb"], ['unseen']],
-            "fr_west": ["male", "qun", 3, ["west_pz", "west_sx", "west_jh"], []],
-            "fr_huye": ["male", "shu", 4, ["huye_ms", "huye_jj", "huye_hr"], ['zhu']],
-            "fr_milite": ["male", "fr_g_dragon", 7, ["milite_sz", "milite_yj"], []],
-            "fr_jackson": ["male", "wu", 3, ["jackson_eb", "jackson_tm", "site_qj"], []],
-            "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ['unseen', "des:檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。"]],
-            "fr_sayisu": ["female", "fr_g_dragon", 4, ["sayisu_fj"], []],
-            "fr_telina": ["female", "wu", 3, ["telina_hs", "telina_th"], ["des:特丽娜拥有特殊的「未来视」能力，她能够预知近至下一秒，远至数年的所有事件。在「瓦尔亚那百科全书」完成编写后，精灵族就在寻找拥有预言能力的人。因此特丽娜成为第一个受邀进入万灵之森的兽人。"]],
-            "fr_oert": ["male", "shen", 4, ["oert_lh", "oert_wy"], ['unseen', "des:轮回之神欧尔特，不像其他的神那样高高在上。据传，欧尔特曾在瓦尔亚娜大陆最重要的节日“火灵日”，亲自来到瓦尔亚娜大陆的一座山峰上为瓦尔亚娜的百姓祈福，并参加兽人族的祭典活动。而受他惠顾的小贩说到：“神灵大人最喜欢我们家的丸子。”虽然真假未可知。"]],
-            "fr_rest": ["male", "shu", 3, ["rest_qf", "rest_nb"], ["des:瑞斯特，生于人鱼之海附近，虽说当地兽人族与鱼人族的关系并不融洽，但瑞斯特算是少有的与两族同时交好的人，其目前在二者之间经商。"]],
-            "fr_krikt": ["male", "qun", 4, ["krikt_th", "krikt_ly"], ["des:科里科特，「连破」剑法大师米亚之徒。修习其赠与的「两仪」剑法。其剑术诡谲多变，剑术有着极强的爆发性。其剑法之转换，时而如同狂风骤雨般快速无比，时而如同狂涛骇浪般凶猛无匹，时而如同清泉溪涧般缓慢温柔细腻，时而如同秋风扫落叶般冷酷无情。世人皆赞之，有诗云：“霍如羿射九日落，矫如群帝骖龙翔。来如雷霆收震怒，罢如江海凝清光。”", 'unseen']],
-            "fr_tery": ["male", "jin", "2/5", ["tery_hx"], ['unseen', "des:特瑞，出生于迦奈尔联邦，其能力极为罕见，虽在大量禁魔矿脉附近，却依然能够释放魔法，其能够从其他人释放的魔法中解析咒文，并快速学习。但其能力仍有限制，其对于不使用魔法或魔法能力过强者无法复制。"]],
-            "fr_sisk": ["male", "shu", 4, ["sisk_hz", "sisk_cs", "sisk_dm"], ["des:西斯科，罕见的狮兽人与吸血鬼的后代。拥有极其强力的身体素质与高超的种族天赋。后来被科亚所救，加入了「流亡者」雇佣兵团。其对血液极为敏感，些许的血腥味也会导致其进入狂暴。"]],
-            "fr_lens": ["male", "fr_g_dragon", 3, ["lens_yl", "lens_rj"], ["des:元素法师"]],
-            "fr_milism": ["male", "wei", 4, ["milism_ql", "milism_th", "milism_gn"], ["des:米里森，虎兽人与狮兽人的后代，就读于「魔法学院」。尤善水性，拥有水元素魔法天赋。而且能够转移他人的疼痛到自己，被誉为「治愈魔法师」。"]],
-            "fr_miya": ["male", "shu", 4, ["miya_hz", "miya_ks"], ["des:米亚，生于兽人王国「克拉」东部的小村落中。幼时便喜好剑术，随父亲学习。无意间得到「连破」与「两仪」两套剑法。成为远近闻名的剑术大师。「连破」剑法大成后，独自前往兽人王国「德恩」东部的兽人王国「奥格」历练。途中遇见科里科特，为其天赋所感。遂收其为徒，赠以「两仪」剑法。"]],
-            "fr_skry": ["male", "wu", 3, ["skery_ds", "skery_yj"], ["des:暗杀行者"]],
-            "fr_lusiya": ["male", "wei", 3, ["luciya_yc", "luciya_xl", "luciya_hl"], ["des:卢西亚，曾就读于人类王国「魔法学院」，与沃里克为好友。其智力超群，并且在学习魔法方面有着很高的造诣。在魔法学院的时期他曾经创立过自己的魔法研究所「时空之门」，并在某双系法师的帮助下，还原了时空魔法的原理。由此卢西亚还未毕业的时候便已经获得了学院授予的最高荣誉。"]],
-            "fr_kersm": ["male", "wei", 4, ["kersm_my", "kersm_jq"], ["des:科尔森，「流亡者」佣兵团的经理，与「赏金公会」进行任务对接。虽然科尔森看起来十分和善，但所有佣兵团的人都知道，科尔森是最不能惹的人。其特殊能力未知，但据说十分强力，能够与十级法师平手。"]],
-            "fr_kert": ["male", "shu", 4, ["kert_lp", "kert_jl"], ["des:枪械大师"]],
-            "fr_keya": ["male", "qun", 4, ["kaye_jy", "kaye_yj"], ["zhu"]],
-            "fr_lust": ["male", "shu", 4, ["lust_fy", "lust_zb"], ["des:福瑞之王"]],
-            "fr_klier": ["male", "qun", 3, ["kelaier_dh", "kelaier_ty"], []],
-            "fr_faers": ["male", "shen", 4, ["faers_hc", "faers_sb", "faers_yl"], ['unseen', "zhu", "des:法斯，或名法尔斯，兽人中最主要的神祇之一，代表了永恒与变换，是动与静的同一。法尔斯常以胡狼的形象示人，对任何物种都报以绝对的平衡。守护平衡是他的使命。但是在精灵族的预言集「瓦尔亚娜大百科」中其被预言是毁灭兽人王国的罪魁祸首。"]],
-            "fr_aroncy": ["male", "wei", 4, ["aroncy_jw"], []],
-            "fr_lint": ["male", "shu", 4, ["lint_nd"], ['unseen']],
-            "fr_berg": ["male", "fr_g_dragon", 3, ["berg_sy", "berg_jh"], []],
-            "fr_xit": ["male", "jin", 3, ["xit_lx", "xit_bs"], []],
-            "fr_markn": ["male", "wu", 3, ["markn_cy", "markn_yz", "markn_yc"], []],
-            "fr_morly": ["male", "shu", 4, ["morly_ld", "morly_xd", "morly_qy"], []],
-            "fr_marxya": ["male", "fr_g_dragon", 3, ["marcia_us", "marcia_jz", "marcia_ql"], []],
-            "fr_yas_klin": ["male", "jin", 4, ["yas_klin_bj", "yas_klin_js"], ['unseen']],
-            "fr_dog": ["male", "shu", 3, ["dog_dm", "dog_zz"], []],
-            "fr_muen": ["male", "shu", 3, ["muen_tx", "muen_jb"], ['unseen']],
-            "fr_patxi": ["male", "wu", 4, ["patxi_fs", "patxi_yw"], []],
-            "fr_zeron": ["male", "qun", 4, ["zeron_sx"], []],
-            "fr_nore": ["male", "qun", 4, ["nore_dz", "nore_ys"], []],
-            "fr_bofeng": ["male", "jin", 4, ["bofeng_aj", "bofeng_ld", "bofeng_ws"], []],
-            "fr_ciyu": ["male", "jin", 4, ["ciyu_ss", "ciyu_hq"], ['unseen']],
-            "fr_delta": ["male", "shu", 4, ["delta_sy", "delta_sz"], []],
-            "fr_edmon": ["male", "wei", 4, ["edmond_jz", "edmond_jj"], []],
-            "fr_mika": ["male", "wei", 4, ["mika_lx", "mika_pl"], []],
-            "fr_peter_likes": ["male", "qun", 4, ["peterlk_kh", "peterlk_jn"], []],
-            "fr_dmoa": ["male", "qun", 3, ["dmoa_sx", "delta_ys"], []],
-            "fr_nulia": ["male", "wu", 4, ["nulia_dh", "nulia_hj"], []],
-            "fr_terlk": ["male", "shu", 4, ["terlk_zj", "terlk_pj"], []],
-            "fr_verb": ["male", "wu", 3, ["verb_zy", "verb_fs"], ['unseen']],
-            "fr_taber": ["male", "wu", 4, ["taber_jj", "taber_sj"], []],
-            "fr_yinhu": ["male", "shen", 3, ["yinhu_xr", "yinhu_zd", "yinhu_sp"], ['unseen']],
-            "fr_dragon": ["male", "fr_g_dragon", 4, ["dragon_hy", "dragon_ly", "dragon_hn"], []],
-            "fr_terz": ["male", "wei", 4, ["terz_sp", "terz_fz", "terz_ts"], ['fobidai']],
-            "fr_jet": ["male", "shen", 3, ["jet_fy", "jet_ww", "jet_sl", "jet_cl"], ['unseen', "hiddenSkill"]],
-            "fr_slen": ["male", "wei", 3, ["slen_xj", "slen_gc"], []],
-            "fr_paers": ["male", "shu", 4, ["paers_fy", "pares_xh"], []],
-            "fr_nier": ["male", "qun", 3, ["nier_zj"], []],
-            "fr_pluvia": ["male", "jin", 4, ["pluvia_fs", "pluvia_sx", "pluvia_xs"], []],
-            "fr_ventus": ["male", "jin", 4, ["ventus_nx", "ventus_yc"], ['unseen']],
-            "fr_knier": ["female", "shu", 3, ["knier_yc", "knier_wh", "knier_hp"], ['unseen']],
-            "fr_zenia": ["female", "jin", 3, ["zenia_yy", "zenia_ys", "zenia_ld"], ['unseen']],
-            "fr_lamost": ["male", "shu", 4, ["lamost_zf"], ['unseen']],
-            "fr_kasaers": ["male", "shu", 4, ["kasers_cy"], []],
-            "fr_yifa": ["female", "wei", 3, ["yifa_xs"], ["des:弈法，《瓦尔亚那百科》中曾参加了万灵之森保卫战的大英雄弈霜的后代，是弈风的妹妹。弈法天性好动活泼，其在幼时就被检测出有稀有的魔法天赋，能够通过语言来获得其他人的能力，《百科》中不曾预言过这种能力，实属世间罕见。由于此能力，其幼时便饱受困扰，许多贪婪狡诈之徒对此能力趋之若鹜。直至其十岁，父母因此而死，后与弈风共同远离兽人王国，前往精灵之森定居。"]],
-            "fr_jgby": ["male", "qun", 4, ["jbgy_qx", "jbgy_ze"], []],
-            "fr_xiaomo": ["male", "wu", 3, ["xiaomo_sj", "xiaomo_ld"], []],
-            "fr_adward": ["male", "wei", 4, ["adward_qm", "adward_yt"], ["des:安德华是来自地狱的无上法术的咏唱者（自称），他做过的坏事数不胜数，包括但不限于：赶走偷吃鸡的黄鼠狼，杀死袭击村民的强盗，强迫受保护费的官兵学狗叫之类，因此其深受百姓憎恶（自称）。他致力于成为整个兽人王国最邪恶的黑魔法师，并为此努力着。《瓦尔亚那百科》中曾预言安德华有着黑暗生物的血统与两幅面孔，但似乎其本身并不知情。"]],
-            "fr_fate": ["male", "wu", 3, ["fate_tm", "fate_ss"], ["des:法特，生于兽人王国“克拉”南部的贫民窟中，幼年时其父母因卷入债务纠纷而死，其一人独自生活。法特十二岁时，曾尝试寻找杀死父母的仇人，未果，后在游历各处的剑术大师米亚的帮助下终于成功。法特有着天生的赌博天赋，纵横各大赌场且百战百胜，被各大赌场称为“命运之手”。"]],
-            "fr_liya": ["female", "wei", 3, ["liya_sz", "liya_sj", 'liya_yy'], ["des:莉亚生于兽人王国中部的商业中心，是兽人王国国王卢森特的独女。作为贵族女子的她，自小时候便被灌输各种各样的贵族礼仪，但她的生性不羁，时时让自己的父其紧张。她在16岁时，曾受到过卢森特赠送的重装机车，是她最喜欢的生日礼物。"]],
-            "fr_laays": ["male", "qun", 4, ["laays_cs"], ["des:“像这样四处游荡，又过了多久呢？”拉亚斯的话语回荡在旷野上。自从那场人类与精灵的大战以人类的完全胜利为结局，拉亚斯也不知道自己游荡多久了。他是当年参加过此次战争的兽人族战士，后牺牲于战火之中。也许是生命树被毁的缘故，拉亚斯重新得到肉体复活。"]],
-            "fr_whitewolf": ["male", "jin", 4, ["whitewolf_wl", "whitewolf_fz"], ["des:“白狼”，生于兽人王国“克拉”南部的贫民窟中，是“黑狼”的哥哥。在兽人王国最重要的巡游——“火灵日大典”被国王卢森特相中，与“黑狼”一同进入王宫成为侍卫。“白狼”的能力：“不动如山，动如雷震”，更加擅长防御与保护。在某次刺杀中因保护国王有功，被提拔为贴身侍卫，但是遭“黑狼”嫉妒，二人反目。"]],
-            "fr_blackwolf": ["male", "jin", 4, ["blackwolf_cy", "blackwolf_nb"], ['unseen', "des:“黑狼”，生于兽人王国“克拉”南部的贫民窟中，从小与“白狼”相依为命。在“火灵日大典”被国王卢森特相中，与“白狼”一同进入王宫成为侍卫，后因嫉妒“白狼”的能力，与其反目。“黑狼”与“白狼”不同，更擅长狂暴而快速的攻击，世人谓之：“一剑斩不摧,双刃去如来”，又赞曰：“势如涛浪汹涌，形如雨打秋风”。"]],
-            "fr_mala": ["male", "fr_g_dragon", 4, ["mala_ly", "mala_ht"], ['unseen']],
+            'fr_mountainbear': ['male', 'qun', '3/3/4', ['mountainbear_xs', 'mountainbear_xj'], ['unseen']],
+            'fr_guotang': ['male', 'qun', 3, ['guotang_yl', 'guotang_xq', 'guotang_st'], ['common']],
+            'fr_lucifer': ['male', 'wu', 3, ['lucifer_cc', 'lucifer_xz'], ['rare']],
+            'fr_lans': ['male', 'shu', 3, [], ['unseen']],
+            'fr_keste': ['male', 'wu', 4, ['keste_yg', 'keste_wp'], ['epic']],
+            'fr_neises': ['male', 'fr_g_dragon', 3, ['puzzles'], ['junk', 'unseen']],
+            'fr_wind': ['male', 'wu', 4, ['wind_fy'], ['rare']],
+            'fr_nine': ['male', 'shen', 3, ['nine_fw', 'nine_cj', 'nine_dx'], ['legend']],
+            'fr_ming': ['male', 'qun', 3, ['ming_yc', 'ming_yy'], ['epic', 'unseen']],
+            'fr_death': ['male', 'shen', 4, ['death_sy', 'death_sl', 'death_sp'], ['legend']],
+            'fr_dolina': ['male', 'qun', 3, ['dolina_wy', 'dolina_sl', 'dolina_qj'], ['common']],
+            'fr_thunder': ['male', 'wei', 4, ['thunder_fz', 'thunder_lj'], ['epic', 'unseen']],
+            'fr_mouse': ['female', 'qun', 4, ['mouse_bm'], ['epic', 'unseen']],
+            'fr_lamas': ['male', 'wei', 4, ['lamas_zj'], ['rare']],
+            'fr_blam': ['male', 'qun', 4, ['blame_jj'], ['legend', 'unseen']],
+            'fr_gairtelu': ['male', 'wei', 4, ['gairtelu_aq', 'gairtelu_cf', 'gairtelu_yj'], ['epic', 'unseen']],
+            'fr_tails': ['male', 'qun', 3, ['tails_jd', 'tails_qx'], ['legend']],
+            'fr_zhan': ['male', 'qun', 3, ['zhan_sf', 'zhan_jf'], ['legend', 'unseen']],
+            'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['legend']],
+            'fr_rasali': ['male', 'shen', 3, ['rasali_ly', 'rasali_hq'], ['legend', 'unseen']],
+            'fr_nashu': ['male', 'shen', 4, ['nashu_th', 'nashu_sg'], ['legend']],
+            'fr_derk': ['male', 'jin', 4, ['derk_ly', 'derk_liuyan'], ['junk']],
+            'fr_crow': ['male', 'wei', 3, ['crow_my', 'crow_mc', 'crow_td'], ['epic', 'unseen']],
+            'fr_bladewolf': ['male', 'fr_g_ji', 4, ['bladewolf_qp', 'bladewolf_rh'], ['legend', 'unseen', 'forbidai']],
+            'fr_dier': ["male", 'fr_g_dragon', 4, ['dier_sb', 'dier_ly', 'dier_xy'], ['epic', 'unseen']],
+            "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed"]],
+            'fr_francium': ["male", 'shen', 3, ['francium_ch', 'francium_sx', 'francium_yl', 'francium_mm'], ['legend', 'unseen']],
+            "fr_kmjia": ["male", 'wu', 3, ['kamijia_sx', 'kamijia_dr'], ['epic', "zhu"]],
+            "fr_ala": ["male", 'shu', 4, ['ala_dy', 'ala_gm'], ['epic']],
+            "fr_liona": ["male", 'wei', '4/5', ['liona_hz', 'liona_zz'], ['epic', 'unseen', "zhu"]],
+            'fr_nanci': ['female', 'qun', 3, ['nanci_tx', 'nanci_tj'], ['legend']],
+            "fr_shark": ["male", 'wei', 4, ['shark_yz'], ['rare']],
+            "fr_tiger": ["male", 'shu', 4, ['tiger_hy', 'tiger_kf'], ['epic']],
+            "fr_linyan": ["male", 'wu', 3, ['linyan_kr', 'linyan_ys'], ['rare']],
+            "fr_horn": ["male", "wei", 3, ['horn_ql', 'horn_ll', /* 'fr_qianghua' */], ['epic']],
+            "fr_qima": ["male", "wu", 3, ['qima_jm', 'qima_dz'], ['legend', 'forbidai']],
+            "fr_zhongyu": ["male", "shu", 4, ["zhongyu_ky", "zhongyu_zb"], ['legend']],
+            "fr_hynea": ["male", "qun", 4, ["hynea_cg", "hynea_ds", "hynea_rx"], ['rare']],
+            "fr_wore": ["male", "qun", 4, ["wore_hy"], ['rare', 'unseen']],
+            "fr_tiers": ["female", "qun", 3, ["tiers_qp", "tiers_kh"], ['rare']],
+            "fr_yifeng": ["male", "wei", 3, ["kref_yz", "yifeng_ml"], ['rare', 'unseen']],
+            "fr_hars": ["male", "shen", 4, ["hars_sj", 'hars_hr'], ['rare', 'unseen']],
+            "fr_wes": ["male", "jin", 3, ["wes_ts", "wes_gs", "wes_lt"], ['legend', 'unseen']],
+            "fr_muyada": ["male", "qun", 4, ["mudaya_bz", "mudaya_wh"], ['epic', 'unseen']],
+            "fr_yada": ["male", "wei", 4, ["yada_by", "yada_jh", "yada_fs"], ['rare']],
+            "fr_fengkn": ["male", "qun", 4, ["muli_cm", "muli_yl"], ['common', 'unseen']],
+            "fr_muliy": ["male", "wu", 3, ["mliy_lf", "mliy_hx"], ['rare']],
+            "fr_sier": ["male", "shu", 3, ["sier_xl", "sier_fh", 'sier_ql'], ['rare']],
+            "fr_klif": ["male", "jin", 3, ["krif_zl", "krif_lj"], ['rare', 'unseen']],
+            "fr_milis": ["male", "wei", 3, ["mislee_jx", "mislee_tj", "mislee_zr"], ['junk']],
+            "fr_alas": ["male", "shu", 4, ["olas_fh", "olas_bx"], ['common']],
+            "fr_kesaya": ["male", "wu", 2, ["kesaya_zw", "kesaya_wy", "kesaya_ax"], ['legend']],
+            "fr_ken": ["male", "fr_g_ji", 4, ["ken_jj", "ken_yn", "ken_pb"], ['epic', 'unseen']],
+            "fr_west": ["male", "qun", 3, ["west_pz", "west_sx", "west_jh"], ['rare']],
+            "fr_huye": ["male", "shu", 4, ["huye_ms", "huye_jj", "huye_hr"], ['junk', 'zhu']],
+            "fr_milite": ["male", "fr_g_dragon", 7, ["milite_sz", "milite_yj"], ['rare']],
+            "fr_jackson": ["male", "wu", 3, ["jackson_eb", "jackson_tm", "site_qj"], ['rare']],
+            "fr_jiejie": ["male", "wei", 3, ["jiejie_zr", "jiejie_zf", "jiejie_my"], ['common', 'unseen']],
+            "fr_sayisu": ["female", "fr_g_dragon", 4, ["sayisu_fj"], ['common']],
+            "fr_telina": ["female", "wu", 3, ["telina_hs", "telina_th"], ['junk']],
+            "fr_oert": ["male", "shen", 4, ["oert_lh", "oert_wy"], ['epic', 'unseen']],
+            "fr_rest": ["male", "shu", 3, ["rest_qf", "rest_nb"], ['rare']],
+            "fr_krikt": ["male", "qun", 4, ["krikt_th", "krikt_ly"], ['legend', 'unseen']],
+            "fr_tery": ["male", "jin", "2/5", ["tery_hx"], ['legend', 'unseen']],
+            "fr_sisk": ["male", "shu", 4, ["sisk_hz", "sisk_cs", "sisk_dm"], ['epic']],
+            "fr_lens": ["male", "fr_g_dragon", 3, ["lens_yl", "lens_rj"], ['rare']],
+            "fr_milism": ["male", "wei", 4, ["milism_ql", "milism_th", "milism_gn"], ['legend']],
+            "fr_miya": ["male", "shu", 4, ["miya_hz", "miya_ks"], ['legend']],
+            "fr_skry": ["male", "wu", 3, ["skery_ds", "skery_yj"], ['epic']],
+            "fr_lusiya": ["male", "wei", 3, ["luciya_yc", "luciya_xl", "luciya_hl"], ['epic']],
+            "fr_kersm": ["male", "wei", 4, ["kersm_my", "kersm_jq"], ['epic']],
+            "fr_kert": ["male", "shu", 4, ["kert_lp", "kert_jl"], ['rare']],
+            "fr_keya": ["male", "qun", 4, ["kaye_jy", "kaye_yj"], ['rare', "zhu"]],
+            "fr_lust": ["male", "shu", 4, ["lust_fy", "lust_zb"], ['legend']],
+            "fr_klier": ["male", "qun", 3, ["kelaier_dh", "kelaier_ty"], ['rare']],
+            "fr_faers": ["male", "shen", 4, ["faers_hc", "faers_sb", "faers_yl"], ['legend', 'unseen', "zhu"]],
+            "fr_aroncy": ["male", "wei", 4, ["aroncy_jw"], ['epic']],
+            "fr_lint": ["male", "shu", 4, ["lint_nd"], ['rare', 'unseen']],
+            "fr_berg": ["male", "fr_g_dragon", 3, ["berg_sy", "berg_jh"], ['epic']],
+            "fr_xit": ["male", "jin", 3, ["xit_lx", "xit_bs"], ['junk']],
+            "fr_markn": ["male", "wu", 3, ["markn_cy", "markn_yz", "markn_yc"], ['epic']],
+            "fr_morly": ["male", "shu", 4, ["morly_ld", "morly_xd", "morly_qy"], ['common']],
+            "fr_marxya": ["male", "fr_g_dragon", 3, ["marcia_us", "marcia_jz", "marcia_ql"], ['epic']],
+            "fr_yas_klin": ["male", "jin", 4, ["yas_klin_bj", "yas_klin_js"], ['legend', 'unseen']],
+            "fr_dog": ["male", "shu", 3, ["dog_dm", "dog_zz"], ['common']],
+            "fr_muen": ["male", "shu", 3, ["muen_tx", "muen_jb"], ['common', 'unseen']],
+            "fr_patxi": ["male", "wu", 4, ["patxi_fs", "patxi_yw"], ['rare']],
+            "fr_zeron": ["male", "qun", 4, ["zeron_sx"], ['common']],
+            "fr_nore": ["male", "qun", 4, ["nore_dz", "nore_ys"], ['rare']],
+            "fr_bofeng": ["male", "jin", 4, ["bofeng_aj", "bofeng_ld", "bofeng_ws"], ['legend']],
+            "fr_ciyu": ["male", "jin", 4, ["ciyu_ss", "ciyu_hq"], ['legend', 'unseen']],
+            "fr_delta": ["male", "shu", 4, ["delta_sy", "delta_sz"], ['legend']],
+            "fr_edmon": ["male", "wei", 4, ["edmond_jz", "edmond_jj"], ['common']],
+            "fr_mika": ["male", "wei", 4, ["mika_lx", "mika_pl"], ['epic']],
+            "fr_peter_likes": ["male", "qun", 4, ["peterlk_kh", "peterlk_jn"], ['legend']],
+            "fr_dmoa": ["male", "qun", 3, ["dmoa_sx", "delta_ys"], ['epic']],
+            "fr_nulia": ["male", "wu", 4, ["nulia_dh", "nulia_hj"], ['rare']],
+            "fr_terlk": ["male", "shu", 4, ["terlk_zj", "terlk_pj"], ['rare']],
+            "fr_verb": ["male", "wu", 3, ["verb_zy", "verb_fs"], ['epic', 'unseen']],
+            "fr_taber": ["male", "wu", 4, ["taber_jj", "taber_sj"], ['epic']],
+            "fr_yinhu": ["male", "shen", 3, ["yinhu_xr", "yinhu_zd", "yinhu_sp"], ['legend', 'unseen']],
+            "fr_dragon": ["male", "fr_g_dragon", 4, ["dragon_hy", "dragon_ly", "dragon_hn"], ['epic']],
+            "fr_terz": ["male", "wei", 4, ["terz_sp", "terz_fz", "terz_ts"], ['legend', 'forbidai']],
+            "fr_jet": ["male", "shen", 3, ["jet_fy", "jet_ww", "jet_sl", "jet_cl"], ['legend', 'unseen', "hiddenSkill"]],
+            "fr_slen": ["male", "wei", 3, ["slen_xj", "slen_gc"], ['epic']],
+            "fr_paers": ["male", "shu", 4, ["paers_fy", "pares_xh"], ['epic']],
+            "fr_nier": ["male", "qun", 3, ["nier_zj"], ['junk']],
+            "fr_pluvia": ["male", "jin", 4, ["pluvia_fs", "pluvia_sx", "pluvia_xs"], ['common']],
+            "fr_ventus": ["male", "jin", 4, ["ventus_nx", "ventus_yc"], ['common', 'unseen']],
+            "fr_knier": ["female", "shu", 3, ["knier_yc", "knier_wh", "knier_hp"], ['legend', 'unseen']],
+            "fr_zenia": ["female", "jin", 3, ["zenia_yy", "zenia_ys", "zenia_ld"], ['common', 'unseen']],
+            "fr_lamost": ["male", "shu", 4, ["lamost_zf"], ['common', 'unseen']],
+            "fr_kasaers": ["male", "shu", 4, ["kasers_cy"], ['legend']],
+            "fr_yifa": ["female", "wei", 3, ["yifa_xs"], ['epic']],
+            "fr_jgby": ["male", "qun", 4, ["jbgy_qx", "jbgy_ze"], ['epic']],
+            "fr_xiaomo": ["male", "wu", 3, ["xiaomo_sj", "xiaomo_ld"], ['legend']],
+            "fr_adward": ["male", "wei", 4, ["adward_qm", "adward_yt"], ['junk']],
+            "fr_fate": ["male", "wu", 3, ["fate_tm", "fate_ss"], ['epic']],
+            "fr_liya": ["female", "wei", 3, ["liya_sz", "liya_sj", 'liya_yy'], ['junk']],
+            "fr_laays": ["male", "qun", 4, ["laays_cs"], ['junk']],
+            "fr_whitewolf": ["male", "jin", 4, ["whitewolf_wl", "whitewolf_fz"], ['epic']],
+            "fr_blackwolf": ["male", "jin", 4, ["blackwolf_cy", "blackwolf_nb"], ['epic', 'unseen']],
+            "fr_mala": ["male", "fr_g_dragon", 4, ["mala_ly", "mala_ht"], ['junk', 'unseen']],
             "fr_bossmala": ["male", "shen", 10, ['mala_ht', 'mala_ly', 'mala_jf', 'mala_hy', 'mala_bc', 'mala_sz'], ['unseen', "boss", "bossallowed"]],
             "fr_bossfaers": ["male", "shen", 7, ["faers_hc", "faers_yl", "miya_ks", "miya_hz"], ['unseen', "boss", "bossallowed"]],
             "fr_bossoert": ["male", "shen", 8, ["oert_bosswy", "oert_bosslh"], ['unseen', "boss", "bossallowed"]],
             "fr_bosshars": ["male", "shen", 7, ["hars_sz", "hars_sj", "muen_tx", "muen_jb", "xiaomo_sj", "xiaomo_ld"], ['unseen', "boss", "bossallowed"]],
-            "fr_zeta": ["male", "fr_g_dragon", 4, ["zeta_gz", "zeta_fg"], ['unseen']],
-            "fr_fox": ["male", "shu", 4, ["fox_hm"], []],
-            "fr_molis": ["female", "wei", 3, ["molis_hs", "molis_dx"], []],
-            "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], []],
+            "fr_zeta": ["male", "fr_g_dragon", 4, ["zeta_gz", "zeta_fg"], ['epic', 'unseen']],
+            "fr_fox": ["male", "shu", 4, ["fox_hm"], ['epic']],
+            "fr_molis": ["female", "wei", 3, ["molis_hs", "molis_dx"], ['legend']],
+            "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], ['legend']],
         },
         skill: {
             'mountainbear_xj': {
@@ -287,13 +287,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 0'
                     player.storage.lucifer_cc = game.addPlayer(player.getSeatNum() + 1, 'fr_mountainbear').getId()
                     player.storage.lucifer_cc.setPosition()
-                    /*if(player.next.identity!='zhu'&&player.next.next!=player){
-                        player.storage.lucifer_cc=player.next
-                    }else if(player.next.identity=='zhu'&&player.next.next!=player){
-                        player.storage.lucifer_cc=player.next.next
-                    }else{
-                        event.finish()
-                    }*/
                     'step 1'
                     var target = player.storage.lucifer_cc
                     target.init('fr_mountainbear')
@@ -746,7 +739,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             if (opinion == 'red') {
                                 for (var i = 0; i < result.red.length; i++) {
                                     var people = result.red[i][0]
-                                    if (people.canUse({ name: 'sha', isCard: true }, target) && people.countCards('h') > 0 && lib.filter.targetInRange({ name: 'sha' }, people, target) && lib.filter.targetEnabled({ name: 'sha' }, people, target) && target.isAlive() && (people.hasSha() || _status.connectMode)) {
+                                    if (people.canUse({ name: 'sha', isCard: true }, target) && people.countCards('h') > 0 && lib.filter.targetInRange({ name: 'sha' }, people, target) && lib.filter.targetEnabled({ name: 'sha' }, people, target) && target.isAlive()) {
                                         player.discardPlayerCard(people, 'h', 1, true)
                                         people.useCard({ name: 'sha', isCard: true }, target);
                                     }
@@ -781,106 +774,103 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             },
             'nine_fw': {
                 trigger: {
-                    player: "loseEnd"
+                    player: "loseEnd",
                 },
                 filter: function (event, player) {
-                    if (player.hasSkill('nine_fw_blocker')) {
-                        return true
-                    } else {
-                        return false
-                    }
+                    if(!lib.phaseName.some(i => Object.keys(event.getParent(i)).length>0)) return false;
+                    return !player.hasSkill('nine_fw_blocker');
                 },
+                mark:true,
+                intro:{
+                    content:"可以发动〖附尾〗",
+                },
+                direct:true,
                 content: function () {
                     'step 0'
-                    player.removeSkill('nine_fw_blocker')
-                    var cards = get.bottomCards(7);
-                    event.cards2 = cards;
-                    game.cardsGotoOrdering(cards);
-                    player.chooseBool().set('createDialog', [
-                        '牌堆底七张牌',
-                        cards
-                    ])
-                    var hs = player.getCards('h')
-                    player.chooseBool().set('createDialog', [
-                        get.translation(player) + '的手牌',
-                        hs
-                    ])
-                    var choice = ['交换']
-                    var choicelist = ['调换这些牌的顺序']
-                    event.all = event.cards2.concat(hs)
-                    var equips = Array.from(event.all).filter(i => get.type(i) == 'equip')
-                    event.equips = equips
-                    if (equips.length > 0) {
-                        choice.push('装备')
-                        choicelist.push('使用其中任意张装备牌')
-                    }
-                    if (choice.length) {
-                        player.chooseControl(choice).set('choiceList', choicelist)
-                    }
+                    var phaseName=lib.phaseName.find(i => Object.keys(event.getParent(i)).length>0);
+                    player.addTempSkill('nine_fw_blocker', phaseName+'After');
+                    player.chooseBool(get.prompt2('nine_fw')).set('ai',()=>true);
                     'step 1'
-                    if (result.control == '交换') {
-                        var next = player.chooseToMove('附尾：将七张牌置于牌堆底');
-                        var list = [['牌堆底', event.cards2]], hs = player.getCards('h');
-                        if (hs.length) {
-                            list.push(['手牌', hs]);
+                    if(!result.bool){
+                        event.finish();
+                        return;
+                    }
+                    player.logSkill('nine_fw');
+                    event.cards1 = player.getCards('h');
+                    event.cards2 = get.bottomCards(7);
+                    event.all = event.cards1.concat(event.cards2);
+                    event.equips = event.all.filter(i => get.type(i) == 'equip');
+                    game.cardsGotoOrdering(event.cards2);
+                    event.videoId=lib.status.videoId++;
+                    game.broadcastAll(function(player,id,cards1,cards2){
+                        var dialog=ui.create.dialog("牌堆底七张牌",cards2);
+                        if(cards1.length){
+                            dialog.addText((player==game.me?'你':get.translation(player)) + '的手牌');
+                            dialog.add(cards1);
+                        }
+                        dialog.videoId=id;
+                    },player,event.videoId,event.cards1,event.cards2);
+                    if(event.cards1) game.log(player,'展示了手牌（',event.cards1,'）');
+                    game.log(player,'展示了牌堆底七张牌（',event.cards2,'）');
+                    if(!event.isMine()) game.delay(4);
+                    'step 2'
+                    var choices = ['交换'];
+                    if (event.equips.length > 0) choices.push('装备');
+                    player.chooseControl(choices).set('ai',()=>choices.contains('装备')?'装备':'交换');
+                    'step 3'
+                    game.broadcastAll('closeDialog',event.videoId);
+                    if (result.control == '装备') event.goto(6);
+                    else {
+                        var next = player.chooseToMove('附尾：将手牌和牌堆底七张牌交换');
+                        var list = [['牌堆底', event.cards2]];
+                        if (event.cards1.length) {
+                            list.push(['手牌', event.cards1]);
                             next.set('filterMove', function (from, to) {
                                 return typeof to != 'number';
                             });
                         }
                         next.set('list', list);
                         next.set('processAI', function (list) {
-                            var player = _status.event.player, cards = list[0][1].concat(list[1][1]).sort(function (a, b) {
+                            var cards = list[0][1].concat(list[1][1]).sort(function (a, b) {
                                 return get.useful(a) - get.useful(b);
                             }), cards2 = cards.splice(0, event.cards2.length);
                             return [cards2, cards];
                         });
-                    } else {
-                        event.goto(3)
                     }
-                    'step 2'
-                    if (result.bool) {
+                    'step 4'
+                    if (!result.bool) event.finish();
+                    else {
                         event.forceDie = true;
-                        var cards = result.moved[0];
-                        event.cards = cards;
-                        var hs = player.getCards('h');
-                        var lose = [], gain = event.cards2.slice(0);
-                        for (var i of cards) {
-                            if (hs.contains(i)) lose.push(i);
-                            else gain.remove(i);
-                        }
-                        if (lose.length) player.lose(lose, ui.cardPile);
-                        if (gain.length) player.gain(gain, 'draw');
-                    } else {
-                        event.finish()
+                        var pushs=result.moved[0],gains=result.moved[1];
+                        event.push=result.moved[0].slice(0);
+                        pushs.removeArray(event.cards2);
+                        gains.removeArray(event.cards1);
+                        if (pushs.length) player.lose(pushs, ui.cardPile);
+                        if (gains.length) player.gain(gains, 'draw');
                     }
-                    for (var i = cards.length - 1; i >= 0; i--) {
-                        var card = cards[i]
+                    'step 5'
+                    for (var i = event.push.length - 1; i >= 0; i--) {
+                        var card = event.push[i];
                         if (!(('hejsdx').includes(get.position(card, true)))) {
                             card.fix();
                             ui.cardPile.appendChild(card);
                         }
                     }
                     game.updateRoundNumber();
-                    event.finish()
-                    'step 3'
-                    player.chooseCardButton(event.all, '使用其中任意张装备牌').set('filterButton', function (button) {
-                        return get.type(button.link) == 'equip'
-                    }).set('ai', function (button) {
-                        return 2 * Math.random() - 1
-                    })
-                    'step 4'
+                    event.finish();
+                    'step 6'
+                    var next=player.chooseCardButton(event.all, [1,event.equips.length], '附尾：使用其中任意张装备牌');
+                    next.set('filterButton', button=> get.type(button.link) == 'equip');
+                    next.set('ai', button => 2 * Math.random() - 1);
+                    'step 7'
                     if (result.bool) {
-                        var card = result.links[0]
-                        player.chooseUseTarget(card, true)
-                        player.$draw()
-                        event.equips.remove(card)
-                        event.cards2.remove(card)
-                        event.all.remove(card)
-                        if (event.equips.length) {
-                            event.goto(3)
+                        for(var card of result.links){
+                            player.$draw();
+                            player.chooseUseTarget(card, true);
+                            event.cards2.remove(card)
                         }
                     }
-                    'step 5'
+                    'step 8'
                     for (var i = event.cards2.length - 1; i >= 0; i--) {
                         event.cards2[i].fix();
                         ui.cardPile.appendChild(event.cards2[i]);
@@ -888,40 +878,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     game.delay();
                     game.updateRoundNumber();
                 },
-                group: ['nine_fw_addMark', 'nine_fw_removeMark'],
                 subSkill: {
-                    addMark: {
-                        trigger: {
-                            global: ['phaseZhunbeiBefore', 'phaseJudgeBefore', 'phaseDrawBefore', 'phaseUseBefore', 'phaseDiscardBefore', 'phaseJieshuBefore']
-                        },
-                        popup: false,
-                        forced: true,
-                        charlotte: true,
-                        filter: function (event, player) {
-                            return !player.hasSkill('nine_fw_blocker')
-                        },
-                        content: function () {
-                            player.addSkill('nine_fw_blocker')
-                        }
-                    },
-                    removeMark: {
-                        trigger: {
-                            global: ['loseAfter', 'phaseZhunbeiAfter', 'phaseJudgeAfter', 'phaseDrawAfter', 'phaseUseAfter', 'phaseDiscardAfter', 'phaseJieshuAfter']
-                        },
-                        popup: false,
-                        forced: true,
-                        charlotte: true,
-                        filter: function (event, player) {
-                            return player.hasSkill('nine_fw_blocker')
-                        },
-                        content: function () {
-                            player.removeSkill('nine_fw_blocker')
-                        }
-                    },
                     blocker: {
-
-                    }
-                }
+                        charlotte:true,
+                        init:function(player){
+                            player.unmarkSkill("nine_fw");
+                        },
+                        onremove:function(player){
+                            player.markSkill("nine_fw");
+                        },
+                        sub:true,
+                    },
+                },
             },
             'nine_cj': {
                 trigger: {
@@ -1051,7 +1019,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         }),
                     };
                     fetch(url, requestOptions)
-                        .then((response) => { response.json() })
+                        .then( response => response.json() )
                         .then((data) => {
                             game.log('chatGPT回复：' + data[0].choices.message.content)
                             game.resume()
@@ -5539,7 +5507,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     target.loseHp()
                     player.recover()
                     'step 1'
-                    if (player.storage.fr_qianghua) {
+                    if (player.hasSkill('_qianghua_effect')) {
                         if (player.isHealthy()) {
                             player.draw(2)
                         } else {
@@ -5547,7 +5515,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             target.draw(target.getDamagedHp())
                         }
                     }
-                    if (player.storage.fr_qianghua) player.storage.fr_qianghua = false
+                    player.removeSkill('_qianghua_effect');
                 },
                 ai: {
                     order: 9,
@@ -5576,7 +5544,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     return event.player != player
                 },
                 content: function () {
-                    if (!player.storage.fr_qianghua) {
+                    if (!player.hasSkill('_qianghua_effect')) {
                         trigger.player.damage(player, 'fire')
                     } else {
                         if (trigger.player.next != trigger.player.previous) {
@@ -5587,71 +5555,71 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         }
                         trigger.player.damage(player, 'fire')
                     }
-                    if (player.storage.fr_qianghua) player.storage.fr_qianghua = false
+                    player.removeSkill('_qianghua_effect');
                 },
                 ai: {
-                    combo: "fr_qianghua",
+                    combo: "_qianghua",
                 }
             },
-            'fr_qianghua': {
-                enable: 'phaseUse',
-                usable: 1,
-                unique: true,
-                charlotte: true,
-                locked: true,
-                fixed: true,
-                filter: function (event, player) {
-                    var list = []
-                    if (player.storage.fr_qianghua) return false
-                    var info = lib.character[player.name]
-                    for (var i = 0; i < info[3].length; i++) {
-                        if (lib.skill[info[3][i]].qianghua) {
-                            list.push(info[3][i])
-                        }
-                    }
-                    if (list.length) {
-                        return true
-                    } else {
-                        return false
-                    }
-                },
-                init: function (player) {
-                    if (!player.storage.fr_qianghua) player.storage.fr_qianghua = false
-                },
-                mark: true,
-                intro: {
-                    mark: function (dialog, storage, player) {
-                        dialog.addText(player.storage.fr_qianghua ? '你当前处于强化状态' : '你当前未处于强化状态');
-                    },
-                },
-                content: function () {
-                    'step 0'
-                    player.chooseCard('he', 2, '弃置两张牌或点击取消并失去1点体力，然后你进入“强化”状态', function (card, player) {
-                        return lib.filter.cardDiscardable(card, player)
-                    }).set('ai', function (card) {
-                        return 5 - get.value(card)
-                    })
-                    'step 1'
-                    if (result.bool) {
-                        player.discard(result.cards)
-                    } else {
-                        player.loseHp()
-                    }
-                    'step 2'
-                    player.storage.fr_qianghua = true
-                },
-                ai: {
-                    order: 14,
-                    result: {
-                        player: function (player) {
-                            if (player.hp < 3) return -1;
-                            if (player.countCards('hs', { name: ['jiu', 'tao'] })) return 1;
-                            return 0;
-                        },
-                    },
-                    threaten: 2,
-                },
-            },
+            // 'fr_qianghua': {
+            //     enable: 'phaseUse',
+            //     usable: 1,
+            //     unique: true,
+            //     charlotte: true,
+            //     locked: true,
+            //     fixed: true,
+            //     filter: function (event, player) {
+            //         var list = []
+            //         if (player.storage.fr_qianghua) return false
+            //         var info = lib.character[player.name]
+            //         for (var i = 0; i < info[3].length; i++) {
+            //             if (lib.skill[info[3][i]].qianghua) {
+            //                 list.push(info[3][i])
+            //             }
+            //         }
+            //         if (list.length) {
+            //             return true
+            //         } else {
+            //             return false
+            //         }
+            //     },
+            //     init: function (player) {
+            //         if (!player.storage.fr_qianghua) player.storage.fr_qianghua = false
+            //     },
+            //     mark: true,
+            //     intro: {
+            //         mark: function (dialog, storage, player) {
+            //             dialog.addText(player.storage.fr_qianghua ? '你当前处于强化状态' : '你当前未处于强化状态');
+            //         },
+            //     },
+            //     content: function () {
+            //         'step 0'
+            //         player.chooseCard('he', 2, '弃置两张牌或点击取消并失去1点体力，然后你进入“强化”状态', function (card, player) {
+            //             return lib.filter.cardDiscardable(card, player)
+            //         }).set('ai', function (card) {
+            //             return 5 - get.value(card)
+            //         })
+            //         'step 1'
+            //         if (result.bool) {
+            //             player.discard(result.cards)
+            //         } else {
+            //             player.loseHp()
+            //         }
+            //         'step 2'
+            //         player.storage.fr_qianghua = true
+            //     },
+            //     ai: {
+            //         order: 14,
+            //         result: {
+            //             player: function (player) {
+            //                 if (player.hp < 3) return -1;
+            //                 if (player.countCards('hs', { name: ['jiu', 'tao'] })) return 1;
+            //                 return 0;
+            //             },
+            //         },
+            //         threaten: 2,
+            //     },
+            // },
             "qima_dz": {
                 trigger: {
                     source: "damageEnd"
@@ -16290,61 +16258,61 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     threaten: 6,
                 },
             },
-            "xuanshi": {
-                trigger: {
-                    player: ["phaseZhunbeiBegin"],
-                    global: "roundStart",
-                },
-                forceunique: true,
-                fixed: true,
-                limited: false,
-                charlotte: true,
-                mark: true,
-                supercharlotte: true,
-                content: function () {
-                    "step 0"
-                    var skills = [];
-                    for (var i in lib.character) {
-                        for (var j = 0; j < lib.character[i][3].length; j++) {
-                            if (player.hasSkill(lib.character[i][3][j])) continue;
-                            var info = lib.skill[lib.character[i][3][j]];
-                            if (info && !(info.hiddenSkill || info.combo)) {
-                                skills.add(lib.character[i][3][j]);
-                            }
-                        }
-                    }
-                    event.skills = skills
-                    player.chooseText(6, true, get.transArray(event.skills)).set('ai', function () {
-                        return get.translation(skills.randomGet())
-                    }).set('prompt', get.prompt2('xuanshi'))
-                    "step 1"
-                    event.choice = event.skills.filter(function (item) {
-                        return get.translation(item) == result.text
-                    })
-                    if (event.choice.length == 1) {
-                        var skills2 = event.choice[0]
-                        player.addTempSkill(skills2, 'roundStart');
-                        player.popup(skills2);
-                        game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-                        event.finish()
-                    } else {
-                        var list = []
-                        var skills = event.choice
-                        for (var i = 0; i < skills.length; i++) {
-                            list.push(get.translation(skills[i] + '_info'))
-                        }
-                        player.chooseControl().set('choiceList', list).set('prompt', '选择〖' + get.translation(skills[0]) + '〗的版本')
-                    }
-                    "step 2"
-                    var skills2 = event.choice[result.index]
-                    player.addTempSkill(skills2, 'roundStart');
-                    player.popup(skills2);
-                    game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-                },
-                ai: {
-                    threaten: 6,
-                },
-            },
+            // "xuanshi": {
+            //     trigger: {
+            //         player: ["phaseZhunbeiBegin"],
+            //         global: "roundStart",
+            //     },
+            //     forceunique: true,
+            //     fixed: true,
+            //     limited: false,
+            //     charlotte: true,
+            //     mark: true,
+            //     supercharlotte: true,
+            //     content: function () {
+            //         "step 0"
+            //         var skills = [];
+            //         for (var i in lib.character) {
+            //             for (var j = 0; j < lib.character[i][3].length; j++) {
+            //                 if (player.hasSkill(lib.character[i][3][j])) continue;
+            //                 var info = lib.skill[lib.character[i][3][j]];
+            //                 if (info && !(info.hiddenSkill || info.combo)) {
+            //                     skills.add(lib.character[i][3][j]);
+            //                 }
+            //             }
+            //         }
+            //         event.skills = skills
+            //         player.chooseText(6, true, get.transArray(event.skills)).set('ai', function () {
+            //             return get.translation(skills.randomGet())
+            //         }).set('prompt', get.prompt2('xuanshi'))
+            //         "step 1"
+            //         event.choice = event.skills.filter(function (item) {
+            //             return get.translation(item) == result.text
+            //         })
+            //         if (event.choice.length == 1) {
+            //             var skills2 = event.choice[0]
+            //             player.addTempSkill(skills2, 'roundStart');
+            //             player.popup(skills2);
+            //             game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
+            //             event.finish()
+            //         } else {
+            //             var list = []
+            //             var skills = event.choice
+            //             for (var i = 0; i < skills.length; i++) {
+            //                 list.push(get.translation(skills[i] + '_info'))
+            //             }
+            //             player.chooseControl().set('choiceList', list).set('prompt', '选择〖' + get.translation(skills[0]) + '〗的版本')
+            //         }
+            //         "step 2"
+            //         var skills2 = event.choice[result.index]
+            //         player.addTempSkill(skills2, 'roundStart');
+            //         player.popup(skills2);
+            //         game.log(player, '声明了', '#g' + '【' + get.translation(skills2) + '】');
+            //     },
+            //     ai: {
+            //         threaten: 6,
+            //     },
+            // },
             "ventus_yc": {
                 trigger: {
                     player: "useCardToBegin",
@@ -19289,8 +19257,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'horn_ql_info': get.introduce('qianghua') + "，每回合限一次，当你对一名其他角色造成伤害后，①你可以对该角色造成1点火焰伤害。②强化：你可以对其相邻的角色造成X点同属性伤害并对该角色造成1点火焰伤害。（X为此次伤害值的一半并向下取整且至少为1）。",
             'horn_ll': "灵链",
             'horn_ll_info': get.introduce('qianghua') + '，出牌阶段限一次，①你可以令一名其他角色失去1点体力，然后你回复1点体力。②强化：你可以令一名其他角色失去1点体力，然后你回复1点体力，然后若你未受伤，你摸两张牌，否则，该角色翻面并摸X张牌（X为该角色的已损体力值）。',
-            "fr_qianghua": "强化",
-            "fr_qianghua_info": "出牌阶段限一次，你可以失去1点体力或弃置两张牌，然后你进入“<a style='color:#FF0000' href=\"javascript:window.furryIntroduce('qianghua_buff');\">强化</a>”状态。",
+            // "fr_qianghua": "强化",
+            // "fr_qianghua_info": "出牌阶段限一次，你可以失去1点体力或弃置两张牌，然后你进入“<a style='color:#FF0000' href=\"javascript:window.furryIntroduce('qianghua_buff');\">强化</a>”状态。",
             "qima_dz": "断斩",
             "qima_dz_info": get.introduce('truexuli') + '（2/4），当你对其他角色造成伤害后，你可以减少1点蓄力点，然后对一名其他角色造成1点伤害。其他角色进入濒死状态时或当你受到伤害后，你获得1点蓄力点。锁定技，当你对一名体力值为1的其他角色造成伤害时，你令此伤害+1。',
             "qima_jm": "俱灭",
@@ -19677,8 +19645,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "kasers_cy_info": "当你使用与你使用的上一张牌花色不同的牌时，你可以摸一张牌，否则，你弃置一张手牌。",
             "yifa_xs": "宣誓",
             "yifa_xs_info": "一轮游戏开始时/准备阶段/结束阶段，你可以声明一个技能，然后你拥有此技能直到本轮结束/回合结束/你的下个回合开始（觉醒技，限定技，主公技，隐匿技，使命技等特殊技能除外）。",
-            "xuanshi": "宣誓",
-            "xuanshi_info": "一轮游戏开始时或准备阶段，你可以声明一个非隐匿技，然后你拥有此技能直到本轮结束。",
+            // "xuanshi": "宣誓",
+            // "xuanshi_info": "一轮游戏开始时或准备阶段，你可以声明一个非隐匿技，然后你拥有此技能直到本轮结束。",
             "ventus_yc": "勇刺",
             "ventus_yc_info": "摸牌阶段，你额外从牌堆中获得一张【杀】；你使用【杀】指定一名其他角色为目标时，该角色失去一点体力。",
             "ventus_nx": "匿形",
@@ -20042,6 +20010,139 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_adward": "邪恶法师",
             "fr_tiers": "战场玫瑰",
         },
+        characterIntro:{
+            'fr_mountainbear': '山熊，原本是居住在矮人之心洞穴周围的魔兽，后来被路西法的父亲打败，作为成年礼物送于路西法。路西法于其成年礼上通过强大的战斗技巧获得了山熊的认可，并与其签订了契约，经过多年的配合，二者已经能够达到通过思想交流的地步，可以说他们二者的性命已经通过“特拉克斯”而连接。由于山熊生性暴戾，在没有兽语者控制的情况下，可能会出现随意伤人的情况。',
+            // 'fr_guotang': '',
+            'fr_lucifer': '路西法，目前为居住在矮人之心洞穴附近的兽人部落首领。其部落信仰生命之神——“特拉克斯”，并获得了其传承的特殊能力。该能力使得其部落的勇士能够与动物沟通，甚至训练动物成为伙伴。拥有这种特殊能力的人在《瓦尔亚那》百科中称为“兽语者”。',
+            // 'fr_lans': '',
+            'fr_keste': '科斯特，迦奈尔联邦最年轻也是最年少有为的将军，曾经在与矮人族的战争——“矮人之心争夺战”中大获全胜，歼敌数万。其主导与矮人族签下的《斯兰条约》为迦奈尔联邦的贸易事业奠定了发展基础。因此，这位将军也被成为“尼拉特”将军——即矮人语中的“恶魔”。',
+            // 'fr_neises': '',
+            // 'fr_wind': '',
+            // 'fr_nine': '',
+            // 'fr_ming': '',
+            // 'fr_death': '',
+            // 'fr_dolina': '',
+            // 'fr_thunder': '',
+            // 'fr_mouse': '',
+            // 'fr_lamas': '',
+            // 'fr_blam': '',
+            // 'fr_gairtelu': '',
+            // 'fr_tails': '',
+            // 'fr_zhan': '',
+            'fr_sheep': '西普，原生活于克拉，是出生于贫民窟的普通兽人；在卢森特国王上任前的那位国王——盖尔德鲁，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。',
+            'fr_rasali': '那萨利，和那舒一样，是瓦尔亚那大陆信仰中的神明之一，执掌着阴间的善灵收集和引导工作。<br>他的责任是寻找那些有着良善灵魂的人们，以便在他们离开世界之前引领他们前往冥界，让他们的灵魂在冥界得到永恒的安息。那萨利是一位仁慈而有担当的神明，他深知自己肩负的责任，努力工作以确保每个良善的灵魂都能得到引领。他深知冥界对于那些有着良善灵魂的人意味着什么，因此他不惜一切代价来保护他们。',
+            'fr_nashu': '那舒，是瓦尔亚那大陆信仰中的神明，他是阴间的统治者，负责管理和收割那些邪恶的灵魂。在瓦尔亚那大陆的历史中，那舒一直是一个神秘而的存在。<br>传说中，当一个人死后，他的灵魂会被送到那舒的阴间，经过他的审判和选择，才能得到永恒的归宿。因此，那舒在人们的心目中拥有着无上的权威和力量，被视为神圣不可侵犯的存在。<br>那舒的力量和能力是源于他所收割的灵魂。每当他收割一个灵魂，他就可以从中吸取力量，增强自己的能力。随着收割的灵魂数量的增加，那舒的力量也会逐渐增强，变得越来越不可战胜。',
+            // 'fr_derk': '',
+            // 'fr_crow': '',
+            'fr_bladewolf': '刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。',
+            // 'fr_dier': '',
+            "fr_bosswore": '沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市',
+            // 'fr_francium': '',
+            // "fr_kmjia": '',
+            "fr_ala": '奥拉，米兰寺的大弟子，在其二十四岁时出师，后四处游历。目前正在矮人之心洞穴附近修行。奥拉类似于林和炎的哥哥的存在，从小对他们多有照顾。',
+            "fr_liona": '里欧那，生活于兽人王国克拉的贵族家庭，从小就被作为一位战士培养。二十一岁时，在一次前往坷拉进行战斗的过程中，意外拯救了坷拉的公主，后二人暗生情愫。后来在一次战斗中下落不明。',
+            'fr_nanci': '南辞，来自龙之谷外围，是稀少的狐人族后裔，其天生就拥有化形的能力，能够在人类与兽人的形态之间切换。其能够接收天界的能力并作用于自身。',
+            "fr_shark": '沙克，来自人鱼之海的深部，其拥有一颗宝贵的珍珠，约一桅长，此珍珠能够映射出任意人的样貌，并使得拥有者获得相同的能力，据传其和凌月之球的制作者属于同一人。',
+            "fr_tiger": '泰格尔，来自兽人王国坷拉西部的区域，该区域的人们习惯使用剑技。米亚和科里科特曾在修行时与其相遇，米亚与其切磋后指出其弱点并与其成为好友。',
+            "fr_linyan": '林和炎是一对双胞胎，自幼时被父母遗弃，后被米兰寺收养。他们从小就生活于龙之谷外围的米兰寺中，与寺庙的主持相依为命。后来霍恩为了夺取寺庙中的宝物，设计毒杀了住持，而林与炎因外出而逃过一劫。',
+            "fr_horn": '霍恩，据传是来自深渊的恶魔，为了夺取米兰寺的珍贵宝物——豁免权杖，设计杀死了米兰寺的住持。霍恩不喜活物，他常常会放出致死的魔法，杀死周围的一切。',
+            "fr_qima": '奇玛，生活在沃尔夫东侧的索尔山脉附近。小时候，其父亲曾给予其一个由未知矿石制作的颜色吊坠，并言此物会在其遭遇危险时拯救其于水火。奇玛在一次前往深渊寻找拯救其父亲的草药：“忘忧草”时被深渊的魔物抓伤眼部，导致其视力丧失。',
+            "fr_zhongyu": '忠与，没有人知道其来处，但是在克拉的北部多有其传奇事迹，包括杀死了一只冰霜巨龙等等。人们不知道的是，忠与时刻与自己的内心作斗争，其内心有一只恶魔，当完全释放时，将给世界带来疯狂与灾难。',
+            // "fr_hynea": '',
+            "fr_wore": "沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市",
+            "fr_tiers": "缇尔斯，生活在迦奈尔联邦，由于联邦周围大量禁魔矿石的影响，此处无法施展魔法，故此处的主要研究方向为科技。缇尔斯幼时丧父，与母亲相依为命，后进入联邦军队，在服役5年后因在与矮人的战争中负伤，回到家乡科马修养。",
+            "fr_yifeng": "弈风，《瓦尔亚那百科》中曾参加了万灵之森保卫战的大英雄弈霜的后代，是弈法的哥哥，与弈法共同居住在万灵之森外围的不知名小村落中。弈风生性沉稳，不喜言辞，与弈法截然相反。据传，其拥有一把能够逆转因果的弓，名曰霜月，通体泛着银月丝绸般的光芒。被弓箭射中者，若其行径正义，心无不端，则平安无事，而若其为邪恶之辈，将会遭受最为严峻的痛苦，直至其为罪行忏悔。",
+            "fr_hars": "哈尔斯，兽人的智慧之神。其拥有惑人心魄的能力。根据矮人族与部分兽人族内部记录。哈尔斯能够直接降临到任何一人身上，据此观察世界。而被降临的人则被称为「神降者」。由于任何人都有可能成为「神降者」。因此，哈尔斯的眼线遍布整个大陆，而其本人也被称为「全知之神」。",
+            "fr_wes": "维斯，生活在克拉北部的小镇米拉亚纳行省，毗邻吸血鬼禁区。由于附近丰富的魔力资源影响，维斯从小便表现出了强烈的魔法亲和性，其能力能够转移其他人受到的伤害。由于其能力的特殊性，自小其就被送往当地教会培养。",
+            "fr_muyada": "慕达亚，克拉最大的黑帮集团——希尔特黑帮的首领，其作风狠辣，言出必行，故拥有众多拥趸。其下产业遍布大陆各处，但最大的产业是与侏儒合作的武器锻造。",
+            "fr_yada": "出生于克拉，后因种种原因前往人类聚集地柯拉。",
+            // "fr_fengkn": '',
+            // "fr_muliy": '',
+            // "fr_sier": '',
+            // "fr_klif": '',
+            // "fr_milis": '',
+            // "fr_alas": '',
+            "fr_kesaya": '隐匿者',
+            // "fr_ken": '',
+            // "fr_west": '',
+            // "fr_huye": '',
+            // "fr_milite": '',
+            // "fr_jackson": '',
+            "fr_jiejie": '檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。',
+            // "fr_sayisu": '',
+            "fr_telina": "特丽娜拥有特殊的「未来视」能力，她能够预知近至下一秒，远至数年的所有事件。在「瓦尔亚那百科全书」完成编写后，精灵族就在寻找拥有预言能力的人。因此特丽娜成为第一个受邀进入万灵之森的兽人。",
+            "fr_oert": "轮回之神欧尔特，不像其他的神那样高高在上。据传，欧尔特曾在瓦尔亚娜大陆最重要的节日“火灵日”，亲自来到瓦尔亚娜大陆的一座山峰上为瓦尔亚娜的百姓祈福，并参加兽人族的祭典活动。而受他惠顾的小贩说到：“神灵大人最喜欢我们家的丸子。”虽然真假未可知。",
+            "fr_rest": "瑞斯特，生于人鱼之海附近，虽说当地兽人族与鱼人族的关系并不融洽，但瑞斯特算是少有的与两族同时交好的人，其目前在二者之间经商。",
+            "fr_krikt": "科里科特，「连破」剑法大师米亚之徒。修习其赠与的「两仪」剑法。其剑术诡谲多变，剑术有着极强的爆发性。其剑法之转换，时而如同狂风骤雨般快速无比，时而如同狂涛骇浪般凶猛无匹，时而如同清泉溪涧般缓慢温柔细腻，时而如同秋风扫落叶般冷酷无情。世人皆赞之，有诗云：“霍如羿射九日落，矫如群帝骖龙翔。来如雷霆收震怒，罢如江海凝清光。”",
+            "fr_tery": "特瑞，出生于迦奈尔联邦，其能力极为罕见，虽在大量禁魔矿脉附近，却依然能够释放魔法，其能够从其他人释放的魔法中解析咒文，并快速学习。但其能力仍有限制，其对于不使用魔法或魔法能力过强者无法复制。",
+            "fr_sisk": "西斯科，罕见的狮兽人与吸血鬼的后代。拥有极其强力的身体素质与高超的种族天赋。后来被科亚所救，加入了「流亡者」雇佣兵团。其对血液极为敏感，些许的血腥味也会导致其进入狂暴。",
+            "fr_lens": "元素法师",
+            "fr_milism": "米里森，虎兽人与狮兽人的后代，就读于「魔法学院」。尤善水性，拥有水元素魔法天赋。而且能够转移他人的疼痛到自己，被誉为「治愈魔法师」。",
+            "fr_miya": "米亚，生于兽人王国「克拉」东部的小村落中。幼时便喜好剑术，随父亲学习。无意间得到「连破」与「两仪」两套剑法。成为远近闻名的剑术大师。「连破」剑法大成后，独自前往兽人王国「德恩」东部的兽人王国「奥格」历练。途中遇见科里科特，为其天赋所感。遂收其为徒，赠以「两仪」剑法。",
+            "fr_skry": "暗杀行者",
+            "fr_lusiya": "卢西亚，曾就读于人类王国「魔法学院」，与沃里克为好友。其智力超群，并且在学习魔法方面有着很高的造诣。在魔法学院的时期他曾经创立过自己的魔法研究所「时空之门」，并在某双系法师的帮助下，还原了时空魔法的原理。由此卢西亚还未毕业的时候便已经获得了学院授予的最高荣誉。",
+            "fr_kersm": "科尔森，「流亡者」佣兵团的经理，与「赏金公会」进行任务对接。虽然科尔森看起来十分和善，但所有佣兵团的人都知道，科尔森是最不能惹的人。其特殊能力未知，但据说十分强力，能够与十级法师平手。",
+            "fr_kert": "枪械大师",
+            // "fr_keya": '',
+            "fr_lust": "福瑞之王",
+            // "fr_klier": '',
+            "fr_faers": "法斯，或名法尔斯，兽人中最主要的神祇之一，代表了永恒与变换，是动与静的同一。法尔斯常以胡狼的形象示人，对任何物种都报以绝对的平衡。守护平衡是他的使命。但是在精灵族的预言集「瓦尔亚娜大百科」中其被预言是毁灭兽人王国的罪魁祸首。",
+            // "fr_aroncy": '',
+            // "fr_lint": '',
+            // "fr_berg": '',
+            // "fr_xit": '',
+            // "fr_markn": '',
+            // "fr_morly": '',
+            // "fr_marxya": '',
+            // "fr_yas_klin": '',
+            // "fr_dog": '',
+            // "fr_muen": '',
+            // "fr_patxi": '',
+            // "fr_zeron": '',
+            // "fr_nore": '',
+            // "fr_bofeng": '',
+            // "fr_ciyu": '',
+            // "fr_delta": '',
+            // "fr_edmon": '',
+            // "fr_mika": '',
+            // "fr_peter_likes": '',
+            // "fr_dmoa": '',
+            // "fr_nulia": '',
+            // "fr_terlk": '',
+            // "fr_verb": '',
+            // "fr_taber": '',
+            // "fr_yinhu": '',
+            // "fr_dragon": '',
+            // "fr_terz": '',
+            // "fr_jet": '',
+            // "fr_slen": '',
+            // "fr_paers": '',
+            // "fr_nier": '',
+            // "fr_pluvia": '',
+            // "fr_ventus": '',
+            // "fr_knier": '',
+            // "fr_zenia": '',
+            // "fr_lamost": '',
+            // "fr_kasaers": '',
+            "fr_yifa": "弈法，《瓦尔亚那百科》中曾参加了万灵之森保卫战的大英雄弈霜的后代，是弈风的妹妹。弈法天性好动活泼，其在幼时就被检测出有稀有的魔法天赋，能够通过语言来获得其他人的能力，《百科》中不曾预言过这种能力，实属世间罕见。由于此能力，其幼时便饱受困扰，许多贪婪狡诈之徒对此能力趋之若鹜。直至其十岁，父母因此而死，后与弈风共同远离兽人王国，前往精灵之森定居。",
+            // "fr_jgby": '',
+            // "fr_xiaomo": '',
+            "fr_adward": "安德华是来自地狱的无上法术的咏唱者（自称），他做过的坏事数不胜数，包括但不限于：赶走偷吃鸡的黄鼠狼，杀死袭击村民的强盗，强迫受保护费的官兵学狗叫之类，因此其深受百姓憎恶（自称）。他致力于成为整个兽人王国最邪恶的黑魔法师，并为此努力着。《瓦尔亚那百科》中曾预言安德华有着黑暗生物的血统与两幅面孔，但似乎其本身并不知情。",
+            "fr_fate": "法特，生于兽人王国“克拉”南部的贫民窟中，幼年时其父母因卷入债务纠纷而死，其一人独自生活。法特十二岁时，曾尝试寻找杀死父母的仇人，未果，后在游历各处的剑术大师米亚的帮助下终于成功。法特有着天生的赌博天赋，纵横各大赌场且百战百胜，被各大赌场称为“命运之手”。",
+            "fr_liya": "莉亚生于兽人王国中部的商业中心，是兽人王国国王卢森特的独女。作为贵族女子的她，自小时候便被灌输各种各样的贵族礼仪，但她的生性不羁，时时让自己的父其紧张。她在16岁时，曾受到过卢森特赠送的重装机车，是她最喜欢的生日礼物。",
+            "fr_laays": "“像这样四处游荡，又过了多久呢？”拉亚斯的话语回荡在旷野上。自从那场人类与精灵的大战以人类的完全胜利为结局，拉亚斯也不知道自己游荡多久了。他是当年参加过此次战争的兽人族战士，后牺牲于战火之中。也许是生命树被毁的缘故，拉亚斯重新得到肉体复活。",
+            "fr_whitewolf": "“白狼”，生于兽人王国“克拉”南部的贫民窟中，是“黑狼”的哥哥。在兽人王国最重要的巡游——“火灵日大典”被国王卢森特相中，与“黑狼”一同进入王宫成为侍卫。“白狼”的能力：“不动如山，动如雷震”，更加擅长防御与保护。在某次刺杀中因保护国王有功，被提拔为贴身侍卫，但是遭“黑狼”嫉妒，二人反目。",
+            "fr_blackwolf": "“黑狼”，生于兽人王国“克拉”南部的贫民窟中，从小与“白狼”相依为命。在“火灵日大典”被国王卢森特相中，与“白狼”一同进入王宫成为侍卫，后因嫉妒“白狼”的能力，与其反目。“黑狼”与“白狼”不同，更擅长狂暴而快速的攻击，世人谓之：“一剑斩不摧,双刃去如来”，又赞曰：“势如涛浪汹涌，形如雨打秋风”。",
+            // "fr_mala": '',
+            // "fr_bossmala": '',
+            // "fr_bossfaers": '',
+            // "fr_bossoert": '',
+            // "fr_bosshars": '',
+            // "fr_zeta": '',
+            // "fr_fox": '',
+            // "fr_molis": '',
+            // "fr_shisan": '',
+        },
     };
     for (var i in furryPack.character) {
         if (lib.config.frLutou) furryPack.character[i][4].push('ext:福瑞拓展/image/lutou/' + i + '.png')
@@ -20050,7 +20151,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
     if (lib.config.achiReward && lib.config.achiReward.character.length != 0) {
         for (var i = 0; i < lib.config.achiReward.character.length; i++) {
             var name = lib.config.achiReward.character[i]
-            furryPack.character[name][4].remove('unseen')
+            if(!furryPack.character[name]) console.log('Achievement Error: Cannot find '+name+' in furryPack');
+            else furryPack.character[name][4].remove('unseen');
         }
     }
     return furryPack;

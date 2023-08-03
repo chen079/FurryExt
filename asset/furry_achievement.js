@@ -1,9 +1,9 @@
 window.furry_import(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
-		'fr_guotang':'',
-		'fr_lucifer':"万物有灵，语通人心。",
-		'fr_mountainbear':'我只要一掌就能让你灰飞烟灭，小矮子！',
+		'fr_guotang': '',
+		'fr_lucifer': "万物有灵，语通人心。",
+		'fr_mountainbear': '我只要一掌就能让你灰飞烟灭，小矮子！',
 		'fr_nine': "我能保护自己，不靠任何人，就这样。",
 		'fr_keste': "我至今还未尝败绩...",
 		'fr_wind': "不要小看风的力量！",
@@ -132,7 +132,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 	lib.element.player.isCharacter = function (name) {
 		return this.isUnderControl(true) && (this.name == name || this.name1 == name || this.name2 == name)
 	};
-	
+
 	//成就列表
 	lib.fr_achievement = {
 		character: {
@@ -573,16 +573,12 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			if (furryPack) {
 				var firstWinSet = function (name) {
 					let level = 3;
-					if (game.furryrank[0].contains(name)) {
-						level = 5
-					} else if (game.furryrank[1].contains(name)) {
-						level = 4
-					} else if (game.furryrank[2].contains(name)) {
-						level = 3
-					} else if (game.furryrank[3].contains(name)) {
-						level = 2
-					} else if (game.furryrank[4].contains(name)) {
-						level = 1
+					let ranks=Object.keys(lib.rank.rarity).reverse();
+					for (let i = 0; i < ranks.length; i++) {
+						if (lib.characterPack.furryPack[name][4].contains(ranks[i])) {
+							level = i + 1;
+							break;
+						}
 					}
 					let reward
 					let rewardInfo
@@ -633,7 +629,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				game.writeFile(JSON.stringify({
 					frAchiStorage: lib.config.frAchiStorage,
 					achiReward: lib.config.achiReward
-				}), 'extension/福瑞拓展', 'save.json', function (err) {
+				}, null, "\t"), 'extension/福瑞拓展', 'save.json', function (err) {
 					if (err) {
 						console.log('成就存档保存错误:', err);
 					} else {
