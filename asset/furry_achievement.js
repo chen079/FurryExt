@@ -1,7 +1,9 @@
-window.furry_import(function (lib, game, ui, get, ai, _status) {
+window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
-		'fr_guotang': '',
+		'fr_sainit': '月华闪烁，一泻千里。',
+		'fr_aak': '来喝我做的果汁吧，怎么样很好喝吗？嘻嘻嘻（榴莲味）',
+		'fr_guotang': '山水有相逢。',
 		'fr_lucifer': "万物有灵，语通人心。",
 		'fr_mountainbear': '我只要一掌就能让你灰飞烟灭，小矮子！',
 		'fr_nine': "我能保护自己，不靠任何人，就这样。",
@@ -48,7 +50,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		"fr_hynea": '哈哈哈，谅你也说不过我！',
 		'fr_linyan': '一花一木，春华秋实。',
 		'fr_shark': '这是合适的价钱。',
-		"fr_muyada": '你是要断手，还是要断首？',
+		"fr_sam": '你是要断手，还是要断首？',
 		"fr_marxya": '谨小慎微，攻无不克。',
 		"fr_fengkn": '我看你命不久矣。',
 		"fr_alas": '不小心下手太重了，下辈子注意。',
@@ -116,7 +118,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		"fr_krikt": "师傅，我们刚刚找到的小孩呢？",
 		"fr_miya": "你有看到我那不省心的徒弟吗？",
 		"fr_lusiya": "只要这样，那样。<br>&nbsp&nbsp时光机成了！",
-		"fr_lust": "位居高位，心系黎民。",
+		"fr_harald": "位居高位，心系黎民。",
 		"fr_tery": "世间变化之相，吾可欣然而往。",
 		"fr_lens": "我看你是欠扁了！",
 		"fr_yifa": "听说，我说的话都会成真？<br>&nbsp&nbsp那么，你肯定很喜欢我！",
@@ -380,7 +382,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 		20: {
 			id: 'fr_gairtelu',
 			name: '武将：盖尔德鲁',
-			info: '这王国，谁不是我的子民？<br>盖尔德鲁，克拉王国著名的暴君，后被卢森特推翻。',
+			info: '这王国，谁不是我的子民？<br>盖尔德鲁，克拉王国著名的暴君，后被哈拉尔推翻。',
 			type: 'character'
 		},
 		15: {
@@ -438,9 +440,9 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			type: 'skin'
 		},
 		90: {
-			id: 'fr_muyada',
-			name: '武将：慕达亚',
-			info: lib.fr_winnerSay['fr_muyada'],
+			id: 'fr_sam',
+			name: '武将：山',
+			info: lib.fr_winnerSay['fr_sam'],
 			type: 'character'
 		},
 		95: {
@@ -473,6 +475,12 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			info: lib.fr_winnerSay['fr_ming'],
 			type: 'character'
 		},
+		140: {
+			id: '华灯初上',
+			name: "皮肤：华灯初上<br>品质：传说",
+			info: '夜晚来临，华灯初上！',
+			type: "skin"
+		}
 		/* 获得奖励需要的点数:{
 			id:'奖励的id' 用于储存是否获得该奖励
 			name:'奖励名称',
@@ -534,7 +542,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			if (game.me && game.me.name && game.me.name.indexOf('fr_') == 0 && game.me.group) {
 				try {
 					game.frAchi.addProgress(lib.characterTitle[game.me.name], 'character');
-					if (game.me.identity == 'nei' && (game.me.name == 'fr_rest' || game.me.name1 == 'fr_rest' || game.me.name2 == 'fr_rest') && !game.frAchi.hasAchi('人鱼狂流', 'character')) {
+					if (game.me.identity == 'nei' && player.isCharacter('fr_rest') && !game.frAchi.hasAchi('人鱼狂流', 'character')) {
 						game.frAchi.addProgress('人鱼狂流', 'character');
 					}
 				} catch (e) {
@@ -573,7 +581,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 			if (furryPack) {
 				var firstWinSet = function (name) {
 					let level = 3;
-					let ranks=Object.keys(lib.rank.rarity).reverse();
+					let ranks = Object.keys(lib.rank.rarity).reverse();
 					for (let i = 0; i < ranks.length; i++) {
 						if (lib.characterPack.furryPack[name][4].contains(ranks[i])) {
 							level = i + 1;
@@ -645,6 +653,14 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
 				for (var key of keys) {
 					var name = { 'character': 'c', 'game': 'g', 'special': 's' }[type] + ',' + key
 					if (!this.hasAchi(name)) this.got(name);
+				}
+			}
+			for(let i in lib.fr_achievementRewards){
+				var achi=lib.fr_achievementRewards[i]
+				if(achi.type=='character') game.unlockCharacter(achi.id)
+				if(achi.type=='skin'){
+					game.saveConfig(achi.id+'_unlock',true)
+					alert('已领取皮肤：'+achi.id)
 				}
 			}
 			this.saveConfig()

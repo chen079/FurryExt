@@ -239,3 +239,128 @@
 .player>.camp-wrap[data-camp='fr_g_ji']>.camp-back {
     background: linear-gradient(to bottom, rgb(96, 85, 158), rgb(106, 14, 212));
 }
+
+.player>.fr-Mp-xiaceyou {
+    display: block;
+    right: -16px;
+    bottom: 5px;
+    width: 13px;
+    height: 13px;
+    background-image: url('../image/others/furry_blue_mp.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    z-index: 130;
+    cursor: pointer;
+    transition: none;
+}
+
+.fr-Mp-xiaceyou>.name-xiaceyou {
+    left: 0px;
+    top: -15px;
+    font-size: 13px;
+    font-family: 'xinwei';
+}
+
+.player>.fr-Mp-shangcenei {
+    left: calc(50% - 18px);
+    top: 0px;
+    width: 15px;
+    height: 15px;
+    background-image: url('../image/others/furry_blue_mp.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    z-index: 130;
+    transition: none;
+    cursor: pointer;
+    display: block;
+}
+
+.fr-Mp-shangcenei>.name-shangcenei {
+    left: 20px;
+    top: 0px;
+    font-size: 15px;
+    font-family: 'xinwei';
+}
+
+.player>.fr-Mp-xiacenei {
+    display: block;
+    left: calc(50% - 18px);
+    bottom: 0px;
+    width: 15px;
+    height: 15px;
+    background-image: url('../image/others/furry_blue_mp.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    z-index: 130;
+    cursor: pointer;
+    transition: none;
+}
+
+.fr-Mp-xiacenei>.name-xiacenei {
+    left: 20px;
+    top: 0px;
+    font-size: 15px;
+    font-family: 'xinwei';
+}
+
+.player>.fr-Mp-xiacewai {
+    display: block;
+    left: calc(50% - 18px);
+    bottom: -15px;
+    width: 15px;
+    height: 15px;
+    background-image: url('../image/others/furry_blue_mp.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    z-index: 130;
+    cursor: pointer;
+    transition: none;
+}
+
+.fr-Mp-xiacewai>.name-xiacewai {
+    left: 20px;
+    top: 0px;
+    font-size: 15px;
+    font-family: 'xinwei';
+}
+
+.player>.fr-Mp-shangcewai {
+    display: block;
+    left: calc(50% - 18px);
+    top: -15px;
+    width: 15px;
+    height: 15px;
+    background-image: url('../image/others/furry_blue_mp.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    z-index: 130;
+    cursor: pointer;
+    transition: none;
+}
+
+.fr-Mp-shangcewai>.name-shangcewai {
+    left: 20px;
+    top: 0px;
+    font-size: 15px;
+    font-family: 'xinwei';
+}
+
+.furry_animation {
+    transition: transform 0s;
+    animation: none;
+    background-repeat: no-repeat;
+    display: block;
+    z-index: 998;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.player>.furry_animation_onplayer {
+    transition: transform 0s;
+    animation: none;
+    background-repeat: no-repeat;
+    display: block;
+    z-index: 998;
+    overflow: hidden;
+    pointer-events: none;
+}

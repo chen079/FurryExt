@@ -4,6 +4,69 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         name: 'furryCard',//卡包命名
         connect: true,//卡包是否可以联机
         card: {
+            'fr_equip1_ar15': {
+                fullskin: true,
+                derivation: "liuye",
+                image: 'ext:福瑞拓展/image/card/fr_equip1_ar15.png',
+                type: "equip",
+                subtype: "equip1",
+                distance: {
+                    attackFrom: -8,
+                },
+                skills: ["ar15_skill"],
+                enable: true,
+                selectTarget: -1,
+                filterTarget: function (card, player, target) {
+                    return target == player;
+                },
+                modTarget: true,
+                allowMultiple: false,
+                content: function () {
+                    if (cards.length && get.position(cards[0], true) == 'o') target.equip(cards[0]);
+                },
+                toself: true,
+                ai: {
+                    equipValue: 9,
+                    basic: {
+                        order: function (card, player) {
+                            if (player && player.hasSkillTag('reverseEquip')) {
+                                return 8.5 - get.equipValue(card, player) / 20;
+                            } else {
+                                return 8 + get.equipValue(card, player) / 20;
+                            }
+                        },
+                        useful: 2,
+                        equipValue: 9,
+                        value: function (card, player, index, method) {
+                            if (player.isDisabled(get.subtype(card))) return 0.01;
+                            var value = 0;
+                            var info = get.info(card);
+                            var current = player.getEquip(info.subtype);
+                            if (current && card != current) {
+                                value = get.value(current, player);
+                            }
+                            var equipValue = info.ai.equipValue;
+                            if (equipValue == undefined) {
+                                equipValue = info.ai.basic.equipValue;
+                            }
+                            if (typeof equipValue == 'function') {
+                                if (method == 'raw') return equipValue(card, player);
+                                if (method == 'raw2') return equipValue(card, player) - value;
+                                return Math.max(0.1, equipValue(card, player) - value);
+                            }
+                            if (typeof equipValue != 'number') equipValue = 0;
+                            if (method == 'raw') return equipValue;
+                            if (method == 'raw2') return equipValue - value;
+                            return Math.max(0.1, equipValue - value);
+                        },
+                    },
+                    result: {
+                        target: function (player, target, card) {
+                            return get.equipResult(player, target, card.name);
+                        },
+                    },
+                },
+            },
             'fr_equip1_shyl': {
                 fullskin: true,
                 image: 'ext:福瑞拓展/image/card/fr_equip1_shyl.png',
@@ -101,7 +164,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         target.recover()
                     }
                     'step 2'
-                    if(!target.isDying()){
+                    if (!target.isDying()) {
                         player.damage()
                         player.fakeLoseHp()
                     }
@@ -1001,7 +1064,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     }
-                    target.chooseText(6, true, '请声明一个技能', get.transArray(event.skills)).set('ai', function () {
+                    target.chooseText(6, true, '请声明一个技能', event.skills.map(i=>get.translation(i))).set('ai', function () {
                         return get.translation(event.skills.randomGet())
                     })
                     "step 1"
@@ -1241,21 +1304,21 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         dialog.addText(str[player.storage.wxpp_skill - 1]);
                     },
                 },
-                music:{
-                    '1155665':"一闪一闪亮晶晶～",
-                    '11556654433221':"满天都是小星星～",
-                    '114514':"你是一个一个一个......",
-                    '3345':"欢～乐～女～神～",
-                    '33455432':"圣～洁～美～丽～",
-                    '334554321123':"灿～烂～光～芒～",
-                    '334554321123322':"照～～～大～地～",
+                music: {
+                    '1155665': "一闪一闪亮晶晶～",
+                    '11556654433221': "满天都是小星星～",
+                    '114514': "你是一个一个一个......",
+                    '3345': "欢～乐～女～神～",
+                    '33455432': "圣～洁～美～丽～",
+                    '334554321123': "灿～烂～光～芒～",
+                    '334554321123322': "照～～～大～地～",
                 },
-                music_achieve:['11556654433221', '334554321123322'],
+                music_achieve: ['11556654433221', '334554321123322'],
                 content: function () {
                     'step 0'
                     event.index = []
                     'step 1'
-                    player.chooseControl('宫', '商', '角', '清角', '徵', '羽', '变宫', 'cancel2').set('ai', ()=>'cancel2');
+                    player.chooseControl('宫', '商', '角', '清角', '徵', '羽', '变宫', 'cancel2').set('ai', () => 'cancel2');
                     'step 2'
                     event.index.push(result.index + 1);
                     switch (result.control) {
@@ -1269,10 +1332,10 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         default: event.finish();
                     }
                     'step 3'
-                    for(var i in lib.skill.wxpp_skill.music){
-                        if(event.index.join('').lastIndexOf(i) === Math.max(event.index.length-i.length,0)){
-                            player.$fullscreenpop(lib.skill.wxpp_skill.music[i],'soil',false,true);
-                            if(lib.skill.wxpp_skill.music_achieve.contains(i)&&!game.frAchi.hasAchi('你会弹琴吗？', 'special')){
+                    for (var i in lib.skill.wxpp_skill.music) {
+                        if (event.index.join('').lastIndexOf(i) === Math.max(event.index.length - i.length, 0)) {
+                            player.$fullscreenpop(lib.skill.wxpp_skill.music[i], 'soil', false, true);
+                            if (lib.skill.wxpp_skill.music_achieve.contains(i) && !game.frAchi.hasAchi('你会弹琴吗？', 'special')) {
                                 game.frAchi.addProgress('你会弹琴吗？', 'special')
                             }
                         }
@@ -1398,6 +1461,106 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     }
                 }
             },
+            "ar15_skill": {
+                trigger: {
+                    player: "useCardToPlayered",
+                },
+                filter:function(event,player){
+                    return event.card.name=='sha'
+                },
+                direct: true,
+                content: function () {
+                    'step 0'
+                    player.chooseToDiscard('h', get.prompt2('ar15_skill')).set('ai', function (card) {
+                        var player = _status.event.player
+                        var att = get.attitude(player, trigger.target)
+                        if (att > 0) return -1
+                        if (player.inRange(trigger.target) && !trigger.target.inRange(player)) {
+                            return 9 - get.value(card)
+                        } else {
+                            return 5 - get.value(card)
+                        }
+                    })
+                    'step 1'
+                    if (result.bool) {
+                        event.suit = get.suit(result.cards[0])
+                        if (player.inRange(trigger.target) && !trigger.target.inRange(player)) {
+                            event.youji = true
+                            player.discardPlayerCard(trigger.target, 'h', '观看并弃置' + get.translation(trigger.target) + '一张手牌', true, 'visible')
+                                .set('ai', function (card) {
+                                    if (get.suit(card) == event.card) return get.value(card) + 50
+                                    else return get.value(card)
+                                })
+                        } else {
+                            event.youji = false
+                            player.discardPlayerCard(trigger.target, 'h', true, '弃置' + get.translation(trigger.target) + '一张手牌')
+                        }
+                    } else {
+                        event.finish()
+                    }
+                    'step 2'
+                    var evt = trigger.getParent();
+                    var suits = result.cards.map(i => get.suit(i)).unique()
+                    var target = trigger.target;
+                    target.addTempSkill('ar15_skill_block');
+                    if (!target.storage.ar15_skill_block) target.storage.ar15_skill_block = [];
+                    target.storage.ar15_skill_block.push([evt.card, suits]);
+                    if (event.youji && event.suit == get.suit(result.cards[0])) {
+                        if (typeof evt.baseDamage != 'number') evt.baseDamage = 1;
+                        evt.baseDamage++;
+                    }
+                },
+                ai: {
+                    threaten: 3.5,
+                    "directHit_ai": true,
+                    halfneg: true,
+                },
+                subSkill: {
+                    block: {
+                        mod: {
+                            cardEnabled: function (card, player) {
+                                if (!player.storage.ar15_skill_block) return;
+                                var suit = get.suit(card);
+                                if (suit == 'none') return;
+                                var evt = _status.event;
+                                if (evt.name != 'chooseToUse') evt = evt.getParent('chooseToUse');
+                                if (!evt || !evt.respondTo || evt.respondTo[1].name != 'sha') return;
+                                for (var i of player.storage.ar15_skill_block) {
+                                    if (i[1].contains(suit)) return false;
+                                }
+                            },
+                        },
+                        trigger: {
+                            player: ["damageBefore", "damageCancelled", "damageZero"],
+                            target: ["shaMiss", "useCardToExcluded", "useCardToEnd"],
+                            global: ["useCardEnd"],
+                        },
+                        silent: true,
+                        popup: false,
+                        forced: true,
+                        firstDo: true,
+                        charlotte: true,
+                        onremove: true,
+                        filter: function (event, player) {
+                            if (!event.card || !player.storage.ar15_skill_block) return false;
+                            for (var i of player.storage.ar15_skill_block) {
+                                if (i[0] == event.card) return true;
+                            }
+                            return false;
+                        },
+                        content: function () {
+                            var storage = player.storage.ar15_skill_block;
+                            for (var i = 0; i < storage.length; i++) {
+                                if (storage[i][0] == trigger.card) {
+                                    storage.splice(i--, 1);
+                                }
+                            }
+                            if (!storage.length) player.removeSkill('ar15_skill_block');
+                        },
+                        sub: true,
+                    },
+                }
+            },
             "sy_skill": {
                 equipSkill: true,
                 trigger: {
@@ -1417,7 +1580,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         if (get.attitude(_status.event.player, source) > 0) return 0
                         if (source.hp == 1) return 9 - get.value(card)
                         return 7 - get.value(card)
-                    }).set('source', trigger.source).set('prompt2','弃置两张牌并对' + get.translation(trigger.source) + '造成1点冰属性伤害')
+                    }).set('source', trigger.source).set('prompt2', '弃置两张牌并对' + get.translation(trigger.source) + '造成1点冰属性伤害')
                     "step 1"
                     if (result.bool) {
                         player.discard(result.cards)
@@ -1477,7 +1640,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         return evt.card == event.card;
                     }).length > 0;
                 },
-                usable:4,
+                usable: 4,
                 content: function () {
                     if (trigger.name == 'phaseDraw') trigger.num--;
                     else player.draw();
@@ -1510,6 +1673,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'ar15_skill': 'AR15',
+            'ar15_skill_info': '你使用【杀】指定目标后，可以依次弃置你与其各一张手牌，其不能使用这些牌包含花色的【闪】响应此【杀】，' + get.introduce('youji') + '：你弃置其牌时观看其手牌，若弃置后两张牌花色相同，此【杀】伤害+1。',
             'shyl_skill': "死魂幽镰",
             'shyl_skill_info': '每回合限一次，当你的【杀】被【闪】抵消时，若此【杀】目标数为1，你可以视为对此【杀】的目标使用一张【杀】。',
             'mhlq_skill': '鸣鸿龙雀',
@@ -1526,6 +1691,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
+            'fr_equip1_ar15': 'AR15',
+            'fr_equip1_ar15_info': '你使用【杀】指定目标后，可以依次弃置你与其各一张手牌，其不能使用这些牌包含花色的【闪】响应此【杀】，' + get.introduce('youji') + '：你弃置其牌时观看其手牌，若弃置后两张牌花色相同，此【杀】伤害+1。',
             'fr_card_xzst': '雪中送炭',
             'fr_card_xzst_info': '其他角色受到伤害后，或处于濒死状态时，你对其使用，你选择一项：1.弃置一张手牌（不足则不弃）并令该角色摸两张牌，2.令该角色回复1点体力，然后若该角色脱离了濒死状态，你受到1点无来源伤害并视为失去1点体力。',
             'fr_equip2_yyxl': '影夜项链',
@@ -1567,6 +1734,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_zhcz_info": "出牌阶段，对一名角色使用，该角色展示X张手牌（X为其手牌数的一半并向下取整），然后你选择一项：1.重铸其展示的所有牌，2.重铸其未展示的所有牌。",
         },
         list: [
+            ['heart', '1', 'fr_equip1_ar15'],
             ['spade', '13', 'fr_equip1_shyl'],
             ['heart', '5', 'fr_card_xzst'],
             ['heart', '7', 'fr_card_xzst'],

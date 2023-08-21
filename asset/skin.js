@@ -1,5 +1,5 @@
 'use strict';
-window.furry_import(function (lib, game, ui, get, ai, _status) {
+window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     if (!lib.qhlypkg) {
         lib.qhlypkg = [];
     }
@@ -60,6 +60,25 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
                 str += "<br>";
             }
             return str;
+        },
+        characterMp: function (name) {
+            var arr = get.character(name, 4);
+            if (arr && arr.length) {
+                for (var d of arr) {
+                    if (d.indexOf('frMp:') == 0) {
+                        var n = d.replace('frMp:', '');
+                        var Mp = n.split('/').map(i=>parseInt(i))
+                        if (Mp.length == 1) {
+                            return Mp[0];
+                        } else if (Mp[0] > Mp[1]) {
+                            return Mp[1];
+                        } else {
+                            return n
+                        }
+                    }
+                }
+            }
+            return null;
         },
         characterNameTranslate: function (name) {
             //这里根据武将ID返回其中文名字。
@@ -148,6 +167,16 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
                             alert('需要成就点数达到85，在成就奖励界面领取');
                         }
                     }
+                },
+                'fr_keya': {
+                    '华灯初上': {
+                        isLocked: function () {
+                            return !lib.config.华灯初上_unlock;
+                        },
+                        tryUnlock: function () {
+                            alert('需要成就点数达到140，在成就奖励界面领取');
+                        }
+                    }
                 }
             };
             var ret1 = reflect[name];
@@ -169,7 +198,7 @@ window.furry_import(function (lib, game, ui, get, ai, _status) {
         },
         forbidEditTaici: false,
     });
-    
+
     if (!lib.qhlyMusic) {
         lib.qhlyMusic = {};
     }
