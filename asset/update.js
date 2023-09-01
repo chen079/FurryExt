@@ -98,51 +98,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         },
     };
     
-    if (typeof game.furryCreateProgress != 'function') {
-        game.furryCreateProgress = (title, max, value) => {
-            const parent = ui.create.div(ui.window, {
-                textAlign: 'center',
-                width: '300px',
-                height: '150px',
-                left: 'calc(50% - 150px)',
-                top: 'auto',
-                bottom: 'calc(50% - 75px)',
-                zIndex: '10',
-                boxShadow: 'rgb(0 0 0 / 40 %) 0 0 0 1px, rgb(0 0 0 / 20 %) 0 3px 10px',
-                backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4))',
-                borderRadius: '8px'
-            });
-            //------------------设置可拖动----------------//
-            parent.className = 'dialog';
-            const container = ui.create.div(parent, {
-                position: 'absolute',
-                top: '0',
-                left: '0',
-                width: '100%',
-                height: '100%'
-            });
-            container.ontouchstart = ui.click.dialogtouchStart;
-            container.ontouchmove = ui.click.touchScroll;
-            container.style.WebkitOverflowScrolling = 'touch';
-            parent.ontouchstart = ui.click.dragtouchdialog;
-            const caption = ui.create.div(container, '', title, {
-                position: 'relative',
-                paddingTop: '8px',
-                fontSize: '20px'
-            });
-            ui.create.node('br', container);
-            const progress = ui.create.node('progress.zxgxProgress', container);
-            progress.setAttribute('value', value || '0');
-            progress.setAttribute('max', max);
-            parent.getTitle = () => caption.innerText;
-            parent.setTitle = (title) => caption.innerText = title;
-            parent.getProgressValue = () => progress.value;
-            parent.setProgressValue = (value) => progress.value = value;
-            parent.getProgressMax = () => progress.max;
-            parent.setProgressMax = (max) => progress.max = max;
-            return parent;
-        };
-    }    
     //-------------------------在线更新--------------------------------//
     window.furry.update = function () {
         const address = 'https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/';
