@@ -248,33 +248,17 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     }
                 }
                 function furryUpdating() {
-                    /**
-                     * 下载一个文件
-                     * @param { string } url 
-                     */
-                    function download(url, success, error) {
-                        var path = 'extension/福瑞拓展';
-                        const address = 'https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/';
-                        if (window.FileTransfer) {
-                            // 判断是不是文件夹，不是才下载
-                            function downloadFile() {
-                                let fileTransfer = new FileTransfer();
-                                fileTransfer.download(encodeURI(`${address + url}?date=${(new Date()).getTime()}`), encodeURI(lib.assetURL + path + '/' + url), success, error);
-                            }
-                            window.resolveLocalFileSystemURL(lib.assetURL,
-                                /**
-                                * @param { DirectoryEntry } DirectoryEntry 
-                                */
-                                DirectoryEntry => {
-                                    DirectoryEntry.getDirectory(path, { create: false }, dir => {
-                                        dir.getDirectory(url, { create: false }, () => {
-                                            console.log(`${path}/${url}是文件夹`);
-                                            // 跳过下载
-                                            success(true);
-                                        }, downloadFile);
-                                    }, downloadFile);
-                                }, downloadFile);
-                        } else {
+                    const files = data.updateFiles;
+                    const totalFiles = files.length;
+                    let downloadedFiles = 0;
+                
+                    // 创建进度条
+                    const progress = game.furryCreateProgress('更新福瑞拓展', totalFiles, files[0], downloadedFiles);
+                
+                    // 下载单个文件的函数
+                    function downloadFile(url) {
+                        return new Promise((resolve, reject) => {
+                            var path = 'extension/福瑞拓展';
                             fetch(`${address + url}?date=${(new Date()).getTime()}`)
                                 .then(response => response.arrayBuffer())
                                 .then(arrayBuffer => {
@@ -288,61 +272,41 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                                             var stat = fs.statSync(filePath);
                                             if (stat.isDirectory()) {
                                                 console.error(`${path + '/' + url}是个文件夹`);
-                                                return success(true);
+                                                resolve(true);
+                                                return;
                                             }
                                         }
                                         fs.writeFile(filePath, Buffer.from(arrayBuffer), null, e => {
-                                            if (e) error(e);
-                                            else success();
+                                            if (e) reject(e);
+                                            else resolve();
                                         });
                                     });
                                 })
-                                .catch(response => error(new Error(response.statusText)));
-                        }
+                                .catch(response => reject(new Error(response.statusText)));
+                        });
                     }
-
-                    /**
-                     * 下载文件列表
-                     * @param { string[] } files 
-                     */
-                    function downloadList(files) {
-                        if (!Array.isArray(files) || files.length == 0) return;
-                        var i = 0;
-                        var progress = game.furryCreateProgress('更新福瑞拓展', files.length, files[0], i);
-                        var success = skip => {
-                            // 下载完了就结束
-                            if (!files[++i]) {
-                                progress.setProgressValue(files.length);
-                                progress.setFileName('下载完成');
+                
+                    // 并行下载所有文件
+                    Promise.all(files.map(downloadFile))
+                        .then(() => {
+                            downloadedFiles = totalFiles;
+                            // 更新进度条
+                            progress.setProgressValue(downloadedFiles);
+                            progress.setFileName('下载完成');
+                            setTimeout(() => {
+                                // 移除进度条
+                                progress.remove();
+                                // 延时提示
                                 setTimeout(() => {
-                                    // 移除进度条
-                                    progress.remove();
-                                    // 延时提示
-                                    setTimeout(() => {
-                                        alert('福瑞拓展更新完成，将自动重启');
-                                        game.reload();
-                                    }, 100);
-                                }, 200);
-                                return;
-                            }
-                            // 下载成功，更新进度
-                            progress.setProgressValue(i);
-                            progress.setFileName(files[i]);
-                            download(files[i], success, error);
-                        };
-                        var error = errorText => {
-                            console.log('下载失败', errorText);
-                            progress.setFileName('重新下载: ' + files[i]);
-                            download(files[i], success, error);
-                        };
-
-                        download(files[i], success, error);
-                    }
-
-                    /** @type { string[] } 要下载的文件 */
-                    //var files = localVersion == data.oldversion ? data.updateFiles : data.allFiles;
-                    var files = data.updateFiles;
-                    downloadList(files);
+                                    alert('福瑞拓展更新完成，将自动重启');
+                                    game.reload();
+                                }, 100);
+                            }, 200);
+                        })
+                        .catch(error => {
+                            console.error('下载失败', error);
+                            progress.setFileName('下载失败');
+                        });
                 }
 
                 if (data.version <= localVersion) return;
