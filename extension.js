@@ -1961,7 +1961,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + "<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.4.0.1",
+            version: "2.4.0.0",
         },
         files: {
             "character": [],
