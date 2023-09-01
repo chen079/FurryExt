@@ -97,7 +97,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             game.showFrChangeLog();
         },
     };
-    
+
     //-------------------------在线更新--------------------------------//
     window.furry.update = function () {
         const address = 'https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/';
@@ -121,9 +121,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     return;
                 }
                 var localVersion = lib.extensionPack.福瑞拓展.version || '0';
-    
+
                 console.log(localVersion, data.version);
-    
+
                 function myConfirm(message, callback) {
                     if (navigator.notification && navigator.notification.confirm) {
                         navigator.notification.confirm(message, index => {
@@ -133,15 +133,15 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                         window.confirm(message) && callback();
                     }
                 }
-    
+
                 function furryUpdating() {
                     const files = data.updateFiles;
                     const totalFiles = files.length;
                     let downloadedFiles = 0;
-                
+
                     // 创建进度条
                     const progress = game.furryCreateProgress('更新福瑞拓展', totalFiles, files[0], downloadedFiles);
-                
+
                     // 下载单个文件的函数
                     function downloadFile(url) {
                         return new Promise((resolve, reject) => {
@@ -172,7 +172,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                                 .catch(response => reject(new Error(response.statusText)));
                         });
                     }
-                
+
                     // 并行下载所有文件
                     Promise.all(files.map(downloadFile))
                         .then(() => {
@@ -195,8 +195,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                             progress.setFileName('下载失败');
                         });
                 }
-                
-    
+
+
                 if (data.version < localVersion) {
                     myConfirm(`你的福瑞拓展版本(v${localVersion})高于服务器版本(v${data.version}),是否覆盖安装?`, furryUpdating);
                 } else if (data.version == localVersion) {
@@ -209,9 +209,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 alert(typeof e == 'string' ? '网络请求错误' : e.message);
             });
     }
-    
+
     window.furry.update2 = function () {
-        fetch('https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/updatecheck.js', {
+        const address = 'https://ghproxy.com/https://raw.githubusercontent.com/chen079/FurryExt/master/';
+        fetch(address + 'updatecheck.js', {
             method: 'GET',
             mode: 'cors',// 允许发送跨域请求
             credentials: 'include',
@@ -251,10 +252,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     const files = data.updateFiles;
                     const totalFiles = files.length;
                     let downloadedFiles = 0;
-                
+
                     // 创建进度条
                     const progress = game.furryCreateProgress('更新福瑞拓展', totalFiles, files[0], downloadedFiles);
-                
+
                     // 下载单个文件的函数
                     function downloadFile(url) {
                         return new Promise((resolve, reject) => {
@@ -285,7 +286,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                                 .catch(response => reject(new Error(response.statusText)));
                         });
                     }
-                
+
                     // 并行下载所有文件
                     Promise.all(files.map(downloadFile))
                         .then(() => {
