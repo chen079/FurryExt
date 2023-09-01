@@ -138,10 +138,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     const files = data.updateFiles;
                     const totalFiles = files.length;
                     let downloadedFiles = 0;
-    
+                
                     // 创建进度条
                     const progress = game.furryCreateProgress('更新福瑞拓展', totalFiles, files[0], downloadedFiles);
-    
+                
                     // 下载单个文件的函数
                     function downloadFile(url) {
                         return new Promise((resolve, reject) => {
@@ -172,7 +172,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                                 .catch(response => reject(new Error(response.statusText)));
                         });
                     }
-    
+                
                     // 并行下载所有文件
                     Promise.all(files.map(downloadFile))
                         .then(() => {
@@ -195,6 +195,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                             progress.setFileName('下载失败');
                         });
                 }
+                
     
                 if (data.version < localVersion) {
                     myConfirm(`你的福瑞拓展版本(v${localVersion})高于服务器版本(v${data.version}),是否覆盖安装?`, furryUpdating);
