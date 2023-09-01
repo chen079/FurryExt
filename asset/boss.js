@@ -3,14 +3,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
     var furryBoss = {
         name: 'furryBoss',//武将包命名（必填）
         connect: true,//该武将包是否可以联机（必填）
-        character:{
-            "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ['unseen', "boss", "bossallowed", 'legend']],
-            "fr_bossmala": ["male", "shen", 10, ['mala_ht', 'mala_ly', 'mala_jf', 'mala_hy', 'mala_bc', 'mala_sz'], ['unseen', "boss", "bossallowed", 'legend']],
-            "fr_bossfaers": ["male", "shen", 7, ["faers_hc", "faers_yl", "miya_ks", "miya_hz"], ['unseen', "boss", "bossallowed", 'legend']],
-            "fr_bossoert": ["male", "shen", 8, ["oert_bosswy", "oert_bosslh"], ['unseen', "boss", "bossallowed", 'legend']],
-            "fr_bosshars": ["male", "shen", 7, ["hars_sz", "hars_sj", "muen_tx", "muen_jb", "xiaomo_sj", "xiaomo_ld"], ['unseen', "boss", "bossallowed", 'legend']],
+        character: {
+            "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ["boss", "bossallowed", 'legend']],
+            "fr_bossmala": ["male", "shen", 10, ['mala_ht', 'mala_ly', 'mala_jf', 'mala_hy', 'mala_bc', 'mala_sz'], ["boss", "bossallowed", 'legend']],
+            "fr_bossfaers": ["male", "shen", 7, ["faers_hc", "faers_yl", "miya_ks", "miya_hz"], ["boss", "bossallowed", 'legend']],
+            "fr_bossoert": ["male", "shen", 8, ["oert_bosswy", "oert_bosslh"], ["boss", "bossallowed", 'legend']],
+            "fr_bosshars": ["male", "shen", 7, ["hars_sz", "hars_sj", "muen_tx", "muen_jb", "xiaomo_sj", "xiaomo_ld"], ["boss", "bossallowed", 'legend']],
         },
-        skill:{
+        skill: {
             "wore_bossty": {
                 trigger: {
                     player: ["phaseDiscardSkipped", "phaseJudgeSkipped", "phaseDrawSkipped", "phaseUseSkipped", "phaseZhunbeiSkipped", "phaseJieshuSkipped", "phaseSkipped"],
@@ -244,5 +244,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         if (lib.config.frLutou) furryBoss.character[i][4].push('ext:福瑞拓展/image/skin/origin-lutou/' + i + '.png')
         else furryBoss.character[i][4].push('ext:福瑞拓展/image/skin/origin-standard/' + i + '.jpg')
     }
-    return furryBoss;
+    if (lib.config.mode == 'boss') {
+        return furryBoss;
+    } else {
+        return {}
+    }
 })

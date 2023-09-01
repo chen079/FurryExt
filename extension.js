@@ -615,6 +615,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         lib.characterPack.mode_guozhan[i] = lib.characterPack.furryGZPack[i]
                     }
                 }
+                //------------------------------------------设置：国战武将------------------------------------------//
+                if (lib.config.mode == 'boss') {
+                    lib.config.all.characters.push('furryBoss');
+                    lib.translate['furryBoss_character_config'] = "福瑞Boss";// 包名翻译
+                }
                 //------------------------------------------设置：背景音乐------------------------------------------//
                 if (lib.config.extension_福瑞拓展_Background_Music && lib.config.extension_福瑞拓展_Background_Music != "1") {
                     game.frplayBackgroundMusic();
@@ -649,7 +654,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         .catch((error) => {
                             var date = new Date()
                             var hisday = {
-                                date: `${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日`,
+                                date: `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`,
                                 title: '您的网络出错了...'
                             }
                             hisElement.innerHTML = '<li>历史上的今天：' + hisday.date + ' ' + hisday.title + '</li>'
@@ -1711,8 +1716,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.group.add('fr_g_ji');
                 lib.translate.fr_g_ji = '机';
                 lib.translate.fr_g_ji2 = '机';
-                lib.config.all.characters.push('furryBoss');
-                lib.translate['furryBoss_character_config'] = "福瑞Boss";// 包名翻译
                 lib.config.all.characters.push('furryPack');
                 lib.translate['furryPack_character_config'] = "<img style='width:100px' src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png>";// 包名翻译
                 //卡包（手牌）
@@ -2216,7 +2219,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + "<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.4.0.0",
+            version: "2.4.0.1",
         },
         files: {
             "character": [],
