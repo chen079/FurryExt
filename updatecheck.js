@@ -37,6 +37,6 @@
 	allFiles: [
 	],
 
-	updateAuto: true,
+	updateAuto: false,
 
 }))();
