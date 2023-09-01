@@ -493,67 +493,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
         }
     };
-    //------------------进度条样式----------------//
-    if (typeof game.furryCreateProgress != 'function') {
-        game.furryCreateProgress = (title, max, fileName, value) => {
-            const parent = ui.create.div(ui.window, {
-                textAlign: 'center',
-                width: '300px',
-                height: '150px',
-                left: 'calc(50% - 150px)',
-                top: 'auto',
-                bottom: 'calc(50% - 75px)',
-                zIndex: '10',
-                boxShadow: 'rgb(0 0 0 / 40 %) 0 0 0 1px, rgb(0 0 0 / 20 %) 0 3px 10px',
-                backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4))',
-                borderRadius: '8px'
-            });
-            //------------------设置可拖动----------------//
-            parent.className = 'dialog';
-            const container = ui.create.div(parent, {
-                position: 'absolute',
-                top: '0',
-                left: '0',
-                width: '100%',
-                height: '100%'
-            });
-            container.ontouchstart = ui.click.dialogtouchStart;
-            container.ontouchmove = ui.click.touchScroll;
-            container.style.WebkitOverflowScrolling = 'touch';
-            parent.ontouchstart = ui.click.dragtouchdialog;
-            const caption = ui.create.div(container, '', title, {
-                position: 'relative',
-                paddingTop: '8px',
-                fontSize: '20px'
-            });
-            ui.create.node('br', container);
-            const tip = ui.create.div(container, {
-                position: 'relative',
-                paddingTop: '8px',
-                fontSize: '20px',
-                width: '100%'
-            });
-            const file = ui.create.node('span', tip, '', fileName);
-            file.style.width = file.style.maxWidth = '100%';
-            ui.create.node('br', tip);
-            const index = ui.create.node('span', tip, '', String(value || '0'));
-            ui.create.node('span', tip, '', '/');
-            const maxSpan = ui.create.node('span', tip, '', String(max || '未知'));
-            ui.create.node('br', container);
-            const progress = ui.create.node('progress.zxgxProgress', container);
-            progress.setAttribute('value', value || '0');
-            progress.setAttribute('max', max);
-            parent.getTitle = () => caption.innerText;
-            parent.setTitle = (title) => caption.innerText = title;
-            parent.getFileName = () => file.innerText;
-            parent.setFileName = (name) => file.innerText = name;
-            parent.getProgressValue = () => progress.value;
-            parent.setProgressValue = (value) => progress.value = index.innerText = value;
-            parent.getProgressMax = () => progress.max;
-            parent.setProgressMax = (max) => progress.max = maxSpan.innerText = max;
-            return parent;
-        };
-    }
     return {
         name: "福瑞拓展",
         editable: false,
