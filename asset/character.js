@@ -183,6 +183,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         trigger:{
                             global:'roundStart'
                         },
+                        firstDo:true,
                         direct:true,
                         forced:true,
                         charlotte:true,
@@ -20158,7 +20159,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'fr_luyezhi': '大总攻',
             'fr_aak': '神医',
             'fr_mountainbear': '力透千钧',
-            'fr_lucfier': '万物通灵',
+            'fr_lucifier': '万物通灵',
             'fr_guotang': '果糖含量',
             'fr_nine': '孤僻的天才',
             'fr_keste': '常胜将军',

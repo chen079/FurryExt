@@ -24,6 +24,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 '2.3.0.3',
                 '新武将：莎尔斯',
                 '新卡牌：AR15',
+                '新功能：体力乘算',
                 '2.4.0.0',
                 '新增魔力值系统（参考玄武江湖拓展）',
                 '重做米亚部分技能',
