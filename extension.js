@@ -10,6 +10,21 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             });
         }
     });
+    Object.defineProperty(Array.prototype, "swapElements", {
+        configurable: true,
+        enumerable: false,
+        writable: true,
+        value: function (index1, index2) {
+            var array = this;
+            if (index1 < 0 || index1 >= array.length || index2 < 0 || index2 >= array.length) {
+                throw new Error("Invalid index values.");
+            }
+            const temp = array[index1];
+            array[index1] = array[index2];
+            array[index2] = temp;
+            return array
+        }
+    });
     window.furry = {
         url: lib.assetURL + "extension/福瑞拓展",
         copy: function (sdir /*源文件夹路径*/, fn /*文件名*/, ddir /*目标文件夹路径*/, callback) {
@@ -90,7 +105,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         introduce: {
             'moli': {
                 name: '魔力',
-                info: '<li>魔力是一种类似体力的指示物，<li>游戏开始时，若无特殊说明，一名角色的魔力上限等于其体力上限（至多为5），魔力值等于魔力上限的一半（向下取整）,<li>魔力可以被获得、消耗和失去（类似体力的回复、伤害和流失）。'
+                info: '<li>魔力是一种类似体力的指示物，<li>游戏开始时，若无特殊说明，一名角色的魔力上限等于其武将牌上的体力上限（至多为5），魔力值等于魔力上限的一半（向下取整）,<li>魔力可以被获得、消耗和失去（类似体力的回复、伤害和流失）。'
             },
             'youji': {
                 name: '游击',
@@ -220,44 +235,52 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
             return str
         },
-        //r宝制作：获取文件路径下所有文件
+        //获取文件路径下所有文件
         traverseFolder: function (dir, includeFolder, depth) {
-            if (typeof dir == "undefined")
-                throw new Error("You must give a Directory path");
-            if (/\.\./.test(dir))
+            if (typeof dir === "undefined") {
+                throw new Error("You must provide a directory path.");
+            }
+            if (/\.\./.test(dir)) {
                 throw new Error("Cannot parse \"..\" in Noname");
-            if (!/$.+\/^/.test(dir)) dir = dir + "/";
+            }
+            // Ensure the directory path ends with a slash
+            if (!/\/$/.test(dir)) {
+                dir = dir + "/";
+            }
             if (typeof includeFolder == "undefined") includeFolder = false;
             if (typeof depth == "undefined") depth = Infinity;
-
-            if (depth <= 0) return Promise.resolve([]);
-
-            /**
-             * 遍历用到的递归函数
-             * 
-             * @param {string[]} result - 储存各文件的数组
-             * @param {string[]} records - 记录层级的数组
-             * @param {PromiseResolve} resolve - Promise的resolve函数
-             */
-            function content(result, records, resolve) {
-                game.getFileList(lib.assetURL + dir + records.join("/"), (folders, files) => {
-                    // 或许只有能被读取的目录才算是目录
-                    if (includeFolder && records.length) result.add(records.join("/"));
-
-                    for (const file of files) {
-                        result.add(records.concat(file).join("/"));
-                    }
-
-                    let promises = new Array();
-                    if (records.length + 1 < depth)
-                        for (const folder of folders)
-                            promises.add(new Promise(resolve => content(result, records.concat(folder), resolve)));
-
-                    Promise.all(promises).then(() => resolve(result));
+            if (depth <= 0) {
+                return [];
+            }
+            function content(records) {
+                var result = new Set();
+                return new Promise(function (resolve) {
+                    game.getFileList(dir + records.join("/"), function (folders, files) {
+                        var promises = [];
+                        if (includeFolder && records.length) {
+                            result.add(records.join("/"));
+                        }
+                        for (var file of files) {
+                            result.add(records.concat(file).join("/"));
+                        }
+                        if (records.length + 1 < depth) {
+                            folders.forEach(function (folder) {
+                                promises.push(content(records.concat(folder)));
+                            });
+                        }
+                        Promise.all(promises).then(function (subResults) {
+                            subResults.forEach(function (subResult) {
+                                subResult.forEach(function (item) {
+                                    result.add(item);
+                                });
+                            });
+                            resolve(Array.from(result));
+                        });
+                    });
                 });
             }
 
-            return new Promise(resolve => content([], [], resolve));
+            return content([]);
         },
         getExtensionNode: async function (name, waitms, times) {
             if (!waitms) waitms = 50;
@@ -616,40 +639,52 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             break;
                         }
                     }
-                    var hisday = game.historyday.result.randomGet()
-                    hisElement.innerHTML = '<li>历史上的今天：' + hisday.date + ' ' + hisday.title + '</li>'
-                    spanElement.innerHTML = '每日一言：<br><div>&nbsp&nbsp&nbsp&nbsp' + game.hitokoto.hitokoto + '</div><br><div style="display: flex; justify-content: flex-end;">———' + game.hitokoto.from + "&nbsp&nbsp</div>"
+                    //---------------------------------------历史上的今天------------------------------------------//
+                    fetch("https://api.oick.cn/lishi/api.php")
+                        .then((result) => result.json())
+                        .then((data) => {
+                            var hisday = data.result.randomGet()
+                            hisElement.innerHTML = '<li>历史上的今天：' + hisday.date + ' ' + hisday.title + '</li>'
+                        })
+                        .catch((error) => {
+                            var date = new Date()
+                            var hisday = {
+                                date: `${date.getFullYear()}年${date.getMonth()}月${date.getDate()}日`,
+                                title: '您的网络出错了...'
+                            }
+                            hisElement.innerHTML = '<li>历史上的今天：' + hisday.date + ' ' + hisday.title + '</li>'
+                        })
+                    //---------------------------------------一言------------------------------------------//
+                    fetch("https://v1.hitokoto.cn/")
+                        .then((respond) => respond.json())
+                        .then((hitokoto) => {
+                            spanElement.innerHTML = '每日一言：<br><div>&nbsp&nbsp&nbsp&nbsp' + hitokoto.hitokoto + '</div><br><div style="display: flex; justify-content: flex-end;">———' + hitokoto.from + "&nbsp&nbsp</div>"
+                        })
+                        .catch((error) => {
+                            hitokoto = {
+                                hitokoto: "您的网络或配置错误，无法获取一言内容。",
+                                from: '钫酸酱',
+                            }
+                            spanElement.innerHTML = '每日一言：<br><div>&nbsp&nbsp&nbsp&nbsp' + hitokoto.hitokoto + '</div><br><div style="display: flex; justify-content: flex-end;">———' + hitokoto.from + "&nbsp&nbsp</div>"
+                            console.error(error);
+                        });
                     spanElement.style.border = 'double'
                     spanElement.style.borderRadius = '3px'
                     spanElement.style.width = '100%'
                     leftBar.innerHTML = "<div id='furry' style='animation: flicker 1.5s infinite alternate;'>福瑞拓展</div>"
                     leftBar.setBackgroundImage('extension/福瑞拓展/image/background/wall.png')
-
                     //鸣谢清单
                     var box = document.createElement('div');
                     let arrow = thanksElement.childNodes[1]
                     box.style.display = 'none';
-                    box.innerHTML = "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/1.jpg></img>南辞：原画搜集"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/2.jpg></img>Inaros：拓展推广"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/3.jpg></img>古神：武将设计"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/4.jpg></img>雪既非雪：代码指导"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/5.jpg></img>UID:611000703：武将设计"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/6.jpg></img>专业维修电机水泵：bug反馈"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/7.jpg></img>阿蜻：武将设计"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/9.jpg></img>重新做人:bug反馈"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/10.jpg></img>DUSR：拓展推广"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/11.jpg></img>野生゛奥特曼~U：拓展推广"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/12.jpg></img>依依：武将设计"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/14.jpg></img>一般阳光界徐盛：武将设计"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/16.jpg></img>子琪：代码指导"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/15.jpg></img>Bauxite_Al：样式指导"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/17.jpg></img>Rintim：代码指导"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/18.jpg></img>立筵听岩：瞬发技授权"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/19.jpg></img>༺梦༒奇༻：bug反馈"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/20.jpg></img>おまえ：bug反馈"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/21.jpg></img>狂神：代码重构"
-                        + "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/22.jpg></img>寰宇星城：代码指导"
                     box.style.border = '1px solid white';
+                    window.furry.traverseFolder('extension/福瑞拓展/image/acknowledgments', false, 1)
+                        .then(fonlders => {
+                            for (var i of fonlders) {
+                                box.innerHTML += "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/image/acknowledgments/" + i + "></img>" + i.slice(0, -4);
+                            }
+                        })
+                        .catch(error => console.log(error))
                     thanksElement.appendChild(box);
                     thanksElement.addEventListener(lib.config.touchscreen ? "touchend" : "click", function () {
                         if (arrow.style.transform === 'rotate(90deg)') {
@@ -725,15 +760,9 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             return true;
                         }
                     });
-                    if (lib.characterPack[pack][name][4].some(function (mp) {
-                        mp.indexOf('frMp') == 0
-                    })) {
-
-                    }
                     if (!bool) console.log('Rarity Error: Cannot read the rarity of ' + name + ' in ' + pack);
                 }
             }
-
             //---------------------------------------设置：显示手牌上限------------------------------------------//
             if (config.ShowmaxHandcard) {
                 lib.skill._ShowmaxHandcard = {
@@ -1277,8 +1306,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             };
             //---------------------------------------设置：检测无名杀版本------------------------------------------//
             get.myCompareVersion = function (a, b) {
-                if (!a) a = "0.0.0";
-                if (!b) b = "0.0.0";
+                if (!a) a = "0.0.0.0";
+                if (!b) b = "0.0.0.0";
                 var arr1 = a.split(".");
                 var arr2 = b.split(".");
                 for (var i = 0; i < Math.min(arr1.length, arr2.length); i++) {
@@ -1295,10 +1324,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 return 0;
             };
-            var noname_versionx = "1.9.123";
+            var noname_versionx = "1.9.125.1";
             if (lib.version && !lib.config.furryNotMetionNonameVersion) {
                 if (get.myCompareVersion(lib.version, noname_versionx) < 0) {
-                    var ret = confirm("当前无名杀版本" + lib.version + "落后于【福瑞拓展】最低支持版本1.9.123，请尽快更新，点击确定关闭本扩展");
+                    var ret = confirm("当前无名杀版本" + lib.version + "落后于【福瑞拓展】最低支持版本1.9.125.1，请尽快更新，点击确定关闭本扩展");
                     if (!ret) {
                         alert("请确认你明白点击此选项导致的后果");
                         alert("由游戏版本过低导致任何问题本扩展均不负责");
@@ -1322,91 +1351,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
         },
         precontent: function (furryPack) {
-            //---------------------------------------更新说明：参考活动武将------------------------------------------//
-            game.showFrChangeLog = function (version) {
-                version = version || lib.extensionPack["福瑞拓展"].version;
-                var changeInfo = {
-                    //更新告示
-                    changeLog: [
-                        '/setPlayer/',
-                        '修复部分bug',
-                        '新武将：塞涅特，阿，鹿野灸',
-                        '修复奈恩的bug',
-                        'To be continued...',
-                    ],
-                    //更新武将
-                    players: ['fr_sainit', 'fr_aak', 'fr_luyezhi'],
-                    cards: ['fr_card_zhcz'],
-                };
-
-                //加载
-                var dialog = ui.create.dialog('hidden');
-                dialog.addText('<div style="font-size:24px;margin-top:5px;text-align:center;">福瑞拓展 ' + version + ' 更新内容</div>');
-                dialog.style.left = '25%';
-                dialog.style.width = '50%';
-                for (var log of changeInfo.changeLog) {
-                    switch (log) {
-                        case '/setPlayer/':
-                            dialog.addText('<div style="font-size:17.5px;text-align:center;">更新角色：</div>')
-                            dialog.addSmall([changeInfo.players, 'character']);
-                            break;
-                        case '/setCard/':
-                            dialog.addText('<div style="font-size:17.5px;text-align:center;">更新卡牌：</div>')
-                            dialog.addSmall([changeInfo.cards, 'vcard']);
-                            break;
-                        default:
-                            var li = document.createElement('li');
-                            li.innerHTML = log;
-                            li.style.textAlign = 'left';
-                            li.style.marginLeft = '25px';
-                            li.style.marginTop = '2.5px';
-                            dialog.content.appendChild(li);
-                    }
-                }
-                var ul = document.createElement('ul');
-                dialog.content.appendChild(ul);
-                dialog.open();
-                var hidden = false;
-                if (!ui.auto.classList.contains('hidden')) {
-                    ui.auto.hide();
-                    hidden = true;
-                }
-                game.pause();
-                var control = ui.create.control('确定', function () {
-                    dialog.close();
-                    control.close();
-                    if (hidden) ui.auto.show();
-                    game.resume();
-                });
-            };
-            //---------------------------------------一言------------------------------------------//
-            fetch("https://v1.hitokoto.cn/")
-                .then((respond) => respond.json())
-                .then((hitokoto) => {
-                    game.hitokoto = hitokoto;
-                })
-                .catch((error) => {
-                    game.hitokoto = {
-                        hitokoto: "您的网络或配置错误，无法获取一言内容。",
-                        from: '钫酸酱',
-                    }
-                    console.error(error);
-                });
-            //---------------------------------------历史上的今天------------------------------------------//
-            fetch("https://api.oick.cn/lishi/api.php")
-                .then((result) => result.json())
-                .then((data) => { game.historyday = data })
-                .catch((error) => {
-                    var date = new Date()
-                    var datestr = `${date.getMonth() < 10 ? '0' : ''}${date.getMonth()}/ ${date.getDate()}`
-                    game.historyday = {
-                        day: datestr,
-                        result: {
-                            date: `${date.getFullYear()}年${date.getMonth()}月${date.getDate()}日`,
-                            title: '您的网络出错了...'
-                        }
-                    }
-                })
             //---------------------------------------自动开启武将------------------------------------------//
             if ((!lib.config.characters.contains('furryPack') || !lib.config.cards.contains('furryCard')) && !lib.config.extension_福瑞拓展_autoOpenPack) {
                 lib.config.characters.push('furryPack')
@@ -1767,6 +1711,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.group.add('fr_g_ji');
                 lib.translate.fr_g_ji = '机';
                 lib.translate.fr_g_ji2 = '机';
+                lib.config.all.characters.push('furryBoss');
+                lib.translate['furryBoss_character_config'] = "福瑞Boss";// 包名翻译
                 lib.config.all.characters.push('furryPack');
                 lib.translate['furryPack_character_config'] = "<img style='width:100px' src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png>";// 包名翻译
                 //卡包（手牌）
@@ -1942,7 +1888,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             },
             "mpLoc": {
-                "name": "魔力条显示位置",
+                "name": "<b>魔力条显示位置</b>",
                 "intro": "可以设置内力条在头像上显示的位置",
                 "init": lib.config.frMpBarLocation !== undefined ? lib.config.frMpBarLocation : "shangcenei",
                 "item": {
@@ -2264,13 +2210,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + "<li>👇下方为QQ群二维码<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup.png></img>"
                 + "<li><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup2.png></img>",
             author: "<img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/image/others/Author.jpg></img><span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span>"
-                + "<br>特别鸣谢：<img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/acknowledgments/21.jpg></img>狂神 重构代码"
+                + "<br>特别鸣谢：<img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/image/acknowledgments/狂神：代码重构.jpg></img>狂神 重构代码"
                 + "<br><div id='thanks'>鸣谢清单<div id='arrow'>⮞</div></div>"
                 + "<br>关注微信公众号“无名杀扩展交流”，也可及时获取“福瑞拓展”最新版"
                 + "<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.3.0.4",
+            version: "2.4.0.0",
         },
         files: {
             "character": [],

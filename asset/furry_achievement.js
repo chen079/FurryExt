@@ -493,7 +493,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		var background = ui.create.div('.frw-background', document.body);
 		var head = ui.create.div('.fr-winner-head');
 		var biankuang = ui.create.div('.fr-winner-biankuang');
-		head.setBackgroundImage('extension/福瑞拓展/image/character/' + name + '.jpg');
+		head.setBackgroundImage('extension/福瑞拓展/image/skin/origin-standard/' + name + '.jpg');
 		background.appendChild(head);
 		background.appendChild(biankuang);
 		var text = ui.create.div('.fr-winner-text');

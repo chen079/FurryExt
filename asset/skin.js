@@ -185,15 +185,15 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             if (!ret2) return;
             return ret2;
         },
-        prefix: 'extension/福瑞拓展/image/character/', //原皮前缀，标识原皮肤的位置。
-        lutouPrefix: 'extension/福瑞拓展/image/lutou/',//露头前缀，标识露头原皮肤位置
+        prefix: 'extension/福瑞拓展/image/skin/origin-standard/', //原皮前缀，标识原皮肤的位置。
+        lutouPrefix: 'extension/福瑞拓展/image/skin/origin-lutou/',//露头前缀，标识露头原皮肤位置
         isLutou: lib.config.frLutou,
         skin: {
-            standard: 'extension/福瑞拓展/skin/standard/',//可切换普通皮肤的前缀
-            lutou: 'extension/福瑞拓展/skin/lutou/',//可以切换露头皮肤的位置
+            standard: 'extension/福瑞拓展/image/skin/skin-standard/',//可切换普通皮肤的前缀
+            lutou: 'extension/福瑞拓展/image/skin/skin-lutou/',//可以切换露头皮肤的位置
         },
-        audioOrigin: 'extension/福瑞拓展/audio/',//原技能配音位置
-        audio: 'extension/福瑞拓展/skin/audio/',//切换皮肤后的技能配音位置
+        audioOrigin: 'extension/福瑞拓展/audio/origin',//原技能配音位置
+        audio: 'extension/福瑞拓展/audio/skin',//切换皮肤后的技能配音位置
         skininfo: {
         },
         forbidEditTaici: false,

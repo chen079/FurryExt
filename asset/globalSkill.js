@@ -61,23 +61,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     };
     lib.translate._qianghua = "强化";
     lib.translate._qianghua_info = "出牌阶段限一次，你可以失去1点体力或弃置两张牌，然后你进入“<a style='color:#FF0000' href=\"javascript:window.furryIntroduce('qianghua_buff');\">强化</a>”状态。";
-    lib.skill._Furry_changeLog = {
-        charlotte: true,
-        ruleSkill: true,
-        trigger: {
-            global: [/*'chooseButtonBefore',*/'gameStart', 'gameDrawAfter', 'phaseBefore']
-        },
-        filter: function (event, player) {
-            //if(event.name=='chooseButton'&&event.parent.name!='chooseCharacter') return false;
-            return !lib.config.extension_福瑞拓展_Frversion || lib.config.extension_福瑞拓展_Frversion != lib.extensionPack.福瑞拓展.version;
-        },
-        direct: true,
-        priority: Infinity,
-        content: function () {
-            game.saveConfig('extension_福瑞拓展_Frversion', lib.extensionPack.福瑞拓展.version);
-            game.showFrChangeLog();
-        },
-    };
     // ---------------------------------------游戏开始时加载------------------------------------------//	
     lib.skill._gameStart = {
         charlotte: true,

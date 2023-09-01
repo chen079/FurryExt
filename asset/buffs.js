@@ -89,6 +89,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         priority: Infinity,
         marktext: '疯狂',
         charlotte: true,
+        buff:true,
         unique: true,
         content: function () {
             'step 0'
@@ -126,6 +127,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     }
     lib.skill.fr_sleep = {
         mark: true,
+        buff:true,
         charlotte: true,
         unique: true,
         marktext: '睡眠',

@@ -827,7 +827,7 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
                 break;
             case 'background':
                 var urlString = List[Listnum][i];
-                ui.background.setBackgroundImage("extension/福瑞拓展/image/background/" + urlString);
+                ui.background.setBackgroundImage("extension/福瑞拓展/image/origin/background/" + urlString);
                 break;
             case 'fuc':
                 List[Listnum][i]();
@@ -851,7 +851,7 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
             avatar2_div.style.height = '230px';
             avatar2_div.style.bottom = '0px';
             avatar2_div.style['background-color'] = 'rgba(0,0,0,0)';
-            avatar2_div.setBackgroundImage('extension/福瑞拓展/image/lutou/' + avatar2 + '.png');
+            avatar2_div.setBackgroundImage('extension/福瑞拓展/image/skin/origin-lutou/' + avatar2 + '.png');
             avatar2_div.style.backgroundSize = "contain";
             avatar2_div.style.backgroundRepeat = "no-repeat"
             avatar2_div.style.backgroundPosition = 'bottom'
@@ -884,7 +884,7 @@ window.furry_drama = function (name, style1, style2, style3, style4, style5) {
             avatar_div.style.height = '230px';
             avatar_div.style.bottom = '0px';
             avatar_div.style['background-color'] = 'rgba(0,0,0,0)';
-            avatar_div.setBackgroundImage('extension/福瑞拓展/image/lutou/' + avatar + '.png');
+            avatar_div.setBackgroundImage('extension/福瑞拓展/image/skin/origin-lutou/' + avatar + '.png');
             avatar_div.style.backgroundSize = "contain";
             avatar_div.style.backgroundRepeat = "no-repeat"
             avatar_div.style.backgroundPosition = 'bottom'

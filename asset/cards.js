@@ -1064,7 +1064,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     }
-                    target.chooseText(6, true, '请声明一个技能', event.skills.map(i=>get.translation(i))).set('ai', function () {
+                    target.chooseText(6, true, '请声明一个技能', event.skills.map(i => get.translation(i))).set('ai', function () {
                         return get.translation(event.skills.randomGet())
                     })
                     "step 1"
@@ -1465,8 +1465,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: "useCardToPlayered",
                 },
-                filter:function(event,player){
-                    return event.card.name=='sha'
+                filter: function (event, player) {
+                    return event.card.name == 'sha' && player.countCards('h') > 0
                 },
                 direct: true,
                 content: function () {
@@ -1481,8 +1481,13 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             return 5 - get.value(card)
                         }
                     })
+                    if (trigger.target.countCards('h') <= 0) {
+                        event.youji = false
+                        event.goto(2)
+                    }
                     'step 1'
                     if (result.bool) {
+                        event.cards1 = result.cards[0]
                         event.suit = get.suit(result.cards[0])
                         if (player.inRange(trigger.target) && !trigger.target.inRange(player)) {
                             event.youji = true
@@ -1499,13 +1504,21 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         event.finish()
                     }
                     'step 2'
+                    event.cards2 = result.cards[0]
                     var evt = trigger.getParent();
-                    var suits = result.cards.map(i => get.suit(i)).unique()
+                    var cards = []
+                    if(event.cards1!=event.cards2){
+                        cards.push(event.cards1)
+                        cards.push(event.cards2)
+                    }else{
+                        cards.push(event.cards1)
+                    }
+                    var suits = cards.map(i => get.suit(i)).unique()
                     var target = trigger.target;
                     target.addTempSkill('ar15_skill_block');
                     if (!target.storage.ar15_skill_block) target.storage.ar15_skill_block = [];
                     target.storage.ar15_skill_block.push([evt.card, suits]);
-                    if (event.youji && event.suit == get.suit(result.cards[0])) {
+                    if (event.youji && event.suit == get.suit(event.cards2)) {
                         if (typeof evt.baseDamage != 'number') evt.baseDamage = 1;
                         evt.baseDamage++;
                     }

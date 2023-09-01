@@ -640,8 +640,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         } else {
             str = i
         }
-        if (lib.config.frLutou) furryGZPack.character[i][4].push('ext:福瑞拓展/image/lutou/' + str + '.png')
-        else furryGZPack.character[i][4].push('ext:福瑞拓展/image/character/' + str + '.jpg')
+        if (lib.config.frLutou) furryGZPack.character[i][4].push('ext:福瑞拓展/image/skin/origin-lutou/' + str + '.png')
+        else furryGZPack.character[i][4].push('ext:福瑞拓展/image/skin/origin-standard/' + str + '.jpg')
     }
     if(lib.config.mode=='guozhan'){
         return furryGZPack;

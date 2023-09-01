@@ -825,9 +825,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         }
         if (node) {
             if (lib.config.frLutou) {
-                var url = 'extension/福瑞拓展/image/lutou/'
+                var url = 'extension/福瑞拓展/image/skin/origin-lutou/'
             } else {
-                var url = 'extension/福瑞拓展/image/character/'
+                var url = 'extension/福瑞拓展/image/skin/origin-standard/'
             }
             node.setBackgroundImage(url + name2 + (lib.config.frLutou ? '.png' : '.jpg'))
             if (this == game.me && ui.fakeme && fakeme !== false) {
