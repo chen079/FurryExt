@@ -649,7 +649,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         .catch((error) => {
                             var date = new Date()
                             var hisday = {
-                                date: `${date.getFullYear()}年${date.getMonth()}月${date.getDate()}日`,
+                                date: `${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日`,
                                 title: '您的网络出错了...'
                             }
                             hisElement.innerHTML = '<li>历史上的今天：' + hisday.date + ' ' + hisday.title + '</li>'
