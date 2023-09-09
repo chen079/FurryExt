@@ -91,27 +91,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             }
         },
     }
-    //--------------------------------阵亡配音:感谢群友DIY扩展参考------------------------
-    lib.skill._FrDieAudio = {
-        trigger: {
-            global: 'dieBegin',
-        },
-        priority: -Infinity,
-        superCharlotte: true,
-        charlotte: true,
-        unique: true,
-        direct: true,
-        content: function () {
-            let pack;
-            for (let i in lib.characterPack) {
-                if (lib.characterPack[i] && lib.characterPack[i][trigger.player.name]) {
-                    pack = i;
-                    break;
-                }
-            }
-            if (pack) game.playAudio('..', 'extension', '福瑞拓展/audio/die', trigger.player.name);
-        },
-    };
     //此处内容由钫酸酱制作，若有需要请联系作者...
     lib.skill._definedSweap = {
         firstDo: true,
@@ -129,6 +108,51 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         content: function () {
             game.swapPlayerAuto(player);
         },
+    }
+    //---------------------------------------设置：显示手牌上限------------------------------------------//
+    if (lib.config.extension_福瑞拓展_ShowmaxHandcard) {
+        lib.skill._ShowmaxHandcard = {
+            trigger: {
+                global: ['gameStart', 'roundStart'],
+            },
+            forced: true,
+            popup: false,
+            silent: true,
+            content: function () {
+                var interval = setInterval(() => {
+                    if (!ui.window.contains(player)) return clearInterval(interval);
+                    var numh = player.countCards('h');
+                    var nummh = player.getHandcardLimit();
+                    if (nummh == Infinity) nummh = '∞';
+                    player.node.count.innerHTML = numh + '/' + nummh;
+                },
+                    100);
+            },
+        };
+    };
+    //---------------------------------------设置：主内单挑音乐------------------------------------------//
+    if (lib.config.extension_福瑞拓展_furry_zhuneimusic != 'z0') {
+        lib.skill._furry_zhuneibgm = {
+            trigger: {
+                global: "dieAfter",
+            },
+            forced: true,
+            nobracket: true,
+            priority: -Infinity,
+            ruleSkill: true,
+            filter: function (event, player) {
+                return game.players.length == 2 && get.population('nei') > 0 && get.population('zhu') > 0 && get.mode() == 'identity'
+            },
+            content: function () {
+                switch (lib.config.extension_福瑞拓展_furry_zhuneimusic) {
+                    case 'z1': str = 'fr_bgm_Hopes And Dreams.mp3'; break;
+                    case 'z2': str = 'fr_bgm_MEGALOVANIA.mp3'; break;
+                    case 'z3': str = 'fr_bgm_ElDorado.mp3'; break;
+                }
+                ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + str
+                ui.backgroundMusic.loop = true;
+            },
+        }
     }
     //---------------------------------作弊技能---------------------------
     lib.skill._xuanshi = {
@@ -272,4 +296,57 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     }
     lib.translate._huiwan = '作弊';
     lib.translate._huiwan_info = '你可以指定你摸到的牌！';
+    //-----------------破碎勾玉----------------------//
+    lib.translate['_fr_Broken'] = '碎玉';
+    lib.skill._fr_Broken = {
+        trigger: {
+            player: 'damageBegin4',
+        },
+        firstDo: true,
+        direct: true,
+        filter: function (event, player) {
+            return player.countMark('_fr_Broken') > 0 && event.num > 0;
+        },
+        mod: {
+            maxHandcard: function (player, num) {
+                return num + player.countMark('_fr_Broken') || 0;
+            },
+        },
+        content: function () {
+            'step 0'
+            var num = Math.min(player.countMark('_fr_Broken'), trigger.num);
+            trigger.num -= num
+            player.removeMark('_fr_Broken', num, false);
+            game.log(player, '失去了', get.translation(num), '个', '#g碎玉');
+        },
+        markimage: 'extension/福瑞拓展/image/others/BrokenHp.png',
+        intro: {
+            name: '碎玉',
+            content: '碎玉数：#',
+        },
+    };
+    lib.skill._fr_unBroken = {
+        enable: 'phaseUse',
+        firstDo: true,
+        filter: function (event, player) {
+            return player.countMark('_fr_Broken') > 0;
+        },
+        usable: 1,
+        check: function (card) {
+            return 7 - get.value(card)
+        },
+        filterCard: true,
+        selectCard: function () {
+            var player = _status.event.player
+            return [1, player.countMark('_fr_Broken')]
+        },
+        position: 'he',
+        content: function () {
+            'step 0'
+            var num = cards.length
+            player.Frunbroken(num)
+        },
+    };
+    lib.translate['_fr_unBroken'] = '补玉';
+    lib.translate['_fr_unBroken_info'] = '出牌阶段限一次，你可以弃置至多X张牌（X为你的碎玉数），然后' + get.introduce('xiubu') + 'X个碎玉。';
 })

@@ -6,25 +6,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             //更新告示
             changeLog: [
                 '/setPlayer/',
-                '/setCard/',
-                '修复部分bug',
-                '2.3.0.1',
-                '新武将：奈恩、科斯特、果糖、路西法、山熊（隐藏）',
-                '修复DIYEditor的连接错误问题',
-                '新增千幻手杀势力框支持',
-                '新增千幻角色成就查看支持',
-                '修复塔尔斯的音效错误',
-                '修复米亚永动机',
-                '修正bgm无法正常播放的错误',
-                '2.3.0.2',
-                '新武将：塞涅特，阿，鹿野灸',
-                '新卡牌：“死魂幽镰”',
-                '重写部分代码',
-                '为拓展增加更多样式',
-                '2.3.0.3',
-                '新武将：莎尔斯',
-                '新卡牌：AR15',
-                '新功能：体力乘算',
                 '2.4.0.0',
                 '新增魔力值系统（参考玄武江湖拓展）',
                 '重做米亚部分技能',
@@ -36,7 +17,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 'To be continued...',
             ],
             //更新武将
-            players: ['fr_nine', 'fr_keste', 'fr_guotang', 'fr_lucifer', 'fr_sainit', 'fr_aak', 'fr_luyezhi', 'fr_souls'],
+            players: ['fr_akain'],
             cards: ['fr_equip1_ar15', 'fr_equip1_shyl'],
         };
 

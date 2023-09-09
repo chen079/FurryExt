@@ -11,12 +11,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         event.map.clear();
     }
     //----------------------------性别判断--------------------------
-    lib.element.player.frPrimarySex=function(){
-        if(this.sex == 'male' || this.sex == 'female'){
+    lib.element.player.frPrimarySex = function () {
+        if (this.sex == 'male' || this.sex == 'female') {
             return this.sex;
         }
-        var info = get.character(this.name == 'unknown' ? this.name1:this.name,4);
-        if(info && info.contains('frPrimarySexFemale')){
+        var info = get.character(this.name == 'unknown' ? this.name1 : this.name, 4);
+        if (info && info.contains('frPrimarySexFemale')) {
             return 'female';
         }
         return 'male';
@@ -97,7 +97,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             input.style.background = 'black';
             input.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=40)";
             input.style.opacity = "0.6"
-            input.style.width = '100%';
+            input.style.width = '50%';
             input.style.fontSize = '20px';
             input.style.textAlign = 'center';
             input.style.color = '#c9c8a2';
@@ -743,7 +743,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         var info = lib.skill[skillname];
         if (!info) return;
         if (info.shunfa) {
-            var button = ui.create.div('.Fr-shunfaanniu-' + config.fr_shunfajiButton, this);
+            var button = ui.create.div('.Fr-shunfaanniu-' + lib.config.extension_福瑞拓展_fr_shunfajiButton, this);
             button.innerHTML = get.translation(skillname);
             var player = this;
             button.listen(function () {
@@ -819,7 +819,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             node = this.node.avatar2
             this.smoothAvatar(true, video)
         }
-        else if (this.name == name) {
+        else if (this.name1 == name) {
             node = this.node.avatar
             this.smoothAvatar(false, video)
         }
@@ -1093,4 +1093,97 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         'step 3'
         event.trigger('damageSource');
     };
+    // ---------------------------------------击碎勾玉------------------------------------------//
+    lib.element.player.Frbroken = function () {
+        var next = game.createEvent('Frbroken');
+        next.player = this;
+        for (var i = 0; i < arguments.length; i++) {
+            if (typeof arguments[i] == 'number') next.num = arguments[i];
+        }
+        if (next.num == undefined) next.num = 1;
+        if (next.num > (this.maxHp - this.countMark('_fr_Broken'))) next.num = this.maxHp - this.countMark('_fr_Broken');
+        if (next.num <= 0) _status.event.next.remove(next);
+        next.setContent('Frbroken');
+        return next;
+    }
+    lib.element.content.Frbroken = function () {
+        player.loseMaxHp(num);
+        player.addMark('_fr_Broken', num, false);
+        game.log(player, '被击碎了', get.translation(num), '个', '#g勾玉');
+    }
+    lib.element.player.Frunbroken = function () {
+        var next = game.createEvent('Frunbroken');
+        next.player = this;
+        for (var i = 0; i < arguments.length; i++) {
+            if (typeof arguments[i] == 'number') next.num = arguments[i];
+        }
+        if (next.num == undefined) next.num = 1;
+        if (next.num > this.countMark('_fr_Broken')) next.num = this.countMark('_fr_Broken');
+        if (next.num <= 0) _status.event.next.remove(next);
+        next.setContent('Frunbroken');
+        return next;
+    }
+    lib.element.content.Frunbroken = function () {
+        player.gainMaxHp(num);
+        player.recover(num)
+        player.removeMark('_fr_Broken', num, false);
+        game.log(player, '修复了', get.translation(num), '个', '#g碎玉');
+    }
+    lib.element.player.hideCharacter = function (playername) {
+        var next = game.createEvent('hideCharacter')
+        var player = this
+        next.player = player
+        if (typeof playername == 'number') {
+            next.playername = player['name' + playername]
+        } else if (typeof playername == 'string') {
+            next.playername = playername
+        } else if (get.itemtype(playername) == 'player') {
+            next.playername = playername.name1
+        }
+        if (!playername) next.playername = this.name1
+        next.setContent('hideCharacter')
+        return next
+    }
+    lib.element.content.hideCharacter = function () {
+        var name = event.playername
+        var info = lib.character[name];
+        if (!info) return;
+        if (player.name1 != name && player.name2 != name) return;
+        var skills = info[3].slice(0);
+        if (name == player.name1) {
+            if (player.classList.contains(_status.video ? 'unseen_v' : 'unseen')) return;
+            game.log('#g' + player.name1, '进入了隐匿状态')
+            player.classList.add(_status.video ? 'unseen_v' : 'unseen');
+            player.name = 'unknown';
+            if (!player.node.name_seat && !_status.video) {
+                player.node.name_seat = ui.create.div('.name.name_seat', get.verticalStr(get.translation(player.name)), player);
+                player.node.name_seat.dataset.nature = get.groupnature(player.group);
+            };
+            player.sex = 'male';
+        } else {
+            if (player.classList.contains(_status.video ? 'unseen2_v' : 'unseen2')) return;
+            game.log('#g' + player.name2, '进入了隐匿状态')
+            player.classList.add(_status.video ? 'unseen2_v' : 'unseen2');
+        };
+        if (!player.hiddenSkills) player.hiddenSkills = [];
+        game.log(game.me.hiddenSkills);
+        player.removeSkill(skills);
+        player.hiddenSkills.addArray(skills);
+        player.storage.nohp = true;
+        player.addSkill('g_hidden_ai');
+        lib.skill.fryinni = {
+            mod: {
+                maxHandcard: function (player, num) {
+                    return num + 99;
+                },
+            },
+        }
+        if (!player.hasSkill('fryinni')) player.addTempSkill('fryinni', { player: 'showCharacterAfter' })
+        player.storage.rawHp = player.hp;
+        player.storage.rawMaxHp = player.maxHp;
+        player.hp = 1;
+        player.maxHp = 1;
+        player.node.hp.hide();
+        player.update();
+    }
 })

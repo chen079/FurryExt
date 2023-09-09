@@ -390,7 +390,7 @@ window.furry.frImport(function(lib,game,ui,get,ai,_status){
                                 ' </br>控制：' + game.frStars(5) + ' 辅助：' + game.frStars(0) +
                                 '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
                             ['fr_yada',
-                                '</br><span class="bluetext">关联角色</span>：来自坷拉的兽人<br>',
+                                '</br><span class="bluetext">关联角色</span>：来自克拉的兽人<br>',
                                 '进攻：' + game.frStars(2) + ' 爆发：' + game.frStars(0) +
                                 ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(2) +
                                 ' </br>控制：' + game.frStars(4) + ' 辅助：' + game.frStars(3) +

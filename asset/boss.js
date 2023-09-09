@@ -1,8 +1,6 @@
 'use strict';
-game.import('character', function (lib, game, ui, get, ai, _status) {
+window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     var furryBoss = {
-        name: 'furryBoss',//武将包命名（必填）
-        connect: true,//该武将包是否可以联机（必填）
         character: {
             "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ["boss", "bossallowed", 'legend']],
             "fr_bossmala": ["male", "shen", 10, ['mala_ht', 'mala_ly', 'mala_jf', 'mala_hy', 'mala_bc', 'mala_sz'], ["boss", "bossallowed", 'legend']],
@@ -241,12 +239,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         }
     }
     for (var i in furryBoss.character) {
-        if (lib.config.frLutou) furryBoss.character[i][4].push('ext:福瑞拓展/image/skin/origin-lutou/' + i + '.png')
-        else furryBoss.character[i][4].push('ext:福瑞拓展/image/skin/origin-standard/' + i + '.jpg')
+        var name = 'fr_' + i.slice(7)
+        if (lib.config.frLutou) furryBoss.character[i][4].push('ext:福瑞拓展/image/skin/origin-lutou/' + name + '.png')
+        else furryBoss.character[i][4].push('ext:福瑞拓展/image/skin/origin-standard/' + name + '.jpg')
     }
-    if (lib.config.mode == 'boss') {
-        return furryBoss;
-    } else {
-        return {}
+    var importPart = Object.keys(furryBoss)
+    for (var i = 0; i < importPart.length; i++) {
+        for (var j in furryBoss[importPart[i]]) {
+            lib[importPart[i]][j] = furryBoss[importPart[i]][j]
+        }
     }
 })

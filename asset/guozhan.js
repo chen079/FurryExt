@@ -12,7 +12,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             gz_fr_wore: ['male', 'ye', 3, ['wore_gzhy'], []],
             gz_fr_tiers: ['female', 'qun', 3, ['tiers_qp', 'tiers_kh'], []],
             gz_fr_miya: ['male', 'shu', 3, ['miya_gzks', 'miya_gzhz'], []],
-            db_gz_fr_krikt: ['male', 'shu', 3, ['krikt_gzly'], []],
+            gz_fr_krikt: ['male', 'qun', 3, ['krikt_gzly'], ['doublegroup:qun:shu']],
             gz_fr_molis: ['female', 'wei', 3, ['molis_gzhs'], []],
             gz_fr_taber: ['male', 'wu', 4, ['taber_sj'], []],
             gz_fr_verb: ['male', 'wu', 4, ['verb_fs'], []],
@@ -41,12 +41,19 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         perfectPair: {
             gz_fr_taber: ['gz_fr_verb'],
+            gz_fr_verb: ['gz_fr_taber'],
             gz_fr_yifeng: ['gz_fr_yifa'],
+            gz_fr_yifa: ['gz_fr_yifeng'],
             gz_fr_whitewolf: ['gz_fr_blackwolf'],
+            gz_fr_blackwolf: ['gz_fr_whitewolf'],
             gz_fr_bofeng: ['gz_fr_ciyu'],
+            gz_fr_ciyu: ['gz_fr_bofeng'],
             gz_fr_wore: ['gz_fr_tiers'],
-            gz_fr_miya: ['db_gz_fr_krikt'],
-            gz_fr_sheep: ['gz_fr_bladewolf']
+            gz_fr_tiers: ['gz_fr_wore'],
+            gz_fr_miya: ['gz_fr_krikt'],
+            gz_fr_krikt: ['gz_fr_miya'],
+            gz_fr_sheep: ['gz_fr_bladewolf'],
+            gz_fr_bladewolf: ['gz_fr_sheep']
         },
         skill: {
             'sheep_gzjf': {
@@ -604,7 +611,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'gz_fr_wore': "沃尔",
             'gz_fr_tiers': "缇尔斯",
             'gz_fr_miya': "米亚",
-            'db_gz_fr_krikt': "科里科特",
+            'gz_fr_krikt': "科里科特",
             'gz_fr_molis': "莫利斯",
             'gz_fr_taber': "塔贝尔",
             'gz_fr_verb': "韦贝尔",
@@ -645,7 +652,5 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
     }
     if(lib.config.mode=='guozhan'){
         return furryGZPack;
-    }else{
-        return {}
-    }
+    }else return {}
 })

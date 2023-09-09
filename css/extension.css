@@ -21,12 +21,13 @@
     position: absolute;
     text-align: left;
     top: calc(27.94%);
-    left: calc(19.64%);
+    left: calc(13.64%);
     width: calc(65.45%);
     height: calc(65.35%);
     font-family: 'xingkai';
     overflow: scroll;
     font-size: 18px;
+    line-height: 25px;
     color: black !important;
     text-shadow: 0 1px 1px white;
 }
@@ -55,10 +56,10 @@
 
 .furry-dialog>.furry-dialog-icon {
     position: absolute;
-    top: calc(22.94%);
-    left: calc(9.70%);
-    width: calc(10.91%);
-    height: calc(14.85%);
+    top: calc(27.6%);
+    right: calc(9.70%);
+    width: calc(12.91%);
+    height: calc(17.85%);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     box-shadow: 0 0 5px black;
@@ -363,4 +364,51 @@
     z-index: 998;
     overflow: hidden;
     pointer-events: none;
+}
+
+progress.oafaProgress {
+	width: 75%;
+	height: 10px;
+	border: 2px solid;
+	border-radius: 15px;
+	vertical-align: middle;
+	appearance: none;
+	-webkit-appearance: none;
+}
+
+progress.oafaProgress::-webkit-progress-bar {
+	background: rgb(239, 239, 239);
+	border-radius: 0.2rem;
+}
+
+progress.oafaProgress::-webkit-progress-value {
+	border-radius: 0.2rem;
+	background: rgb(0, 117, 255);
+}
+
+.frHistory {
+	width: 90% !important;
+	height: 90% !important;
+	top: 5%;
+	left: 5%;
+	z-index: 20;
+	background-color: rgba(0, 0, 0, 0.5);
+	border-radius: 20px;
+}
+
+.frHistory li {
+	font-size: 20px;
+}
+
+.frHistory .buttons {
+	width: 100%;
+}
+
+.frHistory .exit {
+	background-image: url(image/exit.png);
+	background-size: 100% 100%;
+	width: 50px;
+	height: 50px;
+	right: -20px;
+	top: -20px;
 }

@@ -657,7 +657,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 			}
 			for(let i in lib.fr_achievementRewards){
 				var achi=lib.fr_achievementRewards[i]
-				if(achi.type=='character') game.unlockCharacter(achi.id)
+				if(achi.type=='character') game.frAchi.unlockCharacter(achi.id)
 				if(achi.type=='skin'){
 					game.saveConfig(achi.id+'_unlock',true)
 					alert('已领取皮肤：'+achi.id)

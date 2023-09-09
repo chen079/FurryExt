@@ -4,9 +4,50 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         name: 'furryCard',//卡包命名
         connect: true,//卡包是否可以联机
         card: {
+            'fr_card_yfss': {
+                audio: true,
+                fullskin: true,
+                image: 'ext:福瑞拓展/image/card/fr_card_yfss.png',
+                type: "trick",
+                enable: true,
+                selectTarget: -1,
+                toself: true,
+                position: 'h',
+                filterTarget: function (card, player, target) {
+                    return target == player && target.hujia < 5;
+                },
+                modTarget: true,
+                content: function () {
+                    'step 0'
+                    event.cards = target.getCards('h')
+                    target.discard(event.cards)
+                    'step 1'
+                    target.changeHujia(event.cards.length, 'gain', true);
+                },
+                ai: {
+                    basic: {
+                        order: 5.2,
+                        useful: 3.5,
+                        value: 5.2,
+                    },
+                    result: {
+                        target: function (player, target) {
+                            if ((target.countCards('h') + 1) > (5 - target.hujia)) return -((target.countCards('h') + 1) - (5 - target.hujia))
+                            if (target.countCards('h', function (card) {
+                                return get.value(card) > 7
+                            }) > 0) return -2
+                            if (target.hp > 2) return -1
+                            if (target.countCards('h') == 1) return -1
+                            return Math.sqrt(target.countCards('h')) - 1
+                        },
+                    },
+                    tag: {
+                        discard: 2,
+                    },
+                },
+            },
             'fr_equip1_ar15': {
                 fullskin: true,
-                derivation: "liuye",
                 image: 'ext:福瑞拓展/image/card/fr_equip1_ar15.png',
                 type: "equip",
                 subtype: "equip1",
@@ -441,7 +482,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 filterAddedTarget: function (card, player, target, preTarget) {
                     return target != preTarget && preTarget.isIn() && target.isIn() && preTarget.inRange(target) && ui.selected.targets.length <= 1
                 },
-                chongzhu: true,
+                recastable: true,
                 content: function () {
                     'step 0'
                     if (!target || !event.addedTarget || !target.isIn() || !event.addedTarget.isIn()) {
@@ -645,7 +686,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 fullskin: true,
                 type: "trick",
                 enable: true,
-                chongzhu: true,
+                recastable: true,
                 toself: true,
                 selectTarget: -1,
                 modTarget: true,
@@ -744,7 +785,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         return get.translation(item + '_card_config') == result.links[0];
                     });
                     for (var i = 0; i < lib.cardPack[choice].length; i++) {
-                        if (lib.cardPack[choice][i] == 'fr_card_zh' || lib.cardPack[choice][i] == 'gw_tunshi' || lib.cardPack[choice][i] == 'fr_card_lyzq') continue
+                        if (lib.cardPack[choice][i] == 'fr_card_zh' || lib.cardPack[choice][i] == 'gw_tunshi') continue
                         var name = lib.cardPack[choice][i]
                         var type = get.type(name)
                         list.push([type, '', name])
@@ -1064,32 +1105,15 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             }
                         }
                     }
-                    target.chooseText(6, true, '请声明一个技能', event.skills.map(i => get.translation(i))).set('ai', function () {
-                        return get.translation(event.skills.randomGet())
-                    })
-                    "step 1"
-                    event.choice = event.skills.filter(function (item) {
-                        return get.translation(item) == result.text
-                    })
-                    if (event.choice.length == 1) {
-                        var skills2 = event.choice[0]
-                        target.addTempSkill(skills2);
-                        target.popup(skills2);
-                        game.log(target, '声明了', '#g' + '【' + get.translation(skills2) + '】');
-                        event.finish()
-                    } else {
-                        var list = []
-                        var skills = event.choice
-                        for (var i = 0; i < skills.length; i++) {
-                            list.push(get.translation(skills[i] + '_info'))
-                        }
-                        target.chooseControl().set('choiceList', list).set('prompt', '选择〖' + get.translation(skills[0]) + '〗的版本')
+                    'step 1'
+                    var choice = event.skills.randomGets(5)
+                    player.chooseControl(choice).set('ai', function () {
+                        return Math.random()
+                    }).set('prompt', get.prompt2("fr_card_lyzq")).set('choiceList',choice.map(i=>'【'+get.translation(i)+'】:'+get.translation(i+'_info')))
+                    'step 2'
+                    if (result.control != 'cancel2') {
+                        player.addTempSkill(result.control, { player: 'phaseAfter' })
                     }
-                    "step 2"
-                    var skills2 = event.choice[result.index]
-                    target.addTempSkill(skills2);
-                    target.popup(skills2);
-                    game.log(target, '声明了', '#g' + '【' + get.translation(skills2) + '】');
                 },
                 ai: {
                     basic: {
@@ -1507,10 +1531,10 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     event.cards2 = result.cards[0]
                     var evt = trigger.getParent();
                     var cards = []
-                    if(event.cards1!=event.cards2){
+                    if (event.cards1 != event.cards2) {
                         cards.push(event.cards1)
                         cards.push(event.cards2)
-                    }else{
+                    } else {
                         cards.push(event.cards1)
                     }
                     var suits = cards.map(i => get.suit(i)).unique()
@@ -1704,6 +1728,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
+            'fr_card_yfss': '严防死守',
+            'fr_card_yfss_info': '出牌阶段，对你使用。若目标护甲数小于5，其弃置所有手牌并获得等量护甲。',
             'fr_equip1_ar15': 'AR15',
             'fr_equip1_ar15_info': '你使用【杀】指定目标后，可以依次弃置你与其各一张手牌，其不能使用这些牌包含花色的【闪】响应此【杀】，' + get.introduce('youji') + '：你弃置其牌时观看其手牌，若弃置后两张牌花色相同，此【杀】伤害+1。',
             'fr_card_xzst': '雪中送炭',
@@ -1740,13 +1766,15 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             'fr_equip1_shyl': "死魂幽镰",
             'fr_equip1_shyl_info': '每回合限一次，当你的【杀】被【闪】抵消时，若此【杀】目标数为1，你可以视为对此【杀】的目标使用一张【杀】。',
             "fr_card_lyzq": "凌月之球",
-            "fr_card_lyzq_info": "出牌阶段，对你使用。你声明一个技能并获得之直到回合结束（觉醒技，限定技，主公技，隐匿技，使命技等特殊技能除外）。",
+            "fr_card_lyzq_info": "出牌阶段，对你使用。你从随机的五个技能中获得一个直到回合结束（觉醒技，限定技，主公技，隐匿技，使命技等特殊技能除外）。",
             "fr_card_zh": "召唤",
-            "fr_card_zh_info": "出牌阶段，对你使用，你声明一张牌并获得之（部分特殊牌除外且此牌洗牌后销毁）。",
+            "fr_card_zh_info": "出牌阶段，对你使用，目标声明一张牌并获得之（部分特殊牌除外且此牌洗牌后销毁）。",
             "fr_card_zhcz": "制衡掣肘",
             "fr_card_zhcz_info": "出牌阶段，对一名角色使用，该角色展示X张手牌（X为其手牌数的一半并向下取整），然后你选择一项：1.重铸其展示的所有牌，2.重铸其未展示的所有牌。",
         },
         list: [
+            ['heart', '6', 'fr_card_yfss'],
+            ['heart', '12', 'fr_card_yfss'],
             ['heart', '1', 'fr_equip1_ar15'],
             ['spade', '13', 'fr_equip1_shyl'],
             ['heart', '5', 'fr_card_xzst'],
