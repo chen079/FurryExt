@@ -1565,7 +1565,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
             };
             get.dialogIntro = function (name) {
-                let link = "<a style='color:#FF0000' href=\"javascript:furryIntroduce('" + name + "','buff');\">『" + get.FrBuffIntro(name).name + "』</a>"
+                let temp = (Math.random() * 9 + 1) * 100000
+                let link = "<a id='" + temp + "' style='color:#FF0000' href=\"javascript:furryIntroduce('" + name + "','buff');\">『" + get.FrBuffIntro(name).name + "』</a>"
                 return link
             }
             window.furryOpenDialog = function (title, icon, content) {
@@ -1600,7 +1601,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //------------------------------------------武将包------------------------------------------//
             if (furryPack.enable) {
                 //------------------------------------------载入初始js------------------------------------------//
-                var JsForExt = ["functions.js", "furry_mode.js", "cards.js", "character.js", "animation.js", "boss.js", "buffs.js", "drama.js", "functions.js", "globalSkill.js", "guozhan.js", "layout.js", "mp.js", "shop.js", "skin.js", "update.js"]
+                var JsForExt = ["buffs.js", "functions.js", "furry_mode.js", "cards.js", "character.js", "animation.js", "boss.js", "drama.js", "functions.js", "globalSkill.js", "guozhan.js", "layout.js", "mp.js", "shop.js", "skin.js", "update.js"]
                 for (var i = 0; i < JsForExt.length; i++) {
                     var file = JsForExt[i]
                     lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/' + file, null)
@@ -1983,7 +1984,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + "<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.4.0.2",
+            version: "2.4.0.1",
         },
         files: {
             "character": [],

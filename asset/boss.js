@@ -2,11 +2,11 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     var furryBoss = {
         character: {
-            "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ["boss", "bossallowed", 'legend']],
-            "fr_bossmala": ["male", "shen", 10, ['mala_ht', 'mala_ly', 'mala_jf', 'mala_hy', 'mala_bc', 'mala_sz'], ["boss", "bossallowed", 'legend']],
-            "fr_bossfaers": ["male", "shen", 7, ["faers_hc", "faers_yl", "miya_ks", "miya_hz"], ["boss", "bossallowed", 'legend']],
-            "fr_bossoert": ["male", "shen", 8, ["oert_bosswy", "oert_bosslh"], ["boss", "bossallowed", 'legend']],
-            "fr_bosshars": ["male", "shen", 7, ["hars_sz", "hars_sj", "muen_tx", "muen_jb", "xiaomo_sj", "xiaomo_ld"], ["boss", "bossallowed", 'legend']],
+            "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ["boss", "bossallowed", 'legend','unseen']],
+            "fr_bossmala": ["male", "shen", 10, ['mala_ht', 'mala_ly', 'mala_jf', 'mala_hy', 'mala_bc', 'mala_sz'], ["boss", "bossallowed", 'legend','unseen']],
+            "fr_bossfaers": ["male", "shen", 7, ["faers_hc", "faers_yl", "miya_ks", "miya_hz"], ["boss", "bossallowed", 'legend','unseen']],
+            "fr_bossoert": ["male", "shen", 8, ["oert_bosswy", "oert_bosslh"], ["boss", "bossallowed", 'legend','unseen']],
+            "fr_bosshars": ["male", "shen", 7, ["hars_sz", "hars_sj", "muen_tx", "muen_jb", "xiaomo_sj", "xiaomo_ld"], ["boss", "bossallowed", 'legend','unseen']],
         },
         skill: {
             "wore_bossty": {
