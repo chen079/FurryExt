@@ -1,4 +1,21 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
+    game.getInCenter = function () {
+        var list = [];
+        game.getGlobalHistory('cardMove', function (evt) {
+            if (evt.name == 'lose') {
+                if (evt.position == ui.discardPile) {
+                    for (var i of evt.cards) list.add(i);
+                }
+            }
+            else {
+                if (evt.name == 'cardsDiscard') {
+                    for (var i of evt.cards) list.add(i);
+                }
+            }
+        });
+        list = list.filterInD('d')
+        return list
+    }
     lib.element.content.addResult = function (event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result) {
         "step 0"
         event.next.add(event.origin);
@@ -21,31 +38,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         }
         return 'male';
     };
-    lib.element.player.chooseMultiControl = function (object) {
-        if (arguments.length == 1 && get.objtype(arguments[0]) == 'object') {
-            for (let key in object) next[key] = object[key]
-        }
-        for (var i = 0; i < arguments.length; i++) {
-            if (typeof arguments[i] == 'boolean') {
-                next.forced = arguments[i];
-            } else if (typeof arguments[i] == 'function') {
-                if (next.ai) next.filterControl = arguments[i];
-                else next.ai = arguments[i];
-            }
-            else if (typeof arguments[i] == 'string') {
-                get.evtprompt(next, arguments[i]);
-            }
-            else if (typeof arguments[i] == 'number') {
-                next.num = arguments[i]
-            }
-            if (next.forced == undefined) next.forced = false;
-        }
-        next.player = this;
-        next.setContent('chooseMultiControl');
-        next._args = Array.from(arguments);
-        next.forceDie = true;
-        return next;
-    }
     //---------------------------------------自定义函数：选择文本------------------------------------------//
     //此处内容由钫酸酱制作，TAT
     lib.element.player.chooseText = function chooseText(object) {
@@ -935,164 +927,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             player.dying(event);
         }
     }
-    // ---------------------------------------自定义函数：视为伤害------------------------------------------//
-    lib.element.player.fakeDamage = function () {
-        var next = game.createEvent('damage');
-        //next.forceDie=true;
-        next.player = this;
-        var nocard, nosource;
-        var event = _status.event;
-        for (var i = 0; i < arguments.length; i++) {
-            if (get.itemtype(arguments[i]) == 'cards') {
-                next.cards = arguments[i].slice(0);
-            }
-            else if (get.itemtype(arguments[i]) == 'card') {
-                next.card = arguments[i];
-            }
-            else if (typeof arguments[i] == 'number') {
-                next.num = arguments[i];
-            }
-            else if (get.itemtype(arguments[i]) == 'player') {
-                next.source = arguments[i];
-            }
-            else if (typeof arguments[i] == 'object' && arguments[i] && arguments[i].name) {
-                next.card = arguments[i];
-            }
-            else if (arguments[i] == 'nocard') {
-                nocard = true;
-            }
-            else if (arguments[i] == 'nosource') {
-                nosource = true;
-            }
-            else if (arguments[i] == 'notrigger') {
-                next._triggered = null;
-                next.notrigger = true;
-            }
-            else if (get.itemtype(arguments[i]) == 'nature' && arguments[i] != 'stab') {
-                next.nature = arguments[i];
-            }
-        }
-        if (next.card == undefined && !nocard) next.card = event.card;
-        if (next.cards == undefined && !nocard) next.cards = event.cards;
-        if (next.source == undefined && !nosource) next.source = event.player;
-        if (next.source && next.source.isDead()) delete next.source;
-        if (next.num == undefined) next.num = 1;
-        next.original_num = next.num;
-        next.change_history = [];
-        if (next.nature == 'poison') delete next._triggered;
-        next.setContent('fakeDamage');
-        next.filterStop = function () {
-            if (this.source && this.source.isDead()) delete this.source;
-            var num = this.original_num;
-            for (var i of this.change_history) num += i;
-            if (num != this.num) this.change_history.push(this.num - num);
-            if (this.num <= 0) {
-                delete this.filterStop;
-                this.finish();
-                this._triggered = null;
-                return true;
-            }
-        };
-        return next;
-    };
-    lib.element.content.fakeDamage = function () {
-        'step 0'
-        event.forceDie = true;
-        'step 1'
-        if (lib.config.background_audio) {
-            game.playAudio('effect', 'damage' + (num > 1 ? '2' : ''));
-        }
-        game.broadcast(function (num) {
-            if (lib.config.background_audio) {
-                game.playAudio('effect', 'damage' + (num > 1 ? '2' : ''));
-            }
-        }, num);
-        var str = '视为受到了';
-        if (source) str += '来自<span class="bluetext">' + (source == player ? '自己' : get.translation(source)) + '</span>的';
-        str += get.cnNumber(num) + '点';
-        if (event.nature) str += get.translation(event.nature) + '属性';
-        str += '伤害';
-        game.log(player, str);
-        if (player.stat[player.stat.length - 1].damaged == undefined) {
-            player.stat[player.stat.length - 1].damaged = num;
-        }
-        else {
-            player.stat[player.stat.length - 1].damaged += num;
-        }
-        if (source) {
-            source.getHistory('sourceDamage').push(event);
-            if (source.stat[source.stat.length - 1].damage == undefined) {
-                source.stat[source.stat.length - 1].damage = num;
-            }
-            else {
-                source.stat[source.stat.length - 1].damage += num;
-            }
-        }
-        player.getHistory('damage').push(event);
-        if (event.animate !== false) {
-            player.$damage(source);
-            game.broadcastAll(function (nature, player) {
-                if (lib.config.animation && !lib.config.low_performance) {
-                    if (nature == 'fire') {
-                        player.$fire();
-                    }
-                    else if (nature == 'thunder') {
-                        player.$thunder();
-                    }
-                }
-            }, event.nature, player);
-            var numx = Math.max(0, num - player.hujia);
-            player.$damagepop(-numx, event.nature);
-        }
-        'step 2'
-        if (player.hp <= 0 && player.isAlive()) {
-            game.delayx();
-            event._dyinged = true;
-            player.dying(event);
-        }
-        if (source && lib.config.border_style == 'auto') {
-            var dnum = 0;
-            for (var j = 0; j < source.stat.length; j++) {
-                if (source.stat[j].damage != undefined) dnum += source.stat[j].damage;
-            }
-            if (dnum >= 2) {
-                if (lib.config.autoborder_start == 'silver') {
-                    dnum += 4;
-                }
-                else if (lib.config.autoborder_start == 'gold') {
-                    dnum += 8;
-                }
-            }
-            if (lib.config.autoborder_count == 'damage') {
-                source.node.framebg.dataset.decoration = '';
-                if (dnum >= 10) {
-                    source.node.framebg.dataset.auto = 'gold';
-                    if (dnum >= 12) source.node.framebg.dataset.decoration = 'gold';
-                }
-                else if (dnum >= 6) {
-                    source.node.framebg.dataset.auto = 'silver';
-                    if (dnum >= 8) source.node.framebg.dataset.decoration = 'silver';
-                }
-                else if (dnum >= 2) {
-                    source.node.framebg.dataset.auto = 'bronze';
-                    if (dnum >= 4) source.node.framebg.dataset.decoration = 'bronze';
-                }
-                if (dnum >= 2) {
-                    source.classList.add('topcount');
-                }
-            }
-            else if (lib.config.autoborder_count == 'mix') {
-                source.node.framebg.dataset.decoration = '';
-                switch (source.node.framebg.dataset.auto) {
-                    case 'bronze': if (dnum >= 4) source.node.framebg.dataset.decoration = 'bronze'; break;
-                    case 'silver': if (dnum >= 8) source.node.framebg.dataset.decoration = 'silver'; break;
-                    case 'gold': if (dnum >= 12) source.node.framebg.dataset.decoration = 'gold'; break;
-                }
-            }
-        }
-        'step 3'
-        event.trigger('damageSource');
-    };
     // ---------------------------------------击碎勾玉------------------------------------------//
     lib.element.player.Frbroken = function () {
         var next = game.createEvent('Frbroken');

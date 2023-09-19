@@ -2,7 +2,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
     Object.defineProperty(Array.prototype, "unique", {
         configurable: true,
         enumerable: false,
-        writable: true,
+        writable: false,
         value: function () {
             var self = this;
             return this.filter(function (item, index) {
@@ -13,7 +13,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
     Object.defineProperty(Array.prototype, "swapElements", {
         configurable: true,
         enumerable: false,
-        writable: true,
+        writable: false,
         value: function (index1, index2) {
             var array = this;
             if (index1 < 0 || index1 >= array.length || index2 < 0 || index2 >= array.length) {
@@ -103,13 +103,21 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             alert(str)
         },
         introduce: {
+            'zhuangbei': {
+                name: '特殊装备',
+                info: `<li>将一张牌作为武器（a，X）也就是作为攻击范围为a的武器牌，其技能视为该牌上包含X的技能。
+                <li>其他举例：
+                <li>坐骑（–1，牌名【杀】），具有–1马效果的，技能为描述中包含牌名【杀】的技能
+                <li>宝物（伤害），技能为描述中包含“伤害”的技能
+                <li>此类特殊装备只能置入装备区，且离开装备区时销毁。`,
+            },
             'xiuzheng': {
                 name: '休整',
                 info: '<li>当你进入休整状态时，你复原武将牌，且不于此次死亡事件中进行展示身份牌、检测游戏胜利条件与执行奖惩的流程。<li>若无特殊说明，处于修整状态的角色将会于其下个回合开始前回到游戏。'
             },
             'zhuru': {
                 name: '注入',
-                info: `<li>随机查看四张本局游戏未亮出过的“元素能量”牌，选一张作为主将（若已有此类主将则作为副将，与主将组成双将）。注入时需要注意能量不能相互冲突，目前的冲突列表为目前是：
+                info: `<li>随机查看四张本局游戏未亮出过的“元素能量”牌，将选择的这张牌作为主将（若已有被注入的主将则作为副将并替换已有副将，与主将组成双将）。注入时能量不能相互冲突，目前的冲突列表为目前是：
                 <li>光明：【黑暗】
                 <li>黑暗：【光明,雷电】
                 <li>火焰：【寒冰，潮汐】
@@ -130,6 +138,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             'moli': {
                 name: '魔力',
                 info: '<li>魔力是一种类似体力的指示物，<li>游戏开始时，若无特殊说明，一名角色的魔力上限等于其武将牌上的体力上限（至多为5），魔力值等于魔力上限的一半（向下取整）,<li>魔力可以被获得、消耗和失去（类似体力的回复、伤害和流失）。'
+            },
+            'moliji': {
+                name: '耗魔技能',
+                info: '若在技能描述中包含<span class="bluetext">①、②</span>等蓝色标记，表示此技能需要消耗1点、2点魔力值发动，以此类推。',
             },
             'youji': {
                 name: '游击',
@@ -620,6 +632,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         name: "福瑞拓展",
         editable: false,
         content: function (config, pack) {
+            //--------------------------修改标记----------------------------//
+            for (var i in lib.FrBuff) {
+                var name = 'Fr_Buff_' + i;
+                lib.skill[name].intro.name = get.dialogIntro(i, 'buff')
+            }
         },
         precontent: function (furryPack) {
             lib.onover.push(function (bool) {
@@ -752,11 +769,88 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
                 var FrTranslation = get.translation;
                 get.translation = function (str, arg) {
-                    var tran = FrTranslation.apply(this, arguments);
-                    if (tran == '杀' && str && str.nature == 'mad') {
-                        tran = '狂' + tran;
+                    if (str && str.name == 'sha' && str.nature == 'mad') {
+                        if (str && typeof str == 'object' && (str.name || str._tempTranslate)) {
+                            if (str._tempTranslate) return str._tempTranslate;
+                            var str2;
+                            if (arg == 'viewAs' && str.viewAs) {
+                                str2 = get.translation(str.viewAs);
+                            }
+                            else {
+                                str2 = get.translation(str.name);
+                            }
+                            if (str2 == '杀') {
+                                str2 = '狂' + str2;
+                            }
+                            if (get.itemtype(str) == 'card' || str.isCard) {
+                                if (_status.cardtag && str.cardid) {
+                                    var tagstr = '';
+                                    for (var i in _status.cardtag) {
+                                        if (_status.cardtag[i].contains(str.cardid)) {
+                                            tagstr += lib.translate[i + '_tag'];
+                                        }
+                                    }
+                                    if (tagstr) {
+                                        str2 += '·' + tagstr;
+                                    }
+                                }
+                                if (str.suit && str.number) {
+                                    var cardnum = str.number || '';
+                                    if ([1, 11, 12, 13].contains(cardnum)) {
+                                        cardnum = { '1': 'A', '11': 'J', '12': 'Q', '13': 'K' }[cardnum]
+                                    }
+                                    if (arg == 'viewAs' && str.viewAs != str.name && str.viewAs) {
+                                        str2 += '（' + get.translation(str) + '）';
+                                    }
+                                    else {
+                                        str2 += '【' + get.translation(str.suit) + cardnum + '】';
+                                        // var len=str2.length-1;
+                                        // str2=str2.slice(0,len)+'<span style="letter-spacing: -2px">'+str2[len]+'·</span>'+get.translation(str.suit)+str.number;
+                                    }
+                                }
+                            }
+                            return str2;
+                        }
+                        if (Array.isArray(str)) {
+                            var str2 = get.translation(str[0], arg);
+                            for (var i = 1; i < str.length; i++) {
+                                str2 += '、' + get.translation(str[i], arg);
+                            }
+                            return str2;
+                        }
+                        if (arg == 'skill') {
+                            if (lib.translate[str + '_ab']) return lib.translate[str + '_ab'];
+                            if (lib.translate[str]) return lib.translate[str].slice(0, 2);
+                            return str;
+                        }
+                        else if (arg == 'info') {
+                            if (lib.translate[str + '_info']) return lib.translate[str + '_info'];
+                            var str2 = str.slice(0, str.length - 1);
+                            if (lib.translate[str2 + '_info']) return lib.translate[str2 + '_info'];
+                            if (str.lastIndexOf('_') > 0) {
+                                str2 = str.slice(0, str.lastIndexOf('_'));
+                                if (lib.translate[str2 + '_info']) return lib.translate[str2 + '_info'];
+                            }
+                            str2 = str.slice(0, str.length - 2);
+                            if (lib.translate[str2 + '_info']) return lib.translate[str2 + '_info'];
+                            if (lib.skill[str] && lib.skill[str].prompt) return lib.skill[str].prompt;
+                        }
+                        if (lib.translate[str]) {
+                            return lib.translate[str];
+                        }
+                        if (typeof str == 'string') {
+                            return str;
+                        }
+                        if (typeof str == 'number' || typeof str == 'boolean') {
+                            return str.toString();
+                        }
+                        if (str && str.toString) {
+                            return str.toString();
+                        }
+                        return '';
+                    } else {
+                        return FrTranslation.apply(this, arguments);
                     }
-                    return tran;
                 };
 
                 var FrShaPrompt = lib.card.sha.cardPrompt;
@@ -1549,12 +1643,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     this.remove();
                 })
             };
-            get.introduce = function (name) {
-                let str1 = window.furry.introduce[name].name;
-                let str2 = window.furry.introduce[name].info;
-                let temp = (Math.random() * 9 + 1) * 100000
-                let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:get.FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
-                return link;
+            get.introduce = function (name, str) {
+                var temp = (Math.random() * 9 + 1) * 100000
+                if (!str) {
+                    let str1 = window.furry.introduce[name].name;
+                    let str2 = window.furry.introduce[name].info;
+                    let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:get.FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
+                    return link;
+                } else {
+                    let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:get.FrskillTips('" + str + "','" + temp + "');\">" + name + "※</a>";
+                    return link;
+                }
             }
             //------------------------------------------自定义window函数------------------------------------------//
             window.furryIntroduce = function (name, type) {
@@ -1575,7 +1674,18 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 if (!window.furryCurrentDialogs) {
                     window.furryCurrentDialogs = [];
                 }
+
+                // 创建覆盖层
+                var overlay = ui.create.div('.furry-dialog-overlay', document.body);
+                overlay.addEventListener(lib.config.touchscreen ? "touchend" : "click", function (e) {
+                    e.stopPropagation(); // 阻止事件冒泡
+                });
+                overlay.style.zIndex = '98'
+                overlay.style.width = '100%'
+                overlay.style.height = '100%'
+
                 var dialog = ui.create.div('.furry-dialog', document.body);
+                dialog.style.zIndex = '99'
                 window.furryCurrentDialogs.push(dialog);
                 var icondiv = ui.create.div('.furry-dialog-icon', dialog);
                 if (icon) {
@@ -1594,19 +1704,23 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 var close = ui.create.div('.furry-dialog-close', dialog);
                 close.addEventListener('click', function () {
                     window.furryCurrentDialogs.remove(dialog);
-                    dialog.delete();
+                    dialog.remove();
+                    overlay.remove(); // 关闭对话框时同时移除覆盖层
                 });
+
                 return dialog;
             };
             //------------------------------------------武将包------------------------------------------//
             if (furryPack.enable) {
                 //------------------------------------------载入初始js------------------------------------------//
-                var JsForExt = ["buffs.js", "functions.js", "furry_mode.js", "cards.js", "character.js", "animation.js", "boss.js", "drama.js", "functions.js", "globalSkill.js", "guozhan.js", "layout.js", "mp.js", "shop.js", "skin.js", "update.js"]
-                for (var i = 0; i < JsForExt.length; i++) {
-                    var file = JsForExt[i]
-                    lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/' + file, null)
-                    console.log('【福瑞拓展】' + file + '已加载')
-                }
+                var JsForExt = ["functions.js", "buffs.js", "furry_mode.js", "cards.js", "character.js", "animation.js", "boss.js", "drama.js", "functions.js", "globalSkill.js", "guozhan.js", "layout.js", "mp.js", "shop.js", "skin.js", "update.js"]
+                if (get.myCompareVersion(lib.version, '1.9.126.1') < 0) {
+                    for (var i = 0; i < JsForExt.length; i++) {
+                        var file = JsForExt[i]
+                        lib.init.jsFor(lib.assetURL + 'extension/福瑞拓展/asset/' + file, null)
+                        console.log('【福瑞拓展】' + file + '已加载')
+                    }
+                } else lib.init.jsForExtension(lib.assetURL + 'extension/福瑞拓展/asset/', JsForExt.map(i => i.split('.')[0]))
                 //定义势力
                 lib.group.add('fr_g_dragon');
                 lib.translate.fr_g_dragon = '龙';
@@ -1735,6 +1849,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 name: "<b>武将前缀",
                 intro: "是否显示“✡”武将前缀",
                 init: false,
+            },
+            "buffList":{
+                name:"<b>查看Buff列表",
+                clear:true,
+                intro:'查看福瑞拓展的Buff列表',
+                onclick:function(){
+                    get.Bufflist()
+                }
             },
             "unlockall": {
                 "name": "<b>一键解锁奖励</b>",
@@ -1984,7 +2106,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + "<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.4.0.1",
+            version: "2.4.0.2",
         },
         files: {
             "character": [],

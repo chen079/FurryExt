@@ -768,22 +768,38 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         event.list.remove('zhenfa')
                         event.list.remove('guozhan')
                     }
-                    var choiceList = []
-                    for (var i = 0; i < list.length; i++) {
-                        choiceList.push(get.translation(list[i] + '_card_config'))
+                    'step 1'
+                    if (!_status.auto && target.isUnderControl()) {
+                        game.swapPlayerAuto(target);
                     }
-                    var dialog = ui.create.dialog('forcebutton', 'hidden');
-                    dialog.add('选择一个卡牌包');
-                    dialog.add([choiceList, 'tdnodes']);
-                    var chooseButton = target.chooseButton(1, true, dialog)
-                    chooseButton.set('ai', function () {
+                    event.videoId = lib.status.videoId++;
+                    var list = event.list.slice(0)
+                    var choiceList = ui.create.dialog('【召唤】：请选择一个卡牌包', 'forcebutton');
+                    choiceList.videoId = event.videoId;
+                    for (var i = 0; i < list.length; i++) {
+                        var str = '<div class="popup text" style="width:calc(100% - 10px);text-align: center;display:inline-block">' + get.translation(list[i] + '_card_config') + '&nbsp&nbsp&nbsp&nbsp>>></div>';
+                        var next = choiceList.add(str);
+                        next.firstChild.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.button);
+                        next.firstChild.link = list[i];
+                        for (var j in lib.element.button) {
+                            next[j] = lib.element.button[j];
+                        }
+                        choiceList.buttons.add(next.firstChild);
+                    }
+                    event.dialog = choiceList
+                    var next = target.chooseButton();
+                    next.set('dialog', event.dialog);
+                    next.set('ai', function (button) {
                         return Math.random()
                     })
-                    'step 1'
+                    next.set('forced', true)
+                    'step 2'
+                    if (target.isOnline2()) {
+                        target.send('closeDialog', event.dialog);
+                    }
+                    event.dialog.close();
                     var list = []
-                    var choice = event.list.find(function (item) {
-                        return get.translation(item + '_card_config') == result.links[0];
-                    });
+                    var choice = result.links[0];
                     for (var i = 0; i < lib.cardPack[choice].length; i++) {
                         if (lib.cardPack[choice][i] == 'fr_card_zh' || lib.cardPack[choice][i] == 'gw_tunshi') continue
                         var name = lib.cardPack[choice][i]
@@ -792,11 +808,11 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     }
                     event.list = list
                     game.log(target, '选择了', get.translation(choice + '_card_config'))
-                    'step 2'
+                    'step 3'
                     target.chooseButton(['选择所需的卡牌', [event.list, 'vcard']], true).set('ai', function (button) {
                         return Math.random();
                     })
-                    'step 3'
+                    'step 4'
                     var name = result.links[0][2];
                     event.nature = result.links[0][3];
                     event.cardname = name;
@@ -804,13 +820,13 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     target.chooseControl(list).set('ai', function () {
                         return list.randomGet();
                     }).set('prompt', '选择此牌的点数');
-                    'step 4'
+                    'step 5'
                     event.number = result.control;
                     var list = ['diamond', 'spade', 'heart', 'club']
                     target.chooseControl(list).set('ai', function () {
                         return list.randomGet();
                     }).set('prompt', '选择此牌的花色');
-                    'step 5'
+                    'step 6'
                     event.suit = result.control;
                     var fakecard = game.createCard(event.cardname, event.suit, event.number, event.nature);
                     target.showCards(fakecard)
@@ -832,64 +848,53 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             },
             "fr_card_ttbl": {
                 image: 'ext:福瑞拓展/image/card/fr_card_ttbl.png',
-                audio: true,
-                fullskin: true,
                 type: "trick",
+                fullskin: true,
                 enable: true,
-                selectTarget: 1,
                 filterTarget: function (card, player, target) {
-                    if (player == target) return false;
-                    return target.countGainableCards(player, 'h') > 0 && player.inRange(target);
+                    return target != player && target.countGainableCards(player, 'hej') > 0;
                 },
                 filter: function (event, player) {
-                    if (player.countCards('h') == 0) return false;
-                    return game.hasPlayer(function (current) {
-                        return (current != player && get.distance(player, current, 'attack') <= 1 && current.countGainableCards(player, 'h') > 0);
-                    });
+                    return player.countCards('h') > 0
                 },
                 content: function () {
                     'step 0'
-                    if (target.countGainableCards(player, 'h')) {
-                        player.gainPlayerCard([1, Math.min(5, target.countGainableCards(player, 'h'))], 'h', target, true);
-                    }
+                    player.chooseCard('h', true, 1, '交给' + get.translation(target) + '一张手牌');
                     'step 1'
-                    player.chooseCard('h', result.cards.length, true, '交给' + get.translation(target) + get.cnNumber(result.cards.length) + '张手牌').set('ai', function (card) {
-                        return 4 - get.value(card)
-                    })
+                    if (result.bool) {
+                        player.give(result.cards, target)
+                    }
                     'step 2'
-                    target.gain(result.cards, player, 'giveAuto')
+                    if (target.isIn() && target.countCards('hej') > 0) {
+                        player.gainPlayerCard(target, 'hej', true, [1, 2]);
+                    }
                 },
                 ai: {
+                    order: 5,
+                    tag: {
+                        loseCard: 1,
+                        gain: 0.5,
+                    },
                     wuxie: function (target, card, player, viewer) {
-                        if (get.attitude(viewer, player) > 0 && get.attitude(viewer, target) > 0) {
+                        if (get.attitude(player, target) > 0 && get.attitude(viewer, player) > 0) {
                             return 0;
                         }
                     },
-                    basic: {
-                        order: 4,
-                        useful: 7,
-                        value: 9,
-                    },
                     result: {
                         target: function (player, target) {
-                            if (get.attitude(player, target) <= 0) return ((target.countCards('h', function (card) {
+                            if (target.countCards('h') == 0) return 0
+                            if (get.attitude(player, target) <= 0) return ((target.countCards('he', function (card) {
                                 return get.value(card, target) > 0 && card != target.getEquip('jinhe');
                             }) > 0) ? -0.3 : 0.3) * Math.sqrt(player.countCards('h'));
+                            return ((target.countCards('ej', function (card) {
+                                if (get.position(card) == 'e') return get.value(card, target) <= 0;
+                                var cardj = card.viewAs ? { name: card.viewAs } : card;
+                                return get.effect(target, cardj, target, player) < 0;
+                            }) > 0) ? 1.5 : -0.3) * Math.sqrt(player.countCards('h'));
                         },
-                        player: function (player, target) {
-                            if (get.attitude(player, target) < 0 && !target.countCards('h', function (card) {
-                                return get.value(card, target) > 0 && card != target.getEquip('jinhe');
-                            })) {
-                                return 0;
-                            }
-                            return 1;
-                        },
-                    },
-                    tag: {
-                        loseCard: 1,
-                        gain: 1,
                     },
                 },
+                selectTarget: 1,
             },
             "fr_card_gzbj": {
                 image: 'ext:福瑞拓展/image/card/fr_card_gzbj.png',
@@ -897,25 +902,30 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 fullskin: true,
                 type: "trick",
                 enable: true,
+                multiline: true,
                 selectTarget: -1,
+                multitarget: true,
                 filterTarget: true,
-                contentBefore: function () {
-                    "step 0"
-                    var global = game.filterPlayer()
-                    lib.gzbj = 0
-                    for (var i = 0; i < global.length; i++) {
-                        lib.gzbj += global[i].countCards('h')
-                    }
-                    lib.gzbj = Math.floor(lib.gzbj / global.length)
-                },
                 content: function () {
                     "step 0"
-                    var num = lib.gzbj - target.countCards('h')
-                    if (num < 0) {
-                        target.chooseToDiscard('h', -num, true)
-                    } else if (num > 0) {
-                        target.draw(num)
+                    var global = game.players.slice(0)
+                    event.num = 0
+                    for (var i = 0; i < global.length; i++) {
+                        event.num += global[i].countCards('h')
                     }
+                    event.num = Math.floor(event.num / global.length)
+                    "step 1"
+                    event.targets = targets.slice(0).sortBySeat()
+                    "step 2"
+                    event.target = event.targets.shift()
+                    var num = event.num - event.target.countCards('h')
+                    if (num < 0) {
+                        event.target.chooseToDiscard('h', -num, true)
+                    } else if (num > 0) {
+                        event.target.draw(num)
+                    }
+                    'step 3'
+                    if (event.targets.length) event.goto(2)
                 },
                 ai: {
                     wuxie: function () {
@@ -949,7 +959,13 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             if (player.hasUnknown(2)) {
                                 return 0;
                             }
-                            return lib.gzbj - target.countCards('h')
+                            var global = game.players.slice(0)
+                            var num = 0
+                            for (var i = 0; i < global.length; i++) {
+                                num += global[i].countCards('h')
+                            }
+                            num = Math.floor(num / global.length)
+                            return num - target.countCards('h')
                         },
                     },
                     tag: {
@@ -1108,11 +1124,13 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     'step 1'
                     var choice = event.skills.randomGets(5)
                     player.chooseControl(choice).set('ai', function () {
-                        return Math.random()
-                    }).set('prompt', get.prompt2("fr_card_lyzq")).set('choiceList',choice.map(i=>'【'+get.translation(i)+'】:'+get.translation(i+'_info')))
+                        return choice.randomGet()
+                    }).set('prompt', get.prompt2("fr_card_lyzq"))
+                        .set('choiceList', choice.map(i => '【' + get.translation(i) + '】:' + get.translation(i + '_info')))
                     'step 2'
                     if (result.control != 'cancel2') {
                         player.addTempSkill(result.control, { player: 'phaseAfter' })
+                        game.log(player, '获得了技能', '#g【' + get.translation(result.control) + '】')
                     }
                 },
                 ai: {
@@ -1492,6 +1510,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 filter: function (event, player) {
                     return event.card.name == 'sha' && player.countCards('h') > 0
                 },
+                equipSkill:true,
                 direct: true,
                 content: function () {
                     'step 0'
@@ -1505,10 +1524,6 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             return 5 - get.value(card)
                         }
                     })
-                    if (trigger.target.countCards('h') <= 0) {
-                        event.youji = false
-                        event.goto(2)
-                    }
                     'step 1'
                     if (result.bool) {
                         event.cards1 = result.cards[0]
@@ -1522,21 +1537,26 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                                 })
                         } else {
                             event.youji = false
-                            player.discardPlayerCard(trigger.target, 'h', true, '弃置' + get.translation(trigger.target) + '一张手牌')
+                            player.discardPlayerCard(trigger.target, 'h', true, '弃置' + get.translation(trigger.target) + '一张手牌').set('ai',function(button){
+                                if(!_status.event.att) return 0;
+                                if(get.position(button.link)=='e'){
+                                    if(get.subtype(button.link)=='equip2')    return 2*get.value(button.link);
+                                    return get.value(button.link);
+                                }
+                                return 1;
+                            }).set('logSkill',['ar15_skill',trigger.target])
                         }
                     } else {
                         event.finish()
                     }
                     'step 2'
-                    event.cards2 = result.cards[0]
+                    if (result.bool && result.links && result.links.length) {
+                        event.cards2 = result.cards[0]
+                    }
                     var evt = trigger.getParent();
                     var cards = []
-                    if (event.cards1 != event.cards2) {
-                        cards.push(event.cards1)
-                        cards.push(event.cards2)
-                    } else {
-                        cards.push(event.cards1)
-                    }
+                    if (event.cards1) cards.push(event.cards1)
+                    if (event.cards2) cards.push(event.cards2)
                     var suits = cards.map(i => get.suit(i)).unique()
                     var target = trigger.target;
                     target.addTempSkill('ar15_skill_block');
@@ -1636,8 +1656,9 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "card_sx": {
                 audio: "ext:福瑞拓展:2",
                 trigger: {
-                    player: "phaseAfter",
+                    player: "phaseEnd",
                 },
+                lastDo: true,
                 charlotte: true,
                 forced: true,
                 content: function () {
@@ -1756,7 +1777,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_xysx": "修养生息",
             "fr_card_xysx_info": "此牌可被重铸。出牌阶段对自己使用，重置当前回合卡牌和主动技能使用次数。",
             "fr_card_ttbl": "投桃报李",
-            "fr_card_ttbl_info": "出牌阶段，对攻击范围内的一名角色使用，你获得其X张手牌（X为该角色的手牌数且至多为5），然后你交给该角色等量的手牌。",
+            "fr_card_ttbl_info": "出牌阶段，对一名角色使用，你交给其一张手牌，然后你获得该角色区域内至多两张牌。",
             "fr_card_yxys": "野性药水",
             "fr_card_yxys_info": "出牌阶段对一名角色使用，该角色获得技能〖嗜血〗。<li>〖嗜血〗：你的回合结束时，你移除此技能，然后若本回合内你杀死过其他角色，你摸三张牌并执行一个额外的回合。</li>",
             "fr_card_gzbj": "寡众不均",

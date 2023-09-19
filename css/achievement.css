@@ -1,5 +1,5 @@
 @font-face {
-    font-family: "得意黑";
+    font-family: "deyihei";
     src: url("../acknowledgments/font/SmileySans-Oblique.ttf")
 }
 
@@ -209,7 +209,7 @@
     align-items: center;
     padding-top: 1.6%;
     justify-content: center;
-    font-family: "得意黑";
+    font-family: "deyihei";
     font-size: 4vh;
 }
 

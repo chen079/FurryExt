@@ -1,3 +1,53 @@
+.bufflist .exit {
+    background-image: url("../image/others/exit.png");
+    background-size: 100% 100%;
+    width: 50px;
+    height: 50px;
+    right: -20px;
+    top: -20px;
+}
+
+/* 定义一个包含图片的容器的样式 */
+.image-container {
+    display: flex;
+    /* 使用 Flex 布局使图片和文本水平居中对齐 */
+    align-items: center;
+    position: relative;
+    /* 垂直居中对齐 */
+    justify-content: center;
+    /* 水平居中对齐 */
+    margin-bottom: 10px;
+    /* 可根据需要设置底部间距 */
+}
+
+/* 定义正方形图片的样式 */
+.square-image {
+    max-width: 100px;
+    /* 设置图片最大宽度，根据需要调整 */
+    max-height: 100px;
+    /* 设置图片最大高度，根据需要调整 */
+    width: auto;
+    height: auto;
+}
+
+.bufflist {
+    width: 90% !important;
+    height: 90% !important;
+    top: 5%;
+    left: 5%;
+    z-index: 20;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+}
+
+.bufflist li {
+    font-size: 20px;
+}
+
+.bufflist .buttons {
+    width: 100%;
+}
+
 .furry-dialog {
     display: block;
     position: absolute;
@@ -56,8 +106,8 @@
 
 .furry-dialog>.furry-dialog-icon {
     position: absolute;
-    top: calc(27.6%);
-    right: calc(9.70%);
+    top: calc(26.6%);
+    right: calc(14.70%);
     width: calc(12.91%);
     height: calc(17.85%);
     background-repeat: no-repeat;
@@ -102,11 +152,11 @@
     min-height: 5%;
     left: 50%;
     top: 50%;
-    font-size: 18px;
-    color: #bca979;
+    font-size: 16px;
+    color: #ccad76;
     font-family: 'shousha';
-    background-color: #241b1bd9;
-    border: #4f493f 3px solid;
+    background-color: rgba(36, 29, 19, 0.85);
+    border: #523a24 3px solid;
     border-radius: 10px;
     position: absolute;
     display: block;
@@ -367,48 +417,48 @@
 }
 
 progress.oafaProgress {
-	width: 75%;
-	height: 10px;
-	border: 2px solid;
-	border-radius: 15px;
-	vertical-align: middle;
-	appearance: none;
-	-webkit-appearance: none;
+    width: 75%;
+    height: 10px;
+    border: 2px solid;
+    border-radius: 15px;
+    vertical-align: middle;
+    appearance: none;
+    -webkit-appearance: none;
 }
 
 progress.oafaProgress::-webkit-progress-bar {
-	background: rgb(239, 239, 239);
-	border-radius: 0.2rem;
+    background: rgb(239, 239, 239);
+    border-radius: 0.2rem;
 }
 
 progress.oafaProgress::-webkit-progress-value {
-	border-radius: 0.2rem;
-	background: rgb(0, 117, 255);
+    border-radius: 0.2rem;
+    background: rgb(0, 117, 255);
 }
 
 .frHistory {
-	width: 90% !important;
-	height: 90% !important;
-	top: 5%;
-	left: 5%;
-	z-index: 20;
-	background-color: rgba(0, 0, 0, 0.5);
-	border-radius: 20px;
+    width: 90% !important;
+    height: 90% !important;
+    top: 5%;
+    left: 5%;
+    z-index: 20;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
 }
 
 .frHistory li {
-	font-size: 20px;
+    font-size: 20px;
 }
 
 .frHistory .buttons {
-	width: 100%;
+    width: 100%;
 }
 
 .frHistory .exit {
-	background-image: url(image/exit.png);
-	background-size: 100% 100%;
-	width: 50px;
-	height: 50px;
-	right: -20px;
-	top: -20px;
+    background-image: url(image/exit.png);
+    background-size: 100% 100%;
+    width: 50px;
+    height: 50px;
+    right: -20px;
+    top: -20px;
 }

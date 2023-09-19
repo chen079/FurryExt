@@ -2,13 +2,60 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     var furryBoss = {
         character: {
-            "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ["boss", "bossallowed", 'legend','unseen']],
-            "fr_bossmala": ["male", "shen", 10, ['mala_ht', 'mala_ly', 'mala_jf', 'mala_hy', 'mala_bc', 'mala_sz'], ["boss", "bossallowed", 'legend','unseen']],
-            "fr_bossfaers": ["male", "shen", 7, ["faers_hc", "faers_yl", "miya_ks", "miya_hz"], ["boss", "bossallowed", 'legend','unseen']],
-            "fr_bossoert": ["male", "shen", 8, ["oert_bosswy", "oert_bosslh"], ["boss", "bossallowed", 'legend','unseen']],
-            "fr_bosshars": ["male", "shen", 7, ["hars_sz", "hars_sj", "muen_tx", "muen_jb", "xiaomo_sj", "xiaomo_ld"], ["boss", "bossallowed", 'legend','unseen']],
+            "fr_bosswore": ["male", "qun", 7, ["wore_bosshy", "wore_bossty"], ["boss", "bossallowed", 'legend', 'unseen']],
+            "fr_bossmala": ["male", "shen", 10, ['mala_ht', 'mala_ly', 'mala_jf', 'mala_hy', 'mala_bc', 'mala_sz'], ["boss", "bossallowed", 'legend', 'unseen']],
+            "fr_bossfaers": ["male", "shen", 7, ["faers_hc", "faers_yl", "miya_ks", "miya_hz"], ["boss", "bossallowed", 'legend', 'unseen']],
+            "fr_bossoert": ["male", "shen", 8, ["oert_bosswy", "oert_bosslh"], ["boss", "bossallowed", 'legend', 'unseen']],
+            "fr_bosshars": ["male", "shen", 7, ["hars_sz", "hars_sj", "muen_tx", "muen_jb", "xiaomo_sj", "xiaomo_ld"], ["boss", "bossallowed", 'legend', 'unseen']],
         },
         skill: {
+            'nine_bossjn': {
+                init: function (player) {
+                    player.storage.nine_bossjn = [];
+                    for (var i = 0; i < 7; i++) {
+                        player.storage.nine_bossjn.push(ui.cardPile.childNodes[i]);
+                    }
+                    // 创建一个观察器以监视子节点的变化
+                    var observer = new MutationObserver(function (mutationsList) {
+                        // 当子节点发生变化时，更新 list 数组
+                        player.storage.nine_bossjn = [];
+                        for (var i = 0; i < 7; i++) {
+                            player.storage.nine_bossjn.push(ui.cardPile.childNodes[i]);
+                        }
+                    });
+                    // 配置观察器以监视子节点的添加和删除
+                    var config = { childList: true };
+                    // 将观察器与 ui.cardPile 元素关联
+                    observer.observe(ui.cardPile, config);
+                },
+                mark:true,
+                intro:{
+                    markcount:"expansion",
+                    mark:function(dialog,content,player){
+                        var content=player.getExpansions('nine_bossjn');
+                        if(content&&content.length){
+                            if(player==game.me||player.isUnderControl()){
+                                dialog.addAuto(content);
+                            }
+                            else{
+                                return '共有'+get.cnNumber(content.length)+'张波';
+                            }
+                        }
+                    },
+                    content:function(content,player){
+                        var content=player.getExpansions('nine_bossjn');
+                        if(content&&content.length){
+                            if(player==game.me||player.isUnderControl()){
+                                return get.translation(content);
+                            }
+                            return '共有'+get.cnNumber(content.length)+'张波';
+                        }
+                    },
+                },
+                content:function(){
+
+                }
+            },
             "wore_bossty": {
                 trigger: {
                     player: ["phaseDiscardSkipped", "phaseJudgeSkipped", "phaseDrawSkipped", "phaseUseSkipped", "phaseZhunbeiSkipped", "phaseJieshuSkipped", "phaseSkipped"],
