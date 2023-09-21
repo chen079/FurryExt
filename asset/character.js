@@ -1320,8 +1320,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 usable: 1,
                 direct: true,
-                filter: function (event, player, onrewrite) {
-                    return player.group != 'wei' && event.player.group == event.source.group
+                filter: function (event, player) {
+                    return player.group != 'wei' && event.player.group == player.group
                 },
                 content: function () {
                     'step 0'
@@ -1329,7 +1329,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 1'
                     if (result.bool) {
                         player.changeGroup('wei')
-                        player.chooseBool('是否视为对' + get.translation(trigger.player) + '使用一张【杀】')
+                        if (trigger.player != player) {
+                            player.chooseBool('是否视为对' + get.translation(trigger.player) + '使用一张【杀】')
+                        } else {
+                            event.finish()
+                        }
                     }
                     'step 2'
                     if (result.bool) {
@@ -1438,7 +1442,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 subSkill: {
                     nature: {
                         trigger: {
-                            player: "damageAfter"
+                            player: "damageBegin4"
                         },
                         direct: true,
                         charlotte: true,
@@ -1463,26 +1467,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     return player.frMp > 0
                 },
                 mpSkill: true,
-                getTranslate: function (skills) {
-                    var str = '';
-                    var SerialNumber = function (num) {
-                        if (num == Infinity) return '∞';
-                        if (isNaN(num)) return '';
-                        if (typeof num == 'number') {
-                            var str = "" + num + "";
-                            return str.replace("1", "①").replace("2", "②").replace("3", "③").replace("4", "④").replace("5", "⑤").replace("6", "⑥").replace("7", "⑦").replace("8", "⑧").replace("9", "⑨");
-                        }
-                        else return num;
-                    };
-                    for (var j = 0; j < skills.length; j++) {
-                        if (j > 0) str += SerialNumber(j + 1);
-                        else if (skills.length > 1) str += '①';
-                        str += '<span class=thundertext>' + lib.translate[skills[j]] + '</span>：' + lib.translate[skills[j] + '_info'];
-                        if (j < skills.length) str += '<br>';
-                    }
-                    if (!str.length) str = '无效果。';
-                    return str
-                },
                 content: function () {
                     'step 0'
                     player.consumefrMp()
@@ -1494,73 +1478,118 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     list.remove('fr_akain');
                     list = list.randomGets(4)
+                    if (!list.length) event.finish();
                     var dialog = ui.create.dialog('请选择一张作为“法球”' + (player.group == 'wei' ? '（弃置）' : '（伤害牌名）') + '置入宝物区', 'hidden');
                     dialog.add([list.randomGets(list.length), 'character']);
-                    player.chooseButton(dialog, true).ai = function (button) {
-                        return get.rank(button.link, true);
-                    };
-                    'step 1'
-                    if (result.bool) {
-                        var name = 'akain_' + result.links[0]
-                        var skills = [], originalSkill = lib.character[result.links[0]][3]
-                        for (var j of lib.character[result.links[0]][3]) {
-                            var info = get.info(j), translate = lib.translate[j + '_info'];
-                            if (info && translate) {
-                                if (player.group == 'wei' && translate.indexOf('弃置') != -1) {
-                                    skills.add(j)
-                                } else if (player.group != 'wei') {
-                                    var damageCards = lib.inpile.filter(i => {
-                                        if (lib.card[i] && lib.card[i].ai && lib.card[i].ai.tag) {
-                                            return lib.card[i].ai.tag.hasOwnProperty('damage');
-                                        } else {
-                                            return false;
-                                        }
-                                    }).map(i => '【' + get.translation(i) + '】')
-                                    if (damageCards.some(function (value) {
-                                        return translate.includes(value);
-                                    })) {
-                                        skills.add(j)
+                    event.skillsfilter = function (skills) {
+                        return skills.filter(function (skill) {
+                            var info = get.skillInfoTranslation(skill);
+                            if (player.group == 'wei' && info.indexOf('弃置') != -1) {
+                                return true
+                            } else if (player.group != 'wei') {
+                                var damageCards = lib.inpile.filter(i => {
+                                    if (lib.card[i] && lib.card[i].ai && lib.card[i].ai.tag) {
+                                        return lib.card[i].ai.tag.hasOwnProperty('damage');
+                                    } else {
+                                        return false;
                                     }
+                                }).map(i => '【' + get.translation(i) + '】')
+                                if (damageCards.some(function (value) {
+                                    return info.includes(value);
+                                })) {
+                                    return true
                                 }
                             }
-                        }
-                        var str = lib.skill.akain_jh.getTranslate(skills)
-                        lib.card[name] = {
-                            fullskin: true,
-                            enable: true,
-                            type: 'equip',
-                            subtype: 'equip5',
-                            vanish: true,
-                            filterTarget: function (card, player, target) {
-                                return target == player;
-                            },
-                            originalSkill: originalSkill,
-                            selectTarget: -1,
-                            modTarget: true,
-                            toself: true,
-                            content: lib.element.content.equipCard,
-                            skills: skills.slice(0),
-                            //clearLose:true,
-                            onLose: function () {
-                                game.log(card, '被销毁了');
-                                game.cardsGotoSpecial(card);
-                                card.fix();
-                                card.remove();
-                                card.destroyed = true;
-                            },
-                            ai: {
-                                basic: {
-                                    equipValue: (skills.length + 1) * 10,
-                                }
-                            },
-                        }
-                        lib.translate[name] = lib.translate[result.links[0]];
-                        lib.translate[name + '_info'] = str;
-                        var card = game.createCard(name, 'none', NaN);
-                        card.setBackground(result.links[0], 'character');
+                        })
+                    }
+                    player.chooseButton(dialog, true)
+                        .set('filterButton', function (button) {
+                            var name = button.link;
+                            var info = lib.character[name];
+                            if (event.skillsfilter(info[3]).length) {
+                                button.classList.add('glow2');
+                            }
+                            return true;
+                        }).set('ai', function (button) {
+                            var name = button.link;
+                            var info = lib.character[name];
+                            var skills = event.skillsfilter(info[3])
+                            var eff = 0.2;
+                            for (var i of skills) {
+                                eff += get.skillRank(i, 'in');
+                            }
+                            return eff;
+                        })
+                    'step 1'
+                    if (result.bool) {
+                        console.log(result)
+                        var name = result.links[0];
+                        game.broadcastAll(function (name) {
+                            lib.skill.akain_jh.createCard(event.skillsfilter, name);
+                        }, name);
+                        var card = game.createCard('akain_jh_' + name);
                         player.$gain2(card);
                         game.delayx();
                         player.equip(card);
+                    }
+                },
+                createCard: function (skillsfilter, name) {
+                    if (!_status.postReconnect.akain_jh) _status.postReconnect.akain_jh = [
+                        function (list) {
+                            for (var name of list) lib.skill.akain_jh.createCard(name);
+                        }, []
+                    ];
+                    _status.postReconnect.akain_jh[1].add(name)
+                    if (!lib.card['akain_jh_' + name]) {
+                        if (lib.translate[name + '_ab']) lib.translate['akain_jh_' + name] = lib.translate[name + '_ab'];
+                        else lib.translate['akain_jh_' + name] = lib.translate[name];
+                        var info = lib.character[name];
+                        var card = {
+                            fullimage: true,
+                            image: 'character:' + name,
+                            type: 'equip',
+                            subtype: 'equip5',
+                            enable: true,
+                            selectTarget: -1,
+                            filterCard: function (card, player, target) {
+                                if (player != target) return false;
+                                return target.canEquip(card, true);
+                            },
+                            originalSkill: info[3],
+                            modTarget: true,
+                            allowMultiple: false,
+                            content: lib.element.content.equipCard,
+                            toself: true,
+                            ai: {},
+                            skills: ['akain_jh_destroy'],
+                        }
+                        var skills = skillsfilter(card.originalSkill)
+                        var str = '锁定技。';
+                        if (skills.length) {
+                            card.skills.addArray(skills);
+                            str += '你视为拥有技能';
+                            for (var skill of skills) {
+                                str += '〖' + get.introduce(get.translation(skill), get.translation(skill + '_info')) + '〗';
+                                str += '、';
+                            }
+                            str = str.slice(0, str.length - 1);
+                            str += '；'
+                        }
+                        lib.translate['akain_jh_' + name + '_info'] = str;
+                        var append = '';
+                        if (skills.length) {
+                            for (var skill of skills) {
+                                if (lib.skill[skill].nobracket) {
+                                    append += '<div class="skilln">' + get.translation(skill) + '</div><div><span style="font-family: yuanli">' + get.skillInfoTranslation(skill) + '</span></div><br><br>';
+                                }
+                                else {
+                                    var translation = lib.translate[skill + '_ab'] || get.translation(skill).slice(0, 2);
+                                    append += '<div class="skill">【' + translation + '】</div><div><span style="font-family: yuanli">' + get.skillInfoTranslation(skill) + '</span></div><br><br>';
+                                }
+                            }
+                        }
+                        lib.translate['akain_jh_' + name + '_append'] = append;
+                        lib.card['akain_jh_' + name] = card;
                     }
                 },
                 ai: {
@@ -1580,33 +1609,85 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             'step 0'
                             player.gainfrMp(1)
                             'step 1'
-                            if (player.getEquip(5) != null && player.getEquip(5).name.indexOf('akain_') != -1) {
+                            if (player.getEquip(5) != null && player.getEquip(5).name.indexOf('akain_jh_') != -1) {
                                 var name = player.getEquip(5).name
-                                var skills = lib.card[name].originalSkill
-                                var newskills = skills.filter(i => {
-                                    var translate = lib.translate[i + '_info']
-                                    if (player.group == 'wei' && translate.indexOf('弃置') != -1) {
-                                        return i
-                                    } else if (player.group != 'wei') {
-                                        var damageCards = lib.inpile.filter(j => {
-                                            if (lib.card[j] && lib.card[j].ai && lib.card[j].ai.tag) {
-                                                return lib.card[j].ai.tag.hasOwnProperty('damage');
-                                            } else {
-                                                return false;
+                                var skills = lib.card[name].originalSkill.slice(0)
+                                var skillsfilter = function (skills) {
+                                    return skills.filter(function (skill) {
+                                        var info = get.skillInfoTranslation(skill);
+                                        if (player.group == 'wei' && info.indexOf('弃置') != -1) {
+                                            return true
+                                        } else if (player.group != 'wei') {
+                                            var damageCards = lib.inpile.filter(i => {
+                                                if (lib.card[i] && lib.card[i].ai && lib.card[i].ai.tag) {
+                                                    return lib.card[i].ai.tag.hasOwnProperty('damage');
+                                                } else {
+                                                    return false;
+                                                }
+                                            }).map(i => '【' + get.translation(i) + '】')
+                                            if (damageCards.some(function (value) {
+                                                return info.includes(value);
+                                            })) {
+                                                return true
                                             }
-                                        }).map(j => '【' + get.translation(j) + '】')
-                                        if (damageCards.some(function (value) {
-                                            return translate.includes(value);
-                                        })) {
-                                            return i
+                                        }
+                                    })
+                                }
+                                skills = skillsfilter(skills)
+                                var str = '锁定技。';
+                                if (skills.length) {
+                                    str += '你视为拥有技能';
+                                    for (var skill of skills) {
+                                        str += '〖' + + get.introduce(get.translation(skill), get.translation(skill + '_info')) + '〗';
+                                        str += '、';
+                                    }
+                                    str = str.slice(0, str.length - 1);
+                                    str += '；'
+                                }
+                                lib.translate[name + '_info'] = str
+                                var append = '';
+                                if (skills.length) {
+                                    for (var skill of skills) {
+                                        if (lib.skill[skill].nobracket) {
+                                            append += '<div class="skilln">' + get.translation(skill) + '</div><div><span style="font-family: yuanli">' + get.skillInfoTranslation(skill) + '</span></div><br><br>';
+                                        }
+                                        else {
+                                            var translation = lib.translate[skill + '_ab'] || get.translation(skill).slice(0, 2);
+                                            append += '<div class="skill">【' + translation + '】</div><div><span style="font-family: yuanli">' + get.skillInfoTranslation(skill) + '</span></div><br><br>';
                                         }
                                     }
-                                })
-                                lib.card[name].skills = newskills
-                                lib.translate[name + '_info'] = lib.skill.akain_jh.getTranslate(newskills)
+                                }
+                                lib.translate[name + '_append'] = append;
+                                lib.card[name].skills = ['akain_jh_destroy']
+                                lib.card[name].skills.addArray(skills)
                             }
                         }
-                    }
+                    },
+                    destroy: {
+                        trigger: {
+                            player: "loseBegin",
+                        },
+                        equipSkill: true,
+                        forceDie: true,
+                        charlotte: true,
+                        forced: true,
+                        popup: false,
+                        filter: function (event, player) {
+                            return event.cards.some(card => card.name.indexOf('akain_jh_') == 0)
+                        },
+                        content: function () {
+                            for (var card of trigger.cards) {
+                                if (card.name.indexOf('akain_jh_') == 0) {
+                                    card._destroy = true;
+                                    game.log(card, '被放回武将牌堆');
+                                    var name = card.name.slice(7);
+                                    if (lib.character[name]) _status.characterlist.add(name);
+                                }
+                            }
+                        },
+                        sub: true,
+                        "_priority": -25,
+                    },
                 }
             },
             'baixi_lj': {
@@ -13376,6 +13457,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 check: function (card) {
                     return 7 - get.value(card)
                 },
+                filterTarget: true,
                 selectCard: 1,
                 content: function () {
                     if (get.color(cards[0]) == 'red') {
@@ -20887,7 +20969,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'akain_bx': '冰心',
             'akain_bx_info': '魏势力技，你造成的伤害视为冰属性。一名角色摸牌后，若其的手牌数达到全场唯一最多且与你势力不同，你可以加入其势力。',
             'akain_ys': '炎势',
-            'akain_ys_info': '非魏势力技，你造成的伤害视为火属性。每回合限一次，一名角色对同势力角色造成伤害后，你可以变更势力为魏，然后可以视为对受伤害角色使用一张【杀】。',
+            'akain_ys_info': '非魏势力技，你造成的伤害视为火属性。每回合限一次，一名角色对你的同势力角色造成伤害后，你可以变更势力为魏，若受伤角色不为你，你可以视为对受伤角色使用一张【杀】。',
             'akain_fy': '风云',
             'akain_fy_info': '锁定技，当你造成属性伤害时，若与受伤角色上一次受到过的属性伤害的属性不同，伤害+1。',
             'akain_jh': '激活',

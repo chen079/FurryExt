@@ -7,6 +7,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             changeLog: [
                 '/setPlayer/',
                 '/setCard/',
+                '2.4.0.3',
+                '修复阿卡因、林特的错误',
                 '2.4.0.2',
                 '新增Buff系统，感谢时空枢纽、玄武江湖提供的代码参考',
                 '为所有Buff重绘图标，在设置菜单可以查看Buff列表',
@@ -20,7 +22,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 'To be continued...',
             ],
             //更新武将
-            players: ['fr_kulun','fr_akain','fr_baixi','fr'],
+            players: ['fr_kulun','fr_akain','fr_baixi'],
             cards: ['fr_card_yfss'],
         };
 

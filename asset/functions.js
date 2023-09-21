@@ -1,5 +1,6 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     game.getInCenter = function () {
+        //--------------------获取中央区的牌-------------------
         var list = [];
         game.getGlobalHistory('cardMove', function (evt) {
             if (evt.name == 'lose') {
@@ -89,7 +90,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             input.style.background = 'black';
             input.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=40)";
             input.style.opacity = "0.6"
-            input.style.width = '50%';
             input.style.fontSize = '20px';
             input.style.textAlign = 'center';
             input.style.color = '#c9c8a2';
