@@ -1850,11 +1850,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 intro: "是否显示“✡”武将前缀",
                 init: false,
             },
-            "buffList":{
-                name:"<b>查看Buff列表",
-                clear:true,
-                intro:'查看福瑞拓展的Buff列表',
-                onclick:function(){
+            "buffList": {
+                name: "<b>查看Buff列表",
+                clear: true,
+                intro: '查看福瑞拓展的Buff列表',
+                onclick: function () {
                     get.Bufflist()
                 }
             },
@@ -2095,6 +2095,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 },
             },
             intro: "<li>(｡･∀･)ﾉﾞ嗨，" + lib.config.connect_nickname + "！欢迎游玩福瑞拓展！"
+                + "<li>当前版本：" + lib.config.extension_福瑞拓展_Frversion
                 + "<li>图片来自网络，若有侵权请联系作者删除"
                 + "<li><font color=\"red\">点击底部彩色字体可直接加入群聊</font>"
                 + "<li>👇下方为QQ群二维码<img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup.png></img>"
