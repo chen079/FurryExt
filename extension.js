@@ -2099,13 +2099,14 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + "<li>图片来自网络，若有侵权请联系作者删除"
                 + "<li><font color=\"red\">点击底部彩色字体可直接加入群聊</font>"
                 + "<li>👇下方为QQ群二维码"
-                + "<li><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup.png></img>"
-                + "<li><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup2.png></img>",
+                + "<div style='text-align: center; width: 100%;'><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup.png></img></div>"
+                + "<div style='text-align: center; width: 100%;'><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/qqgroup2.png></img></div>",
             author: "<img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/image/others/Author.jpg></img><span id='FrOH' style='animation:changeable 20s infinite;-webkit-animation:changeable 20s infinite;'>钫酸酱</span>"
                 + "<br>特别鸣谢：<img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/image/acknowledgments/狂神：代码重构.jpg></img>狂神 重构代码"
                 + "<br><div id='thanks' style='text-align: center; display: table; width: 100%;'>鸣谢清单<div id='arrow'>⮞</div></div>"
-                + "<br>关注微信公众号“无名杀扩展交流”，也可及时获取“福瑞拓展”最新版"
-                + "<br><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img><div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
+                + "关注微信公众号“无名杀扩展交流”，也可及时获取“福瑞拓展”最新版"
+                + "<div style='text-align: center; width: 100%;'><img style=width:238px src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png></img></div>"
+                + "<div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
             version: "2.4.0.3",
