@@ -694,7 +694,12 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     return target == player;
                 },
                 content: function () {
-                    target.stat.push({ card: {}, skill: {} });
+                    for (var i in target.getStat().skill) {
+                        if (target.hasSkill(i)) {
+                            delete target.getStat().skill[i]
+                        }
+                    }
+                    target.getStat().card = {}
                 },
                 ai: {
                     basic: {
@@ -1510,7 +1515,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 filter: function (event, player) {
                     return event.card.name == 'sha' && player.countCards('h') > 0
                 },
-                equipSkill:true,
+                equipSkill: true,
                 direct: true,
                 content: function () {
                     'step 0'
@@ -1537,14 +1542,14 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                                 })
                         } else {
                             event.youji = false
-                            player.discardPlayerCard(trigger.target, 'h', true, '弃置' + get.translation(trigger.target) + '一张手牌').set('ai',function(button){
-                                if(!_status.event.att) return 0;
-                                if(get.position(button.link)=='e'){
-                                    if(get.subtype(button.link)=='equip2')    return 2*get.value(button.link);
+                            player.discardPlayerCard(trigger.target, 'h', true, '弃置' + get.translation(trigger.target) + '一张手牌').set('ai', function (button) {
+                                if (!_status.event.att) return 0;
+                                if (get.position(button.link) == 'e') {
+                                    if (get.subtype(button.link) == 'equip2') return 2 * get.value(button.link);
                                     return get.value(button.link);
                                 }
                                 return 1;
-                            }).set('logSkill',['ar15_skill',trigger.target])
+                            }).set('logSkill', ['ar15_skill', trigger.target])
                         }
                     } else {
                         event.finish()

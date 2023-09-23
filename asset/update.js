@@ -6,26 +6,41 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             //更新告示
             changeLog: [
                 '/setPlayer/',
-                '/setCard/',
-                '2.4.0.3',
-                '修复阿卡因、林特的错误',
-                '2.4.0.2',
-                '新增Buff系统，感谢时空枢纽、玄武江湖提供的代码参考',
-                '为所有Buff重绘图标，在设置菜单可以查看Buff列表',
-                '重做鹿野灸、苍月龙兽、米里森技能，为他们添加Buff适配',
-                '重做卡牌：投桃报李、凌月之球',
-                '鸣谢清单现在点击主体不会再关闭了',
-                '新角色库伦（我们福瑞拓展也要有自己的十常侍！）',
-                '新角色阿卡因（第一次引入变化势力的概念）、白曦',
-                '新卡牌：严防死守',
-                '修复各种Bug',
+                '2.4.0.4',
+                '新角色：米尔克',
+                '修复哈尔斯控制主公杰特，主公下轮开始把哈尔斯调虎离山，此回合结束时报错',
+                '修复Buff致死造成的报错',
+                '修复获得的连携技能可以直接发动',
                 'To be continued...',
             ],
             //更新武将
-            players: ['fr_kulun','fr_akain','fr_baixi'],
-            cards: ['fr_card_yfss'],
+            players: ['fr_mierk'],
+            cards: [],
         };
-
+        var UpdateHistory = {
+            '2.4.0.2': {
+                dialog: [
+                    '新增Buff系统，感谢时空枢纽、玄武江湖提供的代码参考',
+                    '为所有Buff重绘图标，在设置菜单可以查看Buff列表',
+                    '重做鹿野灸、苍月龙兽、米里森技能，为他们添加Buff适配',
+                    '重做卡牌：投桃报李、凌月之球',
+                    '鸣谢清单现在点击主体不会再关闭了',
+                    '新角色库伦（我们福瑞拓展也要有自己的十常侍！）',
+                    '新角色阿卡因（第一次引入变化势力的概念）、白曦',
+                    '新卡牌：严防死守',
+                    '修复各种Bug',
+                ],
+                players: ['fr_kulun', 'fr_akain', 'fr_baixi'],
+                cards: ['fr_card_yfss'],
+            },
+            '2.4.0.3': {
+                dialog: [
+                    '修复阿卡因、林特的错误',
+                ],
+                players: [],
+                cards: [],
+            }
+        }
         //加载
         var dialog = ui.create.dialog('hidden');
         dialog.addText('<div style="font-size:24px;margin-top:5px;text-align:center;">福瑞拓展 ' + version + ' 更新内容</div>');

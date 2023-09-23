@@ -113,7 +113,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             },
             'xiuzheng': {
                 name: '休整',
-                info: '<li>当你进入休整状态时，你复原武将牌，且不于此次死亡事件中进行展示身份牌、检测游戏胜利条件与执行奖惩的流程。<li>若无特殊说明，处于修整状态的角色将会于其下个回合开始前回到游戏。'
+                info: '<li>当你进入休整状态时，你复原武将牌，且不于此次死亡事件中进行展示身份牌、检测游戏胜利条件与执行奖惩的流程。<li>若无特殊说明，处于修整状态的角色将会于其下个回合开始前回到游戏并回复所有体力值。'
             },
             'zhuru': {
                 name: '注入',
@@ -2109,7 +2109,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + "<div id='yiyan'>每日一言：</div><div id='history'>历史</div>",
             diskURL: "",
             forumURL: "",
-            version: "2.4.0.3",
+            version: "2.4.0.4",
         },
         files: {
             "character": [],

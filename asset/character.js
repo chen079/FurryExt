@@ -23,7 +23,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         ],
         connect: true,//该武将包是否可以联机（必填）
         character: {
-            //'fr_mierk': ['male', 'qun', 3, ['mierk_jc', 'mierk_fm', 'mierk_jingcai'], ['epic']],
+            'fr_mierk': ['male', 'qun', 3, ['mierk_jc', 'mierk_fm', 'mierk_jingcai'], ['epic']],
             //'fr_proten':['male', 'fr_g_ji', 3, [], ['common']],
             //'fr_waers': ['male', 'qun', 3, [], ['common']],
             //'fr_kuang': ['male', 'qun', 3, [], ['legend']],
@@ -179,7 +179,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 filter: function (event, player) {
                     if (!player.countCards('h')) return false;
-                    return event.player != player && event.card.name == 'sha' && !event.targets.contains(player) && player.inRange(event.player)
+                    return event.player != player && event.card.name == 'sha' && !event.targets.contains(player) && event.player.inRange(player)
                 },
                 direct: true,
                 content: function () {
@@ -235,6 +235,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     "step 4"
                     trigger.player.addFrBuff('shisheng')
+                    trigger.player.addFrBuff('zhenhan', player)
                     trigger.getParent().targets.push(player);
                     trigger.player.line(player);
                     game.delay();
@@ -257,22 +258,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             return get.effect(player, event.card, event.player, player) < 0;
                         },
                         filter: function (event, player) {
-                            return event.card.name == 'sha'
+                            return event.card.name == 'sha' && player.canCompare(event.player)
                         },
                         logTarget: "player",
                         content: function () {
                             'step 0'
-                            player.draw()
-                            'step 1'
-                            if (!player.canCompare(trigger.player)) event.finish()
-                            'step 2'
                             player.when('chooseToCompareAfter').then(() => {
                                 if (trigger.num1 < trigger.num2) {
                                     player.gain([trigger.card1, trigger.card2].filterInD('od'), 'gain2', 'log')
                                 }
                             })
                             player.chooseToCompare(trigger.player);
-                            'step 3'
+                            'step 1'
                             if (result.bool) {
                                 trigger.getParent().excluded.add(player);
                             }
@@ -541,6 +538,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     var player = _status.event.player
                     return -get.attitude(player, target)
                 },
+                filter: function (event, player) {
+                    return ((player.name1 == 'fr_kulun_thunder') || (player.name2 == 'fr_kulun_thunder'));
+                },
                 content: function () {
                     'step 0'
                     var cards = game.getInCenter()
@@ -661,7 +661,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 linkage: 'dark',
                 filter: function (event, player) {
-                    return event.card.name == 'sha';
+                    return event.card.name == 'sha' && ((player.name1 == 'fr_kulun_dark') || (player.name2 == 'fr_kulun_dark'));
                 },
                 logTarget: "target",
                 check: function (event, player) {
@@ -705,6 +705,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 filterTarget: function (card, player, target) {
                     return target != player
                 },
+                filter: function (event, player) {
+                    return ((player.name1 == 'fr_kulun_metal') || (player.name2 == 'fr_kulun_metal'));
+                },
                 selectTarget: -1,
                 content: function () {
                     target.link()
@@ -726,7 +729,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 frequent: true,
                 filter: function (event) {
-                    return (get.type(event.card, 'trick') == 'trick' && event.card.isCard);
+                    return (get.type(event.card, 'trick') == 'trick' && event.card.isCard) && ((player.name1 == 'fr_kulun_dirt') || (player.name2 == 'fr_kulun_dirt'));;
                 },
                 content: function () {
                     'step 0'
@@ -745,6 +748,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 enable: "chooseToUse",
                 filterCard: function (card) {
                     return get.color(card) == 'red';
+                },
+                filter: function (event, player) {
+                    return ((player.name1 == 'fr_kulun_light') || (player.name2 == 'fr_kulun_light'));
                 },
                 viewAs: {
                     name: "huogong",
@@ -929,6 +935,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 forced: true,
                 linkage: 'water',
+                filter: function (event, player) {
+                    return ((player.name1 == 'fr_kulun_water') || (player.name2 == 'fr_kulun_water'));
+                },
                 content: function () {
                     trigger.directHit.addArray(game.filterPlayer(current => {
                         return current.getHistory('lose').length > 0
@@ -1199,7 +1208,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 filter: function (event, player) {
                     return player.hasCard(function (card) {
                         return get.type(card) != 'basic';
-                    }, 'hes');
+                    }, 'hes') && ((player.name1 == 'fr_kulun_nature') || (player.name2 == 'fr_kulun_nature'));;
                 },
                 viewAs: {
                     name: "shuiyanqijun",
@@ -1229,7 +1238,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     source: 'damageEnd'
                 },
                 filter: function (event, player) {
-                    return event.card.name == 'sha'
+                    return event.card.name == 'sha' & ((player.name1 == 'fr_kulun_ice') || (player.name2 == 'fr_kulun_ice'));
                 },
                 content: function () {
                     trigger.player.addFrBuff('dongshang', 2 * trigger.num)
@@ -1407,7 +1416,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     source: "damageEnd"
                 },
                 filter: function (event, player) {
-                    return event.nature == 'fire'
+                    return event.nature == 'fire' && ((player.name1 == 'fr_kulun_wind') || (player.name2 == 'fr_kulun_wind'));
                 },
                 linkage: 'wind',
                 content: function () {
@@ -7504,21 +7513,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         }
                     }
                 },
-                ai: {
-                    order: 1,
-                    result: {
-                        target: function (card, player, target) {
-                            var player = _status.event.player
-                            var num = 0, card = { name: 'sha', nature: 'fire', isCard: true };
-                            var hs = player.getCards('h').sort((a, b) => get.number(b) - get.number(a));
-                            var ts = target.getCards('h').sort((a, b) => get.number(b) - get.number(a));
-                            if (get.number(hs[0]) <= Math.min(13, get.number(ts[0]) + num)) {
-                                return -(6 + get.effect(player, card, target, target))
-                            }
-                            return -(get.effect(target, { name: 'guohe_copy2' }, player, player) / 2 + get.effect(target, card, player, player))
-                        }
-                    }
-                }
             },
             'harald_zb': {
                 trigger: {
@@ -8510,7 +8504,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (!player.storage.kaye_yj) player.storage.kaye_yj = [];
                 },
                 content: function () {
-                    target.addTempSkill("kaye_yj_one", { player: "phaseEnd" });
+                    target.addFrBuff('xuruo', 5, player)
                     target.addFrBuff('yishang', 2, player)
                     if (!player.storage.kaye_yj) player.storage.kaye_yj = [];
                     player.storage.kaye_yj.push(target);
@@ -8530,34 +8524,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 intro: {
                     markcount: () => undefined,
                     content: "已对$发动过〖压制〗",
-                },
-                subSkill: {
-                    one: {
-                        forced: true,
-                        trigger: {
-                            source: "damageBefore",
-                        },
-                        charlotte: true,
-                        init: function (player) {
-                            if (!player.storage.kaye_yj_one) player.storage.kaye_yj_one = 0
-                        },
-                        filter: function (event, player) {
-                            return player.storage.kaye_yj_one < 4
-                        },
-                        intro: {
-                            content: function (storage, player, skill) {
-                                return "直到你的下个回合结束，你取消接下来造成的" + get.cnNumber(5 - player.storage.kaye_yj_one) + '次伤害。'
-                            }
-                        },
-                        mark: true,
-                        content: function () {
-                            if (trigger.player != player) {
-                                player.storage.kaye_yj_one += 1
-                                trigger.cancel()
-                            }
-                        },
-                        sub: true,
-                    },
                 },
             },
             "kert_jl": {
@@ -17017,6 +16983,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         var list = [];
                         for (var name of lib.inpile) {
                             var type = get.type(name);
+                            if (name == 'diaohulishan') continue
                             if (type != 'trick') continue;
                             var card = { name: name, isCard: true };
                             if (!get.tag(card, 'damage') && player.hasUseTarget(card)) {
@@ -20919,9 +20886,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'mierk_jingcai': '惊才',
             'mierk_jingcai_info': '你拼点时，可以改为用牌堆顶的一张牌进行拼点；当你拼点的牌亮出后，若此牌颜色与对方相同，则此牌的点数视为K。',
             'mierk_jc': '讥刺',
-            'mierk_jc_info': '当一名其他角色使用【杀】指定目标时，若其在你的攻击范围内且你不是目标，则你可以将一张手牌置于牌堆顶，取消所有目标，然后你成为目标并令使用者获得1层' + get.dialogIntro('shisheng') + '。',
+            'mierk_jc_info': '当一名其他角色使用【杀】指定目标时，若你在其的攻击范围内且你不是目标，则你可以将一张手牌置于牌堆顶，取消所有目标，然后你成为目标并令使用者获得1层' + get.dialogIntro('shisheng') + '和1层' + get.dialogIntro('zhenhan') + '。',
             'mierk_fm': '讽蔑',
-            'mierk_fm_info': '①当你使用【杀】指定目标后，你可以选择一名除目标外的角色，然后令该角色与目标角色拼点，若该角色赢，此【杀】视为该角色使用且不可响应，②当你成为【杀】的目标后，你可以摸一张牌，然后与此【杀】使用者拼点，若你赢，此【杀】对你无效，否则，你获得此次拼点的牌。',
+            'mierk_fm_info': '①当你使用【杀】指定目标后，你可以选择一名除目标外的角色，然后令该角色与目标角色拼点，若该角色赢，此【杀】视为该角色使用且不可响应，②当你成为【杀】的目标后，你可以与此【杀】使用者拼点，若你赢，此【杀】对你无效，否则，你获得此次拼点的牌。',
             'baixi_jc': '酒池',
             'baixi_jc_info': '①你可以将一张黑桃手牌当做【酒】使用。②锁定技，你使用【酒】无次数限制。',
             'kulun_gz': '过载',
@@ -21235,7 +21202,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "kaye_jy": "急援",
             "kaye_jy_info": "出牌阶段限一次，你可以弃置一张手牌并选择一名角色，若如此做，你令该角色获得2层" + get.dialogIntro('jianren') + "。",
             "kaye_yj": "压制",
-            "kaye_yj_info": "出牌阶段，你可以选择一名其他角色，若如此做，你令该角色获得2层" + get.dialogIntro('yishang') + "且即将造成的接下来5次伤害无效直到其下个回合结束。每名角色限一次。",
+            "kaye_yj_info": "出牌阶段，你可以选择一名其他角色，若如此做，你令该角色获得2层" + get.dialogIntro('yishang') + "和5层" + get.dialogIntro('xuruo') + "。每名角色限一次。",
             "kert_jl": "积虑",
             "kert_jl_info": "锁定技，你的黑色【杀】不计入手牌上限，且你可以多使用一张杀。",
             "kert_lp": "掳魄",
@@ -21816,8 +21783,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             }
         },
         characterTitle: {
+            'fr_mierk': '力争神辩',
             'fr_waers': '坚守一方',
-            'fr_kuang': '力争狂辩',
+            'fr_kuang': '狂怒之牺',
             'fr_kulun': '元素引导者',
             'fr_akain': '风云变幻',
             'fr_baixi': '阴阳两仪',

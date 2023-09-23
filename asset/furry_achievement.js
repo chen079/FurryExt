@@ -1,8 +1,9 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
-		'fr_baixi':'',
-		'akain_bx':'我自飘零，未遇明主。',
+		'fr_mierk':'我有一言，诸君静听。',
+		'fr_baixi':'一见生财，天下太平！',
+		'fr_akain':'我自飘零，未遇明主。',
 		'fr_kulun':"我是元素的王！哈哈哈哈哈！",
 		'fr_sainit': '月华闪烁，一泻千里。',
 		'fr_aak': '来喝我做的果汁吧，怎么样很好喝吗？嘻嘻嘻（榴莲味）',

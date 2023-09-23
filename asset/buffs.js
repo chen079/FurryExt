@@ -64,21 +64,100 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 }
             },
         },
+        //虚弱
+        'xuruo': {
+            intro: {
+                name: "虚弱",
+                content: "<li>当你造成伤害时，此伤害-X，并移除1层「虚弱」<li>你的回合结束后，你移除所有「虚弱」。",
+            },
+            charlotte: true,
+            trigger: {
+                source: "damageBegin2",
+                player: 'phaseAfter'
+            },
+            forced: true,
+            silent: true,
+            priority: 3,
+            filter: function (event, player) {
+                return player.hasFrBuff('xuruo')
+            },
+            content: function () {
+                if (event.triggername == 'damageBegin2') {
+                    trigger.num -= player.countFrBuffNum('xuruo')
+                    player.reduceFrBuff('xuruo')
+                } else {
+                    player.clearFrBuff('xuruo')
+                }
+            },
+            FrBuffInfo: {
+                naturalLose: false,
+                type: 'debuff',
+                BuffRank: {
+                    basic: [0, 2],
+                    add: [0, 0.8],
+                }
+            },
+        },
+        //疲惫
+        "pibei": {
+            intro: {
+                name: "疲惫",
+                content: "<li>你的摸牌阶段额定摸牌数-1。",
+            },
+            forced: true,
+            silent: true,
+            priority: 3,
+            trigger: {
+                player: 'phaseDrawBefore'
+            },
+            filter: function (event, player) {
+                return player.hasFrBuff('pibei')
+            },
+            content: function () {
+                game.log(player, '受「<font color=blue>疲惫</font>」影响');
+                trigger.num--;
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                type: 'debuff',
+                limit: 5,
+                buffRank: {
+                    basic: [0, 1],
+                },
+            }
+        },
+        //束缚
+        'shufu': {
+            intro: {
+                name: "束缚",
+                content: "<li>你使用牌只能指定与你距离小于4-X的角色为目标。",
+            },
+            charlotte: true,
+            mod: {
+                playerEnabled: function (card, player, target) {
+                    if (get.distance(player, target) > 4 - player.countFrBuffNum('shufu')) return false;
+                },
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                type: 'debuff',
+                limit: 3,
+                BuffRank: {
+                    basic: [0, 1],
+                    add: [0, 0.8],
+                }
+            },
+        },
         //失声
         'shisheng': {
             intro: {
                 name: "失声",
-                content: "<li>你的拼点牌点数-X，当你拼点后，移除此Buff。<li>你使用牌只能指定与你距离小于1的角色为目标。",
+                content: "<li>你的拼点牌点数-X。",
             },
             charlotte: true,
             trigger: {
                 player: "compare",
                 target: "compare",
-            },
-            mod: {
-                playerEnabled: function (card, player, target) {
-                    if (get.distance(player, target) > 1) return false;
-                },
             },
             forced: true,
             silent: true,
@@ -99,8 +178,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     if (trigger.num2 < 1) trigger.num2 = 1;
                 }
                 game.log(player, '的拼点牌点数-' + num);
-                'step 1'
-                player.clearFrBuff('shisheng')
             },
             FrBuffInfo: {
                 naturalLose: true,
@@ -188,25 +265,31 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         'dragonfire': {
             intro: {
                 name: "龙焰",
-                content: "<li>自然衰减时，你须选择一项：1.弃置2张牌，2.受到1点火焰伤害；。",
+                content: "<li>当你获得「龙焰」时，你击碎1个勾玉。<li>自然衰减时，你受到1点火焰伤害。",
             },
             charlotte: true,
             trigger: {
-                player: "reduceFrBuffBegin2",
+                player: ["addFrBuffBegin1", "reduceFrBuffBegin2"],
             },
             forced: true,
             silent: true,
             priority: 3,
-            filter: function (event, player) {
-                return player.hasFrBuff('dragonfire') && event.naturalLose && event.buff == 'dragonfire'
+            filter: function (event, player, onrewrite) {
+                if (onrewrite == "addFrBuffBegin1") {
+                    return event.buff == 'dragonfire'
+                } else {
+                    return player.hasFrBuff('dragonfire') && event.naturalLose && event.buff == 'dragonfire'
+                }
             },
             content: function () {
                 'step 0'
-                game.log(player, '受「<font color=black>龙焰</font>」影响');
-                player.chooseToDiscard(2, '龙焰：弃置两张手牌或受到1点火焰伤害')
-                'step 1'
-                if (!result.bool) {
-                    player.damage(1, 'fire')
+                var onrewrite = event.triggername
+                if (onrewrite == "addFrBuffBegin1") {
+                    player.Frbroken()
+                    event.finish()
+                } else {
+                    game.log(player, '受「<font color=black>龙焰</font>」影响');
+                    player.damage(1, 'fire', 'nosource')
                 }
             },
             FrBuffInfo: {
@@ -1132,7 +1215,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             'step 1'
             var buff = event.buffList.shift()
             if (player.hasFrBuff(buff)) {
-                player.celarFrBuff(buff);
+                player.clearFrBuff(buff);
             }
             'step 2'
             if (event.buffList.length) event.goto(1)

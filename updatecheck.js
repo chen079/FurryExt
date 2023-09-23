@@ -1,9 +1,9 @@
 (() => ({
 	// 扩展版本
-	version: "2.4.0.3",
+	version: "2.4.0.4",
 
 	// 扩展的上一个版本
-	oldversion: "2.4.0.2",
+	oldversion: "2.4.0.3",
 
 	// 更新内容汇总
 	changeLog: `
@@ -36,6 +36,9 @@
 		'asset/skin.js',
 		'asset/update.js',
 		'extension.js',
+		'image/Buff/pibei.png',
+		'image/Buff/shufu.png',
+		'image/Buff/xuruo.png'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
