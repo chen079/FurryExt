@@ -16451,6 +16451,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 usable: 1,
                 filterCard: true,
                 lose: false,
+                charlotte:true,
                 discard: false,
                 delay: false,
                 selectCard: function () {
