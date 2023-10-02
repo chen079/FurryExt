@@ -1,7 +1,6 @@
-game.import('character', function (lib, game, ui, get, ai, _status) {
+window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     var furryGZPack = {
-        name: 'furryGZPack',//武将包命名（必填）
-        connect: true,//该武将包是否可以联机（必填）
+        mode: 'guozhan',
         character: {
             gz_fr_yifeng: ['male', 'wei', 3, ['kref_gzyz'], []],
             gz_fr_yifa: ['female', 'wei', 3, ['yifa_xs'], []],
@@ -634,7 +633,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'gz_fr_yada': "亚达",
             'gz_fr_skry': "斯克瑞",
             'gz_fr_sam': "山",
-            'fr_fengkn': "冯·莱卡恩",
+            'gz_fr_fengkn': "冯·莱卡恩",
             'gz_fr_sheep': "西普",
             'gz_fr_bladewolf': "刃狼",
         }
@@ -650,7 +649,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         if (lib.config.frLutou) furryGZPack.character[i][4].push('ext:福瑞拓展/image/skin/origin-lutou/' + str + '.png')
         else furryGZPack.character[i][4].push('ext:福瑞拓展/image/skin/origin-standard/' + str + '.jpg')
     }
-    if(lib.config.mode=='guozhan'){
-        return furryGZPack;
-    }else return {}
+    /*if (lib.config.extension_福瑞拓展_guozhan && get.mode() == 'guozhan') {
+        game.addCharacterPack(furryGZPack, '福瑞国战')
+    }*/
 })

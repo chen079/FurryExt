@@ -18,8 +18,27 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             cards: [],
         };
         var UpdateHistory = {
+            '2.4.0.4': {
+                changeLog: [
+                    '2.4.0.4',
+                    '新角色：米尔克',
+                    '修复哈尔斯控制主公杰特，主公下轮开始把哈尔斯调虎离山，此回合结束时报错',
+                    '修复Buff致死造成的报错',
+                    '修复获得的连携技能可以直接发动',
+                    'To be continued...',
+                ],
+                players: ['fr_mierk'],
+                cards: [],
+            },
+            '2.4.0.3': {
+                changeLog: [
+                    '修复阿卡因、林特的错误',
+                ],
+                players: [],
+                cards: [],
+            },
             '2.4.0.2': {
-                dialog: [
+                changeLog: [
                     '新增Buff系统，感谢时空枢纽、玄武江湖提供的代码参考',
                     '为所有Buff重绘图标，在设置菜单可以查看Buff列表',
                     '重做鹿野灸、苍月龙兽、米里森技能，为他们添加Buff适配',
@@ -33,13 +52,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 players: ['fr_kulun', 'fr_akain', 'fr_baixi'],
                 cards: ['fr_card_yfss'],
             },
-            '2.4.0.3': {
-                dialog: [
-                    '修复阿卡因、林特的错误',
-                ],
-                players: [],
-                cards: [],
-            }
         }
         //加载
         var dialog = ui.create.dialog('hidden');
@@ -94,6 +106,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         direct: true,
         priority: Infinity,
         content: function () {
+            //---------------------------------------设置：自动更新------------------------------------------//
+            if (lib.config.extension_福瑞拓展_furryCardFileConfig2 && game.getFileList && lib.config.extensions) {
+                //十周年卡牌素材
+                window.furry.autoFrImport()
+                alert('已自动导入素材')
+            }
             game.saveConfig('extension_福瑞拓展_Frversion', lib.extensionPack.福瑞拓展.version);
             game.showFrChangeLog();
         },

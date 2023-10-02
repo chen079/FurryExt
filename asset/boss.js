@@ -28,31 +28,31 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     // 将观察器与 ui.cardPile 元素关联
                     observer.observe(ui.cardPile, config);
                 },
-                mark:true,
-                intro:{
-                    markcount:"expansion",
-                    mark:function(dialog,content,player){
-                        var content=player.getExpansions('nine_bossjn');
-                        if(content&&content.length){
-                            if(player==game.me||player.isUnderControl()){
+                mark: true,
+                intro: {
+                    markcount: "expansion",
+                    mark: function (dialog, content, player) {
+                        var content = player.getExpansions('nine_bossjn');
+                        if (content && content.length) {
+                            if (player == game.me || player.isUnderControl()) {
                                 dialog.addAuto(content);
                             }
-                            else{
-                                return '共有'+get.cnNumber(content.length)+'张波';
+                            else {
+                                return '共有' + get.cnNumber(content.length) + '张波';
                             }
                         }
                     },
-                    content:function(content,player){
-                        var content=player.getExpansions('nine_bossjn');
-                        if(content&&content.length){
-                            if(player==game.me||player.isUnderControl()){
+                    content: function (content, player) {
+                        var content = player.getExpansions('nine_bossjn');
+                        if (content && content.length) {
+                            if (player == game.me || player.isUnderControl()) {
                                 return get.translation(content);
                             }
-                            return '共有'+get.cnNumber(content.length)+'张波';
+                            return '共有' + get.cnNumber(content.length) + '张波';
                         }
                     },
                 },
-                content:function(){
+                content: function () {
 
                 }
             },
@@ -102,28 +102,26 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                         },
                         content: function () {
                             'step 0'
-                            event.count = trigger.num;
-                            'step 1'
-                            event.count--;
-                            if (player.countMark("wore_bossty_mark") < game.roundNumber) {
-                                player.addMark('wore_bossty_mark', 1);
+                            var num = Math.min(trigger.num, game.roundNumber - player.countMark("wore_bossty_mark"));
+                            if (num <= 0) {
+                                trigger.cancel()
+                                event.finish()
+                            } else {
+                                player.addMark("wore_bossty_mark", num)
+                                trigger.num = num
                             }
-                            else trigger.cancel();
-                            'step 2'
-                            if (event.count > 0) event.goto(1);
                         },
                         sub: true,
                     },
                     remove: {
                         trigger: {
-                            global: "phaseEnd",
+                            global: "roundStart",
                         },
                         popup: false,
                         charlotte: true,
                         forced: true,
                         content: function () {
-                            var m = player.countMark("wore_bossty_mark");
-                            player.removeMark("wore_bossty_mark", m);
+                            player.removeMark("wore_bossty_mark", player.countMark("wore_bossty_mark"));
                             player.unmarkSkill('wore_bossty')
                         },
                         sub: true,
@@ -275,7 +273,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             "oert_bosswy": "威压",
             "oert_bosswy_info": "锁定技，回合开始时，你令所有其他角色的非charlotte技能与防具无效直到回合结束。",
             'wore_bossty': "天佑",
-            "wore_bossty_info": "锁定技，你的阶段不会被跳过，你每回合能受到伤害、失去体力、失去体力上限的总和至多为游戏轮数，当你受到超过游戏轮数的伤害、失去体力、失去体力上限时，取消之。",
+            "wore_bossty_info": "锁定技，你的阶段不会被跳过，你每回合能受到伤害、失去体力、失去体力上限的总和至多为游戏轮数。",
 
             //character
             "fr_bosswore": "✡沃尔",

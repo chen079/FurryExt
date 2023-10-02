@@ -385,6 +385,36 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 fullimage: true,
                 derivation: "fr_tails",
             },
+            'fr_phaseZhunbei': {
+                image: 'character:re_zhugeliang',
+                type: "phase",
+                fullimage: true,
+            },
+            'fr_phaseJudge': {
+                type: "phase",
+                fullimage: true,
+                image: 'character:re_simayi',
+            },
+            'fr_phaseDraw': {
+                type: "phase",
+                fullimage: true,
+                image: 'character:sb_zhouyu',
+            },
+            'fr_phaseUse': {
+                type: "phase",
+                fullimage: true,
+                image: 'character:jsp_huangyueying',
+            },
+            'fr_phaseDiscard': {
+                type: "phase",
+                fullimage: true,
+                image: 'character:re_lvmeng',
+            },
+            'fr_phaseJieshu': {
+                type: "phase",
+                fullimage: true,
+                image: 'character:re_diaochan'
+            },
             'fr_card_scfm': {
                 image: 'ext:福瑞拓展/image/card/fr_card_scfm.png',
                 audio: true,
@@ -1116,26 +1146,21 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 modTarget: true,
                 content: function () {
                     "step 0"
-                    event.skills = [];
-                    for (var i in lib.character) {
-                        for (var j = 0; j < lib.character[i][3].length; j++) {
-                            if (target.hasSkill(lib.character[i][3][j])) continue;
-                            var info = lib.skill[lib.character[i][3][j]];
-                            if (info && !(info.fixed || info.yunlvSkill || info.qianghua || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || info.unique)) {
-                                event.skills.add(lib.character[i][3][j]);
-                            }
-                        }
-                    }
+                    event.skills = get.gainableSkills(function (info, skill) {
+                        if (info.fixed || info.unique || info.zhuSkill || info.charlotte || info.yunlvSkill || info.qianghua || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable)) return false
+                        if (target.hasSkill(skill)) return false
+                        return true
+                    }, target)
                     'step 1'
                     var choice = event.skills.randomGets(5)
-                    player.chooseControl(choice).set('ai', function () {
+                    target.chooseControl(choice).set('ai', function () {
                         return choice.randomGet()
                     }).set('prompt', get.prompt2("fr_card_lyzq"))
                         .set('choiceList', choice.map(i => '【' + get.translation(i) + '】:' + get.translation(i + '_info')))
                     'step 2'
                     if (result.control != 'cancel2') {
-                        player.addTempSkill(result.control, { player: 'phaseAfter' })
-                        game.log(player, '获得了技能', '#g【' + get.translation(result.control) + '】')
+                        target.addTempSkill(result.control, { player: 'phaseAfter' })
+                        game.log(target, '获得了技能', '#g【' + get.translation(result.control) + '】')
                     }
                 },
                 ai: {
@@ -1663,6 +1688,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: "phaseEnd",
                 },
+                popup: false,
                 lastDo: true,
                 charlotte: true,
                 forced: true,
@@ -1754,6 +1780,12 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
+            'fr_phaseZhunbei': '准备阶段',
+            'fr_phaseJudge': '判定阶段',
+            'fr_phaseDraw': '摸牌阶段',
+            'fr_phaseUse': '出牌阶段',
+            'fr_phaseDiscard': '弃牌阶段',
+            'fr_phaseJieshu': '结束阶段',
             'fr_card_yfss': '严防死守',
             'fr_card_yfss_info': '出牌阶段，对你使用。若目标护甲数小于5，其弃置所有手牌并获得等量护甲。',
             'fr_equip1_ar15': 'AR15',
@@ -1833,12 +1865,12 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             ['heart', '5', "fr_card_lltj", null, ['gifts']],
             ['club', '5', "fr_card_lltj", null, ['gifts']],
             ['diamond', '5', "fr_card_lltj", null, ['gifts']],
-            ['heart', '5', "sha", "mad"],
-            ['club', '7', "sha", "mad"],
-            ['spade', '11', "sha", "mad"],
-            ['diamond', '4', "sha", "mad"],
-            ['heart', '6', "sha", "mad"],
-            ['spade', '9', "sha", "mad"],
+            ['heart', '5', "sha",'mad'],
+            ['club', '7', "sha",'mad'],
+            ['spade', '11', "sha",'mad'],
+            ['diamond', '4', "sha",'mad'],
+            ['heart', '6', "sha",'mad'],
+            ['spade', '9', "sha",'mad'],
         ],
     }
     if (lib.config.achiReward && lib.config.achiReward.card.length != 0) {

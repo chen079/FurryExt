@@ -263,7 +263,7 @@
 
 /*这里是龙势力*/
 .button.character.newstyle>.identity[data-nature="fr_g_dragon"] {
-    background-image: url('../image/group/name2_fr_g_dragon.png') !important;
+    background-image: url('../import/十周年UI/image/decorations/name2_fr_g_dragon.png') !important;
     background-size: 100% 100% !important;
 }
 
@@ -278,7 +278,7 @@
 
 /*这里是机势力*/
 .button.character.newstyle>.identity[data-nature="fr_g_ji"] {
-    background-image: url('../image/group/name2_fr_g_ji.png') !important;
+    background-image: url('../import/十周年UI/image/decorations/name2_fr_g_ji.png') !important;
     background-size: 100% 100% !important;
 }
 
@@ -455,7 +455,7 @@ progress.oafaProgress::-webkit-progress-value {
 }
 
 .frHistory .exit {
-    background-image: url(image/exit.png);
+    background-image: url('../image/others/exit.png');
     background-size: 100% 100%;
     width: 50px;
     height: 50px;

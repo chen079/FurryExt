@@ -979,6 +979,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         return next
     }
     lib.element.content.hideCharacter = function () {
+        'step 0'
         var name = event.playername
         var info = lib.character[name];
         if (!info) return;
@@ -1015,6 +1016,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         if (!player.hasSkill('fryinni')) player.addTempSkill('fryinni', { player: 'showCharacterAfter' })
         player.storage.rawHp = player.hp;
         player.storage.rawMaxHp = player.maxHp;
+        'step 1'
         player.hp = 1;
         player.maxHp = 1;
         player.node.hp.hide();

@@ -1,4 +1,4 @@
-window.furry.frImport(function(lib,game,ui,get,ai,_status){
+window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     game.addMode('furry_lib', {
         game: {
             syncMenu: true,
@@ -724,7 +724,7 @@ window.furry.frImport(function(lib,game,ui,get,ai,_status){
             game.clearModeConfig('furry_lib');
         }
     })
-    if (lib.config.extension_手杀ui_qiDongYe == 'othersOn') {
+    if (lib.config.extension_手杀ui_qiDongYe == 'othersOn' && lib.config['extension_手杀ui_enable']) {
         lib.mode['furry_lib'].splash = 'ext:福瑞拓展/image/qidongye/furry_lib.jpg'
     } else {
         lib.mode['furry_lib'].splash = 'ext:福瑞拓展/image/qidongye/furry_lib2.jpg'

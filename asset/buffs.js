@@ -2,11 +2,129 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     //---------------------------------------定义Buff-----------------------------------------//
     //现在定义新的Buff时，在lib.FrBuff中请不要加前缀Fr_Buff_
     lib.FrBuff = {
+        //鼓舞
+        "guwu": {
+            intro: {
+                name: "鼓舞",
+                content: "<li>你摸牌时，20X%的几率摸牌数+1。<li>你造成伤害时，15X%的几率伤害值+1。",
+            },
+            trigger: {
+                player: "drawBegin",
+                source: "damageBegin",
+            },
+            forced: true,
+            silent: true,
+            priority: 3,
+            filter: function (event, player) {
+                return player.hasFrBuff('guwu')
+            },
+            content: function () {
+                var onrewrite = event.triggername;
+                var num = player.countFrBuffNum('guwu');
+                if (onrewrite == "drawBegin") {
+                    if (Math.random() <= num * 0.2) {
+                        game.log(player, '受「<font color=yellow>鼓舞</font>」影响，本次摸牌数+1');
+                        trigger.num++;
+                    }
+                }
+                if (onrewrite == "damageBegin") {
+                    if (Math.random() <= num * 0.15) {
+                        game.log(player, '受「<font color=yellow>鼓舞</font>」影响，本次造成的伤害值+1');
+                        trigger.num++;
+                    }
+                }
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    random: [0.25, 0],
+                    randomPower: 1.5,
+                },
+                type: 'buff',
+                limit: 5,
+                BuffReject: ["dimi"],
+            }
+        },
+        //低迷
+        "dimi": {
+            intro: {
+                name: "低迷",
+                content: "<li>你摸牌时，若摸牌数大于1，20X%的几率摸牌数-1。<li>你造成伤害时，15X%的几率伤害值-1。",
+            },
+            trigger: {
+                player: "drawBegin",
+                source: "damageBegin",
+            },
+            forced: true,
+            silent: true,
+            priority: 3,
+            filter: function (event, player, onrewrite) {
+                if (!player.hasFrBuff('dimi')) return false;
+                if (onrewrite == "drawBegin") return event.num > 1;
+                return true;
+            },
+            content: function () {
+                var onrewrite = event.triggername;
+                var num = player.countFrBuffNum('dimi');
+                if (onrewrite == "drawBegin") {
+                    if (Math.random() <= num * 0.2) {
+                        game.log(player, '受「<font color=blue>低迷</font>」影响，本次摸牌数-1');
+                        trigger.num--;
+                    }
+                }
+                if (onrewrite == "damageBegin") {
+                    if (Math.random() <= num * 0.15) {
+                        game.log(player, '受「<font color=blue>低迷</font>」影响，本次造成的伤害值-1');
+                        trigger.num--;
+                    }
+                }
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    random: [0, 0.25],
+                    randomPower: 1.5,
+                },
+                type: 'debuff',
+                limit: 5,
+                BuffReject: ["guwu"]
+            },
+        },
+        //嘲讽
+        'chaofeng': {
+            intro: {
+                name: "嘲讽",
+                content: "<li>当一名其他角色使用【杀】指定目标时，若你在其攻击范围内且你不是目标，你成为目标，然后移除1层「嘲讽」。",
+            },
+            trigger: {
+                global: "useCardToPlayer",
+            },
+            charlotte: true,
+            forced: true,
+            silent: true,
+            priority: 3,
+            filter: function (event, player) {
+                return event.player != player && event.card.name == 'sha' && !event.targets.contains(player) && event.player.inRange(player);
+            },
+            content: function () {
+                trigger.getParent().targets.push(player);
+                trigger.player.line(player);
+                player.reduceFrBuff('chaofeng')
+                game.delay();
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                type: 'debuff',
+                BuffRank: {
+                    basic: [0, 1],
+                }
+            },
+        },
         //庇护
         'bihu': {
             intro: {
                 name: "庇护",
-                content: "<li>当你成为其他角色普通锦囊牌后，令此牌对你无效。<li>你不会成为【乐不思蜀】和【兵粮寸断】的目标。",
+                content: "<li>当你成为其他角色普通锦囊牌的目标后，令此牌对你无效。<li>你不会成为【乐不思蜀】和【兵粮寸断】的目标。",
             },
             trigger: {
                 target: "useCardToTargeted",
@@ -952,42 +1070,34 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         'dongshang': {
             intro: {
                 name: "冻伤",
-                content: "<li>当你受到火属性伤害时，你移除1层「<font color=blue>冻伤</font>」。若你的「<font color=blue>冻伤</font>」层数大于你的体力上限，当你受到伤害时，你需弃置1张手牌且此伤害有50%的概率+1。",
+                content: "<li>当你受到伤害时，弃置1张手牌，若此伤害为火属性，你减少1层「<font color=blue>冻伤</font>」并令此伤害+1。",
             },
             charlotte: true,
             trigger: {
-                player: ["damage", 'damageBegin2'],
+                player: "damageBegin2",
             },
             forced: true,
             silent: true,
             priority: 3,
-            filter: function (event, player, onrewrite) {
-                if (!player.hasFrBuff("dongshang")) return false;
-                if (onrewrite == 'damage') return event.nature && event.nature == 'fire';
-                if (onrewrite == 'damageBegin2') return player.countFrBuffNum('dongshang') > player.maxHp
+            filter: function (event, player) {
+                return player.hasFrBuff("dongshang")
             },
             content: function () {
-                var onrewrite = event.triggername;
-                if (onrewrite == 'damage') {
+                if (player.countCards('h') > 0) {
+                    player.chooseToDiscard('受到「<font color=blue>冻伤</font>」影响，弃置1张手牌', 'h', true)
+                    game.log(player, '受到「<font color=blue>冻伤</font>」影响，弃置1张手牌')
+                }
+                if (trigger.nature == 'fire') {
                     player.reduceFrBuff('dongshang')
-                } else {
-                    if (player.countCards('h') > 0) {
-                        player.chooseToDiscard('受到「<font color=blue>冻伤</font>」影响，弃置1张手牌', 'h', true)
-                        game.log(player, '受到「<font color=blue>冻伤</font>」影响，弃置1张手牌')
-                    }
-                    if (get.randomPercent(0.5)) {
-                        game.log(player, '受到「<font color=blue>冻伤</font>」影响，受到的伤害+1')
-                        trigger.num++
-                    }
+                    trigger.num += 1
                 }
             },
             FrBuffInfo: {
                 naturalLose: true,
                 type: 'debuff',
                 buffRank: {
-                    basic: [0, 0.3],
-                    add: [0, 2],
-                    random: [0, 0.5]
+                    basic: [0, 0.8],
+                    add: [0, 0.2],
                 },
                 BuffReject: ['ranshao']
             }
@@ -1036,9 +1146,21 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         'qianxing': {
             intro: {
                 name: "潜行",
-                content: "<li>你不能成为其他角色的卡牌的目标。",
+                content: "<li>你不能成为其他角色的卡牌的目标。<li>当你使用牌时，你清除「潜行」层数",
+            },
+            trigger: {
+                player: "useCard",
             },
             charlotte: true,
+            filter: function (event, player) {
+                return player.hasFrBuff('qianxing')
+            },
+            forced: true,
+            silent: true,
+            priority: 3,
+            content: function () {
+                player.clearFrBuff('qianxing')
+            },
             mod: {
                 targetEnabled: function (card, player, target) {
                     if (player != target) return false;
@@ -1228,7 +1350,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         },
         forced: true,
         popup: false,
-        priority: Infinity,
+        priority: 114514,
+        filter: function (event, player) {
+            return get.FrBuffList(player).length > 0
+        },
         content: function () {
             'step 0'
             if (!player.storage.noNaturalLose) player.storage.noNaturalLose = []

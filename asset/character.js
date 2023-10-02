@@ -24,9 +24,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         connect: true,//该武将包是否可以联机（必填）
         character: {
             'fr_mierk': ['male', 'qun', 3, ['mierk_jc', 'mierk_fm', 'mierk_jingcai'], ['epic']],
-            //'fr_proten':['male', 'fr_g_ji', 3, [], ['common']],
-            //'fr_waers': ['male', 'qun', 3, [], ['common']],
-            //'fr_kuang': ['male', 'qun', 3, [], ['legend']],
             'fr_baixi': ['male', 'qun', 3, ['baixi_lj', 'baixi_lj_change', 'baixi_dy', 'baixi_bm'], ['epic']],
             "fr_kulun_light": ['male', 'shen', 1, ['kulun_light_sg', 'kulun_light_yb'], ['epic', 'unseen']],
             "fr_kulun_dark": ['male', 'fr_g_dragon', 1, ['kulun_dark_as', 'kulun_dark_yb'], ['epic', 'unseen']],
@@ -49,7 +46,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'fr_lucifer': ['male', 'wu', 3, ['lucifer_cc', 'lucifer_xz'], ['rare']],
             'fr_lans': ['male', 'shu', 3, [], ['unseen', 'rare']],
             'fr_keste': ['male', 'wu', 4, ['keste_yg', 'keste_wp'], ['epic']],
-            'fr_neises': ['male', 'fr_g_dragon', 3, ['nine_bossjn'], ['junk', 'unseen']],
+            'fr_neises': ['male', 'fr_g_dragon', 3, ['neises_hb'], ['junk', 'unseen']],
             'fr_wind': ['male', 'wu', 4, ['wind_fy'], ['rare']],
             'fr_nine': ['male', 'shen', 3, ['nine_fw', 'nine_cj', 'nine_dx'], ['legend']],
             'fr_ming': ['male', 'qun', 3, ['ming_yc', 'ming_yy'], ['epic', 'unseen']],
@@ -84,12 +81,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_wore": ["male", "qun", 4, ["wore_hy"], ['rare', 'unseen']],
             "fr_tiers": ["female", "qun", 3, ["tiers_qp", "tiers_kh"], ['rare']],
             "fr_yifeng": ["male", "wei", 3, ["kref_yz", "yifeng_ml"], ['rare', 'unseen']],
-            "fr_hars": ["male", "shen", 4, ["hars_sj", 'hars_hr'], ['rare', 'unseen']],
+            "fr_hars": ["female", "shen", 4, ["hars_sj", 'hars_hr'], ['rare', 'unseen']],
             "fr_wes": ["male", "jin", 3, ["wes_ts", "wes_gs", "wes_lt"], ['legend', 'unseen']],
             "fr_sam": ["male", "qun", 4, ["sam_bz", "sam_wh"], ['epic', 'unseen']],
             "fr_yada": ["male", "wei", 4, ["yada_by", "yada_jh", "yada_fs"], ['rare']],
             "fr_fengkn": ["male", "qun", 4, ["muli_cm", "muli_yl"], ['common', 'unseen']],
-            "fr_muliy": ["male", "wu", 3, ["mliy_lf", "mliy_hx"], ['rare']],
+            "fr_muliy": ["female", "wu", 3, ["mliy_lf", "mliy_hx"], ['rare']],
             "fr_sier": ["male", "shu", 3, ["sier_xl", "sier_fh", 'sier_ql'], ['rare']],
             "fr_klif": ["male", "jin", 3, ["krif_zl", "krif_lj"], ['rare', 'unseen']],
             "fr_milis": ["male", "wei", 3, ["mislee_jx", "mislee_tj", "mislee_zr"], ['junk']],
@@ -119,10 +116,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_harald": ["male", "shu", 4, ["harald_fy", "harald_zb"], ['legend']],
             "fr_klier": ["male", "qun", 3, ["kelaier_dh", "kelaier_ty"], ['rare']],
             "fr_faers": ["male", "shen", 4, ["faers_hc", "faers_sb", "faers_yl"], ['legend', 'unseen', "zhu"]],
-            "fr_aroncy": ["male", "wei", 4, ["aroncy_jw"], ['epic']],
+            "fr_aroncy": ["male", "wu", 4, ["aroncy_jw"], ['epic']],
             "fr_lint": ["male", "shu", 4, ["lint_nd"], ['rare', 'unseen']],
             "fr_berg": ["male", "fr_g_dragon", 3, ["berg_sy", "berg_jh"], ['epic']],
-            "fr_xit": ["male", "jin", 3, ["xit_lx", "xit_bs"], ['junk']],
+            "fr_xit": ["male", "fr_g_dragon", 3, ["xit_lx", "xit_bs"], ['junk']],
             "fr_markn": ["male", "wu", 3, ["markn_cy", "markn_yz", "markn_yc"], ['epic']],
             "fr_morly": ["male", "shu", 4, ["morly_ld", "morly_xd", "morly_qy"], ['common']],
             "fr_marxya": ["male", "fr_g_dragon", 3, ["marcia_us", "marcia_jz", "marcia_ql"], ['epic']],
@@ -138,7 +135,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_edmon": ["male", "wei", 4, ["edmond_jz", "edmond_jj"], ['common']],
             "fr_mika": ["male", "wei", 4, ["mika_lx", "mika_pl"], ['epic']],
             "fr_peter_likes": ["male", "qun", 4, ["peterlk_kh", "peterlk_jn"], ['legend']],
-            "fr_dmoa": ["male", "qun", 3, ["dmoa_sx", "delta_ys"], ['epic']],
+            "fr_dmoa": ["female", "wu", 3, ["dmoa_sx", "delta_ys"], ['epic']],
             "fr_nulia": ["male", "wu", 4, ["nulia_dh", "nulia_hj"], ['rare']],
             "fr_terlk": ["male", "shu", 4, ["terlk_zj", "terlk_pj"], ['rare']],
             "fr_verb": ["male", "wu", 3, ["verb_zy", "verb_fs"], ['epic', 'unseen']],
@@ -168,10 +165,106 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_mala": ["male", "fr_g_dragon", 4, ["mala_ly", "mala_ht"], ['junk', 'unseen']],
             "fr_zeta": ["male", "fr_g_dragon", 4, ["zeta_gz", "zeta_fg"], ['epic', 'unseen']],
             "fr_fox": ["male", "shu", 4, ["fox_hm"], ['epic']],
-            "fr_molis": ["female", "wei", 3, ["molis_hs", "molis_dx"], ['legend']],
+            "fr_molis": ["female", "wei", 3, ["molis_hs", "molis_sy"], ['legend']],
             "fr_shisan": ["female", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], ['legend']],
         },
         skill: {
+            'molis_sy': {
+                trigger: {
+                    global: 'phaseBegin'
+                },
+                filter: function (event, player) {
+                    return event.player == player || player.inRange(event.player)
+                },
+                direct: true,
+                content: function () {
+                    'step 0'
+                    trigger.cancel()
+                    trigger.untrigger()
+                    'step 1'
+                    event.allphase = []
+                    for (var i of lib.phaseName) {
+                        event.allphase.push(game.createCard2('fr_' + i, '', ''))
+                    }
+                    player.chooseCardButton('【时移】：选择令' + get.translation(trigger.player) + '获得的主要阶段', event.allphase.slice(1, 5))
+                        .set('ai', function (button) {
+                            var att = get.attitude(_status.event.player, trigger.player)
+                            if (att > 0) {
+                                switch (button.link.name) {
+                                    case 'fr_phaseUse': return 1;
+                                    case 'fr_phaseDraw': return 2;
+                                    case 'fr_phaseJudge': return -1
+                                    case 'fr_phaseDiscard': return -2
+                                }
+                            } else {
+                                switch (button.link.name) {
+                                    case 'fr_phaseUse': return -1;
+                                    case 'fr_phaseDraw': return -2;
+                                    case 'fr_phaseJudge': return 1
+                                    case 'fr_phaseDiscard': return 2
+                                }
+                            }
+                        })
+                    'step 2'
+                    if (result.links) {
+                        event.allphase.push(result.links[0])
+                    }
+                    'step 3'
+                    var next = player.chooseToMove('【时移】：交换' + get.translation(trigger.player) + '的回合阶段顺序。')
+                    next.set('processAI', function (list) {
+                        var cards = list[0][1], player = _status.event.player;
+                        var target = trigger.player;
+                        var att = get.attitude(player, target);
+                        if (att < 0) {
+                            cards.swapElements(3, 4)
+                        } else {
+                            if (target.countCards('h') < target.hp) {
+                                cards.swapElements(1, 4)
+                            }
+                        }
+                        return [cards]
+                    })
+                    next.set('list', [
+                        ['回合顺序', event.allphase],
+                    ])
+                    'step 4'
+                    if (result.bool && result.moved && result.moved[0].length) {
+                        event.cards = result.moved[0];
+                    } else {
+                        event.finish()
+                    }
+                    'step 5'
+                    event.phase = event.cards.shift()
+                    event.nextdo = event.phase.name.replace('fr_', '')
+                    trigger.player[event.nextdo]()
+                    'step 6'
+                    if (event.nextdo == 'phaseDraw') {
+                        if (!trigger.player.noPhaseDelay) {
+                            if (trigger.player == game.me) {
+                                game.delay();
+                            }
+                            else {
+                                game.delayx();
+                            }
+                        }
+                    } else if (event.nextdo == 'phaseUse') {
+                        game.broadcastAll(function () {
+                            if (ui.tempnowuxie) {
+                                ui.tempnowuxie.close();
+                                delete ui.tempnowuxie;
+                            }
+                        });
+                    } else if (event.nextdo == 'phaseDiscard') {
+                        if (!trigger.player.noPhaseDelay) game.delayx();
+                        //delete player.using;
+                        delete trigger.player._noSkill;
+                    }
+                    'step 7'
+                    if (event.cards.length) {
+                        event.goto(5)
+                    }
+                }
+            },
             'mierk_jc': {
                 audio: 2,
                 trigger: {
@@ -253,7 +346,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             target: "useCardToTargeted",
                         },
-                        prompt2: '当你成为【杀】的目标后，你可以摸一张牌，然后与此【杀】使用者拼点，若你赢，此【杀】对你无效，否则，你获得此次拼点的牌。',
+                        prompt2: '当你成为【杀】的目标后，你可以与此【杀】使用者拼点，若你赢，此【杀】对你无效，否则，你获得拼点牌。',
                         check: function (event, player) {
                             return get.effect(player, event.card, event.player, player) < 0;
                         },
@@ -264,8 +357,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         content: function () {
                             'step 0'
                             player.when('chooseToCompareAfter').then(() => {
-                                if (trigger.num1 < trigger.num2) {
-                                    player.gain([trigger.card1, trigger.card2].filterInD('od'), 'gain2', 'log')
+                                if (trigger.num2 >= trigger.num1) {
+                                    player.gain([trigger.card2, trigger.card1].filterInD('od'), 'gain2', 'log')
                                 }
                             })
                             player.chooseToCompare(trigger.player);
@@ -356,7 +449,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'mierk_jingcai': {
                 audio: 2,
                 enable: "chooseCard",
-                filter: function (event) {
+                filter: function (event, player) {
                     return event.type == 'compare' && !event.directresult;
                 },
                 onCompare: function (player) {
@@ -728,7 +821,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player: "useCard",
                 },
                 frequent: true,
-                filter: function (event) {
+                filter: function (event, player) {
                     return (get.type(event.card, 'trick') == 'trick' && event.card.isCard) && ((player.name1 == 'fr_kulun_dirt') || (player.name2 == 'fr_kulun_dirt'));;
                 },
                 content: function () {
@@ -1241,7 +1334,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     return event.card.name == 'sha' & ((player.name1 == 'fr_kulun_ice') || (player.name2 == 'fr_kulun_ice'));
                 },
                 content: function () {
-                    trigger.player.addFrBuff('dongshang', 2 * trigger.num)
+                    trigger.player.addFrBuff('dongshang')
                 }
             },
             'kulun_light_yb': {
@@ -2237,6 +2330,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     global: "roundStart"
                 },
                 direct: true,
+                mod: {
+                    targetInRange: function (card, player, target) {
+                        if (target.yuehua) return true;
+                    },
+                    cardUsableTarget: function (card, player, target) {
+                        if (target.yuehua) return true;
+                    },
+                },
                 content: function () {
                     'step 0'
                     game.filterPlayer(function (current) {
@@ -2354,6 +2455,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player: ["loseAfter", "gainAfter"]
                 },
                 juexingji: true,
+                skillAnimation: true,
+                animationColor: "gray",
                 forced: true,
                 filter: function (event, player) {
                     return player.storage.sainit_jh_count > 12
@@ -2709,7 +2812,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 forced: true,
                 content: function () {
                     'step 0'
-                    player.storage.lucifer_cc = game.addPlayer(player.getSeatNum() + 1, 'fr_mountainbear').getId()
+                    player.storage.lucifer_cc = game.addPlayer(((player.next.seat == 1) ? (game.players.length + 1) : (player.next.seat)), 'fr_mountainbear').getId()
                     player.storage.lucifer_cc.setPosition()
                     'step 1'
                     var target = player.storage.lucifer_cc
@@ -2830,26 +2933,33 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     })
                     'step 1'
                     if (result.bool) {
+                        var choice = [], choiceList = []
                         event.target = result.targets[0]
-                        var choiceList = ['令' + get.translation(player) + '交给你一张牌']
-                        var choice = ['选项一']
+                        if (player.countCards('h') > 0) {
+                            choiceList.push('令' + get.translation(player) + '交给你一张牌')
+                            choice.push('拿牌')
+                        }
                         if (event.target.countCards('h') > 0) {
                             choiceList.push('交给不为' + get.translation(player) + '的其他角色一张牌，若你因此失去最后一张手牌，则' + get.translation(player) + '可令一名角色摸两张牌')
-                            choice.push('选项二')
+                            choice.push('给牌')
                         }
+                        if (!choice.length) return event.finish()
                         event.target.chooseControl(choice).set('choiceList', choiceList)
                             .set('ai', function () {
                                 var player = _status.event.player
                                 var target = _status.event.target
+                                if (choice.length == 1) {
+                                    return choice[0]
+                                }
                                 if (get.attitude(player, target) < 0) {
-                                    return '选项一'
+                                    return '拿牌'
                                 } else {
                                     if (player.countCards('h') == 1) {
-                                        return '选项二'
+                                        return '给牌'
                                     } else if (target.countCards('h') > 3 && player.countCards('h') <= 2) {
-                                        return '选项一'
+                                        return '拿牌'
                                     } else {
-                                        return '选项二'
+                                        return '给牌'
                                     }
                                 }
                             }).set('target', player)
@@ -2857,7 +2967,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         event.finish()
                     }
                     'step 2'
-                    if (result.control == '选项一') {
+                    if (result.control == '拿牌') {
                         player.chooseCard('he', 1, true, '交给' + get.translation(event.target) + '一张牌')
                     } else {
                         event.goto(4)
@@ -3190,6 +3300,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 intro: {
                     content: "可以发动〖附尾〗",
                 },
+                onremove: function (player) {
+                    player.unmarkSkill('nine_fw')
+                },
                 direct: true,
                 content: function () {
                     'step 0'
@@ -3427,6 +3540,45 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 7'
                     if (result.bool && player.countCards('hs', 'sha') > 0) {
                         event.goto(6)
+                    }
+                }
+            },
+            'neises_jz': {
+                enable: 'phaseUse',
+                content: function () {
+                    'step 0'
+                    var m = Math.floor(Math.random() * 4) + 1
+                    var n = Math.floor(Math.random() * 4) + 1
+                    var k = Math.floor(Math.random() * 4) + 1
+                    function generateRandomMatrix(m, n, min, max) {
+                        // 创建一个大小为m x n的空数组
+                        var matrix = new Array(m);
+                        for (var i = 0; i < m; i++) {
+                            matrix[i] = new Array(n);
+                        }
+                        // 填充数组的每个元素为随机数（范围在[min, max]之间）
+                        for (var i = 0; i < m; i++) {
+                            for (var j = 0; j < n; j++) {
+                                matrix[i][j] = Math.floor(Math.random() * (max - min + 1)) + min;
+                            }
+                        }
+                        return matrix;
+                    }
+                    event.MatrixA = math.matrix(generateRandomMatrix(m, n, 1, 10))
+                    event.MatrixB = math.matrix(generateRandomMatrix(n, k, 1, 10))
+                    event.MatrixC = math.multiply(event.MatrixA, event.MatrixB);
+                    console.log(event.MatrixC.toString())
+                    'step 1'
+                    player.chooseText().set('prompt2', '已知矩阵A为' + event.MatrixA.toString() + '，矩阵B为' + event.MatrixB.toString() + '，则二者的矩阵乘积为？').set('prompt', '是否发动【矩阵】？')
+                        .set('ai', function () {
+                            return event.MatrixC.toString()
+                        })
+                    'step 2'
+                    if (result.text.replace(/\s+/g, '') == event.MatrixC.toString().replace(/\s+/g, '')) {
+                        player.draw(5)
+                        game.log(player, '回答正确')
+                    } else {
+                        game.log(player, '回答错误')
                     }
                 }
             },
@@ -5486,8 +5638,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 content: function () {
                     var num = 0;
-                    for (var i of cards) num += get.number(i, player);
-                    var numx = (num % 13 == 0 ? 13 : (num % 13));
+                    for (var i = 0; i < cards.length; i++) {
+                        var cardnum = get.number(cards[i], player)
+                        num += (Math.pow((-1), i) * cardnum)
+                    }
+                    var numx = Math.abs((num % 13 == 0 ? 13 : (num % 13)));
                     var card = get.cardPile2(function (card) {
                         return get.number(card, false) == numx;
                     });
@@ -7683,7 +7838,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     player.removeSkill('_qianghua_effect');
                 },
                 ai: {
-                    order: 9,
+                    order: 3,
                     result: {
                         target: function (target, player, card) {
                             return get.effect(target, { name: 'losehp' }, player, player) - 5
@@ -9170,17 +9325,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 filter: function (event, player) {
                     if (!event.source) return false
                     if (event.num >= player.maxHp) return false
-                    var info = lib.character[event.source.name], skills = event.source.getSkills(), list = [];
-                    for (var i = 0; i < info[3].length; i++) {
-                        var name = info[3][i]
-                        var skillinfo = lib.skill[info[3][i]]
-                        if (skillinfo.fixed || skillinfo.unique || skillinfo.zhuSkill || skillinfo.charlotte || skillinfo.yunlvSkill || skillinfo.qianghua || skillinfo.hiddenSkill || skillinfo.juexingji || skillinfo.limited || skillinfo.dutySkill || (skillinfo.unique && !skillinfo.gainable)) continue;
-                        if (skills.contains(name) && !player.hasSkill(name)) {
-                            list.push(name);
-                        }
-                    }
-                    if (list.length > 0) { return true }
-                    else return false
+                    if (get.gainableSkillsName(event.source.name, function (info, skill, name) {
+                        if (info.fixed || info.unique || info.zhuSkill || info.charlotte || info.yunlvSkill || info.qianghua || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable)) return false
+                        if (player.hasSkill(skill)) return false
+                        return true
+                    }).length > 0) return true
+                    return false
                 },
                 init: function (player) {
                     if (!player.storage.tery_hx) player.storage.tery_hx = [[], []]
@@ -9196,29 +9346,19 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     'step 1'
                     player.loseMaxHp(trigger.num)
                     'step 2'
-                    var info = lib.character[trigger.source.name];
-                    var skills = trigger.source.getSkills();
-                    var list = [];
-                    for (var i = 0; i < info[3].length; i++) {
-                        var name = info[3][i]
-                        var skillinfo = lib.skill[info[3][i]]
-                        if (skillinfo.fixed || skillinfo.unique || skillinfo.zhuSkill || skillinfo.charlotte || skillinfo.yunlvSkill || skillinfo.qianghua || skillinfo.hiddenSkill || skillinfo.juexingji || skillinfo.limited || skillinfo.dutySkill || (skillinfo.unique && !skillinfo.gainable)) continue;
-                        if (skills.contains(name) && !player.hasSkill(name)) {
-                            list.push(name);
-                        }
-                    }
-                    event.skills = list
-                    if (list.length) {
-                        player.chooseControl(list).set('prompt', '选择获得一项技能').set('ai', function () { return event.skills.randomGet() });
-                    }
+                    player.chooseSkill(trigger.source.name, function (info, skill, name) {
+                        if (info.fixed || info.unique || info.zhuSkill || info.charlotte || info.yunlvSkill || info.qianghua || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable)) return false
+                        if (player.hasSkill(skill)) return false
+                        return true
+                    })
                     'step 3'
-                    player.addSkill(result.control);
-                    player.popup(result.control);
-                    game.log(player, '获得技能', '【' + get.translation(result.control) + '】');
-                    trigger.source.removeSkill(result.control)
-                    game.log(trigger.source, '失去技能', '【' + get.translation(result.control) + '】')
+                    player.addSkill(result.skill);
+                    player.popup(result.skill);
+                    game.log(player, '获得技能', '【' + get.translation(result.skill) + '】');
+                    trigger.source.removeSkill(result.skill)
+                    game.log(trigger.source, '失去技能', '【' + get.translation(result.skill) + '】')
                     player.storage.tery_hx[0].push(trigger.source)
-                    player.storage.tery_hx[1].push(result.control)
+                    player.storage.tery_hx[1].push(result.skill)
                 },
                 ai: {
                     "maixie_defend": true,
@@ -9271,6 +9411,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 direct: true,
                 filter: function (event, player) {
                     return event.player != player && player.countCards('he') > 0
+                },
+                mod: {
+                    maxHandcardBase: function (player, num) {
+                        return player.maxHp;
+                    },
                 },
                 content: function () {
                     'step 0'
@@ -10501,13 +10646,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 mod: {
                     targetInRange: function (card, player, target) {
-                        if (target.hasSkill('huye_ms_1')) {
+                        if (target.hasFrBuff('sleep')) {
                             return true;
                         }
                     }
                 },
                 filterTarget: function (card, player, target) {
-                    return target != player && !target.hasSkill('huye_ms_1');
+                    return target != player && !target.hasFrBuff('sleep');
                 },
                 filterCard: function (card) {
                     var suit = get.suit(card);
@@ -13931,7 +14076,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 forceDie: true,
                 skillAnimation: true,
                 animationColor: "gray",
-                filter: function (event) {
+                filter: function (event, player) {
                     return event.source && event.source.isIn();
                 },
                 content: function () {
@@ -14124,7 +14269,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         trigger: {
                             source: "damageBegin1",
                         },
-                        filter: function (event) {
+                        filter: function (event, player) {
                             return event.card && event.card.name == 'sha';
                         },
                         forced: true,
@@ -15339,7 +15484,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     "step 2"
                     if (result.judge > 0) {
-                        if (get.position(result.card, true) == 'o') {
+                        if (get.position(result.card, true) == 'd') {
                             player.addToExpansion('gain2', result.card, target).gaintag.add('dmoa_sx')
                         }
                         event.goto(0)
@@ -15787,24 +15932,25 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         content: function () {
                             "step 0"
                             event.target = player.storage.verb_zy.shift()
-                            var cards = player.getCards('h');
                             player.removeSkill('verb_zy_2');
-                            if (event.target.classList.contains('dead') || event.target.hp <= 0 || cards.length == 0) {
+                            if (!event.target.isIn()) {
                                 event.goto(0)
-                            }
-                            else {
-                                if (cards.length > 0)
+                            } else {
+                                if (player.countCards('h') > 0) {
                                     player.chooseCard('h', true, 1, '征言：选择要交给' + get.translation(event.target) + '的牌').set('ai', function (card) {
                                         var att = get.attitude(player, event.target)
                                         if (att > 0) { return get.value(card) }
                                         else return 100 - get.value(card)
                                     });
+                                } else {
+                                    player.storage.verb_zy = []
+                                    event.finish()
+                                }
                             }
                             "step 1"
-                            event.target.gain(result.cards, player);
-                            player.$give(result.cards.length, event.target);
+                            player.give(result.cards, event.target);
                             "step 2"
-                            if (player.storage.verb_zy.length != 0) {
+                            if (player.storage.verb_zy.length > 0) {
                                 event.goto(0)
                             }
                         },
@@ -16340,7 +16486,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: "damageBegin4",
                 },
-                filter: function (event) {
+                filter: function (event, player) {
                     return event.nature == 'fire' || event.nature == 'thunder';
                 },
                 forced: true,
@@ -16451,7 +16597,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 usable: 1,
                 filterCard: true,
                 lose: false,
-                charlotte:true,
+                charlotte: true,
                 discard: false,
                 delay: false,
                 selectCard: function () {
@@ -18094,16 +18240,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 supercharlotte: true,
                 content: function () {
                     "step 0"
-                    var skills = [];
-                    for (var i in lib.character) {
-                        for (var j = 0; j < lib.character[i][3].length; j++) {
-                            if (player.hasSkill(lib.character[i][3][j])) continue;
-                            var info = lib.skill[lib.character[i][3][j]];
-                            if (info && !(info.fixed || info.yunlvSkill || info.qianghua || info.unique || info.zhuSkill || info.charlotte || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || info.unique)) {
-                                skills.add(lib.character[i][3][j]);
-                            }
-                        }
-                    }
+                    var skills = get.gainableSkills(function (info, skill) {
+                        if (info.fixed || info.unique || info.zhuSkill || info.charlotte || info.yunlvSkill || info.qianghua || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable)) return false
+                        if (player.hasSkill(skill)) return false
+                        return true
+                    }, player)
                     event.skills = skills
                     player.chooseText(6, true, event.skills.map(i => get.translation(i))).set('ai', function () {
                         return get.translation(skills.randomGet())
@@ -18193,6 +18334,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 },
                 trigger: {
                     player: "useCard1",
+                },
+                filter: function (event, player) {
+                    return _status.currentPhase == player
                 },
                 mark: true,
                 intro: {
@@ -19367,7 +19511,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         forced: true,
                         popup: false,
                         charlotte: true,
-                        filter: function (event) {
+                        filter: function (event, player) {
                             return event.num > 0;
                         },
                         content: function () {
@@ -19641,7 +19785,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: "damageBegin4",
                 },
-                filter: function (event) {
+                filter: function (event, player) {
                     return event.nature
                 },
                 forced: true,
@@ -19690,7 +19834,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: ["damageBegin4", 'loseHpBegin']
                 },
-                filter: function (event) {
+                filter: function (event, player) {
                     if (event.name == 'damage') {
                         return event.nature
                     } else {
@@ -20502,7 +20646,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                 },
             },
-            "molis_dx": {
+            /*"molis_dx": {
                 trigger: {
                     player: "useCardToPlayer",
                 },
@@ -20746,7 +20890,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         sub: true,
                     },
                 },
-            },
+            },*/
             "shisan_dg": {
                 forced: true,
                 trigger: {
@@ -20884,12 +21028,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         translate: {
             //技能
+            'molis_sy': '时移',
+            'molis_sy_info': '你或在你攻击范围内的角色回合开始时，你可以令其于结束阶段后获得一个' + get.introduce('zhuyaojieduan') + '，且你可以调换其本回合的' + get.introduce('jieduan') + '顺序。',
+            'neises_jz': '矩阵',
+            'neises_jz_info': '出牌阶段，你计算两个矩阵的乘积，若你回答正确，你摸五张牌。',
             'mierk_jingcai': '惊才',
             'mierk_jingcai_info': '你拼点时，可以改为用牌堆顶的一张牌进行拼点；当你拼点的牌亮出后，若此牌颜色与对方相同，则此牌的点数视为K。',
             'mierk_jc': '讥刺',
             'mierk_jc_info': '当一名其他角色使用【杀】指定目标时，若你在其的攻击范围内且你不是目标，则你可以将一张手牌置于牌堆顶，取消所有目标，然后你成为目标并令使用者获得1层' + get.dialogIntro('shisheng') + '和1层' + get.dialogIntro('zhenhan') + '。',
             'mierk_fm': '讽蔑',
-            'mierk_fm_info': '①当你使用【杀】指定目标后，你可以选择一名除目标外的角色，然后令该角色与目标角色拼点，若该角色赢，此【杀】视为该角色使用且不可响应，②当你成为【杀】的目标后，你可以与此【杀】使用者拼点，若你赢，此【杀】对你无效，否则，你获得此次拼点的牌。',
+            'mierk_fm_info': '①当你使用【杀】指定目标后，你可以选择一名除目标外的角色，然后令该角色与目标角色拼点，若该角色赢，此【杀】视为该角色使用且不可响应，②当你成为【杀】的目标后，你可以与此【杀】使用者拼点，若你赢，此【杀】对你无效，否则，你获得拼点牌。',
             'baixi_jc': '酒池',
             'baixi_jc_info': '①你可以将一张黑桃手牌当做【酒】使用。②锁定技，你使用【酒】无次数限制。',
             'kulun_gz': '过载',
@@ -20917,7 +21065,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'kulun_dark_as': '黯蚀',
             'kulun_dark_as_info': '锁定技，你使用黑色【杀】无次数限制。',
             'kulun_dark_yb': '影冰',
-            'kulun_dark_yb_info': '连携-寒冰：你的【杀】造成伤害后，受到伤害的角色获得2X层' + get.dialogIntro('dongshang') + '（X为该角色受到的伤害）。',
+            'kulun_dark_yb_info': '连携-寒冰：你的【杀】造成伤害后，受到伤害的角色获得1层' + get.dialogIntro('dongshang') + '。',
             'kulun_dirt_zj': '浊降',
             'kulun_dirt_zj_info': '浊降：连携-黑暗：当你使用【杀】指定目标后，你可以重铸任意张花色不同的牌，每重铸两张牌，此【杀】伤害+1。',
             'kulun_dirt_zw': '载物',
@@ -20959,7 +21107,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'souls_mj': '得失',
             'souls_mj_info': '当你消耗' + get.introduce('moli') + '时，若你的手牌数为全场最少，你可以摸一张牌。',
             'sainit_yj': '月皎',
-            'sainit_yj_info': '每轮开始时，你令所有其他角色获得“月华”标记，你对有“月华”的角色造成伤害时，此伤害+1并弃置一名其他角色一张牌，然后移除其“月华”。',
+            'sainit_yj_info': '每轮开始时，你令所有其他角色获得“月华”标记，你对有“月华”的角色造成伤害时，此伤害+1并可以弃置一名其他角色一张牌，然后移除受伤角色的“月华”。你对有“月华”的角色使用牌无距离和次数限制。',
             'sainit_yq': '影倾',
             'sainit_yq_info': '觉醒技，当你因〖镜华②〗累计弃置不小于12张牌时,你获得〖月皎〗并移除〖镜华②〗。',
             'sainit_jh': '镜华',
@@ -21081,7 +21229,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'derk_ly': '连语',
             'derk_ly_info': '当你使用牌时，若此牌的点数与你使用的前两张牌的点数和对13取余（若整除则视为K）相等，你摸两张牌；锁定技，你使用与你上一张使用牌的颜色相同的牌无次数限制。',
             'derk_liuyan': '流言',
-            'derk_liuyan_info': '出牌阶段，你可以弃置至少两张牌，然后从牌堆中获得一张点数为X的牌（X为这些牌的点数和对13取余，若整除则视为K）。',
+            'derk_liuyan_info': '出牌阶段，你可以弃置至少两张牌，然后从牌堆中获得一张点数为X的牌（X为这些牌的点数按照正负交错的方式求和并取绝对值后对13取余，若整除则视为K）。',
             'crow_td': '天妒',
             'crow_td_info': '你的判定牌生效后，你可以获得此牌。',
             'crow_my': '藐意',
@@ -21235,7 +21383,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "tery_hx": "幻形",
             "tery_hx_info": "当你受到不大于你体力上限的伤害时，若伤害来源存在你没有获得过的技能，你可以免除此次伤害并改为失去等于此伤害值的体力上限，然后你获得伤害来源的一个技能直到其死亡（觉醒技，限定技，主公技，隐匿技，使命技等特殊技能除外），然后令该角色失去此技能；当你死亡时，你归还你获得的所有技能。",
             "tery_sg": "伺攻",
-            "tery_sg_info": "其他角色的回合结束时，你可以将一张牌当刺【杀】对该角色使用。若此牌未造成伤害，该角色视为对你使用一张【杀】。",
+            "tery_sg_info": "锁定技，你的手牌上限等于体力上限。其他角色的回合结束时，你可以将一张牌当刺【杀】对该角色使用，若此牌未造成伤害，该角色视为对你使用一张【杀】。",
             "lens_yl": "焱雷",
             "lens_yl_info": "当你使用牌对其他角色造成无属性伤害时，你可以进行一次判定，若此牌与判定牌颜色相同：<li>若此牌为红色：将此次伤害改为火属性，<li>若此牌为黑色：将此次伤害改为雷属性，</li>且若二者花色相同，此伤害+2。",
             "krikt_th": "调和",
@@ -21924,37 +22072,37 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             <br>&nbsp&nbsp&nbsp&nbsp后来，他偶然发现了一个神秘的泉眼，这个泉眼融合了各种元素的能量，释放着无尽的魔法力量。库伦决定将泉眼视为自己的研究对象，但随着时间的推移，他渐渐被泉眼中的力量所吸引，着魔般地渴望着占有它。他利用“扭称”进行危险的实验，试图掌握泉眼的能量。
             <br>&nbsp&nbsp&nbsp&nbsp库伦不知道的是，当所有元素被禁锢于同一容器时，它们会相互碰撞和交织，引发了强烈的爆炸。这场爆炸不仅波及了数千人，炸毁了整个魔法师塔，还导致了一场名为“魔力大崩溃”的魔法浩劫，世界的魔力等级骤降，所有人都无法再从世界的魔网中吸取超过十阶的能量。
             <br>&nbsp&nbsp&nbsp&nbsp魔法，曾经是克拉文明的核心，从此陷入了低谷。而库伦的研究和冒险，无论是对于魔法学的贡献还是对于后世的警示，都将被永远地铭记在瓦尔亚那的历史中。`,
-            //'fr_aak':"",
+            'fr_aak': "",
             'fr_mountainbear': `&nbsp&nbsp&nbsp&nbsp山熊，原本是一只栖息在矮人之心洞穴周围的强大魔兽。它的存在一直是矮人部落的威胁，不断地对部落成员构成威胁。然而，山熊的命运在一次决定性的战斗中发生了巨变。在那场战斗中，山熊遭到了路西法的父亲的挑战。这场战斗激烈而残酷，但最终，路西法的父亲以出色的战斗技巧和坚韧不拔的意志，战胜了山熊。这场胜利被看作是路西法的父亲的一项英勇壮举，也标志着山熊的命运将发生改变。
             <br>&nbsp&nbsp&nbsp&nbsp作为成年礼的礼物，路西法的父亲决定将山熊送给他的儿子。这个决定改变了山熊的生活轨迹，也让它与路西法的命运紧密交织在一起。在路西法的成年礼上，他通过强大的战斗技巧获得了山熊的认可。这次战斗是他们之间的一场考验，也是他们友谊的开始。山熊看到了路西法的坚决和勇气，开始信任他，并与他签订了一份特殊的契约。
             <br>&nbsp&nbsp&nbsp&nbsp多年来，山熊和路西法成为了一对默契无间的伙伴。他们已经可以通过思想交流，将彼此的意愿传达得非常清晰，这是一种深厚的信任和默契的体现。他们的生命似乎已经通过契约而紧密连接，无论在战斗还是在日常生活中，他们总是互相扶持，守护着彼此。山熊生性暴戾，在没有兽语者控制的情况下。它可能会表现出随意伤人的行为，因此，只有路西法的存在和指导才能确保山熊不会陷入暴怒之中，保持友善和控制。
             <br>&nbsp&nbsp&nbsp&nbsp山熊和路西法的故事是一段关于友情和信任的传奇。他们的契约将继续引领他们前行，不仅是伙伴，也是彼此的支持和保护者。这个不寻常的友情，已经成为了他们生命中最宝贵的财富。`,
-            // 'fr_guotang': '',
+            'fr_guotang': '',
             'fr_lucifer': '路西法，目前为居住在矮人之心洞穴附近的兽人部落首领。其部落信仰生命之神——“特拉克斯”，并获得了其传承的特殊能力。该能力使得其部落的勇士能够与动物沟通，甚至训练动物成为伙伴。拥有这种特殊能力的人在《瓦尔亚那》百科中称为“兽语者”。',
-            // 'fr_lans': '',
+            'fr_lans': '',
             'fr_keste': '科斯特，迦奈尔联邦最年轻也是最年少有为的将军，曾经在与矮人族的战争——“矮人之心争夺战”中大获全胜，歼敌数万。其主导与矮人族签下的《斯兰条约》为迦奈尔联邦的贸易事业奠定了发展基础。因此，这位将军也被成为“尼拉特”将军——即矮人语中的“恶魔”。',
-            // 'fr_neises': '',
-            // 'fr_wind': '',
-            // 'fr_nine': '',
-            // 'fr_ming': '',
-            // 'fr_death': '',
-            // 'fr_dolina': '',
-            // 'fr_thunder': '',
-            // 'fr_mouse': '',
-            // 'fr_lamas': '',
-            // 'fr_blam': '',
-            // 'fr_gairtelu': '',
-            // 'fr_tails': '',
-            // 'fr_zhan': '',
+            'fr_neises': '',
+            'fr_wind': '',
+            'fr_nine': '',
+            'fr_ming': '',
+            'fr_death': '',
+            'fr_dolina': '',
+            'fr_thunder': '',
+            'fr_mouse': '',
+            'fr_lamas': '',
+            'fr_blam': '',
+            'fr_gairtelu': '',
+            'fr_tails': '',
+            'fr_zhan': '',
             'fr_sheep': '西普，原生活于克拉，是出生于贫民窟的普通兽人；在哈拉尔国王上任前的那位国王——盖尔德鲁，是一位不折不扣的暴君，他欺压百姓并强迫贫民窟的人们前往战场。西普不幸被选中，后在战场上遇到了战争机器人——刃狼，经历一系列事件之后，西普成功使得刃狼获得了感情并相爱。后来再一次意外中，西普战死。刃狼将其带回并改造为机械生命。但是由于死去过久，其记忆没有被继承，现在将刃狼当作自己的哥哥。',
             'fr_rasali': '洛，和尧一样，是瓦尔亚那大陆信仰中的神明之一，执掌着阴间的善灵收集和引导工作。<br>他的责任是寻找那些有着良善灵魂的人们，以便在他们离开世界之前引领他们前往冥界，让他们的灵魂在冥界得到永恒的安息。洛是一位仁慈而有担当的神明，他深知自己肩负的责任，努力工作以确保每个良善的灵魂都能得到引领。他深知冥界对于那些有着良善灵魂的人意味着什么，因此他不惜一切代价来保护他们。',
             'fr_nashu': '尧，是瓦尔亚那大陆信仰中的神明，他是阴间的统治者，负责管理和收割那些邪恶的灵魂。在瓦尔亚那大陆的历史中，尧一直是一个神秘而的存在。<br>传说中，当一个人死后，他的灵魂会被送到尧的阴间，经过他的审判和选择，才能得到永恒的归宿。因此，尧在人们的心目中拥有着无上的权威和力量，被视为神圣不可侵犯的存在。<br>尧的力量和能力是源于他所收割的灵魂。每当他收割一个灵魂，他就可以从中吸取力量，增强自己的能力。随着收割的灵魂数量的增加，尧的力量也会逐渐增强，变得越来越不可战胜。',
-            // 'fr_derk': '',
-            // 'fr_crow': '',
+            'fr_derk': '',
+            'fr_crow': '',
             'fr_bladewolf': '刃狼，是产于迦奈尔联邦的机器人，由于其驱动需要大量的电力，因此刃狼作为该型号唯一的机器人被装载了核动力反应堆。刃狼的生产目的是为了战争，因此其功能也被特化为战争相关，并卸除了情感模块。但是后来因一些机缘巧合，被西普感化并重新获得了情感，在其死后将其带回并改造为了机械生命。',
-            // 'fr_dier': '',
-            // 'fr_francium': '',
-            // "fr_kmjia": '',
+            'fr_dier': '',
+            'fr_francium': '',
+            "fr_kmjia": '',
             "fr_ala": '奥拉，米兰寺的大弟子，在其二十四岁时出师，后四处游历。目前正在矮人之心洞穴附近修行。奥拉类似于林和炎的哥哥的存在，从小对他们多有照顾。',
             "fr_liona": '里欧那，生活于兽人王国克拉的贵族家庭，从小就被作为一位战士培养。二十一岁时，在一次前往坷拉进行战斗的过程中，意外拯救了坷拉的公主，后二人暗生情愫。后来在一次战斗中下落不明。',
             'fr_nanci': '南辞，来自龙之谷外围，是稀少的狐人族后裔，其天生就拥有化形的能力，能够在人类与兽人的形态之间切换。其能够接收天界的能力并作用于自身。',
@@ -21964,7 +22112,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_horn": '霍恩，据传是来自深渊的恶魔，为了夺取米兰寺的珍贵宝物——豁免权杖，设计杀死了米兰寺的住持。霍恩不喜活物，他常常会放出致死的魔法，杀死周围的一切。',
             "fr_qima": '奇玛，生活在沃尔夫东侧的索尔山脉附近。小时候，其父亲曾给予其一个由未知矿石制作的颜色吊坠，并言此物会在其遭遇危险时拯救其于水火。奇玛在一次前往深渊寻找拯救其父亲的草药：“忘忧草”时被深渊的魔物抓伤眼部，导致其视力丧失。',
             "fr_zhongyu": '忠与，没有人知道其来处，但是在克拉的北部多有其传奇事迹，包括杀死了一只冰霜巨龙等等。人们不知道的是，忠与时刻与自己的内心作斗争，其内心有一只恶魔，当完全释放时，将给世界带来疯狂与灾难。',
-            // "fr_hynea": '',
+            "fr_hynea": '',
             "fr_wore": "沃尔，生活在迦奈尔联邦，职业为心理医生，曾前往克拉研习催眠术，其原本为沃尔为免服役人员，但在其强烈要求下，进入联邦军队成为战地心理医生。在服役五年后又要求回到家乡科马——联邦南部的一座小城市",
             "fr_tiers": "缇尔斯，生活在迦奈尔联邦，由于联邦周围大量禁魔矿石的影响，此处无法施展魔法，故此处的主要研究方向为科技。缇尔斯幼时丧父，与母亲相依为命，后进入联邦军队，在服役5年后因在与矮人的战争中负伤，回到家乡科马修养。",
             "fr_yifeng": "弈风，《瓦尔亚那百科》中曾参加了万灵之森保卫战的大英雄弈霜的后代，是弈法的哥哥，与弈法共同居住在万灵之森外围的不知名小村落中。弈风生性沉稳，不喜言辞，与弈法截然相反。据传，其拥有一把能够逆转因果的弓，名曰霜月，通体泛着银月丝绸般的光芒。被弓箭射中者，若其行径正义，心无不端，则平安无事，而若其为邪恶之辈，将会遭受最为严峻的痛苦，直至其为罪行忏悔。",
@@ -21972,20 +22120,20 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_wes": "维斯，生活在克拉北部的小镇米拉亚纳行省，毗邻吸血鬼禁区。由于附近丰富的魔力资源影响，维斯从小便表现出了强烈的魔法亲和性，其能力能够转移其他人受到的伤害。由于其能力的特殊性，自小其就被送往当地教会培养。",
             "fr_sam": "山，克拉最大的黑帮集团——希尔特黑帮的首领，其作风狠辣，言出必行，故拥有众多拥趸。其下产业遍布大陆各处，但最大的产业是与侏儒合作的武器锻造。",
             "fr_yada": "出生于克拉，后因种种原因前往人类聚集地柯拉。",
-            // "fr_fengkn": '',
-            // "fr_muliy": '',
-            // "fr_sier": '',
-            // "fr_klif": '',
-            // "fr_milis": '',
-            // "fr_alas": '',
+            "fr_fengkn": '',
+            "fr_muliy": '',
+            "fr_sier": '',
+            "fr_klif": '',
+            "fr_milis": '',
+            "fr_alas": '',
             "fr_kesaya": '隐匿者',
-            // "fr_ken": '',
-            // "fr_west": '',
-            // "fr_huye": '',
-            // "fr_milite": '',
-            // "fr_jackson": '',
+            "fr_ken": '',
+            "fr_west": '',
+            "fr_huye": '',
+            "fr_milite": '',
+            "fr_jackson": '',
             "fr_jiejie": '檞界生活在克拉王城外郊，学习木系魔法与剑术，曾与米亚切磋剑术但是惜败。檞界的剑据说时来自深渊的矿石制成，因此天然带有魔法亲和力。据说此矿石若与禁魔石混合点燃，便会发生剧烈的爆炸，但是否有此事尚未可知。',
-            // "fr_sayisu": '',
+            "fr_sayisu": '',
             "fr_telina": "特丽娜拥有特殊的「未来视」能力，她能够预知近至下一秒，远至数年的所有事件。在「瓦尔亚那百科全书」完成编写后，精灵族就在寻找拥有预言能力的人。因此特丽娜成为第一个受邀进入万灵之森的兽人。",
             "fr_oert": "轮回之神欧尔特，不像其他的神那样高高在上。据传，欧尔特曾在瓦尔亚娜大陆最重要的节日“火灵日”，亲自来到瓦尔亚娜大陆的一座山峰上为瓦尔亚娜的百姓祈福，并参加兽人族的祭典活动。而受他惠顾的小贩说到：“神灵大人最喜欢我们家的丸子。”虽然真假未可知。",
             "fr_rest": "瑞斯特，生于人鱼之海附近，虽说当地兽人族与鱼人族的关系并不融洽，但瑞斯特算是少有的与两族同时交好的人，其目前在二者之间经商。",
@@ -21999,63 +22147,1017 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_lusiya": "卢西亚，曾就读于人类王国「魔法学院」，与沃里克为好友。其智力超群，并且在学习魔法方面有着很高的造诣。在魔法学院的时期他曾经创立过自己的魔法研究所「时空之门」，并在某双系法师的帮助下，还原了时空魔法的原理。由此卢西亚还未毕业的时候便已经获得了学院授予的最高荣誉。",
             "fr_kersm": "科尔森，「流亡者」佣兵团的经理，与「赏金公会」进行任务对接。虽然科尔森看起来十分和善，但所有佣兵团的人都知道，科尔森是最不能惹的人。其特殊能力未知，但据说十分强力，能够与十级法师平手。",
             "fr_kert": "枪械大师",
-            // "fr_keya": '',
+            "fr_keya": '',
             "fr_harald": "福瑞之王",
-            // "fr_klier": '',
+            "fr_klier": '',
             "fr_faers": "法斯，或名法尔斯，兽人中最主要的神祇之一，代表了永恒与变换，是动与静的同一。法尔斯常以胡狼的形象示人，对任何物种都报以绝对的平衡。守护平衡是他的使命。但是在精灵族的预言集「瓦尔亚娜大百科」中其被预言是毁灭兽人王国的罪魁祸首。",
-            // "fr_aroncy": '',
-            // "fr_lint": '',
-            // "fr_berg": '',
-            // "fr_xit": '',
-            // "fr_markn": '',
-            // "fr_morly": '',
-            // "fr_marxya": '',
-            // "fr_yas_klin": '',
-            // "fr_dog": '',
-            // "fr_muen": '',
-            // "fr_patxi": '',
-            // "fr_zeron": '',
-            // "fr_nore": '',
-            // "fr_bofeng": '',
-            // "fr_ciyu": '',
-            // "fr_delta": '',
-            // "fr_edmon": '',
-            // "fr_mika": '',
-            // "fr_peter_likes": '',
-            // "fr_dmoa": '',
-            // "fr_nulia": '',
-            // "fr_terlk": '',
-            // "fr_verb": '',
-            // "fr_taber": '',
-            // "fr_yinhu": '',
-            // "fr_dragon": '',
-            // "fr_terz": '',
-            // "fr_jet": '',
-            // "fr_slen": '',
-            // "fr_paers": '',
-            // "fr_nier": '',
-            // "fr_pluvia": '',
-            // "fr_ventus": '',
-            // "fr_knier": '',
-            // "fr_zenia": '',
-            // "fr_lamost": '',
-            // "fr_kasaers": '',
+            "fr_aroncy": '',
+            "fr_lint": '',
+            "fr_berg": '',
+            "fr_xit": '',
+            "fr_markn": '',
+            "fr_morly": '',
+            "fr_marxya": '',
+            "fr_yas_klin": '',
+            "fr_dog": '',
+            "fr_muen": '',
+            "fr_patxi": '',
+            "fr_zeron": '',
+            "fr_nore": '',
+            "fr_bofeng": '',
+            "fr_ciyu": '',
+            "fr_delta": '',
+            "fr_edmon": '',
+            "fr_mika": '',
+            "fr_peter_likes": '',
+            "fr_dmoa": '',
+            "fr_nulia": '',
+            "fr_terlk": '',
+            "fr_verb": '',
+            "fr_taber": '',
+            "fr_yinhu": '',
+            "fr_dragon": '',
+            "fr_terz": '',
+            "fr_jet": '',
+            "fr_slen": '',
+            "fr_paers": '',
+            "fr_nier": '',
+            "fr_pluvia": '',
+            "fr_ventus": '',
+            "fr_knier": '',
+            "fr_zenia": '',
+            "fr_lamost": '',
+            "fr_kasaers": '',
             "fr_yifa": "弈法，《瓦尔亚那百科》中曾参加了万灵之森保卫战的大英雄弈霜的后代，是弈风的妹妹。弈法天性好动活泼，其在幼时就被检测出有稀有的魔法天赋，能够通过语言来获得其他人的能力，《百科》中不曾预言过这种能力，实属世间罕见。由于此能力，其幼时便饱受困扰，许多贪婪狡诈之徒对此能力趋之若鹜。直至其十岁，父母因此而死，后与弈风共同远离兽人王国，前往精灵之森定居。",
-            // "fr_jgby": '',
-            // "fr_xiaomo": '',
+            "fr_jgby": '',
+            "fr_xiaomo": '',
             "fr_adward": "安德华是来自地狱的无上法术的咏唱者（自称），他做过的坏事数不胜数，包括但不限于：赶走偷吃鸡的黄鼠狼，杀死袭击村民的强盗，强迫受保护费的官兵学狗叫之类，因此其深受百姓憎恶（自称）。他致力于成为整个兽人王国最邪恶的黑魔法师，并为此努力着。《瓦尔亚那百科》中曾预言安德华有着黑暗生物的血统与两幅面孔，但似乎其本身并不知情。",
             "fr_fate": "法特，生于兽人王国“克拉”南部的贫民窟中，幼年时其父母因卷入债务纠纷而死，其一人独自生活。法特十二岁时，曾尝试寻找杀死父母的仇人，未果，后在游历各处的剑术大师米亚的帮助下终于成功。法特有着天生的赌博天赋，纵横各大赌场且百战百胜，被各大赌场称为“命运之手”。",
             "fr_liya": "莉亚生于兽人王国中部的商业中心，是兽人王国国王哈拉尔的独女。作为贵族女子的她，自小时候便被灌输各种各样的贵族礼仪，但她的生性不羁，时时让自己的父其紧张。她在16岁时，曾受到过哈拉尔赠送的重装机车，是她最喜欢的生日礼物。",
             "fr_laays": "“像这样四处游荡，又过了多久呢？”拉亚斯的话语回荡在旷野上。自从那场人类与精灵的大战以人类的完全胜利为结局，拉亚斯也不知道自己游荡多久了。他是当年参加过此次战争的兽人族战士，后牺牲于战火之中。也许是生命树被毁的缘故，拉亚斯重新得到肉体复活。",
             "fr_whitewolf": "“白狼”，生于兽人王国“克拉”南部的贫民窟中，是“黑狼”的哥哥。在兽人王国最重要的巡游——“火灵日大典”被国王哈拉尔相中，与“黑狼”一同进入王宫成为侍卫。“白狼”的能力：“不动如山，动如雷震”，更加擅长防御与保护。在某次刺杀中因保护国王有功，被提拔为贴身侍卫，但是遭“黑狼”嫉妒，二人反目。",
             "fr_blackwolf": "“黑狼”，生于兽人王国“克拉”南部的贫民窟中，从小与“白狼”相依为命。在“火灵日大典”被国王哈拉尔相中，与“白狼”一同进入王宫成为侍卫，后因嫉妒“白狼”的能力，与其反目。“黑狼”与“白狼”不同，更擅长狂暴而快速的攻击，世人谓之：“一剑斩不摧,双刃去如来”，又赞曰：“势如涛浪汹涌，形如雨打秋风”。",
-            // "fr_mala": '',
-            // "fr_zeta": '',
-            // "fr_fox": '',
-            // "fr_molis": '',
-            // "fr_shisan": '',
+            "fr_mala": '',
+            "fr_zeta": '',
+            "fr_fox": '',
+            "fr_molis": '',
+            "fr_shisan": '',
         },
     };
+    var infoList = {
+        'fr_mierk': {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: 'fox⑧',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_baixi': {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '白曦',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_kulun': {
+            writer: '钫酸酱の祝福、fox⑧',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福、fox⑧',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_akain': {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: 'fox⑧',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_luyezhi': {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '白曦',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_sainit': {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_souls': {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_aak': {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_guotang': {
+            writer: '',
+            skin: '果糖含量',
+            drawer: '会飞的耗子',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_lucifer': {
+            writer: '',
+            skin: '',
+            drawer: 'ししみ',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_mountainbear': {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_nine': {
+            writer: '',
+            skin: '',
+            drawer: 'sonic',
+            designer: 'fox⑧',
+            coder: '狂神、钫酸酱の祝福',
+        },
+        'fr_keste': {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        'fr_wind': {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_ming": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_death": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_dolina": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_thunder": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_mouse": {
+            writer: '',
+            skin: '',
+            drawer: '風篠 kazashino',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_lamas": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '風篠 kazashino',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_blam": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_gairtelu": {
+            writer: '',
+            skin: '',
+            drawer: 'caro',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_neises": {
+            writer: '',
+            skin: '',
+            drawer: '風篠 kazashino',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_tails": {
+            writer: '',
+            skin: '',
+            drawer: 'sonic',
+            designer: 'fox⑧',
+            coder: '狂神、钫酸酱の祝福',
+        },
+        "fr_dier": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_francium": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_nanci": {
+            writer: '',
+            skin: '',
+            drawer: 'Sakimichan',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_shark": {
+            writer: '',
+            skin: '',
+            drawer: 'IVAN-JHANG',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_kmjia": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_liona": {
+            writer: '',
+            skin: '',
+            drawer: 'koutanagamori',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_ala": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_tiger": {
+            writer: '',
+            skin: '',
+            drawer: '風篠 kazashino',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_linyan": {
+            writer: '',
+            skin: '',
+            drawer: 'CM夏4_07',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_horn": {
+            writer: '',
+            skin: '',
+            drawer: '影之诗 原画',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_qima": {
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_zhongyu": {
+            writer: '',
+            skin: '',
+            drawer: 'tadatomo (tokyo afterschool)',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_hynea": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_wore": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_tiers": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_yifeng": {
+            writer: '',
+            skin: '',
+            drawer: '翌风',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_hars": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_wes": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_sam": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_yada": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_fengkn": {
+            writer: '',
+            skin: '',
+            drawer: 'ポン酢@けもケ【I-27】',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_muliy": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_sier": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_klif": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_milis": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_alas": {
+            writer: '',
+            skin: '',
+            drawer: '子雄菌',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_kesaya": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_ken": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_west": {
+            writer: '',
+            skin: '',
+            drawer: 'rabbity',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_huye": {
+            writer: '',
+            skin: '',
+            drawer: 'rabbity',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_milite": {
+            writer: '',
+            skin: '',
+            drawer: 'rabbity',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_jackson": {
+            writer: '',
+            skin: '',
+            drawer: 'НеВТему',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_jiejie": {
+            writer: '',
+            skin: '',
+            drawer: 'rabbity',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_sayisu": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_telina": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_oert": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_rest": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_krikt": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_tery": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_sisk": {
+            writer: '',
+            skin: '',
+            drawer: '子雄菌',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_lens": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_milism": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_miya": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_skry": {
+            writer: '',
+            skin: '',
+            drawer: '村山竜大',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_lusiya": {
+            writer: '',
+            skin: '',
+            drawer: '子雄菌',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_kersm": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_kert": {
+            writer: '',
+            skin: '',
+            drawer: 'Moriyo',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_keya": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_harald": {
+            writer: '',
+            skin: '',
+            drawer: 'Caro',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_klier": {
+            writer: '',
+            skin: '',
+            drawer: '子雄菌',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_faers": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_aroncy": {
+            writer: '',
+            skin: '',
+            drawer: '風篠 kazashino',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_lint": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_berg": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_xit": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_markn": {
+            writer: '',
+            skin: '',
+            drawer: 'furaffinity',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_morly": {
+            writer: '',
+            skin: '',
+            drawer: '~JoeMiller96',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_marxya": {
+            writer: '',
+            skin: '',
+            drawer: '藤宫Lily',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_yas_klin": {
+            writer: '',
+            skin: '',
+            drawer: '藤宫Lily',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_dog": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_muen": {
+            writer: '',
+            skin: '',
+            drawer: '子雄菌',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_patxi": {
+            writer: '',
+            skin: '',
+            drawer: 'Fate Grand Order',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_zeron": {
+            writer: '',
+            skin: '',
+            drawer: '子雄菌',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_nore": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_bofeng": {
+            writer: '',
+            skin: '',
+            drawer: '白化红鲱鱼',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_ciyu": {
+            writer: '',
+            skin: '',
+            drawer: '白化红鲱鱼',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_delta": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_edmon": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_mika": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_peter_likes": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_dmoa": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_nulia": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_terlk": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_verb": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_taber": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_yinhu": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_dragon": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_terz": {
+            writer: '',
+            skin: '',
+            drawer: '風篠 kazashino',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_jet": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_slen": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_paers": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_nier": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_pluvia": {
+            writer: '',
+            skin: '',
+            drawer: '影之诗原画',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_ventus": {
+            writer: '',
+            skin: '',
+            drawer: '影之诗原画',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_knier": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_zenia": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_lamost": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_kasaers": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_yifa": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_jgby": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_xiaomo": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_adward": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_fate": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_liya": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_laays": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_whitewolf": {
+            writer: '',
+            skin: '',
+            drawer: '影之诗原画',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_blackwolf": {
+            writer: '',
+            skin: '',
+            drawer: '影之诗原画',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_mala": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_zeta": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_fox": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_molis": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_shisan": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_bladewolf": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_crow": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_derk": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_nashu": {
+            writer: '',
+            skin: '',
+            drawer: 'Uiokv',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_rasali": {
+            writer: '',
+            skin: '',
+            drawer: 'Uiokv',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_sheep": {
+            writer: '',
+            skin: '',
+            drawer: 'AI',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+        "fr_zhan": {
+            writer: '',
+            skin: '',
+            drawer: '',
+            designer: '钫酸酱の祝福',
+            coder: '钫酸酱の祝福',
+        },
+    }
+    for (var i in infoList) {
+        var info = infoList[i]
+        var str = "<br>"
+        if (info.writer) str += '<br>故事作者：' + info.writer
+        if (info.drawer) {
+            str += "<br>原画画师：" + info.drawer
+        } else {
+            str += "<br>原画画师：暂未找到来源。"
+        }
+        if (info.skin) str += "<br>皮肤画师：" + info.skin
+        if (info.designer) str += "<br>技能设计：" + info.designer
+        if (info.coder) str += "<br>代码编写：" + info.coder
+        str += '<br>'
+        str += '<br>原画版权归画师所有。'
+        str += '<br>部分原画来自网络，若侵犯您的权益，请联系作者删除。'
+        str += '<br>若原画未标注出处，系作者能力有限，欢迎提供。'
+        str += '<br>本作品内容不用作任何商业用途，仅为同人作品二次创作。'
+        if (furryPack.characterIntro[i]) {
+            furryPack.characterIntro[i] += str
+        } else {
+            furryPack.characterIntro[i] = str
+        }
+    }
     for (var i in furryPack.character) {
         if (lib.config.frLutou) furryPack.character[i][4].push('ext:福瑞拓展/image/skin/origin-lutou/' + i + '.png')
         else furryPack.character[i][4].push('ext:福瑞拓展/image/skin/origin-standard/' + i + '.jpg')
