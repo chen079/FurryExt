@@ -368,7 +368,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 	lib.lockedSkin = {
 		'fr_yifeng': '异界之花',
 		'fr_jackson': "树影斑驳",
-		'fr_molis': "碾碎时光",
 		'fr_tiers': "战场蔷薇"
 	}
 	if (lib.config.extension_千幻聆音_enable) {
@@ -388,12 +387,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 			name: '武将：盖尔德鲁',
 			info: '这王国，谁不是我的子民？<br>盖尔德鲁，克拉王国著名的暴君，后被哈拉尔推翻。',
 			type: 'character'
-		},
-		15: {
-			id: "碾碎时光",
-			name: "皮肤：碾碎时光<br>品质：精品",
-			info: "与你一起踏碎了时光...",
-			type: "skin"
 		},
 		30: {
 			id: 'fr_shark',

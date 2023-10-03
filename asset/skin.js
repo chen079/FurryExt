@@ -94,10 +94,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             };
             return info[name];
         },
-        ssborder: '../../福瑞拓展/image/group/',//手杀边框
         characterInfo: function (name) {
             //这里可以返回角色资料。如不返回则显示get.characterIntro(name)。
         },
+        ssborder: '../../福瑞拓展/import/千幻聆音/theme/shousha/',//手杀边框
         //皮肤锁定
         lockSkin: function (name, skin) {
             if (!skin) return false;
@@ -125,16 +125,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                         },
                         tryUnlock: function () {
                             alert('需要成就点数达到120，在成就奖励界面领取');
-                        }
-                    }
-                },
-                'fr_molis': {
-                    '碾碎时光': {
-                        isLocked: function () {
-                            return !lib.config.碾碎时光_unlock;
-                        },
-                        tryUnlock: function () {
-                            alert('需要成就点数达到15，在成就奖励界面领取');
                         }
                     }
                 },

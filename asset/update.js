@@ -106,14 +106,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         direct: true,
         priority: Infinity,
         content: function () {
-            //---------------------------------------设置：自动更新------------------------------------------//
-            if (lib.config.extension_福瑞拓展_furryCardFileConfig2 && game.getFileList && lib.config.extensions) {
-                //十周年卡牌素材
-                window.furry.autoFrImport()
-                alert('已自动导入素材')
-            }
             game.saveConfig('extension_福瑞拓展_Frversion', lib.extensionPack.福瑞拓展.version);
             game.showFrChangeLog();
+            var message='检测到版本更新，是否导入图片素材？\n您也可以稍后在扩展设置菜单导入素材。'
+            if(confirm(message)=='true'){
+                window.furry.autoFrImport()
+            }
         },
     };
 

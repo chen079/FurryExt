@@ -134,7 +134,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_delta": ["male", "shu", 4, ["delta_sy", "delta_sz"], ['legend']],
             "fr_edmon": ["male", "wei", 4, ["edmond_jz", "edmond_jj"], ['common']],
             "fr_mika": ["male", "wei", 4, ["mika_lx", "mika_pl"], ['epic']],
-            "fr_peter_likes": ["male", "qun", 4, ["peterlk_kh", "peterlk_jn"], ['legend']],
+            "fr_peter_likes": ["male", "wei", 4, ["peterlk_kh", "peterlk_jn"], ['legend']],
             "fr_dmoa": ["female", "wu", 3, ["dmoa_sx", "delta_ys"], ['epic']],
             "fr_nulia": ["male", "wu", 4, ["nulia_dh", "nulia_hj"], ['rare']],
             "fr_terlk": ["male", "shu", 4, ["terlk_zj", "terlk_pj"], ['rare']],
@@ -1578,7 +1578,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             list.push(i);
                         }
                     }
-                    list.remove('fr_akain');
+                    list = list.filter(i => {
+                        var players = game.players.concat(game.dead)
+                        return !players.some(j => i == j.name || i == j.name1 || i == j.name2)
+                    })
                     list = list.randomGets(4)
                     if (!list.length) event.finish();
                     var dialog = ui.create.dialog('请选择一张作为“法球”' + (player.group == 'wei' ? '（弃置）' : '（伤害牌名）') + '置入宝物区', 'hidden');
@@ -21097,7 +21100,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'baixi_bm': '白墨',
             'baixi_bm_info': '出牌阶段限一次，你可以弃置一张颜色最多的手牌，然后选择一名其他角色，令其本回合无法使用或打出牌，其下一个摸牌阶段开始时，其放弃摸牌，然后你与其将手牌摸至4。',
             'kulun_zn': '注能',
-            'kulun_zn_info': '锁定技。①游戏开始时，你获得十张“元素能量”牌。②游戏开始时或当你休整结束后，你进行一次“' + get.introduce('zhuru') + '”并摸两张牌。③若你有亮出的“元素能量”牌，你视为拥有此牌上的技能。',
+            'kulun_zn_info': '锁定技。①游戏开始时，你获得十张“元素能量”牌。②游戏开始时或当你休整结束后，系统随机选择一张“元素能量”并“' + get.introduce('zhuru') + '”，然后摸两张牌。③若你有亮出的“元素能量”牌，你视为拥有此牌上的技能。',
             'kulun_fs': '反噬',
             'kulun_fs_info': '锁定技。①当你死亡前，若你有未注入过的元素且你的体力上限大于0，你改为' + get.introduce('xiuzheng') + '。②回合结束后，你死亡。',
             'souls_md': '魔盾',
@@ -22169,7 +22172,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fr_delta": '',
             "fr_edmon": '',
             "fr_mika": '',
-            "fr_peter_likes": '',
+            "fr_peter_likes": '皮特莱克，出生于一个传统的兽人家庭，父亲以制作玩偶为生。在一次意外之后，皮特获得了特殊的能力，能够操纵别人的意识。如此强大的能力却没有被其滥用，而是用来帮助更多人。',
             "fr_dmoa": '',
             "fr_nulia": '',
             "fr_terlk": '',
@@ -22341,8 +22344,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         "fr_lamas": {
             writer: '',
             skin: '',
-            drawer: '',
-            designer: '風篠 kazashino',
+            drawer: '風篠 kazashino',
+            designer: '',
             coder: '钫酸酱の祝福',
         },
         "fr_blam": {
@@ -22368,8 +22371,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         },
         "fr_tails": {
             writer: '',
-            skin: '',
-            drawer: 'sonic',
+            skin: 'AI',
+            drawer: 'Alcyone',
             designer: 'fox⑧',
             coder: '狂神、钫酸酱の祝福',
         },
@@ -22850,12 +22853,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         "fr_mika": {
             writer: '',
             skin: '',
-            drawer: '',
+            drawer: 'AI',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
         "fr_peter_likes": {
-            writer: '',
+            writer: '钫酸酱の祝福',
             skin: '',
             drawer: '',
             designer: '钫酸酱の祝福',
@@ -22941,7 +22944,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         "fr_nier": {
             writer: '',
             skin: '',
-            drawer: '',
+            drawer: '子雄菌',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
@@ -22962,7 +22965,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         "fr_knier": {
             writer: '',
             skin: '',
-            drawer: '',
+            drawer: 'AI',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
@@ -22997,14 +23000,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         "fr_jgby": {
             writer: '',
             skin: '',
-            drawer: '',
+            drawer: 'AI',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
         "fr_xiaomo": {
             writer: '',
             skin: '',
-            drawer: '',
+            drawer: 'AI',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
@@ -23018,7 +23021,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         "fr_fate": {
             writer: '',
             skin: '',
-            drawer: '',
+            drawer: 'AI',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
@@ -23039,28 +23042,28 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         "fr_whitewolf": {
             writer: '',
             skin: '',
-            drawer: '影之诗原画',
+            drawer: '永守浩太',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
         "fr_blackwolf": {
             writer: '',
             skin: '',
-            drawer: '影之诗原画',
+            drawer: '永守浩太',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
         "fr_mala": {
             writer: '',
             skin: '',
-            drawer: '',
+            drawer: '永守浩太',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
         "fr_zeta": {
             writer: '',
             skin: '',
-            drawer: '',
+            drawer: '永守浩太',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },
@@ -23081,7 +23084,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
         "fr_shisan": {
             writer: '',
             skin: '',
-            drawer: '',
+            drawer: '拾叁',
             designer: '钫酸酱の祝福',
             coder: '钫酸酱の祝福',
         },

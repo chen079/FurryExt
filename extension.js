@@ -1,5 +1,3 @@
-const { extname } = require("path");
-
 game.import("extension", function (lib, game, ui, get, ai, _status) {
     Object.defineProperty(Array.prototype, "unique", {
         configurable: true,
@@ -43,35 +41,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         addProgress: function (obj, value, total) {
             var progress = Math.floor(value / total * 100);
             obj.style.backgroundSize = progress + "% 100%";
-        },
-        furryCardFileConfig: function () {
-            var progressBG = ui.create.div(".progressBG", ui.window);
-            var progressBar = ui.create.div(progressBG);
-            var path = "extension/福瑞拓展/import/十周年UI/image/card";
-            var decade = "extension/十周年UI/image/card";
-            var count = 0;
-            game.getFileList(path, function (fold, file) {
-                var arr = Array.from(file);
-                var total = arr.length;
-                var doing = function () {
-                    if (arr.length) {
-                        var f = arr.shift();
-                        furry.copy(path, f, decade, function () {
-                            furry.addProgress(progressBar, ++count, total);
-                            doing();
-                        });
-                    } else {
-                        setTimeout(() => {
-                            progressBG.style.opacity = "0";
-                            if (confirm("导入成功，点击重启")) {
-                                progressBG.remove();
-                                game.reload();
-                            }
-                        }, 1000);
-                    }
-                };
-                doing();
-            });
         },
         loadLibFromFile: function (name) {
             return lib.init.js(lib.assetURL + 'extension/福瑞拓展/Lib/' + name)
@@ -130,7 +99,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             },
             'zhuru': {
                 name: '注入',
-                info: `<li>随机查看四张本局游戏未亮出过的“元素能量”牌，将选择的这张牌作为主将（若已有被注入的主将则作为副将并替换已有副将，与主将组成双将）。注入时能量不能相互冲突，目前的冲突列表为目前是：
+                info: `<li>选择一张牌作为主将（若已有被注入的主将则作为副将并替换已有副将，与主将组成双将）。注入时能量不能相互冲突，目前的冲突列表为目前是：
                 <li>光明：【黑暗】
                 <li>黑暗：【光明,雷电】
                 <li>火焰：【寒冰，潮汐】
@@ -377,32 +346,41 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         },
         autoFrImport: function () {
             var sourceDir = 'extension/福瑞拓展/import';
-            window.furry.traverseFolder(sourceDir, false)
-                .then(Files => {
-                    var extensions = Files.split('/')[0].unique()
-                    for (var j of extensions) {
-                        if (lib.config.extensions.contains(j) && lib.config['extension_' + j + '_enable']) {
-                            var extFiles = Files.filter(i => i.indexOf(j) === 0)
-                            extFiles.forEach(i => {
-                                var path = i.slice(0, i.lastIndexOf('/'));
-                                var file = i.slice(i.lastIndexOf('/') + 1);
-                                game.ensureDirectory('extension/' + path, () => {
-                                    game.getFileList('extension/' + path, (folders, files) => {
-                                        if (!files.includes(file)) {
-                                            if (game.readFile && game.writeFile) {
-                                                game.readFile(sourceDir + '/' + i, (data) => {
-                                                    game.writeFile(data, 'extension/' + path, file, function () {
-                                                        // 复制完成后的回调
-                                                    });
-                                                }, (e) => console.log(e));
-                                            }
-                                        }
-                                    });
-                                });
+            try {
+                window.furry.traverseFolder(sourceDir, false).then(function (Files) {
+                    var needToImport = Files.filter(function (i) {
+                        var extname = i.split('/')[0]
+                        return lib.config.extensions.contains(extname) !== -1 && lib.config['extension_' + extname + '_enable'];
+                    });
+                    var progressBG = ui.create.div(".progressBG", ui.window);
+                    var progressBar = ui.create.div(progressBG);
+                    var count = 0;
+                    var total = needToImport.length;
+
+                    var doing = function () {
+                        if (needToImport.length) {
+                            var f = needToImport.shift();
+                            var to = f.slice(0, f.lastIndexOf('/'));
+                            var name = f.slice(f.lastIndexOf('/') + 1);
+                            window.furry.copy(sourceDir + '/' + to, name, 'extension/' + to, function () {
+                                window.furry.addProgress(progressBar, ++count, total);
+                                doing();
                             });
+                        } else {
+                            setTimeout(function () {
+                                progressBG.style.opacity = "0";
+                                if (confirm("导入成功，点击重启")) {
+                                    progressBG.remove();
+                                    game.reload();
+                                }
+                            }, 1000);
                         }
-                    }
+                    };
+                    doing();
                 });
+            } catch (error) {
+                console.error(error);
+            }
         },
     };
     //------------------进度条样式----------------//
@@ -495,6 +473,23 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
         name: "福瑞拓展",
         editable: false,
         content: function (config, pack) {
+            if (!lib.furryStorage) lib.furryStorage = {}
+            // ---------------------------------------设置：武将前缀隐藏------------------------------------------//
+            if (!lib.config.extension_福瑞拓展_furry_name) {
+                lib.furryStorage.FrSlimName = get.slimName
+                get.slimName = function (str) {
+                    var str2 = lib.translate[str];
+                    if (lib.translate[str + '_ab']) str2 = lib.translate[str + '_ab'];
+                    if (!str2) return '';
+                    if (str.indexOf('fr_') === 0 && str2.indexOf('✡') == 0) {
+                        str2 = str2.slice(1);
+                        return get.verticalStr(str2, true);
+                    }
+                    else {
+                        return lib.furryStorage.FrSlimName.apply(this, arguments)
+                    }
+                }
+            }
             //--------------------------修改标记----------------------------//
             for (var i in lib.FrBuff) {
                 var name = 'Fr_Buff_' + i;
@@ -593,22 +588,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 .catch(error => {
                     console.error(error);
                 });
-            // ---------------------------------------设置：武将前缀隐藏------------------------------------------//
-            if (!lib.config.extension_福瑞拓展_furry_name) {
-                var FrSlimName = get.slimName;
-                get.slimName = function (str) {
-                    var str2 = lib.translate[str];
-                    if (lib.translate[str + '_ab']) str2 = lib.translate[str + '_ab'];
-                    if (!str2) return '';
-                    if (str2.indexOf('✡') == 0) {
-                        str2 = str2.slice(1);
-                        return get.verticalStr(str2, true);
-                    }
-                    else {
-                        return FrSlimName.apply(this, arguments)
-                    }
-                }
-            }
             lib.arenaReady.push(function () {
                 setTimeout(function () {
                     window.furry.loadLibFromFile('jquery-3.7.1.min.js')
@@ -1536,6 +1515,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 item: {
                     "1": "默认背景",
                     "decadeUI": "十周年UI",
+                    'fire and heart': '烈火雄心',
+                    'knier': '面朝大海',
                     "auto": "自动切换",
                 },
                 onclick: function (item) {
@@ -1640,13 +1621,8 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     game.saveConfig('extension_福瑞拓展_guozhan', item);
                 }
             },
-            'furryCardFileConfig2': {
-                'name': '<b>自动导入素材</b>',
-                'init': true,
-                'intro': '<font color=\'#ADEAEA\'>开启后将自动检测并导入图片素材',
-            },
             "furryCardFileConfig": {
-                name: "<div><button id='furryCardFileConfig' onclick='furry.furryCardFileConfig()'>导入美化卡牌素材</button> </div>",
+                name: "<div><button id='furryCardFileConfig' onclick='furry.autoFrImport()'>导入图片素材</button> </div>",
                 clear: true
             },
             'new_character_title': {
