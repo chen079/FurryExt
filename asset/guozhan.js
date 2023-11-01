@@ -586,7 +586,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             "skery_gzds": "毒杀",
             "skery_gzds_info": "锁定技，当你造成伤害后，受到伤害的角色获得X点“毒”标记（X为此次伤害值）；若该角色在出牌阶段没有使用过【桃】或【酒】，则其于回合结束时失去Y点体力（Y为该角色“毒”标记的总数），并移除其所有“毒”标记。",
             'horn_gzll': "灵链",
-            'horn_gzll_info': get.introduce('qianghua') + '，出牌阶段限一次，①你可以令一名其他角色失去1点体力，然后你回复1点体力。②强化：你可以令一名其他角色失去1点体力，然后你回复1点体力，然后若你未受伤，你摸两张牌，否则，该角色叠置并摸X张牌（X为该角色的已损体力值）。',
+            'horn_gzll_info': get.frIntroduce('qianghua') + '，出牌阶段限一次，①你可以令一名其他角色失去1点体力，然后你回复1点体力。②强化：你可以令一名其他角色失去1点体力，然后你回复1点体力，然后若你未受伤，你摸两张牌，否则，该角色叠置并摸X张牌（X为该角色的已损体力值）。',
             "molis_gzhs": "回溯",
             "molis_gzhs_info": "限定技，当你进入濒死状态时，你可以弃置你区域内的所有牌并将你的体力上限、体力值、装备区、手牌区复原到本回合开始时的状态，然后你终止本回合并执行一个额外的回合，且你可以变更副将。",
             "krikt_gzly": "两仪",
@@ -603,8 +603,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             //武将
             'gz_fr_yifeng': "弈风",
             'gz_fr_yifa': "弈法",
-            'gz_fr_whitewolf': "“白狼”",
-            'gz_fr_blackwolf': "“黑狼”",
+            'gz_fr_whitewolf': "华特",
+            'gz_fr_blackwolf': "华兹",
             'gz_fr_bofeng': "迟风",
             'gz_fr_ciyu': "迟雨",
             'gz_fr_wore': "沃尔",
@@ -619,10 +619,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             'gz_fr_fox': "狐克斯",
             'gz_fr_patxi': "帕茨希",
             'gz_fr_alas': "奥拉斯",
-            'gz_fr_west': "洛",
+            'gz_fr_west': "韦斯特",
             'gz_fr_dmoa': "多默尔",
             'gz_fr_adward': "安德华",
-            'gz_fr_yas_klin': "亚瑟&克林",
+            'gz_fr_yas_klin': "亚瑟",
             'gz_fr_muliy': "穆里耶",
             'gz_fr_zhongyu': "忠与",
             'gz_fr_hynea': "哈尼亚",
@@ -649,7 +649,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         if (lib.config.frLutou) furryGZPack.character[i][4].push('ext:福瑞拓展/image/skin/origin-lutou/' + str + '.png')
         else furryGZPack.character[i][4].push('ext:福瑞拓展/image/skin/origin-standard/' + str + '.jpg')
     }
-    /*if (lib.config.extension_福瑞拓展_guozhan && get.mode() == 'guozhan') {
+    if (lib.config.extension_福瑞拓展_guozhan && get.mode() == 'guozhan') {
         game.addCharacterPack(furryGZPack, '福瑞国战')
-    }*/
+    }
 })

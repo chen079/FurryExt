@@ -1,4 +1,62 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
+    //---------------------------------------设置：显示手牌上限------------------------------------------//
+    if (lib.config.extension_福瑞拓展_AIchooseCharacter) {
+        lib.skill._AichooseCharacter = {
+            trigger: {
+                global: 'gameStart',
+            },
+            firstDo: true,
+            ruleSkill: true,
+            direct: true,
+            filter: (event, player) => player == game.me && get.mode() != 'guozhan',
+            content: function () {
+                'step 0'
+                player.chooseTarget('选择你要替换的角色').set('ai', (target) => -1)
+                'step 1'
+                if (result.bool) {
+                    event.target = result.targets[0]
+                } else {
+                    event.finish()
+                }
+                'step 2'
+                player.chooseText().set('prompt', '是否发动AI选将？').set('prompt2', '请输入武将的英文名/中文名/拼音')
+                    .set('filterText', function (value) {
+                        return get.findOrigin(value).length > 0
+                    }).set('ai', () => -1)
+                'step 3'
+                if (result.bool) {
+                    var list = get.findOrigin(result.text)
+                    var dialog = ui.create.dialog('请选择一张武将牌', 'hidden');
+                    dialog.add([list, 'character']);
+                    player.chooseButton(dialog, true).set('ai', function (button) {
+                        return Math.random()
+                    })
+                } else {
+                    event.goto(0)
+                }
+                'step 4'
+                if (result.bool) {
+                    event.target.init(result.links[0])
+                    if (get.mode() == 'doudizhu' && event.target.identity == 'zhu') {
+                        event.target.addSkill('feiyang')
+                        event.target.addSkill('bahu')
+                        event.target.gainMaxHp()
+                        event.target.hp++
+                    }
+                    if (get.is.double(result.links[0])) {
+                        player.chooseControl(get.is.double(result.links[0], true)).set('prompt', '请选择你的势力');
+                    } else {
+                        event.goto(0)
+                    }
+                } else {
+                    event.goto(0)
+                }
+                'step 5'
+                player.group = result.control
+                event.goto(0)
+            }
+        }
+    }
     lib.skill._mp = {
         trigger: {
             global: ['roundStart', 'gameStart'],
@@ -86,8 +144,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         },
         content: function () {
             'step 0'
-            if (trigger.nature == "mad") {
-                trigger.player.addFrBuff('mad', 1)
+            if (trigger.hasNature("frmad")) {
+                trigger.player.addFrBuff('mad', trigger.num)
             }
         },
     }
@@ -348,5 +406,5 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         },
     };
     lib.translate['_fr_unBroken'] = '补玉';
-    lib.translate['_fr_unBroken_info'] = '出牌阶段限一次，你可以弃置至多X张牌（X为你的碎玉数），然后' + get.introduce('xiubu') + 'X个碎玉。';
+    lib.translate['_fr_unBroken_info'] = '出牌阶段限一次，你可以弃置至多X张牌（X为你的碎玉数），然后' + get.frIntroduce('xiubu') + 'X个碎玉。';
 })

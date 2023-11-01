@@ -1,4 +1,5 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
+    //感谢时空枢纽拓展提供的代码参考
     //---------------------------------------定义Buff-----------------------------------------//
     //现在定义新的Buff时，在lib.FrBuff中请不要加前缀Fr_Buff_
     lib.FrBuff = {
@@ -90,6 +91,69 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 BuffReject: ["guwu"]
             },
         },
+        //恐慌
+        "konghuang": {
+            intro: {
+                name: "恐慌",
+                content: "<li>你的非锁定技在回合内失效，你不能对其他角色使用牌。",
+            },
+            init: function (player, skill) {
+                player.addSkillBlocker(skill);
+            },
+            onremove: function (player, skill) {
+                player.removeSkillBlocker(skill);
+            },
+            skillBlocker: function (skill, player) {
+                if (!player.hasFrBuff('konghuang')) return;
+                if (!_status.currentPhase || _status.currentPhase != player) return;
+                return !lib.skill[skill].charlotte && !get.is.locked(skill, player);;
+            },
+            forced: true,
+            silent: true,
+            mod: {
+                playerEnabled: function (card, player, target) {
+                    if (!player.hasFrBuff('konghuang')) return;
+                    if (player != target) return false;
+                },
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                type: 'debuff',
+                limit: 5,
+                buffRank: {
+                    basic: [0, -2.5],
+                },
+            }
+        },
+        //诅咒
+        "zuzhou": {
+            intro: {
+                name: "诅咒",
+                content: "<li>你移除此buff时，失去X点体力。",
+            },
+            forced: true,
+            silent: true,
+            priority: 3,
+            trigger: {
+                player: "reduceFrBuffBegin2",
+            },
+            filter: function (event, player) {
+                return event.buff == 'zuzhou' && player.hasFrBuff('zuzhou')
+            },
+            content: function () {
+                game.log(player, '受「<font color=#600030>诅咒</font>」影响');
+                player.loseHp(player.countFrBuffNum('zuzhou'));
+            },
+            FrBuffInfo: {
+                naturalLose: false,
+                limit: 5,
+                type: 'debuff',
+                buffRank: {
+                    basic: [0, -2],
+                    add: [0, -2],
+                },
+            }
+        },
         //嘲讽
         'chaofeng': {
             intro: {
@@ -165,18 +229,26 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         'zhenhan': {
             intro: {
                 name: "震撼",
-                content: "<li>你使用牌不能指定对你施加「震撼」的角色为目标。",
+                content: "<li>你使用牌不能指定对你施加「震撼」的角色为目标。<li>每回合结束时，清除所有「震撼」层数。",
+            },
+            trigger: {
+                global: 'phaseEnd'
             },
             charlotte: true,
+            forced: true,
+            silent: true,
+            priority: 3,
+            content: () => {
+                player.clearFrBuff('zhenhan')
+            },
             mod: {
                 playerEnabled: function (card, player, target) {
                     if (player.storage['Fr_Buff_zhenhan_Source'].contains(target)) return false;
                 },
             },
             FrBuffInfo: {
-                naturalLose: true,
+                naturalLose: false,
                 type: 'debuff',
-                limit: 1,
                 BuffRank: {
                     basic: [0, 2],
                 }
@@ -310,9 +382,18 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         "sleep": {
             intro: {
                 name: "睡眠",
-                content: "<li>你不能使用或打出手牌。<li>你受到伤害后，清除「睡眠」层数。",
+                content: "<li>你的非锁定技失效且不能使用或打出手牌。<li>你受到伤害结算完毕后，「睡眠」层数-1。",
             },
             charlotte: true,
+            init: function (player, skill) {
+                player.addSkillBlocker(skill);
+            },
+            onremove: function (player, skill) {
+                player.removeSkillBlocker(skill);
+            },
+            skillBlocker: function (skill, player) {
+                return !lib.skill[skill].charlotte && !get.is.locked(skill, player);
+            },
             mod: {
                 cardEnabled: function (card, player) {
                     if (player.hasFrBuff('sleep')) return false;
@@ -338,6 +419,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             content: function () {
                 player.clearFrBuff("sleep");
+            },
+            ai: {
+                "directHit_ai": true,
             },
             FrBuffInfo: {
                 naturalLose: true,
@@ -556,7 +640,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             silent: true,
             priority: 3,
             filter: function (event, player, onrewrite) {
-                console.log(event)
                 if (!player.hasFrBuff("ranshao")) return false;
                 if (onrewrite == 'damage') return event.nature && event.nature == 'ice';
                 else return event.buff == 'ranshao' && event.naturalLose
@@ -642,30 +725,34 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         "kangfen": {
             intro: {
                 name: "亢奋",
-                content: "<li>你的【杀】命中后，令此【杀】不计入次数并弃置目标X张牌，然后移除一层「<font color=fire>亢奋</font>」；<br><li>你的攻击范围+X，你的手牌上限-X。",
+                content: "<li>你使用【杀】无次数限制。<li>当你使用【杀】结算完毕后，你弃置受伤角色的X张牌，然后你移除一层「<font color=fire>亢奋</font>」<li>你的攻击范围+X，你的手牌上限-X。",
             },
             charlotte: true,
             trigger: {
-                player: "shaHit",
+                player: "useCardAfter",
             },
             forced: true,
             silent: true,
             priority: 3,
             filter: function (event, player) {
-                return player.hasFrBuff('kangfen')
+                return player.hasFrBuff('kangfen') && event.card.name == 'sha'
             },
             content: function () {
-                game.log(player, '受「<font color=red>亢奋</font>」影响');
-                if (trigger.parent.addCount != false) {
-                    trigger.parent.addCount = false;
-                    game.log(player, '使用的', trigger.card, '不计入次数限制');
-                    player.getStat().card.sha--;
-                }
+                'step 0'
                 var num = player.countFrBuffNum("kangfen");
-                if (trigger.target.countDiscardableCards(player, 'he') > 0) player.discardPlayerCard(trigger.target, num, 'he', true);
+                var damaged = player.getHistory('sourceDamage', function (evt) {
+                    return evt.card == trigger.card
+                }).map(i => i.player)
+                for (var i of damaged) {
+                    if (i.countDiscardableCards(player, 'he') > 0) player.discardPlayerCard(i, num, 'he', true);
+                }
+                'step 1'
                 player.reduceFrBuff('kangfen')
             },
             mod: {
+                cardUsable: function (card, player, num) {
+                    if (card.name == 'sha' && player.hasFrBuff('kangfen')) return Infinity;
+                },
                 attackRange: function (player, range) {
                     if (player.countFrBuffNum("kangfen") > 0) {
                         var num = player.countFrBuffNum("kangfen");
@@ -719,6 +806,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             FrBuffInfo: {
                 naturalLose: false,
                 type: 'buff',
+                limit: 4,
                 buffRank: {
                     basic: [2, 0],
                 },
@@ -1102,15 +1190,46 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 BuffReject: ['ranshao']
             }
         },
+        //回生
+        'huisheng': {
+            intro: {
+                name: "回生",
+                content: "<li>当你进入濒死状态时，移除一层「<font color=green>回生</font>」并将体力恢复至1点。",
+            },
+            charlotte: true,
+            trigger: {
+                player: "dying",
+            },
+            forceDie: true,
+            forced: true,
+            silent: true,
+            priority: 3,
+            filter: function (event, player) {
+                return player.hasFrBuff('huisheng')
+            },
+
+            content: function () {
+                player.reduceFrBuff('huisheng')
+                player.recover(1 - player.hp);
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                limit: 1,
+                type: 'buff',
+                buffRank: {
+                    basic: [4, 0],
+                },
+            },
+        },
         //免疫
         'mianyi': {
             intro: {
                 name: "免疫",
-                content: "<li>当你受到伤害前，移除一层「<font color=gray>免疫</font>」并取消之。",
+                content: "<li>当你受到伤害时，移除一层「<font color=gray>免疫</font>」并取消之。",
             },
             charlotte: true,
             trigger: {
-                player: 'damageBefore'
+                player: 'damageBegin2'
             },
             forced: true,
             silent: true,
@@ -1146,14 +1265,14 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         'qianxing': {
             intro: {
                 name: "潜行",
-                content: "<li>你不能成为其他角色的卡牌的目标。<li>当你使用牌时，你清除「潜行」层数",
+                content: "<li>你不能成为其他角色的卡牌的目标。<li>当你对其他角色使用牌时，你清除「潜行」层数",
             },
             trigger: {
                 player: "useCard",
             },
             charlotte: true,
             filter: function (event, player) {
-                return player.hasFrBuff('qianxing')
+                return player.hasFrBuff('qianxing') && event.target != player
             },
             forced: true,
             silent: true,
@@ -1446,13 +1565,14 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     };
     //获取Buff的rank值（给ai判断用）
     get.FrBuffRank = function (player, name, income, plies) {
+        if (player.isImmFrBuff(name)) return 0
         name = get.FrBuffName(name, false);
         var Buff = get.FrBuffName(name);
         var list = [lib.skill[Buff].FrBuffInfo.BuffRank];
         player.getSkills(null, false, false).filter(function (i) {
-            if (lib.skill[i] && lib.skill[i].ai && lib.skill[i].ai.BuffRank_extra &&
-                lib.skill[i].ai.BuffRank_extra[name]) {
-                list.push(lib.skill[i].ai.BuffRank_extra[name]);
+            if (lib.skill[i] && lib.skill[i].ai && lib.skill[i].ai.FrBuffRank_extra &&
+                lib.skill[i].ai.FrBuffRank_extra[name]) {
+                list.push(lib.skill[i].ai.FrBuffRank_extra[name]);
             }
         });
         if (!plies || typeof plies != 'number') {
@@ -1492,7 +1612,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     /*技能中对Buffrank的影响赋值写法例：
         Fr_xxx:{
             ai:{
-                BuffRank_extra:{
+                FrBuffRank_extra:{
                     "diaoling":{
                         basic:[0,-0.5],
                         add:[1,0]
@@ -1570,7 +1690,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         if (!next.num) next.num = 1;
         next.setContent(function () {
             "step 0"
-            if (this.isReject) {
+            if (this.player.isImmFrBuff(get.FrBuffName(this.buff, false)) && this.num > 0) {
+                game.log(this.player, '因免疫', '#g「' + get.translation(this.buff) + '」', '无法被附加该Buff')
+                event.finish()
+            } else if (this.isReject) {
                 event.goto(3);
             } else {
                 this.trigger('changeFrBuffToBegin1'); //事件开始，取消事件的地方
@@ -1626,17 +1749,19 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 } else {
                     tip2 = ''
                 }
-                this.player.storage[Buff] += num;
-                this.player.syncStorage(Buff);
-                if (this.player.storage[Buff] > 0) {
-                    player.addAdditionalSkill('Fr_Buff', Buff, true);
-                    this.player.markSkill(Buff);
-                } else {
-                    player.removeAdditionalSkill('Fr_Buff', Buff);
-                    this.player.unmarkSkill(Buff);
-                    delete this.player.storage[Buff + '_Source']
+                if (num != 0) {
+                    this.player.storage[Buff] += num;
+                    this.player.syncStorage(Buff);
+                    if (this.player.storage[Buff] > 0) {
+                        player.addAdditionalSkill('Fr_Buff', Buff, true);
+                        this.player.markSkill(Buff);
+                    } else {
+                        player.removeAdditionalSkill('Fr_Buff', Buff);
+                        this.player.unmarkSkill(Buff);
+                        delete this.player.storage[Buff + '_Source']
+                    }
+                    game.log(this.player, this.source != 'nosource' ? '因' : '', '#b' + tip2, tip1, Math.abs(num), '层', '#g「' + get.translation(Buff) + '」');
                 }
-                game.log(this.player, this.source != 'nosource' ? '因' : '', '#b' + tip2, tip1, Math.abs(num), '层', '#g「' + get.translation(Buff) + '」');
             }
             'step 4'
             this.trigger('changeFrBuff')
@@ -1736,20 +1861,20 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         return game.changeFrBuffTo(this, arg1, arg2, arg3, arg4);
     };
     //获得目标角色已有的Buff种类数目（可设置不算在内的Buff）
-    lib.element.player.countFrBuff = function (except) {
-        if (Array.isArray(except)) {
-            for (var i = 0; i < except.length; i++) {
-                except[i] = get.FrBuffName(except[i], false);
+    lib.element.player.countFrBuff = function (filter) {
+        var buffs = get.FrBuffList(this);
+        return buffs.reduce((accumulator, currentElement) => {
+            if (filter(currentElement)) {
+                return accumulator + 1;
+            } else {
+                return accumulator;
             }
-        } else {
-            except = [get.FrBuffName(except, false)];
-        }
-        var num = 0;
-        for (let i of lib.FrBuff) {
-            if (except.contains(i)) continue;
-            if (get.FrBuffNum(this, i) > 0) num++;
-        }
-        return num;
+        }, 0);
+    };
+    //获取目标角色符合条件的buff
+    lib.element.player.getFrBuff = function (filter) {
+        var buffs = get.FrBuffList(this);
+        return buffs.filter(i => filter(i))
     };
     //增加buff
     lib.element.player.addFrBuff = function () {
@@ -1766,14 +1891,17 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         next.player = this
         if (!next.source) next.source = 'nosource'
         if (next.num == undefined) next.num = 1
-        if (next.buff == undefined) return
-        if (next.num <= 0) return
         next.setContent(function () {
             'step 0'
-            event.trigger('addFrBuffBegin1')
+            if (!event.buff) return event.finish()
+            event.num = Math.min(get.FrBuffLimit(event.buff) - player.countFrBuffNum(event.buff), event.num)
+            if (event.num <= 0) return event.finish()
             'step 1'
-            game.changeFrBuff(player, event.source, event.buff, event.num)
+            event.trigger('addFrBuffBegin1')
             'step 2'
+            if (event.source != 'nosource') event.source.line(player)
+            game.changeFrBuff(player, event.source, event.buff, event.num)
+            'step 3'
             event.trigger('addFrBuffSource')
         })
         return next
@@ -1798,14 +1926,17 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         next.player = this
         if (next.source == undefined) next.source = 'nosource'
         if (next.num == undefined) next.num = 1
-        if (next.buff == undefined) return
-        if (next.num <= 0) return
         next.setContent(function () {
             'step 0'
-            event.trigger('reduceFrBuffBegin1')
+            if (event.buff == undefined) return event.finish()
+            event.num = Math.min(player.countFrBuffNum(event.buff), event.num)
+            if (event.num <= 0) return event.finish()
             'step 1'
-            event.trigger('reduceFrBuffBegin2')
+            event.trigger('reduceFrBuffBegin1')
             'step 2'
+            event.trigger('reduceFrBuffBegin2')
+            'step 3'
+            if (event.source !== 'nosource') event.source.line(player)
             var arg1 = event.naturalLose ? 'naturalLose' : undefined
             var arg2 = event.isReject ? 'isReject' : undefined
             game.changeFrBuff(player, event.source, get.FrBuffName(event.buff), -event.num, arg1, arg2)
@@ -1813,6 +1944,49 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             event.trigger('reduceFrBuffSource')
         })
         return next
+    }
+    lib.element.player.addTempFrBuff = function () {
+        var source, num, expire, losetype, buff
+        for (var i in arguments) {
+            if (get.itemtype(arguments[i]) == 'player') {
+                source = arguments[i]
+            } else if (typeof arguments[i] == 'number') {
+                num = arguments[i]
+            } else if (['array', 'object'].contains(get.objtype(arguments[i]))) {
+                expire = arguments[i]
+            } else if (['naturalLose', 'isReject'].contains(arguments[i])) {
+                losetype = arguments[i]
+            } else {
+                buff = arguments[i]
+            }
+        }
+        if (!num) num = 1
+        num = Math.min(num, get.FrBuffLimit(buff) - this.countFrBuffNum(buff))
+        if (num > 0) {
+            if (!expire) {
+                expire = {
+                    global: ['phaseAfter', 'phaseBefore']
+                }
+            } else if (Array.isArray(expire) || typeof expire == 'string') {
+                expire = {
+                    global: expire
+                }
+            }
+            this.when(expire).then(() => {
+                var skillinfo = lib.skill[event.name]
+                var buff = skillinfo.buff
+                var num = skillinfo.num
+                var type = skillinfo.type
+                if (num > 0 && player.hasFrBuff(buff)) {
+                    player.reduceFrBuff(buff, num, type)
+                }
+            }).assign({
+                buff: buff,
+                num: num,
+                type: losetype
+            })
+        }
+        return this.addFrBuff(buff, num, source)
     }
     //清除Buff
     lib.element.player.clearFrBuff = function (buff, type) {
@@ -1826,26 +2000,28 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         return get.FrBuffNum(player, buff)
     }
     //判断是否拥有Buff
-    lib.element.player.hasFrBuff = function (buff) {
+    lib.element.player.hasFrBuff = function (filter) {
         var player = this
-        if (player.countFrBuffNum(buff) > 0) {
-            return true
-        } else {
-            return false
+        var buffs = get.FrBuffList(player)
+        if (typeof filter == 'string') {
+            if (player.countFrBuffNum(filter) > 0) {
+                return true
+            } else {
+                return false
+            }
+        } else if (typeof filter == 'function') {
+            return buffs.some(i => filter(i))
         }
     }
     //判断其是否免疫该种Buff
     lib.element.player.isImmFrBuff = function (name) {
-        name = get.FrBuffName(name);
-        var skills = player.getSkills(null, false, false);
-        for (let i of skills) {
-            if (lib.skill[i] && lib.skill[i].ai &&
-                lib.skill[i].ai.BuffRank_extra &&
-                lib.skill[i].ai.BuffRank_extra[name]) {
-                if (lib.skill[i].ai.BuffRank_extra[name].immunity === true) {
-                    return true;
-                }
+        var skills = this.getSkills(null, false, false);
+        for (var i of skills) {
+            var info = lib.skill[i];
+            if (info && info.ai && info.ai.FrBuffRank_extra && info.ai.FrBuffRank_extra[name] && info.ai.FrBuffRank_extra[name].immunity === true) {
+                return true;
             }
         }
+        return false;
     };
 })

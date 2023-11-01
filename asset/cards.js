@@ -189,7 +189,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     next.set('choiceList', ['弃置一张手牌（不足则不弃）并令' + get.translation(target) + '摸两张牌。', '受到1点伤害并视为失去1点体力并令' + get.translation(target) + '回复1点体力。'])
                     next.set('ai', function () {
                         if (get.attitude(player, target) > 0) {
-                            if (player.hp >= 2 && target.hp <= 1) return 1
+                            if (player.hp >= 2 && target.hp <= 1 && target.hp < target.maxHp) return 1
                             if (player.countCards('h') > player.hp) return 0
                             if (player.hasSkillTag('maixie') && player.hp >= 2) return 1
                             if (player.countCards('h') == 0 && target.hp > 1) return 0
@@ -643,7 +643,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     if (result.bool) {
                         var cards = result.links
                         player.gain(cards, 'draw')
-                        event.cards.remove(cards)
+                        event.cards.removeArray(cards)
                     }
                     'step 2'
                     while (event.cards.length) {
@@ -691,7 +691,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     var cards = result.links;
                     target.gain(cards, 'draw');
                     game.log(target, '发掘了', '#y' + get.translation(cards))
-                    event.cards.remove(cards);
+                    event.cards.removeArray(cards);
                     'step 2'
                     while (event.cards.length) {
                         ui.cardPile.insertBefore(event.cards.pop(), ui.cardPile.childNodes[get.rand(0, ui.cardPile.childNodes.length)])
@@ -816,7 +816,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         var next = choiceList.add(str);
                         next.firstChild.addEventListener(lib.config.touchscreen ? 'touchend' : 'click', ui.click.button);
                         next.firstChild.link = list[i];
-                        for (var j in lib.element.button) {
+                        for (var j in Object.keys(lib.element.button)) {
                             next[j] = lib.element.button[j];
                         }
                         choiceList.buttons.add(next.firstChild);
@@ -890,18 +890,30 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     return target != player && target.countGainableCards(player, 'hej') > 0;
                 },
                 filter: function (event, player) {
-                    return player.countCards('h') > 0
+                    return player.countCards('h') > 0 && player.countCards('h') > 1
                 },
                 content: function () {
                     'step 0'
-                    player.chooseCard('h', true, 1, '交给' + get.translation(target) + '一张手牌');
+                    player.chooseCard('h', true, [1, 2], '交给' + get.translation(target) + '一至两张手牌')
+                        .set('ai', function (card) {
+                            if (get.attitude(player, target) > 0) {
+                                return get.value(card)
+                            } else {
+                                if (ui.selected.cards.length >= 1) {
+                                    return -1
+                                }
+                            }
+                            return 100 - get.value(card)
+                        });
                     'step 1'
                     if (result.bool) {
                         player.give(result.cards, target)
+                    } else {
+                        event.finish()
                     }
                     'step 2'
-                    if (target.isIn() && target.countCards('hej') > 0) {
-                        player.gainPlayerCard(target, 'hej', true, [1, 2]);
+                    if (target.isIn() && target.countGainableCards(player, 'hej') > 0) {
+                        player.gainPlayerCard(target, 'hej', [1, 2]);
                     }
                 },
                 ai: {
@@ -1209,7 +1221,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     }
                     event.cards = [result.cards, handcards]
                     'step 2'
-                    player.chooseControl('重铸展示的手牌', '重铸未展示的手牌').set('ai', function () {
+                    player.chooseControl('选项一', '选项二').set('ai', function () {
                         var value1 = 0
                         var value2 = 0
                         for (var i = 0; i < event.cards[0].length; i++) {
@@ -1222,28 +1234,21 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         var target = _status.event.target
                         if (get.attitude(player, target) > 0) {
                             if (value1 > value2) {
-                                return '重铸未展示的手牌'
+                                return '选项二'
                             } else {
-                                return '重铸展示的手牌'
+                                return '选项一'
                             }
                         } else {
                             if (value1 > value2) {
-                                return '重铸展示的手牌'
+                                return '选项一'
                             } else {
-                                return '重铸未展示的手牌'
+                                return '选项二'
                             }
                         }
-                    }).set('target', target)
+                    }).set('target', target).set('choiceList', ['重铸展示的手牌：' + get.translation(event.cards[0]), '重铸未展示的手牌'])
                     'step 3'
                     var cards = event.cards[result.index];
-                    for (var i = 0; i < cards.length; i++) {
-                        var card = cards[i]
-                        target.lose(card, ui.discardPile, 'visible');
-                        target.$throw(card, 1000);
-                        game.log(target, '将', card, '置入弃牌堆');
-                        target.draw();
-                        game.delay()
-                    }
+                    target.recast(cards)
                 },
                 ai: {
                     basic: {
@@ -1394,13 +1399,13 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     'step 2'
                     event.index.push(result.index + 1);
                     switch (result.control) {
-                        case '宫': game.frPlayAudio('gong'); break;
-                        case '商': game.frPlayAudio('shang'); break;
-                        case '角': game.frPlayAudio('jue'); break;
-                        case '清角': game.frPlayAudio('qingjue'); break;
-                        case '徵': game.frPlayAudio('zhi'); break;
-                        case '羽': game.frPlayAudio('yu'); break;
-                        case '变宫': game.frPlayAudio('biangong'); break;
+                        case '宫': lib.frStory.playfrAudio('gong'); break;
+                        case '商': lib.frStory.playfrAudio('shang'); break;
+                        case '角': lib.frStory.playfrAudio('jue'); break;
+                        case '清角': lib.frStory.playfrAudio('qingjue'); break;
+                        case '徵': lib.frStory.playfrAudio('zhi'); break;
+                        case '羽': lib.frStory.playfrAudio('yu'); break;
+                        case '变宫': lib.frStory.playfrAudio('biangong'); break;
                         default: event.finish();
                     }
                     'step 3'
@@ -1430,19 +1435,19 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             game.log(player, '获得了', '#g' + vioce[player.storage.wxpp_skill - 1], '的效果')
                             var num = player.storage.wxpp_skill
                             if (num == 1) {
-                                game.frPlayAudio('gong')
+                                lib.frStory.playfrAudio('gong')
                                 player.addTempSkill('wxpp_skill_gong')
                             } else if (num == 2) {
-                                game.frPlayAudio('shang')
+                                lib.frStory.playfrAudio('shang')
                                 player.addTempSkill('wxpp_skill_shang')
                             } else if (num == 3) {
-                                game.frPlayAudio('jue')
+                                lib.frStory.playfrAudio('jue')
                                 player.addTempSkill('wxpp_skill_jue')
                             } else if (num == 4) {
-                                game.frPlayAudio('zhi')
+                                lib.frStory.playfrAudio('zhi')
                                 player.addTempSkill('wxpp_skill_zhi')
                             } else if (num == 5) {
-                                game.frPlayAudio('yu')
+                                lib.frStory.playfrAudio('yu')
                                 player.addTempSkill('wxpp_skill_yu')
                             }
                         },
@@ -1763,7 +1768,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         translate: {
             //技能
             'ar15_skill': 'AR15',
-            'ar15_skill_info': '你使用【杀】指定目标后，可以依次弃置你与其各一张手牌，其不能使用这些牌包含花色的【闪】响应此【杀】，' + get.introduce('youji') + '：你弃置其牌时观看其手牌，若弃置后两张牌花色相同，此【杀】伤害+1。',
+            'ar15_skill_info': '你使用【杀】指定目标后，可以依次弃置你与其各一张手牌，其不能使用这些牌包含花色的【闪】响应此【杀】，' + get.frIntroduce('youji') + '：你弃置其牌时观看其手牌，若弃置后两张牌花色相同，此【杀】伤害+1。',
             'shyl_skill': "死魂幽镰",
             'shyl_skill_info': '每回合限一次，当你的【杀】被【闪】抵消时，若此【杀】目标数为1，你可以视为对此【杀】的目标使用一张【杀】。',
             'mhlq_skill': '鸣鸿龙雀',
@@ -1777,7 +1782,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "sy_skill": "霜月之弓",
             "sy_skill_info": "当你或你攻击范围内的角色受到一名其他角色造成的非冰属性伤害后，你可以弃置两张牌，然后对伤害来源造成1点冰属性伤害。",
             "wxpp_skill": "演奏",
-            "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
+            "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.frIntroduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
             'fr_phaseZhunbei': '准备阶段',
@@ -1789,7 +1794,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             'fr_card_yfss': '严防死守',
             'fr_card_yfss_info': '出牌阶段，对你使用。若目标护甲数小于5，其弃置所有手牌并获得等量护甲。',
             'fr_equip1_ar15': 'AR15',
-            'fr_equip1_ar15_info': '你使用【杀】指定目标后，可以依次弃置你与其各一张手牌，其不能使用这些牌包含花色的【闪】响应此【杀】，' + get.introduce('youji') + '：你弃置其牌时观看其手牌，若弃置后两张牌花色相同，此【杀】伤害+1。',
+            'fr_equip1_ar15_info': '你使用【杀】指定目标后，可以依次弃置你与其各一张手牌，其不能使用这些牌包含花色的【闪】响应此【杀】，' + get.frIntroduce('youji') + '：你弃置其牌时观看其手牌，若弃置后两张牌花色相同，此【杀】伤害+1。',
             'fr_card_xzst': '雪中送炭',
             'fr_card_xzst_info': '其他角色受到伤害后，或处于濒死状态时，你对其使用，你选择一项：1.弃置一张手牌（不足则不弃）并令该角色摸两张牌，2.令该角色回复1点体力，然后若该角色脱离了濒死状态，你受到1点无来源伤害并视为失去1点体力。',
             'fr_equip2_yyxl': '影夜项链',
@@ -1806,15 +1811,15 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_zfxd": '针锋相对',
             'fr_card_zfxd_info': "此牌可被重铸。出牌阶段，对一名角色使用。令其与你指定的另一名在其攻击范围内的角色各声明一张【杀】或【闪】；若二者都声明【杀】，二者各流失一点体力；若二者都声明【闪】，二者各弃置一张牌；否则，声明【杀】的角色摸两张牌并对声明【闪】的角色造成一点伤害。",
             "fr_card_cmhc": "筹谋划策",
-            "fr_card_cmhc_info": "出牌阶段，对一名角色使用，若判定结果为红色，该角色进行一次“" + get.introduce('chouhua') + "”。",
+            "fr_card_cmhc_info": "出牌阶段，对一名角色使用，若判定结果为红色，该角色进行一次“" + get.frIntroduce('chouhua') + "”。",
             "fr_equip5_wxpp": "忘弦琵琶",
-            "fr_equip5_wxpp_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.introduce('wuyin') + "的效果之一直到回合结束。",
+            "fr_equip5_wxpp_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.frIntroduce('wuyin') + "的效果之一直到回合结束。",
             "fr_card_lltj": "浪里淘金",
-            "fr_card_lltj_info": "出牌阶段对自己使用，你" + get.introduce('found') + "一张牌。",
+            "fr_card_lltj_info": "出牌阶段对自己使用，你" + get.frIntroduce('found') + "一张牌。",
             "fr_card_xysx": "修养生息",
             "fr_card_xysx_info": "此牌可被重铸。出牌阶段对自己使用，重置当前回合卡牌和主动技能使用次数。",
             "fr_card_ttbl": "投桃报李",
-            "fr_card_ttbl_info": "出牌阶段，对一名角色使用，你交给其一张手牌，然后你获得该角色区域内至多两张牌。",
+            "fr_card_ttbl_info": "出牌阶段，若你的手牌至少有两张，你可以对一名其他角色使用，你交给其一至两张手牌，然后你获得该角色区域内至多两张牌。",
             "fr_card_yxys": "野性药水",
             "fr_card_yxys_info": "出牌阶段对一名角色使用，该角色获得技能〖嗜血〗。<li>〖嗜血〗：你的回合结束时，你移除此技能，然后若本回合内你杀死过其他角色，你摸三张牌并执行一个额外的回合。</li>",
             "fr_card_gzbj": "寡众不均",
@@ -1831,8 +1836,6 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_zhcz_info": "出牌阶段，对一名角色使用，该角色展示X张手牌（X为其手牌数的一半并向下取整），然后你选择一项：1.重铸其展示的所有牌，2.重铸其未展示的所有牌。",
         },
         list: [
-            ['heart', '6', 'fr_card_yfss'],
-            ['heart', '12', 'fr_card_yfss'],
             ['heart', '1', 'fr_equip1_ar15'],
             ['spade', '13', 'fr_equip1_shyl'],
             ['heart', '5', 'fr_card_xzst'],
@@ -1865,12 +1868,12 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             ['heart', '5', "fr_card_lltj", null, ['gifts']],
             ['club', '5', "fr_card_lltj", null, ['gifts']],
             ['diamond', '5', "fr_card_lltj", null, ['gifts']],
-            ['heart', '5', "sha",'mad'],
-            ['club', '7', "sha",'mad'],
-            ['spade', '11', "sha",'mad'],
-            ['diamond', '4', "sha",'mad'],
-            ['heart', '6', "sha",'mad'],
-            ['spade', '9', "sha",'mad'],
+            ['heart', '5', "sha", 'frmad'],
+            ['club', '7', "sha", 'frmad'],
+            ['spade', '11', "sha", 'frmad'],
+            ['diamond', '4', "sha", 'frmad'],
+            ['heart', '6', "sha", 'frmad'],
+            ['spade', '9', "sha", 'frmad'],
         ],
     }
     if (lib.config.achiReward && lib.config.achiReward.card.length != 0) {

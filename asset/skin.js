@@ -7,8 +7,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         lib.qhly_groupimage = {};
     }
 
-    lib.qhly_groupimage['fr_g_ji'] = 'extension/福瑞拓展/image/group/name_fr_g_ji.webp';
-    lib.qhly_groupimage['fr_g_dragon'] = 'extension/福瑞拓展/image/group/name_fr_g_dragon.webp';
+    lib.qhly_groupimage['fr_g_dragon'] = 'extension/福瑞拓展/image/biaoqian/group_fr_g_dragon.png';
+    lib.qhly_groupimage['fr_g_ji'] = 'extension/福瑞拓展/image/biaoqian/group_fr_g_ji.png';
+    
 
     if (!lib.qhly_groupcolor) {
         lib.qhly_groupcolor = {};
@@ -67,7 +68,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 for (var d of arr) {
                     if (d.indexOf('frMp:') == 0) {
                         var n = d.replace('frMp:', '');
-                        var Mp = n.split('/').map(i=>parseInt(i))
+                        var Mp = n.split('/').map(i => parseInt(i))
                         if (Mp.length == 1) {
                             return Mp[0];
                         } else if (Mp[0] > Mp[1]) {
@@ -81,8 +82,11 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             return null;
         },
         characterNameTranslate: function (name) {
-            //这里根据武将ID返回其中文名字。
-            return get.translation(name);
+            if (name.indexOf('fr_') === 0 && lib.translate[name].indexOf('✡') == 0){
+                return get.translation(name).slice(1)
+            }else{
+                return get.translation(name)
+            }
         },
         characterTaici: function (name) {
             //这里返回武将原皮台词。
@@ -94,10 +98,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             };
             return info[name];
         },
-        characterInfo: function (name) {
-            //这里可以返回角色资料。如不返回则显示get.characterIntro(name)。
-        },
-        ssborder: '../../福瑞拓展/import/千幻聆音/theme/shousha/',//手杀边框
+        ssborder: '../../福瑞拓展/image/group/',//手杀边框
         //皮肤锁定
         lockSkin: function (name, skin) {
             if (!skin) return false;
@@ -167,6 +168,16 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                             alert('需要成就点数达到140，在成就奖励界面领取');
                         }
                     }
+                },
+                'fr_rabby':{
+                    '海风轻抚': {
+                        isLocked: function () {
+                            return !lib.config.海风轻抚_unlock;
+                        },
+                        tryUnlock: function () {
+                            alert('请使用激活码领取');
+                        }
+                    }
                 }
             };
             var ret1 = reflect[name];
@@ -182,8 +193,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             standard: 'extension/福瑞拓展/image/skin/skin-standard/',//可切换普通皮肤的前缀
             lutou: 'extension/福瑞拓展/image/skin/skin-lutou/',//可以切换露头皮肤的位置
         },
-        audioOrigin: 'extension/福瑞拓展/audio/origin',//原技能配音位置
-        audio: 'extension/福瑞拓展/audio/skin',//切换皮肤后的技能配音位置
+        audioOrigin: 'extension/福瑞拓展/audio/origin/',//原技能配音位置
+        audio: 'extension/福瑞拓展/audio/skin/',//切换皮肤后的技能配音位置
         skininfo: {
         },
         forbidEditTaici: false,

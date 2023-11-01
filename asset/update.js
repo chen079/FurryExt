@@ -6,16 +6,23 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             //更新告示
             changeLog: [
                 '/setPlayer/',
-                '2.4.0.4',
-                '新角色：米尔克',
-                '修复哈尔斯控制主公杰特，主公下轮开始把哈尔斯调虎离山，此回合结束时报错',
-                '修复Buff致死造成的报错',
-                '修复获得的连携技能可以直接发动',
+                '/setRedoPlayer/',
+                '3.0',
+                '替换大部分武将原画',
+                '重做一些跟不上时代的角色',
+                '修复53个bug，点名表（殴）扬（打）@fox⑧',
+                '联动扩展：星穹防线（染柒）-印龙、黎玥幻歌（无冕黎明）-莫卡林',
+                '为所有原画增加了版权声明',
+                '为大量角色添加背景故事，可以在角色简介中查看',
+                '新增一段剧情-色塔卡之旅，开启新剧情地点',
+                '本次为大型更新，建议删除之前的拓展文件（可以保留save.json以保留成就进度）',
+                '获取更新可前往qq群828182346或频道等渠道',
                 'To be continued...',
             ],
             //更新武将
-            players: ['fr_mierk'],
+            players: ['fr_yinlong', 'fr_mokalin', 'fr_charlin', 'fr_rabby', 'fr_siji', 'fr_sangdi'],
             cards: [],
+            redoPlayers: ['fr_sisk', 'fr_dmoa', 'fr_molis', 'fr_dog', 'fr_kasaers', 'fr_xit', 'fr_yada']
         };
         var UpdateHistory = {
             '2.4.0.4': {
@@ -29,6 +36,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 ],
                 players: ['fr_mierk'],
                 cards: [],
+                redoPlayers: []
             },
             '2.4.0.3': {
                 changeLog: [
@@ -36,6 +44,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 ],
                 players: [],
                 cards: [],
+                redoPlayers: []
             },
             '2.4.0.2': {
                 changeLog: [
@@ -51,6 +60,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 ],
                 players: ['fr_kulun', 'fr_akain', 'fr_baixi'],
                 cards: ['fr_card_yfss'],
+                redoPlayers: []
             },
         }
         //加载
@@ -63,6 +73,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 case '/setPlayer/':
                     dialog.addText('<div style="font-size:17.5px;text-align:center;">更新角色：</div>')
                     dialog.addSmall([changeInfo.players, 'character']);
+                    break;
+                case '/setRedoPlayer/':
+                    dialog.addText('<div style="font-size:17.5px;text-align:center;">重做角色：</div>')
+                    dialog.addSmall([changeInfo.redoPlayers, 'character']);
                     break;
                 case '/setCard/':
                     dialog.addText('<div style="font-size:17.5px;text-align:center;">更新卡牌：</div>')
@@ -90,7 +104,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             dialog.close();
             control.close();
             if (hidden) ui.auto.show();
-            game.resume();
+            var message = '检测到版本更新，是否导入图片素材？\n您也可以稍后在扩展设置菜单导入素材。'
+            if (confirm(message) === true) {
+                window.furry.autoFrImport()
+            } else {
+                game.resume();
+            }
         });
     };
     lib.skill._Furry_changeLog = {
@@ -108,10 +127,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         content: function () {
             game.saveConfig('extension_福瑞拓展_Frversion', lib.extensionPack.福瑞拓展.version);
             game.showFrChangeLog();
-            var message='检测到版本更新，是否导入图片素材？\n您也可以稍后在扩展设置菜单导入素材。'
-            if(confirm(message)=='true'){
-                window.furry.autoFrImport()
-            }
         },
     };
 

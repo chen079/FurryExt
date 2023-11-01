@@ -69,7 +69,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 			num = player.frMaxMp - player.frMp;
 		}
 		if (num > 0) {
-			game.frPlayAudio('mprec_audio');
+			lib.frStory.playfrAudio('mprec_audio');
 			game.log(player, '获得了' + get.cnNumber(num) + '点魔力');
 			player.changefrMp(num);
 		}

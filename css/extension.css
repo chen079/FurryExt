@@ -263,7 +263,7 @@
 
 /*这里是龙势力*/
 .button.character.newstyle>.identity[data-nature="fr_g_dragon"] {
-    background-image: url('../import/十周年UI/image/decorations/name2_fr_g_dragon.png') !important;
+    background-image: url('../image/group/name2_fr_g_dragon.png') !important;
     background-size: 100% 100% !important;
 }
 
@@ -278,7 +278,7 @@
 
 /*这里是机势力*/
 .button.character.newstyle>.identity[data-nature="fr_g_ji"] {
-    background-image: url('../import/十周年UI/image/decorations/name2_fr_g_ji.png') !important;
+    background-image: url('../image/group/name2_fr_g_ji.png') !important;
     background-size: 100% 100% !important;
 }
 
@@ -461,4 +461,53 @@ progress.oafaProgress::-webkit-progress-value {
     height: 50px;
     right: -20px;
     top: -20px;
+}
+
+.shopItem {
+    width: 100px;
+    border: #d3843c 3px solid;
+    border-radius: 10px;
+    height: 100px;
+    margin: 10px;
+    background-color: rgba(36, 29, 19, 0.85);
+    top: 20px;
+    position: relative;
+}
+
+.skillItem {
+    width: 80%;
+    height: 50%;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    /* 水平居中 */
+    align-items: center;
+    /* 垂直居中 */
+    left: 10%;
+    top: 10%;
+    background-image: url('../image/button/skill.png');
+}
+
+.acceptItem {
+    width: 80%;
+    left: 10%;
+    height: 20%;
+    bottom: 20%;
+    background-image: url('../image/achievement/receive.png');
+    background-size: 100% 100%;
+}
+
+.innershopText {
+    background: linear-gradient(180deg, #f7d78e 0%, #af8e31 50%);
+    font-family: 'HYZLSJ';
+    font-weight: 600;
+    font-size: 130%;
+    -webkit-background-clip: text;
+    text-shadow: none;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(2px 0 0 #453325) drop-shadow(-2px 0 0 #453325) drop-shadow(0 2px 0 #453325) drop-shadow(0 -2px 0 #453325);
+}
+
+.frmad.olImage {
+    background-image: url("../image/card/OLUI/handcards/frmadsha.webp") !important;
 }

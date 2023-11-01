@@ -1,4 +1,19 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
+    if (!lib.furryStorage) lib.furryStorage = {}
+    lib.furryStorage.addCharacter = {
+
+    }
+    game.getFrJudge = function (name, judges, ralated, details) {
+        if (!ralated) ralated = '无'
+        if (!details) details = '无'
+        var attack = judges[0], outbreak = judges[1], fortune = judges[2], survival = judges[3], control = judges[4], auxiliary = judges[5], strategy = judges[6], comprehensive = judges[7]
+        return [name,
+            '</br><span class="bluetext">关联角色</span>：' + get.translation(ralated) + '<br><span class="bluetext">角色分析</span>：' + details,
+            '进攻：' + game.frStars(attack) + ' 爆发：' + game.frStars(outbreak) +
+            ' </br>运气：' + game.frStars(fortune) + ' 生存：' + game.frStars(survival) +
+            ' </br>控制：' + game.frStars(control) + ' 辅助：' + game.frStars(auxiliary) +
+            '</br>谋略：' + game.frStars(strategy) + ' 综合：' + game.frStars(comprehensive) + ' </br>']
+    }
     game.addMode('furry_lib', {
         game: {
             syncMenu: true,
@@ -315,12 +330,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     var node = this;
                     if (init) {
                         var charalist = [
-                            ['fr_wore',
-                                '</br><span class="bluetext">关联角色</span>：缇尔斯<br><span class="bluetext">角色分析</span>：超级左慈。',
-                                '进攻：' + game.frStars(2) + ' 爆发：' + game.frStars(3) +
-                                ' </br>运气：' + game.frStars(5) + ' 生存：' + game.frStars(2) +
-                                ' </br>控制：' + game.frStars(2) + ' 辅助：' + game.frStars(2) +
-                                '</br>谋略：' + game.frStars(4) + ' 综合：' + game.frStars(4) + ' </br>'],
+                            game.getFrJudge('fr_wore', [2, 3, 5, 2, 2, 2, 4, 4], ['fr_tiers']),
                             ['fr_tiers',
                                 '</br><span class="bluetext">关联角色</span>：沃尔<br>',
                                 '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(6) +
@@ -408,13 +418,13 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                                 ' </br>控制：' + game.frStars(4) + ' 辅助：' + game.frStars(0) +
                                 '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(3) + ' </br>'],
                             ['fr_whitewolf',
-                                '</br><span class="bluetext">关联角色</span>：“黑狼”<br>',
+                                '</br><span class="bluetext">关联角色</span>：华兹<br>',
                                 '进攻：' + game.frStars(0) + ' 爆发：' + game.frStars(0) +
                                 ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(6) +
                                 ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(5) +
                                 '</br>谋略：' + game.frStars(2) + ' 综合：' + game.frStars(5) + ' </br>'],
                             ['fr_blackwolf',
-                                '</br><span class="bluetext">关联角色</span>：“白狼”<br>',
+                                '</br><span class="bluetext">关联角色</span>：华特<br>',
                                 '进攻：' + game.frStars(5) + ' 爆发：' + game.frStars(5) +
                                 ' </br>运气：' + game.frStars(0) + ' 生存：' + game.frStars(2) +
                                 ' </br>控制：' + game.frStars(3) + ' 辅助：' + game.frStars(0) +

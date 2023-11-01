@@ -17,12 +17,42 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             return name == 'fr_neises'
         },
         content: function () {
-            //附加页内显示的内容。
-            var str = "显示内容";
-            return str;
+            
         },
         handleView: function (view, name) {
-            //为附加页内的元素添加点击事件和其它逻辑。
+            var player = game.me
+            var list = []
+            for (var i in lib.characterPack.furryPack) {
+                var character = lib.characterPack.furryPack[i]
+                list = list.concat(character[3])
+            }
+            list = list.filter(i => {
+                var info = get.info(i)
+                return lib.translate[i + '_info'] != undefined && info && !(info.charlotte || info.fixed || info.unique || info.zhuSkill || info.charlotte || info.yunlvSkill || info.qianghua || info.hiddenSkill || info.juexingji || info.limited || info.dutySkill || (info.unique && !info.gainable))
+            })
+            var shop = ui.create.div('', view)
+            var title = ui.create.div('', shop)
+            var name = ui.create.div('', title)
+            var divList = {
+
+            }
+            for (var i of list) {
+                (function (currentSkill) {
+                    divList[currentSkill] = {};
+                    divList[currentSkill]['div'] = ui.create.div('.shopItem', shop);
+                    divList[currentSkill]['div'].id = currentSkill;
+                    divList[currentSkill]['skillItem'] = ui.create.div('.skillItem', divList[currentSkill]['div']);
+                    divList[currentSkill]['accept'] = ui.create.div('.acceptItem', divList[currentSkill]['div']);
+                    divList[currentSkill]['text'] = ui.create.div('.innershopText', divList[currentSkill]['skillItem']);
+                    divList[currentSkill]['text'].innerText = get.translation(currentSkill);
+                    if (player.hasSkill(currentSkill)) divList[currentSkill]['accept'].setBackgroundImage('extension/福瑞拓展/image/achievement/received.png');
+                    divList[currentSkill]['accept'].addEventListener('click', function () {
+                        if (!player.hasSkill(currentSkill)) alert('领取成功');
+                        player.addSkill(currentSkill);
+                        divList[currentSkill]['accept'].setBackgroundImage('extension/福瑞拓展/image/achievement/received.png');
+                    });
+                })(i);
+            }
         }
     });
 });

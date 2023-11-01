@@ -1,4 +1,89 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
+    get.frAvatarSrc = function (name, flat) {
+        if (!flat) flat = false
+        if (!name) return null;
+        var src = null;
+        var ext = '.jpg';
+        var subfolder = 'default';
+        var dbimage = null, extimage = null, modeimage = null;
+        var nameinfo;
+        var gzbool = false;
+        var mode = get.mode();
+        if (lib.characterPack['mode_' + mode] && lib.characterPack['mode_' + mode][name]) {
+            if (mode == 'guozhan') {
+                nameinfo = lib.character[name];
+                if (name.indexOf('gz_shibing') == 0) {
+                    name = name.slice(3, 11);
+                }
+                else {
+                    if (lib.config.mode_config.guozhan.guozhanSkin && lib.character[name] && lib.character[name][4].contains('gzskin')) gzbool = true;
+                    name = name.slice(3);
+                }
+            }
+            else {
+                modeimage = mode;
+            }
+        }
+        else if (lib.character[name]) {
+            nameinfo = lib.character[name];
+        }
+        else if (name.indexOf('::') != -1) {
+            name = name.split('::');
+            modeimage = name[0];
+            name = name[1];
+        }
+        if (!modeimage && nameinfo && nameinfo[4]) {
+            for (var i = 0; i < nameinfo[4].length; i++) {
+                if (nameinfo[4][i].indexOf('ext:') == 0) {
+                    extimage = nameinfo[4][i]; break;
+                }
+                else if (nameinfo[4][i].indexOf('db:') == 0) {
+                    dbimage = nameinfo[4][i]; break;
+                }
+                else if (nameinfo[4][i].indexOf('mode:') == 0) {
+                    modeimage = nameinfo[4][i].slice(5); break;
+                }
+                else if (nameinfo[4][i].indexOf('character:') == 0) {
+                    name = nameinfo[4][i].slice(10); break;
+                }
+            }
+        }
+        if (!flat) {
+            if (nameinfo[4][i]) return nameinfo[4][i]
+            else return 'character:' + name
+        }
+        if (extimage) {
+            src = extimage.replace(/ext:/, 'extension/');
+        }
+        else if (dbimage) {
+            return null;
+        }
+        else if (modeimage) {
+            src = 'image/mode/' + modeimage + '/character/' + name + ext;
+        }
+        else if (lib.config.skin[name] && arguments[2] != 'noskin') {
+            src = 'image/skin/' + name + '/' + lib.config.skin[name] + ext;
+        }
+        else {
+            src = 'image/character/' + (gzbool ? 'gz_' : '') + name + ext;
+        }
+        return src;
+    }
+    get.findOrigin = function (value) {
+        var list = []
+        var characters = Object.keys(lib.character)
+        var map = {}
+        for (var i of characters) {
+            map[i] = lib.translate[i]
+        }
+        if (map.hasOwnProperty(value)) list.add(value)
+        for (var i in map) {
+            if (get.pinyin(map[i], false).join("").indexOf(get.pinyin(value, false).join("")) !== -1) list.add(i)
+            if (map[i].indexOf(value) != -1) list.add(i)
+            if (i.indexOf(value) != -1) list.add(i)
+        }
+        return list.unique()
+    }
     game.getInCenter = function () {
         //--------------------获取中央区的牌-------------------
         var list = [];

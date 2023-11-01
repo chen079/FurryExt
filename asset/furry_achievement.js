@@ -1,10 +1,15 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
-		'fr_mierk':'我有一言，诸君静听。',
-		'fr_baixi':'一见生财，天下太平！',
-		'fr_akain':'我自飘零，未遇明主。',
-		'fr_kulun':"我是元素的王！哈哈哈哈哈！",
+		'fr_siji': "天下弗安，黎民阻饥，<br>拯民降谷，功在司稷",
+		'fr_rabby': '请和我走一趟',
+		'fr_charlin': '你会听从我的命令',
+		'fr_mokalin': '我的决心，永不动摇！',
+		'fr_yinlong': '我会带领龙族再次走向辉煌！',
+		'fr_mierk': '我有一言，诸君静听。',
+		'fr_baixi': '一见生财，天下太平！',
+		'fr_akain': '我自飘零，未遇明主。',
+		'fr_kulun': "我是元素的王！哈哈哈哈哈！",
 		'fr_sainit': '月华闪烁，一泻千里。',
 		'fr_aak': '来喝我做的果汁吧，怎么样很好喝吗？嘻嘻嘻（榴莲味）',
 		'fr_guotang': '山水有相逢。',
@@ -15,7 +20,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		'fr_wind': "不要小看风的力量！",
 		'fr_ming': "语出如剑，可伤人心。",
 		'fr_death': "我喜欢死亡的味道...",
-		'fr_gairtelu': "不过是几条人命而已，哪有我的享乐重要，哈哈哈哈！",
+		'fr_gairtelu': "不过是几条人命而已，哪有享乐重要，哈哈哈哈！",
 		'fr_thunder': '所谓雷电，不过是玩具罢了...',
 		'fr_lamas': '我会战斗到最后一刻！',
 		'fr_mouse': '奇门遁甲，唯破万法...',
@@ -27,7 +32,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		'fr_tiers': "我于杀戮之中盛放！",
 		"fr_milis": '所铸兵刃，可破万法。',
 		"fr_huye": '魂起何处，梦落何归？',
-		"fr_xit": '智者，当以全身而退！',
+		"fr_xit": '陷入永恒的安眠吧...',
 		"fr_nier": '智解万物，元生万象。',
 		"fr_laays": '今日何日，今时何时？以吾之血，饲世之厄。',
 		'fr_liya': '喜欢我的机车吗？我爸爸给我的！',
@@ -107,7 +112,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		"fr_terz": '对弈天地，洞察玄机。',
 		"fr_jet": '让世界混乱起来吧！',
 		"fr_knier": '你看见的，未必是真相。',
-		"fr_kasaers": '不过是说说而已。',
+		"fr_kasaers": '当心月下的狼吟。',
 		"fr_molis": '真没意思，<br>&nbsp&nbsp要回到什么时候呢？',
 		"fr_shisan": '糟糕，又迷路了，不知龙族的同胞们在哪呢？',
 		"fr_zhongyu": '这令人癫狂的火焰！<br>&nbsp&nbsp这令人沉寂的火焰...',
@@ -368,7 +373,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 	lib.lockedSkin = {
 		'fr_yifeng': '异界之花',
 		'fr_jackson': "树影斑驳",
-		'fr_tiers': "战场蔷薇"
+		'fr_tiers': "战场蔷薇",
+		'fr_rabby': '海风轻抚'
 	}
 	if (lib.config.extension_千幻聆音_enable) {
 		for (let name in lib.lockedSkin) {
@@ -652,12 +658,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 					if (!this.hasAchi(name)) this.got(name);
 				}
 			}
-			for(let i in lib.fr_achievementRewards){
-				var achi=lib.fr_achievementRewards[i]
-				if(achi.type=='character') game.frAchi.unlockCharacter(achi.id)
-				if(achi.type=='skin'){
-					game.saveConfig(achi.id+'_unlock',true)
-					alert('已领取皮肤：'+achi.id)
+			for (let i in lib.fr_achievementRewards) {
+				var achi = lib.fr_achievementRewards[i]
+				if (achi.type == 'character') game.frAchi.unlockCharacter(achi.id)
+				if (achi.type == 'skin') {
+					game.saveConfig(achi.id + '_unlock', true)
+					alert('已领取皮肤：' + achi.id)
 				}
 			}
 			this.saveConfig()
@@ -706,25 +712,29 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		},
 		unlockCharacter: function () {
 			var characters = Array.prototype.slice.call(arguments);
-			var str = '已解锁新角色：'
-			for (var i = 0; i < characters.length; i++) {
-				if (!lib.config.achiReward.character.contains(characters[i])) {
-					lib.config.achiReward.character.push(characters[i]);
-					str += ' ' + get.translation(characters[i])
+			if (characters.filter(i => !lib.config.achiReward.character.contains(i)).length) {
+				var str = '已解锁新角色：'
+				for (var i = 0; i < characters.length; i++) {
+					if (!lib.config.achiReward.character.contains(characters[i])) {
+						lib.config.achiReward.character.push(characters[i]);
+						str += ' ' + get.translation(characters[i])
+					}
 				}
+				alert(str)
+				this.saveConfig()
 			}
-			alert(str)
-			this.saveConfig()
 		},
 		unlockCard: function () {
 			var cards = Array.prototype.slice.call(arguments);
-			for (var i = 0; i < cards.length; i++) {
-				if (!lib.config.achiReward.card.contains(cards[i])) {
-					lib.config.achiReward.card.push(cards[i]);
+			if (cards.filter(i => !lib.config.achiReward.card.contains(i)).length) {
+				for (var i = 0; i < cards.length; i++) {
+					if (!lib.config.achiReward.card.contains(cards[i])) {
+						lib.config.achiReward.card.push(cards[i]);
+					}
 				}
+				alert('已解锁新卡牌：' + get.translation(cards[0][2]))
+				this.saveConfig();
 			}
-			alert('已解锁新卡牌：' + get.translation(cards[0][2]))
-			this.saveConfig();
 		},
 		//保存设置
 		saveConfig: function () {
