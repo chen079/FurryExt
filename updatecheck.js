@@ -1,6 +1,6 @@
 (() => ({
 	// 扩展版本
-	version: "2.4.0.5",
+	version: "3.0.1",
 
 	// 扩展的上一个版本
 	oldversion: "2.4.0.4",
@@ -16,6 +16,7 @@
 	新增一段剧情-色塔卡之旅，开启新剧情地点
 	本次为大型更新，建议删除之前的拓展文件（可以保留save.json以保留成就进度）
 	获取更新可前往qq群828182346或频道等渠道
+	为莫莉斯新增一个皮肤，替换他的原画，修复【时移】技能bug
 	To be continued...
     `,
 
@@ -40,9 +41,10 @@
 		'asset/skin.js',
 		'asset/update.js',
 		'extension.js',
-		'image/Buff/pibei.png',
-		'image/Buff/shufu.png',
-		'image/Buff/xuruo.png'
+		'image/skin/origin-lutou/fr_molis.png',
+		'image/skin/origin-lutou/fr_molis.png',
+		'image/skin/skin-lutou/fr_molis/宇宙凝视.png',
+		'image/skin/skin-standard/fr_molis/宇宙凝视.jpg'
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [

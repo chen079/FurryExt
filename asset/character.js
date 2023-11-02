@@ -1072,7 +1072,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     if (!map[id].extraDamage) map[id].extraDamage = 0;
                     map[id].extraDamage += 1;
                     'step 2'
-                    player.chooseToDiscard('hs', [1, Infinity], function (card) {
+                    player.chooseToDiscard('hs', [1, trigger.target.countCards('he')], function (card) {
                         return card.name == 'sha'
                     }).set('ai', function (card) {
                         return 7 - get.value(card)
@@ -1104,7 +1104,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                         direct: true,
                         content: () => {
                             'step 0'
-                            var num = Math.min(player.countCards('h'), player.maxHp, 3)
+                            var num = Math.min(player.countCards('h'), player.maxHp)
                             player.chooseToDiscard('h', num, true)
                             'step 1'
                             event.cards = result.cards
@@ -1140,14 +1140,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                             global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
                         },
                         prompt: '是否发动【地护】？',
-                        prompt2: '减少1层「免疫」并摸X张牌（X为你的体力上限且至多为3）。',
+                        prompt2: '减少1层「免疫」并摸X张牌（X为你的体力上限）。',
                         usable: 1,
                         filter: function (event, player) {
                             var evt = event.getl(player);
                             return evt && evt.cards2 && evt.cards2.length > 0
                         },
                         content: function () {
-                            var num = Math.min(player.maxHp, 3)
+                            var num = player.maxHp
                             player.draw(num)
                             player.reduceFrBuff('mianyi')
                         }
@@ -1296,16 +1296,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 content: function () {
                     'step 0'
                     event.allphase = []
-                    if (get.myCompareVersion(lib.version, '1.10.3.1') > 1) {
-                        for (var i of lib.phaseName) {
-                            event.allphase.push(game.createCard2('fr_' + i, '', ''))
-                        }
+                    event.standard = []
+                    for (var i of lib.phaseName) {
+                        event.standard.push(game.createCard2('fr_' + i, '', ''))
+                    }
+                    if (get.myCompareVersion(lib.version, '1.10.3.1') < 0) {
+                        event.allphase = event.standard
                     } else {
                         for (var i of trigger.phaseList) {
                             event.allphase.push(game.createCard2('fr_' + i, '', ''))
                         }
                     }
-                    player.chooseCardButton('【时移】：选择令' + get.translation(trigger.player) + '获得的主要阶段', event.allphase.slice(1, 5))
+                    player.chooseCardButton('【时移】：选择令' + get.translation(trigger.player) + '获得的主要阶段', event.standard.slice(1, event.standard.length - 1))
                         .set('ai', function (button) {
                             var att = get.attitude(_status.event.player, trigger.player)
                             if (att > 0) {
@@ -1354,7 +1356,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     }
                     'step 4'
                     event.phaseList = event.cards.map(i => i.name.replace('fr_', ''))
-                    if (get.myCompareVersion(lib.version, '1.10.3.1') > 1) {
+                    if (get.myCompareVersion(lib.version, '1.10.3.1') > 0) {
                         trigger.phaseList = event.phaseList
                         event.finish()
                     } else {
@@ -21643,7 +21645,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     for (var i = 0; i < cards.length; i++) {
                         ui.cardPile.insertBefore(cards[i], ui.cardPile.childNodes[get.rand(ui.cardPile.childElementCount)]);
                     }
-                    player.addSkill('molis_hs_lock')
                     game.updateRoundNumber();
                 },
                 ai: {
@@ -21659,20 +21660,6 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                     },
                 },
                 subSkill: {
-                    lock: {
-                        trigger: {
-                            global: "roundStart",
-                        },
-                        forced: true,
-                        popup: false,
-                        silent: true,
-                        firstDo: true,
-                        content: function () {
-                            game.roundNumber -= 1;
-                            game.updateRoundNumber();
-                        },
-                        sub: true,
-                    },
                     record: {
                         trigger: {
                             global: "roundStart",
@@ -21944,7 +21931,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'mokalin_sy': "碎岩",
             'mokalin_sy_info': '你使用【杀】指定一名角色为目标后，你可失去1点体力令此【杀】伤害+1，然后可以弃置任意张【杀】和其等量牌。',
             'mokalin_dh': '地护',
-            'mokalin_dh_info': '每个回合开始时，你的' + get.dialogIntro('mianyi') + '改为1层；你的「免疫」减为0后，弃置X张手牌，不足则全弃，然后可以令任意名角色获得其中一张；每回合限一次，你失去牌时，可以摸X张牌，令「免疫」层数–1（X为体力上限且至多为3）。',
+            'mokalin_dh_info': '每个回合开始时，你的' + get.dialogIntro('mianyi') + '改为1层；你的「免疫」减为0后，弃置X张手牌，不足则全弃，然后可以令任意名角色获得其中一张；每回合限一次，你失去牌时，可以摸X张牌，令「免疫」层数–1（X为体力上限）。',
             'yinlong_jh': '惊鸿',
             'yinlong_jh_info': '锁定技，弃牌阶段开始时，若你不是全场手牌唯一最多的角色，本回合手牌上限+2，否则你摸1张牌。你的♣手牌因弃置进入弃牌堆时，你可以摸<span class="bluetext">2</span>张牌并可以使用至多<span class="bluetext">1</span>张牌。',
             'yinlong_cb': '陈波',
@@ -22068,7 +22055,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             'keste_yg': "议攻",
             'keste_yg_info': '出牌阶段限一次，你可以选择一名角色并令该角色外的角色议事，若结果为：红色，你弃置意见为红色且可以对该角色使用【杀】的角色一张手牌，然后对视为该角色使用一张【杀】；黑色：你获得意见为黑色的角色区域内的一张牌。',
             'nine_dx': "独行",
-            'nine_dx_info': "锁定技，锁定技，①你从牌堆底摸牌、判定。②回合结束后，牌堆洗牌，洗入弃牌堆中的装备。③你弃置回合外不因此武将牌上的技能获得的牌，并摸一张牌。",
+            'nine_dx_info': "锁定技，①你从牌堆底摸牌、判定。②回合结束后，牌堆洗牌，洗入弃牌堆中的装备。③你弃置回合外不因此武将牌上的技能获得的牌，并摸一张牌。",
             'nine_fw': "附尾",
             'nine_fw_info': "每阶段内第一次失去牌后，你可以展示牌堆底7张牌和手牌，然后选择一项：①任意交换其中的顺序，②使用其中任意张装备；若为你的回合，你获得并可重铸其中未使用的、某点数的牌。",
             'nine_cj': '冲击',
@@ -22662,7 +22649,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
             "fox_hm": "幻梦",
             "fox_hm_info": "锁定技，当你不因〖幻梦〗使用有目标的基本牌或普通锦囊牌结算完毕后，若此牌非转化且对应的实体牌数为1，你将此牌置于你的武将牌上，称为“幻”；结束阶段，若你有“幻”，你依次对所有“幻”的原目标使用这些“幻”，并弃置无法使用的“幻”。",
             "molis_hs": "回溯",
-            "molis_hs_info": "限定技，当你进入濒死状态时，你可以将场上的卡牌复原到本轮开始时的状态（包括武将牌和体力牌），然后游戏轮数锁定为当前轮次。",
+            "molis_hs_info": "限定技，当你进入濒死状态时，你可以将场上的卡牌复原到本轮开始时的状态（包括武将牌和体力牌）。",
             "marcia_ql": "潜掠",
             "marcia_ql_info": "锁定技，每回合每种颜色限一次，当你成为其他角色使用【杀】或伤害类锦囊牌的唯一目标时，若此牌对应的实体牌数为1，你取消之，然后将此牌置于你的武将牌上，称为“潜”；出牌阶段开始时，你获得武将牌上的“潜”。",
             "molis_dx": "洞悉",

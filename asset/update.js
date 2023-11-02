@@ -3,28 +3,34 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     game.showFrChangeLog = function (version) {
         version = version || lib.extensionPack["福瑞拓展"].version;
         var changeInfo = {
-            //更新告示
-            changeLog: [
-                '/setPlayer/',
-                '/setRedoPlayer/',
-                '3.0',
-                '替换大部分武将原画',
-                '重做一些跟不上时代的角色',
-                '修复53个bug，点名表（殴）扬（打）@fox⑧',
-                '联动扩展：星穹防线（染柒）-印龙、黎玥幻歌（无冕黎明）-莫卡林',
-                '为所有原画增加了版权声明',
-                '为大量角色添加背景故事，可以在角色简介中查看',
-                '新增一段剧情-色塔卡之旅，开启新剧情地点',
-                '本次为大型更新，建议删除之前的拓展文件（可以保留save.json以保留成就进度）',
-                '获取更新可前往qq群828182346或频道等渠道',
-                'To be continued...',
-            ],
-            //更新武将
-            players: ['fr_yinlong', 'fr_mokalin', 'fr_charlin', 'fr_rabby', 'fr_siji', 'fr_sangdi'],
+            changeLog: [],
+            players: [],
             cards: [],
-            redoPlayers: ['fr_sisk', 'fr_dmoa', 'fr_molis', 'fr_dog', 'fr_kasaers', 'fr_xit', 'fr_yada']
+            redoPlayers: []
         };
         var UpdateHistory = {
+            '3.0': {
+                //更新告示
+                changeLog: [
+                    '/setPlayer/',
+                    '/setRedoPlayer/',
+                    '3.0',
+                    '替换大部分武将原画',
+                    '重做一些跟不上时代的角色',
+                    '修复53个bug，点名表（殴）扬（打）@fox⑧',
+                    '联动扩展：星穹防线（染柒）-印龙、黎玥幻歌（无冕黎明）-莫卡林',
+                    '为所有原画增加了版权声明',
+                    '为大量角色添加背景故事，可以在角色简介中查看',
+                    '新增一段剧情-色塔卡之旅，开启新剧情地点',
+                    '本次为大型更新，建议删除之前的拓展文件（可以保留save.json以保留成就进度）',
+                    '获取更新可前往qq群828182346或频道等渠道',
+                    'To be continued...',
+                ],
+                //更新武将
+                players: ['fr_yinlong', 'fr_mokalin', 'fr_charlin', 'fr_rabby', 'fr_siji', 'fr_sangdi'],
+                cards: [],
+                redoPlayers: ['fr_sisk', 'fr_dmoa', 'fr_molis', 'fr_dog', 'fr_kasaers', 'fr_xit', 'fr_yada']
+            },
             '2.4.0.4': {
                 changeLog: [
                     '2.4.0.4',
