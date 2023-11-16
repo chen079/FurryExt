@@ -6,9 +6,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     }
     var keys = {
         'c4d038b4bed09fdb1471ef51ec3a32cd': {
-            'fr_youying': {
-                type: 'character'
-            },
             '海风轻抚': {
                 type: 'skin'
             }

@@ -890,7 +890,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     return target != player && target.countGainableCards(player, 'hej') > 0;
                 },
                 filter: function (event, player) {
-                    return player.countCards('h') > 0 && player.countCards('h') > 1
+                    return player.countCards('h') > 1
                 },
                 content: function () {
                     'step 0'

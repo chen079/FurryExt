@@ -1131,7 +1131,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             charlotte: true,
             trigger: {
-                player: ["addFrBuffAfter", 'changeHp'],
+                player: ["addFrBuffAfter", 'changeHp',"reduceFrBuffAfter"],
             },
             forced: true,
             silent: true,
@@ -1313,7 +1313,89 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 },
             }
         },
-
+        //灵秘
+        'lingmi': {
+            intro: {
+                name: "灵秘",
+                content: "<li>你的所有牌均可重铸。<li>当你重铸一张原本不可重铸的牌时，「灵秘」层数-1",
+            },
+            trigger: {
+                player: 'recastAfter'
+            },
+            charlotte: true,
+            forced: true,
+            silent: true,
+            priority: 3,
+            filter: function (event, player) {
+                return event.cards.some(card => {
+                    var info = get.info(card), recastable = info.recastable || info.chongzhu
+                    return !Boolean(typeof recastable == 'function' ? recastable(_status.event, player) : recastable);
+                })
+            },
+            content: function () {
+                var num = trigger.cards.filter(i => {
+                    var info = get.info(i), recastable = info.recastable || info.chongzhu
+                    return !Boolean(typeof recastable == 'function' ? recastable(_status.event, player) : recastable);
+                }).length
+                player.reduceFrBuff('lingmi', num)
+            },
+            mod: {
+                cardRecastable: function (card, player) {
+                    if (player.hasFrBuff('lingmi')) return true
+                }
+            },
+            FrBuffInfo: {
+                naturalLose: false,
+                buffRank: {
+                    basic: [0.5, 0]
+                },
+                type: 'buff',
+            },
+        },
+        'zuijiu': {
+            intro: {
+                name: "醉酒",
+                content: "<li>当你使用【杀】时，你移去X层「醉酒」，然后此【杀】伤害+X",
+            },
+            trigger: {
+                player: "useCard1",
+            },
+            filter: function (event) {
+                return event.card && event.card.name == 'sha';
+            },
+            charlotte: true,
+            forced: true,
+            silent: true,
+            priority: 3,
+            content: function () {
+                var num = player.countFrBuffNum('zuijiu')
+                if (!trigger.baseDamage) trigger.baseDamage = 1;
+                trigger.baseDamage += num
+                player.reduceFrBuff('zuijiu', num)
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    basic: [1, 0],
+                    randomPower: 0.2
+                },
+                type: 'buff',
+            },
+        },
+        'yingneng': {
+            intro: {
+                name: "盈能",
+                content: "还没想到效果",
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    basic: [0.5, 0],
+                    randomPower: 0.2
+                },
+                type: 'buff',
+            },
+        }
         /*新Buff创建模板
                 //「」
                 "Buff名称":{

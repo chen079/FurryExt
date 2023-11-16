@@ -36,12 +36,16 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 }
                 'step 4'
                 if (result.bool) {
+                    event.target.clearSkills()
                     event.target.init(result.links[0])
                     if (get.mode() == 'doudizhu' && event.target.identity == 'zhu') {
                         event.target.addSkill('feiyang')
                         event.target.addSkill('bahu')
                         event.target.gainMaxHp()
                         event.target.hp++
+                    }
+                    if (!lib.character[result.links[0]][4].contains("hiddenSkill")) {
+                        event.target.showCharacter(2, false)
                     }
                     if (get.is.double(result.links[0])) {
                         player.chooseControl(get.is.double(result.links[0], true)).set('prompt', '请选择你的势力');
@@ -52,7 +56,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     event.goto(0)
                 }
                 'step 5'
-                player.group = result.control
+                event.target.group = result.control
                 event.goto(0)
             }
         }
@@ -145,7 +149,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         content: function () {
             'step 0'
             if (trigger.hasNature("frmad")) {
-                trigger.player.addFrBuff('mad', trigger.num)
+                trigger.player.addFrBuff('chuxue', trigger.num)
             }
         },
     }
@@ -206,6 +210,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     case 'z1': str = 'fr_bgm_Hopes And Dreams.mp3'; break;
                     case 'z2': str = 'fr_bgm_MEGALOVANIA.mp3'; break;
                     case 'z3': str = 'fr_bgm_ElDorado.mp3'; break;
+                    case 'z4': str = 'furry_bgm_BOSS BATTLE：BIG ARMS.mp3'; break
                 }
                 ui.backgroundMusic.src = lib.assetURL + 'extension/福瑞拓展/audio/bgm/' + str
                 ui.backgroundMusic.loop = true;

@@ -3,10 +3,22 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     game.showFrChangeLog = function (version) {
         version = version || lib.extensionPack["福瑞拓展"].version;
         var changeInfo = {
-            changeLog: [],
-            players: [],
+            changeLog: [
+                '/setRedoPlayer/',
+                '/setPlayer/',
+                '3.0.2',
+                '重做武将塔尔斯',
+                '解放上个版本的激活码武将',
+                '新增一首主内单挑bgm、一首普通bgm',
+                '修复激活码在手机端无法使用的部分bug',
+                '修复部分武将描述错误、将修改狂属性伤害',
+                '修复ai换将功能在部分选将时保留技能的错误',
+                '修复部分bug',
+                '新增更多的bug...'
+            ],
+            players: ['fr_youying'],
             cards: [],
-            redoPlayers: []
+            redoPlayers: ['fr_tails']
         };
         var UpdateHistory = {
             '3.0': {
@@ -422,7 +434,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 else myConfirm(`福瑞拓展检测到更新(v${data.version}), 是否更新?\n${data.changeLog}`, furryUpdating);
             })
             .catch(e => {
-                alert(typeof e == 'string' ? '网络请求错误' : e.message);
+                alert('自动更新网络请求出错，请检查您的网络。<br>您也可以前往设置中关闭自动更新检查，不再弹出此窗口。');
             });
 
     }

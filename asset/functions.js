@@ -102,6 +102,73 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         list = list.filterInD('d')
         return list
     }
+    game.doMultiEvents = function () {
+        let next = game.createEvent("doMultiEvents", false);
+        next.events = [];
+        next.add = function (item) {
+            if (typeof item == "function") {
+                this.events.push(item);
+            } else if (typeof item == "object") {
+                let evt = item;
+                if (Array.isArray(evt)) {
+                    if (typeof evt[i] == "function") {
+                        let args = Array.from(evt).slice(1);
+                        evt = (result, results) => evt[0].apply(null, [result, results].concat(args));
+                    } else {
+                        let args = Array.from(evt).slice(2);
+                        evt = evt[0][evt[1]].apply(evt[0], args);
+                    }
+                }
+                _status.event.next.remove(evt);
+                this.events.push(evt);
+            }
+        }
+        for (let i = 0; i < arguments.length; ++i) {
+            next.add(arguments[i]);
+        }
+        next.setContent("doMultiEvents");
+        return next;
+    }
+
+    lib.element.content.doMultiEvents = function (event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result) {
+        "step 0"
+        event.result = [];
+        "step 1"
+        if (!event.events.length) event.finish();
+        "step 2"
+        let current = event.events.shift();
+        if (typeof current == "function") {
+            current(event.result.length > 0 ? event.result[event.result.length - 1] : undefined, event.result);
+        }
+        else {
+            event.next.push(current);
+        }
+        "step 3"
+        event.result.push(result);
+        event.goto(1);
+    }
+    game.addResult = function () {
+        const args = Array.from(arguments), event = args[0], items = args.slice(1);
+        let evt = event;
+        if (event.name != "addResult") {
+            evt = game.createEvent("addResult", false);
+            evt.origin = event;
+            _status.event.next.remove(event);
+            evt.map = new Map();
+            evt.add = function (items) {
+                for (let i = 0; i < items.length; ++i) {
+                    if (typeof items[i] == "object") {
+                        for (const name in items[i]) evt.map.set(name, items[i][name]);
+                    }
+                    else evt.map.set(items[i], items[++i]);
+                }
+            }
+            evt.setContent("addResult");
+        }
+        evt.add(items);
+        return evt;
+    }
+
     lib.element.content.addResult = function (event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result) {
         "step 0"
         event.next.add(event.origin);
