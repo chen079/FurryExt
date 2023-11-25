@@ -69,6 +69,23 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         }
         return src;
     }
+    get.arraysIntersection = function (arrays) {
+        // 如果数组个数小于 2，无法形成交集
+        if (arrays.length < 2) {
+            return [];
+        }
+
+        // 将第一个数组转换为 Set
+        let intersection = new Set(arrays[0]);
+
+        // 遍历其他数组，保留在交集中出现的元素
+        for (let i = 1; i < arrays.length; i++) {
+            let currentArray = arrays[i];
+            intersection = new Set([...intersection].filter(element => currentArray.includes(element)));
+        }
+
+        return [...intersection];
+    }
     get.findOrigin = function (value) {
         var list = []
         var characters = Object.keys(lib.character)
@@ -126,26 +143,24 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         for (let i = 0; i < arguments.length; ++i) {
             next.add(arguments[i]);
         }
-        next.setContent("doMultiEvents");
+        next.setContent(function () {
+            "step 0"
+            event.result = [];
+            "step 1"
+            if (!event.events.length) event.finish();
+            "step 2"
+            let current = event.events.shift();
+            if (typeof current == "function") {
+                current(event.result.length > 0 ? event.result[event.result.length - 1] : undefined, event.result);
+            }
+            else {
+                event.next.push(current);
+            }
+            "step 3"
+            event.result.push(result);
+            event.goto(1);
+        });
         return next;
-    }
-
-    lib.element.content.doMultiEvents = function (event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result) {
-        "step 0"
-        event.result = [];
-        "step 1"
-        if (!event.events.length) event.finish();
-        "step 2"
-        let current = event.events.shift();
-        if (typeof current == "function") {
-            current(event.result.length > 0 ? event.result[event.result.length - 1] : undefined, event.result);
-        }
-        else {
-            event.next.push(current);
-        }
-        "step 3"
-        event.result.push(result);
-        event.goto(1);
     }
     game.addResult = function () {
         const args = Array.from(arguments), event = args[0], items = args.slice(1);
@@ -163,22 +178,20 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     else evt.map.set(items[i], items[++i]);
                 }
             }
-            evt.setContent("addResult");
+            evt.setContent(function () {
+                "step 0"
+                event.next.add(event.origin);
+                "step 1"
+                event.result = result;
+                for (const item of event.map) {
+                    event.result[item[0]] = event.result[item[1]];
+                }
+                "step 2"
+                event.map.clear();
+            });
         }
         evt.add(items);
         return evt;
-    }
-
-    lib.element.content.addResult = function (event, step, source, player, target, targets, card, cards, skill, forced, num, trigger, result) {
-        "step 0"
-        event.next.add(event.origin);
-        "step 1"
-        event.result = result;
-        for (const item of event.map) {
-            event.result[item[0]] = event.result[item[1]];
-        }
-        "step 2"
-        event.map.clear();
     }
     //----------------------------性别判断--------------------------
     lib.element.player.frPrimarySex = function () {
@@ -219,84 +232,83 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             if (next.forced == undefined) next.forced = false;
         }
         next.player = this;
-        next.setContent('chooseText');
+        next.setContent(function () {
+            'step 0';
+            if (event.isMine()) {
+                if (event.dialog) {
+                    event.dialog.open();
+                } else {
+                    if (!event.prompt) event.prompt = '请在下方输入文本'
+                    event.dialog = ui.create.dialog(event.prompt);
+                    if (event.prompt2) {
+                        event.dialog.addText(event.prompt2, event.prompt2.length <= 20);
+                    }
+                }
+                event.result = {}
+                const div = document.createElement('div');
+                const input = div.appendChild(document.createElement('input'));
+                input.style.background = 'black';
+                input.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=40)";
+                input.style.opacity = "0.6"
+                input.style.fontSize = '20px';
+                input.style.textAlign = 'center';
+                input.style.color = '#c9c8a2';
+                input.addEventListener('keydown', e => e.stopPropagation());
+                input.addEventListener('keyup', e => e.stopPropagation());
+                input.placeholder = '请在此输入文本';
+                input.setAttribute('maxlength', event.max);
+                event.dialog.add(div);
+                game.pause();
+                game.countChoose();
+                event.choosing = true;
+                var button = ui.create.control('确定', () => {
+                    if (event.filterText) {
+                        var ok
+                        if (typeof event.filterText == 'function') ok = event.filterText(input.value)
+                        else if (Array.isArray(event.filterText)) ok = event.filterText.contains(input.value)
+                        if (!ok) return alert('您输入的内容不符合要求')
+                    }
+                    event.result.bool = true
+                    event.result.text = input.value ? input.value : ''
+                    doClose()
+                });
+                if (!event.forced) {
+                    var cancel = ui.create.control('取消', () => {
+                        event.result.bool = false
+                        doClose()
+                    });
+                }
+                event.switchToAuto = () => {
+                    event.result = 'ai';
+                    doClose()
+                };
+                const doClose = () => {
+                    button.remove();
+                    if (cancel) cancel.remove();
+                    game.resume();
+                }
+            } else if (event.isOnline()) {
+                event.send();
+            } else {
+                event.result = 'ai';
+            }
+            'step 1';
+            if (event.result == 'ai') {
+                if (event.ai) {
+                    event.value = event.ai(event.getParent(), player);
+                }
+                event.result = {}
+                event.result.bool = (event.value != -1 || event.forced)
+                if (event.result.bool) event.result.text = event.value
+            }
+            _status.imchoosing = false;
+            event.choosing = false;
+            if (event.dialog) event.dialog.close();
+            event.resume();
+        });
         next._args = Array.from(arguments);
         next.forceDie = true;
         return next;
-    }
-    lib.element.content.chooseText = function chooseTextContent() {
-        'step 0';
-        if (event.isMine()) {
-            if (event.dialog) {
-                event.dialog.open();
-            } else {
-                if (!event.prompt) event.prompt = '请在下方输入文本'
-                event.dialog = ui.create.dialog(event.prompt);
-                if (event.prompt2) {
-                    event.dialog.addText(event.prompt2, event.prompt2.length <= 20);
-                }
-            }
-            event.result = {}
-            const div = document.createElement('div');
-            const input = div.appendChild(document.createElement('input'));
-            input.style.background = 'black';
-            input.style.filter = "progid:DXImageTransform.Microsoft.Alpha(style=3,opacity=50,finishOpacity=40)";
-            input.style.opacity = "0.6"
-            input.style.fontSize = '20px';
-            input.style.textAlign = 'center';
-            input.style.color = '#c9c8a2';
-            input.addEventListener('keydown', e => e.stopPropagation());
-            input.addEventListener('keyup', e => e.stopPropagation());
-            input.placeholder = '请在此输入文本';
-            input.setAttribute('maxlength', event.max);
-            event.dialog.add(div);
-            game.pause();
-            game.countChoose();
-            event.choosing = true;
-            var button = ui.create.control('确定', () => {
-                if (event.filterText) {
-                    var ok
-                    if (typeof event.filterText == 'function') ok = event.filterText(input.value)
-                    else if (Array.isArray(event.filterText)) ok = event.filterText.contains(input.value)
-                    if (!ok) return alert('您输入的内容不符合要求')
-                }
-                event.result.bool = true
-                event.result.text = input.value ? input.value : ''
-                doClose()
-            });
-            if (!event.forced) {
-                var cancel = ui.create.control('取消', () => {
-                    event.result.bool = false
-                    doClose()
-                });
-            }
-            event.switchToAuto = () => {
-                event.result = 'ai';
-                doClose()
-            };
-            const doClose = () => {
-                button.remove();
-                if (cancel) cancel.remove();
-                game.resume();
-            }
-        } else if (event.isOnline()) {
-            event.send();
-        } else {
-            event.result = 'ai';
-        }
-        'step 1';
-        if (event.result == 'ai') {
-            if (event.ai) {
-                event.value = event.ai(event.getParent(), player);
-            }
-            event.result = {}
-            event.result.bool = (event.value != -1 || event.forced)
-            if (event.result.bool) event.result.text = event.value
-        }
-        _status.imchoosing = false;
-        event.choosing = false;
-        if (event.dialog) event.dialog.close();
-        event.resume();
     }
     //---------------------------------------自定义函数：选择数量------------------------------------------//
     lib.element.player.chooseNumber = function chooseNumber(range, ...options) {
@@ -336,330 +348,329 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         if (filter) next.set("filter", filter);
 
         next._args = [min, max, ...options];
-        next.setContent('chooseNumber');
+        next.setContent(function () {
+            "step 0"
+            if (event.isMine()) {
+                let isInput = false;
+
+                event.controls = {
+                    cancel: ui.create.control("取消", () => { }),
+                    min: ui.create.control("最小", () => { }),
+                    minusss: ui.create.control("---", () => { }),
+                    minuss: ui.create.control("--", () => { }),
+                    minus: ui.create.control("-", () => { }),
+                    num: ui.create.control(event.num, () => { }),
+                    plus: ui.create.control("+", () => { }),
+                    pluss: ui.create.control("++", () => { }),
+                    plusss: ui.create.control("+++", () => { }),
+                    max: ui.create.control("最大", () => { }),
+                    clear: ui.create.control("确认", () => { })
+                };
+
+                if (event.forced) {
+                    event.controls.cancel.close();
+                    delete event.controls.cancel;
+                }
+
+                const difference = event.max - event.min;
+                if (difference <= 100) {
+                    event.controls.plusss.close();
+                    event.controls.minusss.close();
+                    delete event.controls.plusss;
+                    delete event.controls.minusss;
+                }
+                if (difference <= 10) {
+                    event.controls.pluss.close();
+                    event.controls.minuss.close();
+                    delete event.controls.pluss;
+                    delete event.controls.minuss;
+                }
+
+                const symbol = {
+                    m: Symbol("minus"),
+                    p: Symbol("plus"),
+                    l: Symbol("limit"),
+                    i: Symbol("input")
+                }
+
+                const divsConfig = new Map();
+                if (event.controls.plus) divsConfig.set(event.controls.plus, [symbol.p, 1]);
+                if (event.controls.pluss) divsConfig.set(event.controls.pluss, [symbol.p, 10]);
+                if (event.controls.plusss) divsConfig.set(event.controls.plusss, [symbol.p, 100]);
+
+                if (event.controls.minus) divsConfig.set(event.controls.minus, [symbol.m, -1]);
+                if (event.controls.minuss) divsConfig.set(event.controls.minuss, [symbol.m, -10]);
+                if (event.controls.minusss) divsConfig.set(event.controls.minusss, [symbol.m, -100]);
+
+                divsConfig.set(event.controls.min, [symbol.l, event.min]);
+                divsConfig.set(event.controls.max, [symbol.l, event.max]);
+
+                const doUpdate = (sym) => {
+                    for (const [div, [sym2, num]] of divsConfig) {
+                        switch (sym2) {
+                            case symbol.l:
+                                if (event.num === num && !div.classList.contains("disabled"))
+                                    div.classList.add("disabled");
+                                else if (div.classList.contains("disabled"))
+                                    div.classList.remove("disabled");
+
+                                break;
+                            default:
+                                switch (sym) {
+                                    case symbol.i:
+                                        switch (sym2) {
+                                            case symbol.p:
+                                                if (event.num + num <= event.max && div.classList.contains("disabled"))
+                                                    div.classList.remove("disabled");
+                                                break;
+                                            case symbol.m:
+                                                if (event.num + num >= event.min && div.classList.contains("disabled"))
+                                                    div.classList.remove("disabled");
+                                                break;
+                                        }
+                                        break;
+                                    case symbol.l:
+                                        switch (event.num) {
+                                            case event.min:
+                                                if (sym2 === symbol.p && div.classList.contains("disabled"))
+                                                    div.classList.remove("disabled");
+                                                if (sym2 === symbol.m && !div.classList.contains("disabled"))
+                                                    div.classList.add("disabled");
+                                                break;
+                                            case event.max:
+                                                if (sym2 === symbol.m && div.classList.contains("disabled"))
+                                                    div.classList.remove("disabled");
+                                                if (sym2 === symbol.p && !div.classList.contains("disabled"))
+                                                    div.classList.add("disabled");
+                                                break;
+                                        }
+                                        break;
+                                    case symbol.m:
+                                        if (event.num + num <= event.max && div.classList.contains("disabled"))
+                                            div.classList.remove("disabled");
+                                        if (event.num + num < event.min && !div.classList.contains("disabled"))
+                                            div.classList.add("disabled");
+                                        break;
+                                    case symbol.p:
+                                        if (event.num + num >= event.min && div.classList.contains("disabled"))
+                                            div.classList.remove("disabled");
+                                        if (event.num + num > event.max && !div.classList.contains("disabled"))
+                                            div.classList.add("disabled");
+                                        break;
+                                    default:
+                                        if (event.num + num < event.min && !div.classList.contains("disabled"))
+                                            div.classList.add("disabled");
+                                        if (event.num + num > event.max && !div.classList.contains("disabled"))
+                                            div.classList.add("disabled");
+                                        break;
+                                }
+                                break;
+                        }
+                    }
+                };
+
+                const doFilter = () => {
+                    if (event.filter) {
+                        const result = event.filter(event.num);
+                        if (result && event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.remove("disabled");
+                        else if (!result && !event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.add("disabled");
+                    }
+                };
+
+                const doShow = () => {
+                    event.controls.num.textContent = (Reflect.get(event.show, event.num) !== undefined ? Reflect.get(event.show, event.num) : event.num).toString();
+                    if (event.controls.num.classList.contains("disabled")) event.controls.num.classList.remove("disabled");
+                };
+
+                const pressTemplate = (self, sym, num) => () => {
+                    if (!self.classList.contains("disabled")) {
+                        event.num = num + event.num * Number(sym !== symbol.l);
+
+                        doUpdate(sym);
+                        doFilter();
+
+                        doShow();
+                    }
+                };
+
+                const pressDownTemplate = (self, sym, num) => ((doMethod => () => {
+                    self._setTimeout = setTimeout(() => {
+                        delete self._setTimeout;
+                        self._setInterval = setInterval(() => {
+                            doMethod();
+                            if (self.classList.contains("disabled")) {
+                                clearInterval(self._setInterval);
+                                delete self._setInterval;
+                            }
+                        }, 50);
+                    }, 500);
+                })(pressTemplate(self, sym, num)));
+
+                const pressUpTemplate = (self) => () => {
+                    if (self._setTimeout) {
+                        clearTimeout(self._setTimeout);
+                        delete self._setTimeout;
+                    }
+                    if (self._setInterval) {
+                        clearInterval(self._setInterval);
+                        delete self._setInterval;
+                    }
+                };
+
+                const itemTemplate = (filter, callback) => () => {
+                    if (isInput) {
+                        const num = parseInt(event._input.value);
+                        if (filter(num)) {
+                            isInput = false;
+                            event._div.removeChild(event._input);
+                            event.controls.dialog.content.removeChild(event._div);
+                            event._div.delete();
+
+                            callback(num);
+
+                            delete event._div;
+                            delete event._input;
+                            if (!event.prompt) event.controls.dialog.hide();
+
+                            doUpdate(symbol.i);
+                            doFilter();
+                            doShow();
+
+                        }
+                        else callback(true);
+                    }
+                    else {
+                        event.result = callback(false);
+                        game.resume();
+                    }
+                }
+
+                doUpdate();
+                doFilter();
+
+                let numdiv = event.controls.num;
+                numdiv.addEventListener(lib.config.touchscreen ? "touchend" : "click", _click => {
+                    if (!numdiv.classList.contains("disabled")) {
+                        isInput = true;
+
+                        numdiv.classList.add("disabled");
+                        for (const [div, _item] of divsConfig)
+                            if (!div.classList.contains("disabled"))
+                                div.classList.add("disabled");
+
+                        if (!event.prompt) event.controls.dialog.show();
+
+                        let div = ui.create.div();
+                        event.controls.dialog.add(div);
+
+                        div.append(`请输入范围内的数字（${event.min}~${event.max}）`);
+
+                        let input = document.createElement("input");
+                        input.type = "number";
+                        input.setAttribute("maxlength", difference.toString().length);
+                        input.addEventListener("keydown", e => e.stopPropagation());
+                        input.addEventListener("keyup", e => e.stopPropagation());
+
+                        div.append(input);
+
+                        event._div = div;
+                        event._input = input;
+                        if (event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.remove("disabled");
+                    }
+                })
+
+                for (const [div, [sym, num]] of divsConfig) {
+                    div.addEventListener(lib.config.touchscreen ? "touchend" : "click", pressTemplate(div, sym, num));
+                    if (lib.config.button_press) {
+                        div.addEventListener(lib.config.touchscreen ? "touchstart" : "mousedown", pressDownTemplate(div, sym, num));
+                        div.addEventListener(lib.config.touchscreen ? "touchend" : "mouseup", pressUpTemplate(div));
+                    }
+                }
+
+                if (event.controls.cancel) event.controls.cancel.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(_num =>
+                    true, bool => ({ bool })));
+                if (event.controls.clear) event.controls.clear.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(num =>
+                    num >= event.min && num <= event.max, bool => {
+                        if (typeof bool === "number") {
+                            event.num = bool;
+                        }
+                        else if (bool === true) {
+                            if (event.controls.clear._setTimeout) {
+                                clearTimeout(event.controls.clear._setTimeout);
+                                delete event.controls.clear._setTimeout;
+                            }
+                            let text = document.createElement("span");
+                            text.style.color = "#FF3333";
+                            text.style.fontFamily = "7px";
+                            text.textContent = "请输入符合要求的数字！";
+                            event._div.append(text);
+                            event.controls.clear._setTimeout = setTimeout(() => {
+                                event._div.removeChild(text);
+                            }, 500);
+                        }
+                        else if (bool === false) return { bool: true, choice: event.num };
+                    }));
+
+                event.controls.dialog = ui.create.dialog();
+                event.controls.dialog.hide();
+                if (event.prompt) {
+                    event.controls.dialog.show();
+                    event.controls.dialog.add(event.prompt);
+                    if (event.prompt2) event.controls.dialog.addText(event.prompt2, event.prompt2.length <= 20 || event.centerprompt2)
+                }
+
+                event.configs = divsConfig;
+
+                game.pause();
+                game.countChoose();
+                event.choosing = true;
+            }
+            else if (event.isOnline()) {
+                event.send();
+            }
+            else {
+                event.result = "ai";
+            }
+            "step 1"
+            if (event.result === "ai") {
+                if (event.ai) event.result = event.ai(player, event.filter, event.getParent());
+                else if (event.goon) event.result = event.goon;
+
+                if (typeof event.result === "number") {
+                    let result = Math.min(Math.max(event.result, event.min), event.max) + event.min;
+                    while (true) {
+                        if (!event.filter || event.filter(result)) break;
+                        result = Math.floor(Math.random() * (event.max - event.min + 1)) + event.min;
+                    }
+                    event.result = { bool: true, choice: result };
+                }
+                else if (event.forced) {
+                    while (true) {
+                        event.result = { bool: true, choice: Math.floor(Math.random() * (event.max - event.min + 1)) + event.min };
+                        if (!event.filter || event.filter(event.result.choice)) break;
+                    }
+                }
+                else event.result = { bool: false };
+            }
+
+            event.choosing = false;
+            _status.imchoosing = false;
+            if (event.controls) for (const name in event.controls) event.controls[name].close();
+            if (event.configs) event.configs.clear();
+            if (event.result.bool && event.logSkill) {
+                if (typeof event.logSkill === "string") {
+                    player.logSkill(event.logSkill);
+                }
+                else if (Array.isArray(event.logSkill)) {
+                    player.logSkill.apply(player, event.logSkill);
+                }
+            }
+            event.resume();
+        });
 
         next._set.length = 0;
 
         return next;
-    };
-    lib.element.content.chooseNumber = function chooseNumberContent() {
-        "step 0"
-        if (event.isMine()) {
-            let isInput = false;
-
-            event.controls = {
-                cancel: ui.create.control("取消", () => { }),
-                min: ui.create.control("最小", () => { }),
-                minusss: ui.create.control("---", () => { }),
-                minuss: ui.create.control("--", () => { }),
-                minus: ui.create.control("-", () => { }),
-                num: ui.create.control(event.num, () => { }),
-                plus: ui.create.control("+", () => { }),
-                pluss: ui.create.control("++", () => { }),
-                plusss: ui.create.control("+++", () => { }),
-                max: ui.create.control("最大", () => { }),
-                clear: ui.create.control("确认", () => { })
-            };
-
-            if (event.forced) {
-                event.controls.cancel.close();
-                delete event.controls.cancel;
-            }
-
-            const difference = event.max - event.min;
-            if (difference <= 100) {
-                event.controls.plusss.close();
-                event.controls.minusss.close();
-                delete event.controls.plusss;
-                delete event.controls.minusss;
-            }
-            if (difference <= 10) {
-                event.controls.pluss.close();
-                event.controls.minuss.close();
-                delete event.controls.pluss;
-                delete event.controls.minuss;
-            }
-
-            const symbol = {
-                m: Symbol("minus"),
-                p: Symbol("plus"),
-                l: Symbol("limit"),
-                i: Symbol("input")
-            }
-
-            const divsConfig = new Map();
-            if (event.controls.plus) divsConfig.set(event.controls.plus, [symbol.p, 1]);
-            if (event.controls.pluss) divsConfig.set(event.controls.pluss, [symbol.p, 10]);
-            if (event.controls.plusss) divsConfig.set(event.controls.plusss, [symbol.p, 100]);
-
-            if (event.controls.minus) divsConfig.set(event.controls.minus, [symbol.m, -1]);
-            if (event.controls.minuss) divsConfig.set(event.controls.minuss, [symbol.m, -10]);
-            if (event.controls.minusss) divsConfig.set(event.controls.minusss, [symbol.m, -100]);
-
-            divsConfig.set(event.controls.min, [symbol.l, event.min]);
-            divsConfig.set(event.controls.max, [symbol.l, event.max]);
-
-            const doUpdate = (sym) => {
-                for (const [div, [sym2, num]] of divsConfig) {
-                    switch (sym2) {
-                        case symbol.l:
-                            if (event.num === num && !div.classList.contains("disabled"))
-                                div.classList.add("disabled");
-                            else if (div.classList.contains("disabled"))
-                                div.classList.remove("disabled");
-
-                            break;
-                        default:
-                            switch (sym) {
-                                case symbol.i:
-                                    switch (sym2) {
-                                        case symbol.p:
-                                            if (event.num + num <= event.max && div.classList.contains("disabled"))
-                                                div.classList.remove("disabled");
-                                            break;
-                                        case symbol.m:
-                                            if (event.num + num >= event.min && div.classList.contains("disabled"))
-                                                div.classList.remove("disabled");
-                                            break;
-                                    }
-                                    break;
-                                case symbol.l:
-                                    switch (event.num) {
-                                        case event.min:
-                                            if (sym2 === symbol.p && div.classList.contains("disabled"))
-                                                div.classList.remove("disabled");
-                                            if (sym2 === symbol.m && !div.classList.contains("disabled"))
-                                                div.classList.add("disabled");
-                                            break;
-                                        case event.max:
-                                            if (sym2 === symbol.m && div.classList.contains("disabled"))
-                                                div.classList.remove("disabled");
-                                            if (sym2 === symbol.p && !div.classList.contains("disabled"))
-                                                div.classList.add("disabled");
-                                            break;
-                                    }
-                                    break;
-                                case symbol.m:
-                                    if (event.num + num <= event.max && div.classList.contains("disabled"))
-                                        div.classList.remove("disabled");
-                                    if (event.num + num < event.min && !div.classList.contains("disabled"))
-                                        div.classList.add("disabled");
-                                    break;
-                                case symbol.p:
-                                    if (event.num + num >= event.min && div.classList.contains("disabled"))
-                                        div.classList.remove("disabled");
-                                    if (event.num + num > event.max && !div.classList.contains("disabled"))
-                                        div.classList.add("disabled");
-                                    break;
-                                default:
-                                    if (event.num + num < event.min && !div.classList.contains("disabled"))
-                                        div.classList.add("disabled");
-                                    if (event.num + num > event.max && !div.classList.contains("disabled"))
-                                        div.classList.add("disabled");
-                                    break;
-                            }
-                            break;
-                    }
-                }
-            };
-
-            const doFilter = () => {
-                if (event.filter) {
-                    const result = event.filter(event.num);
-                    if (result && event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.remove("disabled");
-                    else if (!result && !event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.add("disabled");
-                }
-            };
-
-            const doShow = () => {
-                event.controls.num.textContent = (Reflect.get(event.show, event.num) !== undefined ? Reflect.get(event.show, event.num) : event.num).toString();
-                if (event.controls.num.classList.contains("disabled")) event.controls.num.classList.remove("disabled");
-            };
-
-            const pressTemplate = (self, sym, num) => () => {
-                if (!self.classList.contains("disabled")) {
-                    event.num = num + event.num * Number(sym !== symbol.l);
-
-                    doUpdate(sym);
-                    doFilter();
-
-                    doShow();
-                }
-            };
-
-            const pressDownTemplate = (self, sym, num) => ((doMethod => () => {
-                self._setTimeout = setTimeout(() => {
-                    delete self._setTimeout;
-                    self._setInterval = setInterval(() => {
-                        doMethod();
-                        if (self.classList.contains("disabled")) {
-                            clearInterval(self._setInterval);
-                            delete self._setInterval;
-                        }
-                    }, 50);
-                }, 500);
-            })(pressTemplate(self, sym, num)));
-
-            const pressUpTemplate = (self) => () => {
-                if (self._setTimeout) {
-                    clearTimeout(self._setTimeout);
-                    delete self._setTimeout;
-                }
-                if (self._setInterval) {
-                    clearInterval(self._setInterval);
-                    delete self._setInterval;
-                }
-            };
-
-            const itemTemplate = (filter, callback) => () => {
-                if (isInput) {
-                    const num = parseInt(event._input.value);
-                    if (filter(num)) {
-                        isInput = false;
-                        event._div.removeChild(event._input);
-                        event.controls.dialog.content.removeChild(event._div);
-                        event._div.delete();
-
-                        callback(num);
-
-                        delete event._div;
-                        delete event._input;
-                        if (!event.prompt) event.controls.dialog.hide();
-
-                        doUpdate(symbol.i);
-                        doFilter();
-                        doShow();
-
-                    }
-                    else callback(true);
-                }
-                else {
-                    event.result = callback(false);
-                    game.resume();
-                }
-            }
-
-            doUpdate();
-            doFilter();
-
-            let numdiv = event.controls.num;
-            numdiv.addEventListener(lib.config.touchscreen ? "touchend" : "click", _click => {
-                if (!numdiv.classList.contains("disabled")) {
-                    isInput = true;
-
-                    numdiv.classList.add("disabled");
-                    for (const [div, _item] of divsConfig)
-                        if (!div.classList.contains("disabled"))
-                            div.classList.add("disabled");
-
-                    if (!event.prompt) event.controls.dialog.show();
-
-                    let div = ui.create.div();
-                    event.controls.dialog.add(div);
-
-                    div.append(`请输入范围内的数字（${event.min}~${event.max}）`);
-
-                    let input = document.createElement("input");
-                    input.type = "number";
-                    input.setAttribute("maxlength", difference.toString().length);
-                    input.addEventListener("keydown", e => e.stopPropagation());
-                    input.addEventListener("keyup", e => e.stopPropagation());
-
-                    div.append(input);
-
-                    event._div = div;
-                    event._input = input;
-                    if (event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.remove("disabled");
-                }
-            })
-
-            for (const [div, [sym, num]] of divsConfig) {
-                div.addEventListener(lib.config.touchscreen ? "touchend" : "click", pressTemplate(div, sym, num));
-                if (lib.config.button_press) {
-                    div.addEventListener(lib.config.touchscreen ? "touchstart" : "mousedown", pressDownTemplate(div, sym, num));
-                    div.addEventListener(lib.config.touchscreen ? "touchend" : "mouseup", pressUpTemplate(div));
-                }
-            }
-
-            if (event.controls.cancel) event.controls.cancel.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(_num =>
-                true, bool => ({ bool })));
-            if (event.controls.clear) event.controls.clear.addEventListener(lib.config.touchscreen ? "touchend" : "click", itemTemplate(num =>
-                num >= event.min && num <= event.max, bool => {
-                    if (typeof bool === "number") {
-                        event.num = bool;
-                    }
-                    else if (bool === true) {
-                        if (event.controls.clear._setTimeout) {
-                            clearTimeout(event.controls.clear._setTimeout);
-                            delete event.controls.clear._setTimeout;
-                        }
-                        let text = document.createElement("span");
-                        text.style.color = "#FF3333";
-                        text.style.fontFamily = "7px";
-                        text.textContent = "请输入符合要求的数字！";
-                        event._div.append(text);
-                        event.controls.clear._setTimeout = setTimeout(() => {
-                            event._div.removeChild(text);
-                        }, 500);
-                    }
-                    else if (bool === false) return { bool: true, choice: event.num };
-                }));
-
-            event.controls.dialog = ui.create.dialog();
-            event.controls.dialog.hide();
-            if (event.prompt) {
-                event.controls.dialog.show();
-                event.controls.dialog.add(event.prompt);
-                if (event.prompt2) event.controls.dialog.addText(event.prompt2, event.prompt2.length <= 20 || event.centerprompt2)
-            }
-
-            event.configs = divsConfig;
-
-            game.pause();
-            game.countChoose();
-            event.choosing = true;
-        }
-        else if (event.isOnline()) {
-            event.send();
-        }
-        else {
-            event.result = "ai";
-        }
-        "step 1"
-        if (event.result === "ai") {
-            if (event.ai) event.result = event.ai(player, event.filter, event.getParent());
-            else if (event.goon) event.result = event.goon;
-
-            if (typeof event.result === "number") {
-                let result = Math.min(Math.max(event.result, event.min), event.max) + event.min;
-                while (true) {
-                    if (!event.filter || event.filter(result)) break;
-                    result = Math.floor(Math.random() * (event.max - event.min + 1)) + event.min;
-                }
-                event.result = { bool: true, choice: result };
-            }
-            else if (event.forced) {
-                while (true) {
-                    event.result = { bool: true, choice: Math.floor(Math.random() * (event.max - event.min + 1)) + event.min };
-                    if (!event.filter || event.filter(event.result.choice)) break;
-                }
-            }
-            else event.result = { bool: false };
-        }
-
-        event.choosing = false;
-        _status.imchoosing = false;
-        if (event.controls) for (const name in event.controls) event.controls[name].close();
-        if (event.configs) event.configs.clear();
-        if (event.result.bool && event.logSkill) {
-            if (typeof event.logSkill === "string") {
-                player.logSkill(event.logSkill);
-            }
-            else if (Array.isArray(event.logSkill)) {
-                player.logSkill.apply(player, event.logSkill);
-            }
-        }
-        event.resume();
     };
     //---------------------------------------自定义函数：chooseButtonControl------------------------------------------//
     //此处内容由狂神制作，乐
@@ -702,118 +713,117 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         if (!next.control) next.control = () => 'ok';
         if (!next.filterButton) next.filterButton = () => true;
 
-        next.setContent('chooseButtonControl');
+        next.setContent(function () {
+            'step 0'
+            let chooseButton = function (event, player) {
+                if (!event.result) event.result = {};
+                event.forceMine = true;
+                event.buttons = [];
+                for (let button of event.dialog.buttons) {
+                    button.classList.add('pointerdiv');
+                    button.classList.add('selectable');
+                }
+                event.dialog.open();
+
+                event.custom.replace.button = function (button) {
+                    if (!event.dialog.contains(button.parentNode)) return;
+                    if (button.classList.contains('unselectable')) return;
+
+                    for (let i of event.dialog.buttons) i.classList.remove('unselectable');
+
+                    if (button.classList.contains('selected')) {
+                        event.buttons.remove(button);
+                        button.classList.remove('selected');
+                        for (let i of event.dialog.buttons) {
+                            if (event.buttons.contains(i)) continue;
+                            if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
+                        }
+                    } else {
+                        event.buttons.add(button);
+                        button.classList.add('selected');
+                        for (let i of event.dialog.buttons) {
+                            if (event.buttons.contains(i)) continue;
+                            if (!event.multibutton) i.classList.add('unselectable');
+                            else if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
+                        }
+                    }
+
+                    event.controls.replacex();
+                }
+
+                event.custom.replace.window = function () {
+                    event.buttons = [];
+                    for (let i of event.dialog.buttons) {
+                        i.classList.remove('selected');
+                        i.classList.remove('unselectable');
+                    }
+                    event.controls.replacex();
+                }
+
+                event.controls = ui.create.control();
+                event.controls.replacex = function () {
+                    let newControls, args = event.control(event.buttons);
+                    if (Array.isArray(args)) newControls = args;
+                    else if (args != undefined && args != null) newControls = [args];
+                    else newControls = [];
+
+                    if (event.multibutton) {
+                        if (newControls.contains('cancel2')) newControls.remove('cancel2');
+                        if (!event.forced) newControls.add('cancel2');
+                    }
+                    else if (!event.forced && !newControls.contains('cancel2')) {
+                        if (newControls.length == 0 || event.buttons.length == 0) newControls.add('cancel2');
+                    }
+
+                    this.style.opacity = newControls.length > 0 ? 1 : 0;
+
+                    newControls.push(function (control) {
+                        if (control == 'cancel2') event.result.bool = false;
+                        else {
+                            event.result.bool = true;
+                            event.result.buttons = event.buttons;
+                            event.result.links = event.buttons.map(button => button.link);
+                            event.result.control = control;
+                        }
+                        event.dialog.close();
+                        event.controls.close();
+                        game.resume();
+                        _status.imchoosing = false;
+                    });
+
+                    return this.replace.apply(this, newControls);
+                }
+                event.controls.replacex();
+                game.pause();
+                game.countChoose();
+            };
+
+            if (event.isMine()) chooseButton(event, player);
+            else if (event.isOnline()) {
+                event.player.send(chooseButton, event, player);
+                event.player.wait();
+                game.pause();
+            } else {
+                if (event.dialog && event.closeDialog) event.dialog.close();
+                if (event.controls && event.closeDialog) event.controls.close();
+                game.resume();
+                _status.imchoosing = false;
+
+                if (event.processAI) event.result = event.processAI(event, player);
+                else if (!event.forced) event.result = { bool: false };
+                else throw "processAI : " + event.getParent().name + "'s chooseButtonControl is forced";
+
+                event.finish();
+            }
+
+            'step 1'
+            if (event.result.control == 'cancel2') {
+                event.finish();
+                return;
+            }
+        });
         next._args = Array.from(arguments);
         return next;
-    };
-    lib.element.content.chooseButtonControl = function () {
-        'step 0'
-        let chooseButton = function (event, player) {
-            if (!event.result) event.result = {};
-            event.forceMine = true;
-            event.buttons = [];
-            for (let button of event.dialog.buttons) {
-                button.classList.add('pointerdiv');
-                button.classList.add('selectable');
-            }
-            event.dialog.open();
-
-            event.custom.replace.button = function (button) {
-                if (!event.dialog.contains(button.parentNode)) return;
-                if (button.classList.contains('unselectable')) return;
-
-                for (let i of event.dialog.buttons) i.classList.remove('unselectable');
-
-                if (button.classList.contains('selected')) {
-                    event.buttons.remove(button);
-                    button.classList.remove('selected');
-                    for (let i of event.dialog.buttons) {
-                        if (event.buttons.contains(i)) continue;
-                        if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
-                    }
-                } else {
-                    event.buttons.add(button);
-                    button.classList.add('selected');
-                    for (let i of event.dialog.buttons) {
-                        if (event.buttons.contains(i)) continue;
-                        if (!event.multibutton) i.classList.add('unselectable');
-                        else if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
-                    }
-                }
-
-                event.controls.replacex();
-            }
-
-            event.custom.replace.window = function () {
-                event.buttons = [];
-                for (let i of event.dialog.buttons) {
-                    i.classList.remove('selected');
-                    i.classList.remove('unselectable');
-                }
-                event.controls.replacex();
-            }
-
-            event.controls = ui.create.control();
-            event.controls.replacex = function () {
-                let newControls, args = event.control(event.buttons);
-                if (Array.isArray(args)) newControls = args;
-                else if (args != undefined && args != null) newControls = [args];
-                else newControls = [];
-
-                if (event.multibutton) {
-                    if (newControls.contains('cancel2')) newControls.remove('cancel2');
-                    if (!event.forced) newControls.add('cancel2');
-                }
-                else if (!event.forced && !newControls.contains('cancel2')) {
-                    if (newControls.length == 0 || event.buttons.length == 0) newControls.add('cancel2');
-                }
-
-                this.style.opacity = newControls.length > 0 ? 1 : 0;
-
-                newControls.push(function (control) {
-                    if (control == 'cancel2') event.result.bool = false;
-                    else {
-                        event.result.bool = true;
-                        event.result.buttons = event.buttons;
-                        event.result.links = event.buttons.map(button => button.link);
-                        event.result.control = control;
-                    }
-                    event.dialog.close();
-                    event.controls.close();
-                    game.resume();
-                    _status.imchoosing = false;
-                });
-
-                return this.replace.apply(this, newControls);
-            }
-            event.controls.replacex();
-            game.pause();
-            game.countChoose();
-        };
-
-        if (event.isMine()) chooseButton(event, player);
-        else if (event.isOnline()) {
-            event.player.send(chooseButton, event, player);
-            event.player.wait();
-            game.pause();
-        } else {
-            if (event.dialog && event.closeDialog) event.dialog.close();
-            if (event.controls && event.closeDialog) event.controls.close();
-            game.resume();
-            _status.imchoosing = false;
-
-            if (event.processAI) event.result = event.processAI(event, player);
-            else if (!event.forced) event.result = { bool: false };
-            else throw "processAI : " + event.getParent().name + "'s chooseButtonControl is forced";
-
-            event.finish();
-        }
-
-        'step 1'
-        if (event.result.control == 'cancel2') {
-            event.finish();
-            return;
-        }
     };
     //---------------------------------------自定义函数：互变------------------------------------------//
     lib.skill.hubian = {
@@ -1026,31 +1036,30 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         if (next.source == undefined && !nosource) next.source = event.player;
         if (next.num == undefined) next.num = 1;
         if (next.num <= 0) _status.event.next.remove(next);
-        next.setContent('fakeRecover');
-        return next;
-    }
-    lib.element.content.fakeRecover = function () {
-        if (lib.config.background_audio) {
-            game.playAudio('effect', 'recover');
-        }
-        game.broadcast(function () {
+        next.setContent(function () {
             if (lib.config.background_audio) {
                 game.playAudio('effect', 'recover');
             }
-        });
-        if (num > player.maxHp - player.hp) {
-            num = player.maxHp - player.hp;
-            event.num = num;
-        }
-        if (num > 0) {
-            game.broadcastAll(function (player) {
-                if (lib.config.animation && !lib.config.low_performance) {
-                    player.$recover();
+            game.broadcast(function () {
+                if (lib.config.background_audio) {
+                    game.playAudio('effect', 'recover');
                 }
-            }, player);
-            player.$damagepop(num, 'wood');
-            game.log(player, '视为回复了' + get.cnNumber(num) + '点体力')
-        }
+            });
+            if (num > player.maxHp - player.hp) {
+                num = player.maxHp - player.hp;
+                event.num = num;
+            }
+            if (num > 0) {
+                game.broadcastAll(function (player) {
+                    if (lib.config.animation && !lib.config.low_performance) {
+                        player.$recover();
+                    }
+                }, player);
+                player.$damagepop(num, 'wood');
+                game.log(player, '视为回复了' + get.cnNumber(num) + '点体力')
+            }
+        });
+        return next;
     }
     // ---------------------------------------自定义函数：视为流失体力------------------------------------------//
     lib.element.player.fakeLoseHp = function (num) {
@@ -1058,26 +1067,25 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         next.num = num;
         next.player = this;
         if (next.num == undefined) next.num = 1;
-        next.setContent('fakeLoseHp');
-        return next;
-    }
-    lib.element.content.fakeLoseHp = function () {
-        "step 0"
-        if (lib.config.background_audio) {
-            game.playAudio('effect', 'loseHp');
-        }
-        game.broadcast(function () {
+        next.setContent(function () {
+            "step 0"
             if (lib.config.background_audio) {
                 game.playAudio('effect', 'loseHp');
             }
+            game.broadcast(function () {
+                if (lib.config.background_audio) {
+                    game.playAudio('effect', 'loseHp');
+                }
+            });
+            game.log(player, '视为失去了' + get.cnNumber(num) + '点体力')
+            "step 1"
+            if (player.hp <= 0) {
+                game.delayx();
+                event._dyinged = true;
+                player.dying(event);
+            }
         });
-        game.log(player, '视为失去了' + get.cnNumber(num) + '点体力')
-        "step 1"
-        if (player.hp <= 0) {
-            game.delayx();
-            event._dyinged = true;
-            player.dying(event);
-        }
+        return next;
     }
     // ---------------------------------------击碎勾玉------------------------------------------//
     lib.element.player.Frbroken = function () {
@@ -1089,13 +1097,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         if (next.num == undefined) next.num = 1;
         if (next.num > (this.maxHp - this.countMark('_fr_Broken'))) next.num = this.maxHp - this.countMark('_fr_Broken');
         if (next.num <= 0) _status.event.next.remove(next);
-        next.setContent('Frbroken');
+        next.setContent(function () {
+            player.loseMaxHp(num);
+            player.addMark('_fr_Broken', num, false);
+            game.log(player, '被击碎了', get.translation(num), '个', '#g勾玉');
+        });
         return next;
-    }
-    lib.element.content.Frbroken = function () {
-        player.loseMaxHp(num);
-        player.addMark('_fr_Broken', num, false);
-        game.log(player, '被击碎了', get.translation(num), '个', '#g勾玉');
     }
     lib.element.player.Frunbroken = function () {
         var next = game.createEvent('Frunbroken');
@@ -1106,14 +1113,13 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         if (next.num == undefined) next.num = 1;
         if (next.num > this.countMark('_fr_Broken')) next.num = this.countMark('_fr_Broken');
         if (next.num <= 0) _status.event.next.remove(next);
-        next.setContent('Frunbroken');
+        next.setContent(function () {
+            player.gainMaxHp(num);
+            player.recover(num)
+            player.removeMark('_fr_Broken', num, false);
+            game.log(player, '修复了', get.translation(num), '个', '#g碎玉');
+        });
         return next;
-    }
-    lib.element.content.Frunbroken = function () {
-        player.gainMaxHp(num);
-        player.recover(num)
-        player.removeMark('_fr_Broken', num, false);
-        game.log(player, '修复了', get.translation(num), '个', '#g碎玉');
     }
     lib.element.player.hideCharacter = function (playername) {
         var next = game.createEvent('hideCharacter')
@@ -1127,51 +1133,50 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             next.playername = playername.name1
         }
         if (!playername) next.playername = this.name1
-        next.setContent('hideCharacter')
-        return next
-    }
-    lib.element.content.hideCharacter = function () {
-        'step 0'
-        var name = event.playername
-        var info = lib.character[name];
-        if (!info) return;
-        if (player.name1 != name && player.name2 != name) return;
-        var skills = info[3].slice(0);
-        if (name == player.name1) {
-            if (player.classList.contains(_status.video ? 'unseen_v' : 'unseen')) return;
-            game.log('#g' + player.name1, '进入了隐匿状态')
-            player.classList.add(_status.video ? 'unseen_v' : 'unseen');
-            player.name = 'unknown';
-            if (!player.node.name_seat && !_status.video) {
-                player.node.name_seat = ui.create.div('.name.name_seat', get.verticalStr(get.translation(player.name)), player);
-                player.node.name_seat.dataset.nature = get.groupnature(player.group);
+        next.setContent(function () {
+            'step 0'
+            var name = event.playername
+            var info = lib.character[name];
+            if (!info) return;
+            if (player.name1 != name && player.name2 != name) return;
+            var skills = info[3].slice(0);
+            if (name == player.name1) {
+                if (player.classList.contains(_status.video ? 'unseen_v' : 'unseen')) return;
+                game.log('#g' + player.name1, '进入了隐匿状态')
+                player.classList.add(_status.video ? 'unseen_v' : 'unseen');
+                player.name = 'unknown';
+                if (!player.node.name_seat && !_status.video) {
+                    player.node.name_seat = ui.create.div('.name.name_seat', get.verticalStr(get.translation(player.name)), player);
+                    player.node.name_seat.dataset.nature = get.groupnature(player.group);
+                };
+                player.sex = 'male';
+            } else {
+                if (player.classList.contains(_status.video ? 'unseen2_v' : 'unseen2')) return;
+                game.log('#g' + player.name2, '进入了隐匿状态')
+                player.classList.add(_status.video ? 'unseen2_v' : 'unseen2');
             };
-            player.sex = 'male';
-        } else {
-            if (player.classList.contains(_status.video ? 'unseen2_v' : 'unseen2')) return;
-            game.log('#g' + player.name2, '进入了隐匿状态')
-            player.classList.add(_status.video ? 'unseen2_v' : 'unseen2');
-        };
-        if (!player.hiddenSkills) player.hiddenSkills = [];
-        game.log(game.me.hiddenSkills);
-        player.removeSkill(skills);
-        player.hiddenSkills.addArray(skills);
-        player.storage.nohp = true;
-        player.addSkill('g_hidden_ai');
-        lib.skill.fryinni = {
-            mod: {
-                maxHandcard: function (player, num) {
-                    return num + 99;
+            if (!player.hiddenSkills) player.hiddenSkills = [];
+            game.log(game.me.hiddenSkills);
+            player.removeSkill(skills);
+            player.hiddenSkills.addArray(skills);
+            player.storage.nohp = true;
+            player.addSkill('g_hidden_ai');
+            lib.skill.fryinni = {
+                mod: {
+                    maxHandcard: function (player, num) {
+                        return num + 99;
+                    },
                 },
-            },
-        }
-        if (!player.hasSkill('fryinni')) player.addTempSkill('fryinni', { player: 'showCharacterAfter' })
-        player.storage.rawHp = player.hp;
-        player.storage.rawMaxHp = player.maxHp;
-        'step 1'
-        player.hp = 1;
-        player.maxHp = 1;
-        player.node.hp.hide();
-        player.update();
+            }
+            if (!player.hasSkill('fryinni')) player.addTempSkill('fryinni', { player: 'showCharacterAfter' })
+            player.storage.rawHp = player.hp;
+            player.storage.rawMaxHp = player.maxHp;
+            'step 1'
+            player.hp = 1;
+            player.maxHp = 1;
+            player.node.hp.hide();
+            player.update();
+        })
+        return next
     }
 })

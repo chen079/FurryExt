@@ -1,6 +1,8 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
+		'fr_bwol': '看看那火焰中盛开的鲜花！',
+		'fr_mile': '你看见我的朋友们了吗？',
 		'fr_siji': "天下弗安，黎民阻饥，<br>拯民降谷，功在司稷",
 		'fr_rabby': '请和我走一趟',
 		'fr_charlin': '你会听从我的命令',
@@ -181,10 +183,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				level: 6,
 				info: '使用✡瑞斯特当内奸赢得一局身份局游戏',
 				extra: '让大海将你们埋葬！',
-				reward: function () {
+				/*reward: function () {
 					game.frAchi.unlockCharacter('fr_mouse')
 				},
-				rewardInfo: '奖励：解锁角色——缪斯',
+				rewardInfo: '奖励：解锁角色——缪斯',*/
 				progress: 1
 			},
 			'压榨童工': {

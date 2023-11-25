@@ -36,7 +36,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 }
                 'step 4'
                 if (result.bool) {
-                    event.target.clearSkills()
+                    var initSkill = get.arraysIntersection(game.players.map(i => i.skills))
+                    event.target.skills.forEach(i => event.target.removeSkill(i))
+                    event.target.skills = initSkill
                     event.target.init(result.links[0])
                     if (get.mode() == 'doudizhu' && event.target.identity == 'zhu') {
                         event.target.addSkill('feiyang')

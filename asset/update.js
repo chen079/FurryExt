@@ -4,23 +4,41 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         version = version || lib.extensionPack["福瑞拓展"].version;
         var changeInfo = {
             changeLog: [
-                '/setRedoPlayer/',
                 '/setPlayer/',
-                '3.0.2',
-                '重做武将塔尔斯',
-                '解放上个版本的激活码武将',
-                '新增一首主内单挑bgm、一首普通bgm',
-                '修复激活码在手机端无法使用的部分bug',
-                '修复部分武将描述错误、将修改狂属性伤害',
-                '修复ai换将功能在部分选将时保留技能的错误',
-                '修复部分bug',
-                '新增更多的bug...'
+                '/setRedoPlayer/',
+                '修改了召唤的范围限制',
+                '修复了莫卡林的碎岩bug',
+                '修复了AI换将部分技能无法清除的bug',
+                '修复了多戈的bug',
+                '移除武将缪斯，直到未来能够解决ai问题',
+                '修改刃狼原画',
+                '移除了herobrine',
+                '修复很多bug',
+                '新增更多bug...'
             ],
-            players: ['fr_youying'],
+            players: ['fr_mile', 'fr_bwol'],
             cards: [],
-            redoPlayers: ['fr_tails']
+            redoPlayers: ['fr_bladewolf']
         };
         var UpdateHistory = {
+            '3.0.2': {
+                changeLog: [
+                    '/setRedoPlayer/',
+                    '/setPlayer/',
+                    '3.0.2',
+                    '重做武将塔尔斯',
+                    '解放上个版本的激活码武将',
+                    '新增一首主内单挑bgm、一首普通bgm',
+                    '修复激活码在手机端无法使用的部分bug',
+                    '修复部分武将描述错误、将修改狂属性伤害',
+                    '修复ai换将功能在部分选将时保留技能的错误',
+                    '修复部分bug',
+                    '新增更多的bug...'
+                ],
+                players: ['fr_youying'],
+                cards: [],
+                redoPlayers: ['fr_tails']
+            },
             '3.0': {
                 //更新告示
                 changeLog: [
@@ -434,7 +452,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 else myConfirm(`福瑞拓展检测到更新(v${data.version}), 是否更新?\n${data.changeLog}`, furryUpdating);
             })
             .catch(e => {
-                alert('自动更新网络请求出错，请检查您的网络。<br>您也可以前往设置中关闭自动更新检查，不再弹出此窗口。');
+                alert('自动更新网络请求出错，请检查您的网络。\n您也可以前往设置中关闭自动更新检查，不再弹出此窗口。');
             });
 
     }

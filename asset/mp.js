@@ -5,164 +5,188 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		var next = game.createEvent('changefrMp', false);
 		next.num = num;
 		next.player = this;
-		next.setContent('changefrMp');
+		next.setContent(function () {
+			game.createfrMpBar(player);
+			if (num == 0) return;
+			player.storage.frMp += num;
+			if (isNaN(player.storage.frMp) || player.storage.frMp < 0) player.storage.frMp = 0;
+			if (player.storage.frMp > player.storage.frMaxMp) player.storage.frMp = player.storage.frMaxMp;
+			var button = player.node.frMp;
+			if (!button) return;
+			button.innerHTML = player.frMp + '/' + player.frMaxMp;
+			if (player.frMaxMp > 0) {
+				player.node.frMp.show();
+				player.node.frMpIcon.show();
+			} else {
+				player.node.frMp.hide();
+				player.node.frMpIcon.hide();
+			}
+			event.trigger('changefrMp');
+		});
 		return next;
-	};
-	lib.element.content.changefrMp = function () {
-		game.createfrMpBar(player);
-		if (num == 0) return;
-		player.storage.frMp += num;
-		if (isNaN(player.storage.frMp) || player.storage.frMp < 0) player.storage.frMp = 0;
-		if (player.storage.frMp > player.storage.frMaxMp) player.storage.frMp = player.storage.frMaxMp;
-		var button = player.node.frMp;
-		if (!button) return;
-		button.innerHTML = player.frMp + '/' + player.frMaxMp;
-		if (player.frMaxMp > 0) {
-			player.node.frMp.show();
-			player.node.frMpIcon.show();
-		} else {
-			player.node.frMp.hide();
-			player.node.frMpIcon.hide();
-		}
-		event.trigger('changefrMp');
 	};
 	lib.element.player.losefrMp = function (num) {
 		var next = game.createEvent('losefrMp');
+		if (num <= 0) {
+			num = 0;
+		}
+		if (num > this.frMp) {
+			num = this.frMp;
+		}
 		next.num = num;
 		next.player = this;
 		if (next.num == undefined) next.num = 1;
-		next.setContent('losefrMp');
+		next.setContent(function () {
+			'step 0'
+			if (num <= 0) {
+				num = 0;
+			}
+			if (num > player.frMp) {
+				num = player.frMp;
+			}
+			'step 1'
+			if (num > 0) {
+				game.log(player, '失去了' + get.cnNumber(num) + '点魔力');
+				player.changefrMp(-num);
+			}
+			event.num = num;
+		});
 		if (num <= 0) {
 			_status.event.next.remove(next);
 		}
 		return next;
 	};
-	lib.element.content.losefrMp = function () {
-		if (num <= 0) {
-			num = 0;
-		}
-		if (num > player.frMp) {
-			num = player.frMp;
-		}
-		if (num > 0) {
-			game.log(player, '失去了' + get.cnNumber(num) + '点魔力');
-			player.changefrMp(-num);
-		}
-		event.num = num;
-	};
 	lib.element.player.gainfrMp = function (num) {
 		var next = game.createEvent('gainfrMp');
+		if (num < 0) {
+			num = 0;
+		}
+		if (this.frMp + num > this.frMaxMp) {
+			num = this.frMaxMp - this.frMp;
+		}
 		next.num = num;
 		next.player = this;
 		if (next.num == undefined) next.num = 1;
-		next.setContent('gainfrMp');
+		next.setContent(function () {
+			'step 0'
+			if (num < 0) {
+				num = 0;
+				event.trigger('consumefrMpToZero')
+			}
+			if (player.frMp + num > player.frMaxMp) {
+				num = player.frMaxMp - player.frMp;
+			}
+			'step 1'
+			if (num > 0) {
+				lib.frStory.playfrAudio('mprec_audio');
+				game.log(player, '获得了' + get.cnNumber(num) + '点魔力');
+				player.changefrMp(num);
+			}
+			event.num = num;
+		});
 		if (num <= 0 || this.isfrMpDisabled()) {
 			_status.event.next.remove(next);
 		}
 		return next;
 	};
-	lib.element.content.gainfrMp = function () {
+	lib.element.player.consumefrMp = function (num) {
+		var next = game.createEvent('consumefrMp');
 		if (num < 0) {
 			num = 0;
 		}
-		if (player.frMp + num > player.frMaxMp) {
-			num = player.frMaxMp - player.frMp;
+		if (num > this.frMp) {
+			num = this.frMp;
 		}
-		if (num > 0) {
-			lib.frStory.playfrAudio('mprec_audio');
-			game.log(player, '获得了' + get.cnNumber(num) + '点魔力');
-			player.changefrMp(num);
-		}
-		event.num = num;
-	};
-	lib.element.player.consumefrMp = function (num) {
-		var next = game.createEvent('consumefrMp');
 		next.num = num;
 		next.player = this;
 		if (next.num == undefined) next.num = 1;
-		next.setContent('consumefrMp');
+
+		next.setContent(function () {
+			'step 0'
+			event.trigger('consumefrMpBegin1')
+			'step 1'
+			if (num < 0) {
+				num = 0;
+				event.trigger('consumefrMpToZero')
+			}
+			if (num > player.frMp) {
+				num = player.frMp;
+			}
+			'step 2'
+			event.trigger('consumefrMpBegin2')
+			'step 3'
+			if (num > 0) {
+				game.log(player, '消耗了' + get.cnNumber(num) + '点魔力');
+				player.changefrMp(-num);
+				if (event.frAnim !== false) game.frPlayAnimOnPlayer('mp_consume', player);
+			}
+			event.num = num;
+		});
 		if (num <= 0) {
 			_status.event.next.remove(next);
 		}
 		return next;
-	};
-	lib.element.content.consumefrMp = function () {
-		if (num < 0) {
-			num = 0;
-		}
-		if (num > player.frMp) {
-			num = player.frMp;
-		}
-		if (num > 0) {
-			game.log(player, '消耗了' + get.cnNumber(num) + '点魔力');
-			player.changefrMp(-num);
-			if (event.frAnim !== false) game.frPlayAnimOnPlayer('mp_consume', player);
-		}
-		event.num = num;
 	};
 	//魔力上限
 	lib.element.player.changefrMaxMp = function (num) {
 		var next = game.createEvent('changefrMaxMp', false);
 		next.num = num;
 		next.player = this;
-		next.setContent('changefrMaxMp');
+		next.setContent(function () {
+			'step 0'
+			game.createfrMpBar(player);
+			player.storage.frMaxMp += num;
+			if (isNaN(player.storage.frMaxMp) || player.storage.frMaxMp < 0) player.storage.frMaxMp = 0;
+			if (player.storage.frMp > player.storage.frMaxMp) {
+				player.changefrMp(player.storage.frMaxMp - player.storage.frMp);
+			}
+			'step 1'
+			var button = player.node.frMp;
+			button.innerHTML = player.frMp + '/' + player.frMaxMp;
+			if (player.frMaxMp > 0) {
+				player.node.frMp.show();
+				player.node.frMpIcon.show();
+			} else {
+				player.node.frMp.hide();
+				player.node.frMpIcon.hide();
+			}
+			event.trigger('changefrMaxMp')
+		});
 		return next;
-	};
-	lib.element.content.changefrMaxMp = function () {
-		'step 0'
-		game.createfrMpBar(player);
-		player.storage.frMaxMp += num;
-		if (isNaN(player.storage.frMaxMp) || player.storage.frMaxMp < 0) player.storage.frMaxMp = 0;
-		if (player.storage.frMp > player.storage.frMaxMp) {
-			player.changefrMp(player.storage.frMaxMp - player.storage.frMp);
-		}
-		'step 1'
-		var button = player.node.frMp;
-		button.innerHTML = player.frMp + '/' + player.frMaxMp;
-		if (player.frMaxMp > 0) {
-			player.node.frMp.show();
-			player.node.frMpIcon.show();
-		} else {
-			player.node.frMp.hide();
-			player.node.frMpIcon.hide();
-		}
-		event.trigger('changefrMaxMp');
 	};
 	lib.element.player.losefrMaxMp = function (num) {
 		var next = game.createEvent('losefrMaxMp');
 		next.num = num;
 		next.player = this;
 		if (next.num == undefined) next.num = 1;
-		next.setContent('losefrMaxMp');
+		next.setContent(function () {
+			if (num <= 0) {
+				num = 0;
+			}
+			if (num > player.frMaxMp) {
+				num = player.frMaxMp;
+			}
+			if (num > 0) {
+				game.log(player, '失去了' + get.cnNumber(num) + '点魔力上限');
+				player.changefrMaxMp(-num);
+			}
+			event.num = num;
+		});
 		return next;
-	};
-	lib.element.content.losefrMaxMp = function () {
-		if (num <= 0) {
-			num = 0;
-		}
-		if (num > player.frMaxMp) {
-			num = player.frMaxMp;
-		}
-		if (num > 0) {
-			game.log(player, '失去了' + get.cnNumber(num) + '点魔力上限');
-			player.changefrMaxMp(-num);
-		}
-		event.num = num;
 	};
 	lib.element.player.gainfrMaxMp = function (num) {
 		var next = game.createEvent('gainfrMaxMp');
 		next.num = num;
 		next.player = this;
 		if (next.num == undefined) next.num = 1;
-		next.setContent('gainfrMaxMp');
+		next.setContent(function () {
+			game.log(player, '获得了' + get.cnNumber(num) + '点魔力上限');
+			player.changefrMaxMp(num);
+		});
 		if (num <= 0 || this.isfrMpDisabled()) {
 			_status.event.next.remove(next);
 		}
 		return next;
-	};
-	lib.element.content.gainfrMaxMp = function () {
-		game.log(player, '获得了' + get.cnNumber(num) + '点魔力上限');
-		player.changefrMaxMp(num);
 	};
 	lib.element.player.disablefrMp = function () {
 		this.storage.frMp = 0;
@@ -195,7 +219,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				}
 			}
 			if (mpstr) {
-				var Mp = mpstr.split('/').map(i=>parseInt(i))
+				var Mp = mpstr.split('/').map(i => parseInt(i))
 				if (Mp.length == 1) {
 					maxmp = Mp[0];
 					mp = Math.floor((Mp[0]) / 2)
@@ -226,7 +250,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				}
 			}
 			if (mpstr) {
-				var Mp = mpstr.split('/').map(i=>parseInt(i))
+				var Mp = mpstr.split('/').map(i => parseInt(i))
 				if (Mp.length == 1) {
 					maxmp2 = Mp[0];
 					mp2 = Math.floor((Mp[0]) / 2)

@@ -1,23 +1,4 @@
 game.import("extension", function (lib, game, ui, get, ai, _status) {
-    Object.defineProperty(Array.prototype, "unique", {
-        configurable: true,
-        enumerable: false,
-        writable: true,
-        value: function () {
-            let uniqueArray = [...new Set(this)];
-            this.length = uniqueArray.length;
-            for (let i = 0; i < uniqueArray.length; i++) this[i] = uniqueArray[i];
-            return this;
-        }
-    });
-    Object.defineProperty(Array.prototype, "toUniqued", {
-        configurable: true,
-        enumerable: false,
-        writable: true,
-        value: function () {
-            return [...new Set(this)];
-        }
-    });
     Object.defineProperty(Array.prototype, "swapElements", {
         configurable: true,
         enumerable: false,
@@ -117,6 +98,33 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
         },
         introduce: {
+            'Buff':{
+                name:'Buff系统',
+                info:`
+                <li>Buff系统是一种特殊系统。
+                <li>自然衰减：回合结束时，含有自然衰减的所有Buff会移去1层。
+                <li>附加：当你的某种Buff层数从0变为1及以上时，称为附加某种Buff
+                <li>消解：当你的某种Buff层数减为0时，称为消解某种Buff
+                <li>增加/减少：当你增加或减少某种Buff时，你的Buff层数+1/-1
+                <li>调整至/增至/降至：指你将某种Buff层数改为/+/-至指定值
+                <li>在Buff描述中的X，若未特殊说明均指Buff层数
+                <li>上限：当你的Buff达到上限时，不会再继续增加，没有特殊说明的Buff为无上限
+                <li>清除：指的是将你的Buff层数减为0（触发含有消解描述的技能）
+                <li>增益/减益/中立：指的是Buff在一般情况下是获得收益还是获得损害
+                `
+            },
+            'peizhi': {
+                name: '配置',
+                info: `你弃置的所有牌中，
+                <br>根据其中的牌名，获得对应的效果或buff
+                <li>桃：回生，
+                <li>杀：流血，
+                <li>闪：迅捷，
+                <li>酒：令本次配置所有buff层数+1；</li>
+                除以上固定配方以外
+                <br>每有一张红色牌，获得一个随机增益buff，
+                <br>每有一张黑色牌，获得一个随机减益buff；`
+            },
             'weizhuang': {
                 name: '伪装',
                 info: '<li>当你获得新的伪装时，替换上一个伪装。<li>你视为拥有伪装角色的所有技能。'
@@ -1107,10 +1115,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 return 0;
             };
-            var noname_versionx = "1.10.3.1";
+            var noname_versionx = "1.10.4";
             if (lib.version && !lib.config.furryNotMetionNonameVersion) {
                 if (get.compareVersion(noname_versionx) > 0) {
-                    var ret = confirm("当前无名杀版本" + lib.version + "落后于【福瑞拓展】最低支持版本1.10.3.1，请尽快更新，点击确定关闭本扩展");
+                    var ret = confirm("当前无名杀版本" + lib.version + "落后于【福瑞拓展】最低支持版本1.10.4，请尽快更新，点击确定关闭本扩展");
                     if (!ret) {
                         alert("请确认你明白点击此选项导致的后果");
                         alert("由游戏版本过低导致任何问题本扩展均不负责");
@@ -1427,13 +1435,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             if (furryPack.enable) {
                 //------------------------------------------载入初始js------------------------------------------//
                 var JsForExt = ["functions.js", "buffs.js", "furry_mode.js", "cards.js", "character.js", "animation.js", "boss.js", "drama.js", "functions.js", "globalSkill.js", "guozhan.js", "mp.js", "shop.js", "skin.js", "update.js", 'story.js', 'activeKeys.js']
-                if (get.compareVersion('1.9.126.1') > 0) {
-                    for (var i = 0; i < JsForExt.length; i++) {
-                        var file = JsForExt[i]
-                        lib.init.js(lib.assetURL + 'extension/福瑞拓展/asset/' + file, null)
-                        console.log('【福瑞拓展】' + file + '已加载')
-                    }
-                } else lib.init.jsForExtension(lib.assetURL + 'extension/福瑞拓展/asset/', JsForExt.map(i => i.split('.')[0]))
+                lib.init.jsForExtension(lib.assetURL + 'extension/福瑞拓展/asset/', JsForExt.map(i => i.split('.')[0]))
                 //定义势力
                 game.addGroup('fr_g_dragon', '龙', {
                     color: 'black',
@@ -1847,7 +1849,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + '<div id="active" style="text-align: center;width: 100%;border: double;border-radius: 3px;padding-bottom: 5px;"><div>使用福利码</div><br><input type="text" name="activeKey" placeholder="请输入福利码"/>&nbsp&nbsp<button id="activeKey">激活</button></div>',
             diskURL: "",
             forumURL: "",
-            version: "3.0.2",
+            version: "3.0.3",
         },
         files: {
             "character": [],

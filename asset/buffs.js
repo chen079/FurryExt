@@ -3,6 +3,272 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     //---------------------------------------定义Buff-----------------------------------------//
     //现在定义新的Buff时，在lib.FrBuff中请不要加前缀Fr_Buff_
     lib.FrBuff = {
+        //言灵
+        'yanling': {
+            intro: {
+                name: "言灵",
+                content: "<li>一名角色的判定牌生效前，你可以打出一张牌代替之。<li>然后你移除1层「<font color=green>言灵</font>」",
+            },
+            forced: true,
+            silent: true,
+            charlotte: true,
+            trigger: {
+                global: "judge",
+            },
+            filter: function (event, player) {
+                return player.countCards(get.mode() == 'guozhan' ? 'hes' : 'hs') > 0 && player.hasFrBuff('yanling');
+            },
+            priority: 3,
+            content: function () {
+                "step 0"
+                player.chooseCard(get.translation(trigger.player) + '的' + (trigger.judgestr || '') + '判定为' +
+                    get.translation(trigger.player.judging[0]) + '，' + get.prompt('Fr_Buff_yanling'), get.mode() == 'guozhan' ? 'hes' : 'hs', function (card) {
+                        var player = _status.event.player;
+                        var mod2 = game.checkMod(card, player, 'unchanged', 'cardEnabled2', player);
+                        if (mod2 != 'unchanged') return mod2;
+                        var mod = game.checkMod(card, player, 'unchanged', 'cardRespondable', player);
+                        if (mod != 'unchanged') return mod;
+                        return true;
+                    }).set('ai', function (card) {
+                        var trigger = _status.event.getTrigger();
+                        var player = _status.event.player;
+                        var judging = _status.event.judging;
+                        var result = trigger.judge(card) - trigger.judge(judging);
+                        var attitude = get.attitude(player, trigger.player);
+                        if (attitude == 0 || result == 0) return 0;
+                        if (attitude > 0) {
+                            return result - get.value(card) / 2;
+                        }
+                        else {
+                            return -result - get.value(card) / 2;
+                        }
+                    }).set('judging', trigger.player.judging[0]);
+                "step 1"
+                if (result.bool) {
+                    player.respond(result.cards, 'Fr_Buff_yanling', 'highlight', 'noOrdering');
+                }
+                else {
+                    event.finish();
+                }
+                "step 2"
+                if (result.bool) {
+                    if (trigger.player.judging[0].clone) {
+                        trigger.player.judging[0].clone.classList.remove('thrownhighlight');
+                        game.broadcast(function (card) {
+                            if (card.clone) {
+                                card.clone.classList.remove('thrownhighlight');
+                            }
+                        }, trigger.player.judging[0]);
+                        game.addVideo('deletenode', player, get.cardsInfo([trigger.player.judging[0].clone]));
+                    }
+                    game.cardsDiscard(trigger.player.judging[0]);
+                    trigger.player.judging[0] = result.cards[0];
+                    trigger.orderingCards.addArray(result.cards);
+                    game.log(trigger.player, '的判定牌改为', result.cards[0]);
+                    player.reduceFrBuff('yanling')
+                    game.delay(2);
+                }
+            },
+            ai: {
+                rejudge: true,
+                tag: {
+                    rejudge: 1,
+                },
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    basic: [1, 0],
+                    add: [0.5, 0],
+                    random: [1, 0]
+                },
+                type: 'buff',
+            },
+        },
+        //潮湿
+        'chaoshi': {
+            intro: {
+                name: "潮湿",
+                content: "<li>当你受到雷属性伤害时，此伤害+1；<li>当你受到火属性伤害时，此伤害-1；<li>然后你移除1层「<font color=blue>潮湿</font>」。",
+            },
+            forced: true,
+            silent: true,
+            charlotte: true,
+            priority: 3,
+            filter: function (event, player) {
+                return event.hasNature('fire') || event.hasNature('thunder')
+            },
+            trigger: {
+                player: "damageBegin3",
+            },
+            content: function () {
+                if (trigger.hasNature('fire')) {
+                    trigger.num--
+                    game.log(player, '受到「<font color=blue>潮湿</font>」影响，此次火属性伤害-1')
+                }
+                if (trigger.hasNature('thunder')) {
+                    trigger.num++
+                    game.log(player, '受到「<font color=blue>潮湿</font>」影响，此次雷属性伤害+1')
+                }
+                player.reduceFrBuff('chaoshi')
+            },
+            ai: {
+                nofire: true,
+                effect: {
+                    target: function (card, player, target, current) {
+                        if (get.tag(card, 'fireDamage')) return 'zerotarget';
+                    },
+                },
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    basic: [0, 1],
+                    add: [0, 1.5]
+                },
+                type: 'none',
+            },
+        },
+        //荆棘
+        'jingji': {
+            intro: {
+                name: "荆棘",
+                content: "<li>当你于一回合内使用第4-X张牌结算完毕后，你失去1点体力并移除1层「<font color=green>荆棘</font>」。",
+            },
+            forced: true,
+            silent: true,
+            charlotte: true,
+            priority: 3,
+            trigger: {
+                player: "useCardAfter",
+            },
+            filter: function (event, player) {
+                return player.hasFrBuff('jingji') && player.countUsed() == 4 - player.countFrBuffNum('jingji')
+            },
+            content: function () {
+                player.loseHp()
+                player.reduceFrBuff('jingji')
+            },
+            ai: {
+                presha: true,
+                pretao: true,
+                nokeep: true,
+            },
+            mod: {
+                aiOrder: function (player, card, num) {
+                    if (typeof card == 'object' && 4 - player.countFrBuffNum('jingji') >= player.countUsed() + 1) return num - 10;
+                },
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    basic: [0, 1],
+                    add: [0, 1.5]
+                },
+                type: 'debuff',
+                limit: 3,
+            },
+        },
+        //劣势
+        "lieshi": {
+            intro: {
+                name: "劣势",
+                content: "<li>当你使用牌时，若你有牌，交给一名其他目标角色一张牌，然后你移除1层「<font color=red>劣势</font>」。",
+            },
+            trigger: {
+                player: "useCard1"
+            },
+            forced: true,
+            charlotte: true,
+            silent: true,
+            priority: 3,
+            filter: (event, player) => player.countCards('he') > 0 && game.hasPlayer(target => target != player && event.targets.contains(target)),
+            content: function () {
+                'step 0'
+                player.chooseCardTarget({
+                    position: 'he',
+                    prompt: '交给不为你的一名目标角色一张牌',
+                    forced: true,
+                    selectTarget: 1,
+                    selectCard: 1,
+                    filterTarget: (card, player, target) => target != player && trigger.targets.contains(target),
+                    ai1: function (card) {
+                        return 10 - get.value(card);
+                    },
+                    ai2: function (target) {
+                        var att = get.attitude(_status.event.player, target);
+                        if (_status.event.du) {
+                            if (target.hasSkillTag('nodu')) return 0.5;
+                            return -att;
+                        }
+                        if (att > 0) {
+                            if (_status.event.player != target) att += 2;
+                            return att + Math.max(0, 5 - target.countCards('h'));
+                        }
+                        return att;
+                    }
+                })
+                'step 1'
+                if (result.bool) {
+                    player.give(result.cards, result.targets[0], true)
+                    player.reduceFrBuff('lieshi')
+                }
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    basic: [0, 2],
+                    random: [0, 0.25],
+                    randomPower: 1.5,
+                },
+                type: 'debuff',
+                limit: 3,
+                BuffReject: ["youshi"]
+            },
+        },
+        "youshi": {
+            intro: {
+                name: "优势",
+                content: "<li>当你使用牌时，可以令一名其他目标角色交给你一张牌。然后你移除1层「<font color=green>优势</font>」。",
+            },
+            trigger: {
+                player: "useCard1"
+            },
+            forced: true,
+            silent: true,
+            charlotte: true,
+            priority: 3,
+            filter: (event, player) => game.hasPlayer(target => target != player && event.targets.contains(target) && target.countCards('he') > 0),
+            content: function () {
+                'step 0'
+                player.chooseTarget('令一名不为你的目标角色交给你一张牌', 1)
+                    .set('filterTarget', (card, player, target) => target != player && trigger.targets.contains(target) && target.countCards('he') > 0)
+                    .set('ai', target => -get.attitude(player, target))
+                'step 1'
+                if (result.bool) {
+                    event.target = result.targets[0]
+                    event.target.chooseCard('he', true, '将一张牌交给' + get.translation(player) + '。');
+                } else {
+                    event.finish()
+                }
+                'step 2'
+                if (result.bool) {
+                    event.target.give(result.cards, player, true);
+                    player.reduceFrBuff('youshi')
+                }
+            },
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    basic: [2, 0],
+                    random: [0.25, 0],
+                    randomPower: 1.5,
+                },
+                type: 'buff',
+                limit: 3,
+                BuffReject: ["lieshi"]
+            },
+        },
         //鼓舞
         "guwu": {
             intro: {
@@ -15,6 +281,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             forced: true,
             silent: true,
+            charlotte: true,
             priority: 3,
             filter: function (event, player) {
                 return player.hasFrBuff('guwu')
@@ -58,6 +325,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             forced: true,
             silent: true,
+            charlotte: true,
             priority: 3,
             filter: function (event, player, onrewrite) {
                 if (!player.hasFrBuff('dimi')) return false;
@@ -108,6 +376,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 if (!_status.currentPhase || _status.currentPhase != player) return;
                 return !lib.skill[skill].charlotte && !get.is.locked(skill, player);;
             },
+            charlotte: true,
             forced: true,
             silent: true,
             mod: {
@@ -132,6 +401,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 content: "<li>你移除此buff时，失去X点体力。",
             },
             forced: true,
+            charlotte: true,
             silent: true,
             priority: 3,
             trigger: {
@@ -666,21 +936,23 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         "yujian": {
             intro: {
                 name: "预见",
-                content: "<li>你的回合外，当前回合角色手牌对你可见。<li>你在一回合内首次获得牌前〖观星2〗。",
+                content: "<li>你的回合外，当前回合角色手牌对你可见。<li>你的回合内，你可以在前三次摸牌前卜算X+1。",
             },
             charlotte: true,
             trigger: {
-                player: "gainBefore",
+                player: "drawBefore",
             },
-            usable: 1,
+            usable: 3,
             forced: true,
             silent: true,
             priority: 3,
             filter: function (event, player) {
-                return player.hasFrBuff("yujian") && player.getHistory('gain').length == 0
+                return player.hasFrBuff("yujian") && _status.currentPhase == player
             },
             content: function () {
-                player.chooseToGuanxing(2);
+                'step 0'
+                var num = player.countFrBuffNum("yujian")
+                player.chooseToGuanxing(num + 1);
             },
             FrBuffInfo: {
                 naturalLose: true,
@@ -768,7 +1040,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             FrBuffInfo: {
                 naturalLose: true,
-                type: 'buff',
+                type: 'none',
                 buffRank: {
                     basic: [1, 0],
                     add: [1.15, 0.4],
@@ -1131,7 +1403,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             charlotte: true,
             trigger: {
-                player: ["addFrBuffAfter", 'changeHp',"reduceFrBuffAfter"],
+                player: ["addFrBuffAfter", 'changeHp', "reduceFrBuffAfter"],
             },
             forced: true,
             silent: true,
@@ -1211,6 +1483,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             content: function () {
                 player.reduceFrBuff('huisheng')
                 player.recover(1 - player.hp);
+            },
+            ai: {
+                save: true,
+                threaten: 0.6
             },
             FrBuffInfo: {
                 naturalLose: true,
@@ -1385,7 +1661,19 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         'yingneng': {
             intro: {
                 name: "盈能",
-                content: "还没想到效果",
+                content: "<li>当你消耗魔力时，移除Y层盈能，然后减少等量魔力消耗（Y为你此次消耗的魔力值）。",
+            },
+            trigger: {
+                player: "consumefrMpBegin1",
+            },
+            charlotte: true,
+            forced: true,
+            silent: true,
+            priority: 3,
+            content: function () {
+                var num = Math.min(player.countFrBuffNum('yingneng'), trigger.num)
+                trigger.num -= num
+                player.reduceFrBuff('yingneng', num)
             },
             FrBuffInfo: {
                 naturalLose: true,
@@ -1489,6 +1777,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             str += '<li>类型：增益'
         } else if (info.type == 'debuff') {
             str += '<li>类型：减益'
+        } else if (info.type == 'none') {
+            str += '<li>类型：中立'
         }
         if (info.limit) {
             str += '<li>上限：' + info.limit
@@ -1551,25 +1841,28 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         },
         forced: true,
         popup: false,
-        priority: 114514,
+        lastDo: true,
         filter: function (event, player) {
             return get.FrBuffList(player).length > 0
         },
         content: function () {
             'step 0'
-            if (!player.storage.noNaturalLose) player.storage.noNaturalLose = []
             event.buffList = Object.keys(lib.FrBuff)
             'step 1'
             var buff = event.buffList.shift()
             if (lib.FrBuff[buff].FrBuffInfo.naturalLose && player.hasFrBuff(buff)) {
-                if (!player.storage.noNaturalLose.contains(buff)) {
-                    player.reduceFrBuff(buff, 1, 'naturalLose');
+                if (!game.checkMod(player, buff, 'naturalLose', false, 'FrBuffIgnore', player)) {
+                    player.reduceFrBuff(buff, 1, 'naturalLose')
                 }
             }
             'step 2'
             if (event.buffList.length) event.goto(1)
         }
     };
+    get.frBuffs = function (filter) {
+        if (typeof filter == 'function') return Object.keys(lib.FrBuff).filter(i => filter(i))
+        else return Object.keys(lib.FrBuff)
+    }
     //获取Buff的代码名（除这里之外一般用不上）
     //现在支持的写法：_Fr_Buff_Buff名、Buff名、Fr_Buff_Buff名
     get.FrBuffName = function (name, iscomplete) {
@@ -1775,6 +2068,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             if (this.player.isImmFrBuff(get.FrBuffName(this.buff, false)) && this.num > 0) {
                 game.log(this.player, '因免疫', '#g「' + get.translation(this.buff) + '」', '无法被附加该Buff')
                 event.finish()
+            } else if (game.checkMod(this.player, get.FrBuffName(this.buff, false), 'changeFrBuff', false, 'FrBuffIgnore', this.player)) {
+                event.finish()
             } else if (this.isReject) {
                 event.goto(3);
             } else {
@@ -1812,6 +2107,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     if (!this.player.storage[Buff]) {
                         this.player.storage[Buff] = 0;
                         tip1 = '附加了';
+                        this.trigger('toHasFrBuff')
                     } else {
                         tip1 = '增加了';
                     }
@@ -1935,12 +2231,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         return next;
     };
     //方法game.changeFrBuff的封装
-    lib.element.player.changeFrBuff = function (arg1, arg2) {
-        return game.changeFrBuff(this, arg1, arg2);
+    lib.element.player.changeFrBuff = function () {
+        return game.changeFrBuff(this, ...arguments);
     };
     //方法game.changeFrBuffTo的封装
-    lib.element.player.changeFrBuffTo = function (arg1, arg2, arg3, arg4) {
-        return game.changeFrBuffTo(this, arg1, arg2, arg3, arg4);
+    lib.element.player.changeFrBuffTo = function () {
+        return game.changeFrBuffTo(this, ...arguments);
     };
     //获得目标角色已有的Buff种类数目（可设置不算在内的Buff）
     lib.element.player.countFrBuff = function (filter) {
@@ -1976,6 +2272,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         next.setContent(function () {
             'step 0'
             if (!event.buff) return event.finish()
+            if (game.checkMod(player, event.buff, 'addFrBuff', false, 'FrBuffIgnore', player)) {
+                return event.finish()
+            }
             event.num = Math.min(get.FrBuffLimit(event.buff) - player.countFrBuffNum(event.buff), event.num)
             if (event.num <= 0) return event.finish()
             'step 1'
@@ -2010,6 +2309,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         if (next.num == undefined) next.num = 1
         next.setContent(function () {
             'step 0'
+            if (game.checkMod(player, event.buff, 'reduceFrBuff', false, 'FrBuffIgnore', player)) return event.finish()
             if (event.buff == undefined) return event.finish()
             event.num = Math.min(player.countFrBuffNum(event.buff), event.num)
             if (event.num <= 0) return event.finish()
@@ -2096,14 +2396,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         }
     }
     //判断其是否免疫该种Buff
-    lib.element.player.isImmFrBuff = function (name) {
-        var skills = this.getSkills(null, false, false);
-        for (var i of skills) {
-            var info = lib.skill[i];
-            if (info && info.ai && info.ai.FrBuffRank_extra && info.ai.FrBuffRank_extra[name] && info.ai.FrBuffRank_extra[name].immunity === true) {
-                return true;
-            }
-        }
-        return false;
+    lib.element.player.isImmFrBuff = function (buff) {
+        var player = this
+        return game.checkMod(player, buff, false, 'ImmerFrBuff', player)
     };
 })

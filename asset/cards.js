@@ -4,6 +4,35 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
         name: 'furryCard',//卡包命名
         connect: true,//卡包是否可以联机
         card: {
+            'fr_magic_ysns': {
+                audio: true,
+                fullskin: true,
+                image: 'ext:福瑞拓展/image/card/fr_magic_ysns.png',
+                type: "spell",
+                enable: true,
+                filterTarget: function (card, player, target) {
+                    return target != player && !target.hasFrBuff('sleep')
+                },
+                modTarget: true,
+                selectTarget: 1,
+                content: () => {
+                    target.addTempFrBuff('sleep')
+                },
+                ai: {
+                    value: [4.5, 1],
+                    useful: [4, 1],
+                    result: {
+                        target: function (player, target) {
+                            var threaten = get.threaten(target, player, true);
+                            if (target.hasFrBuff('sleep')) {
+                                return 0;
+                            }
+                            return -threaten;
+                        },
+                    },
+                    order: 9.5,
+                },
+            },
             'fr_card_yfss': {
                 audio: true,
                 fullskin: true,
@@ -802,6 +831,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     if (get.mode() != 'guozhan') {
                         event.list.remove('zhenfa')
                         event.list.remove('guozhan')
+                        event.list.remove('furryCard')
                     }
                     'step 1'
                     if (!_status.auto && target.isUnderControl()) {
@@ -836,7 +866,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     var list = []
                     var choice = result.links[0];
                     for (var i = 0; i < lib.cardPack[choice].length; i++) {
-                        if (lib.cardPack[choice][i] == 'fr_card_zh' || lib.cardPack[choice][i] == 'gw_tunshi') continue
+                        if (lib.cardPack[choice][i] == 'gw_tunshi') continue
                         var name = lib.cardPack[choice][i]
                         var type = get.type(name)
                         list.push([type, '', name])
@@ -888,9 +918,6 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 enable: true,
                 filterTarget: function (card, player, target) {
                     return target != player && target.countGainableCards(player, 'hej') > 0;
-                },
-                filter: function (event, player) {
-                    return player.countCards('h') > 1
                 },
                 content: function () {
                     'step 0'
@@ -1785,6 +1812,8 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "wxpp_skill_info": "出牌阶段，你可以演奏忘弦琵琶。回合开始时，你随机获得" + get.frIntroduce('wuyin') + "的效果之一直到回合结束。",
 
             //卡牌
+            'fr_magic_ysns':'夜神凝视',
+            'fr_magic_ysns_info':'出牌阶段，对一名其他角色使用，该角色获得1层'+get.dialogIntro('sleep')+'直到回合结束',
             'fr_phaseZhunbei': '准备阶段',
             'fr_phaseJudge': '判定阶段',
             'fr_phaseDraw': '摸牌阶段',
@@ -1819,7 +1848,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_xysx": "修养生息",
             "fr_card_xysx_info": "此牌可被重铸。出牌阶段对自己使用，重置当前回合卡牌和主动技能使用次数。",
             "fr_card_ttbl": "投桃报李",
-            "fr_card_ttbl_info": "出牌阶段，若你的手牌至少有两张，你可以对一名其他角色使用，你交给其一至两张手牌，然后你获得该角色区域内至多两张牌。",
+            "fr_card_ttbl_info": "出牌阶段，对一名其他角色使用，你交给其至多两张手牌，然后你可以获得该角色区域内至多两张牌。",
             "fr_card_yxys": "野性药水",
             "fr_card_yxys_info": "出牌阶段对一名角色使用，该角色获得技能〖嗜血〗。<li>〖嗜血〗：你的回合结束时，你移除此技能，然后若本回合内你杀死过其他角色，你摸三张牌并执行一个额外的回合。</li>",
             "fr_card_gzbj": "寡众不均",
@@ -1831,11 +1860,13 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             "fr_card_lyzq": "凌月之球",
             "fr_card_lyzq_info": "出牌阶段，对你使用。你从随机的五个技能中获得一个直到回合结束（觉醒技，限定技，主公技，隐匿技，使命技等特殊技能除外）。",
             "fr_card_zh": "召唤",
-            "fr_card_zh_info": "出牌阶段，对你使用，目标声明一张牌并获得之（部分特殊牌除外且此牌洗牌后销毁）。",
+            "fr_card_zh_info": "出牌阶段，对你使用，目标声明一张福瑞拓展外的牌并获得之（此牌洗牌后销毁）。",
             "fr_card_zhcz": "制衡掣肘",
             "fr_card_zhcz_info": "出牌阶段，对一名角色使用，该角色展示X张手牌（X为其手牌数的一半并向下取整），然后你选择一项：1.重铸其展示的所有牌，2.重铸其未展示的所有牌。",
         },
         list: [
+            ['heart', '6', 'fr_card_yfss'],
+            ['heart', '12', 'fr_card_yfss'],
             ['heart', '1', 'fr_equip1_ar15'],
             ['spade', '13', 'fr_equip1_shyl'],
             ['heart', '5', 'fr_card_xzst'],
