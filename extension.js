@@ -36,7 +36,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 const script = document.createElement('script');
                 script.src = modulePath;
                 script.async = true;
-                getModuleName = modulePath => modulePath.split('/').pop().replace('.js', '');
+                let getModuleName = modulePath => modulePath.split('/').pop().replace('.js', '');
 
                 script.onload = () => {
                     resolve(window[getModuleName(modulePath)]);
@@ -84,6 +84,10 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             alert(str)
         },
         storyIntroduce: {
+            'ziranshen': {
+                name: '自然神',
+                info: '<li>神祇分为自然神和概念神两种，自然神是自世界诞生之初就存在的神族，概念神则是由众多人的信仰而产生的神祇。<li>概念神会因为信仰的消失而死亡，而自然神则不会。<li>二者有本质的区别。',
+            },
             'huolingri': {
                 name: '火灵日',
                 info: '<li>火灵日（晨曦月初一）是瓦尔亚那大陆上最盛大的节日，象征一年的开始。人们欢庆新希望，共同祭祀火神“祝”的恩惠。<li>火灵日最为盛大的仪式就是在夜晚的祭祀活动，人们会在大街上摆满食物以供任何人取用。<li>每个国家的火灵日休假活动各不相同，一般来说都是休息15天（初一至十五）。'
@@ -98,14 +102,16 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             }
         },
         introduce: {
-            'Buff':{
-                name:'Buff系统',
-                info:`
+            'Buff': {
+                name: 'Buff系统',
+                info: `
                 <li>Buff系统是一种特殊系统。
                 <li>自然衰减：回合结束时，含有自然衰减的所有Buff会移去1层。
+                <li>衰减：指的是以自然衰减的方式减少buff，如：你衰减5层某buff指你的某buff以自然衰减的方式依次减少5层（每次减少1层，减少5次）。
+                <li>当你的描述为你减少5层Buff并视为自然衰减时，指直接移除5层Buff并视为自然衰减移除的（只触发1次自然衰减的技能）
                 <li>附加：当你的某种Buff层数从0变为1及以上时，称为附加某种Buff
                 <li>消解：当你的某种Buff层数减为0时，称为消解某种Buff
-                <li>增加/减少：当你增加或减少某种Buff时，你的Buff层数+1/-1
+                <li>增加（获得）/减少（移除）：当你增加或减少某种Buff时，你的Buff层数+1/-1
                 <li>调整至/增至/降至：指你将某种Buff层数改为/+/-至指定值
                 <li>在Buff描述中的X，若未特殊说明均指Buff层数
                 <li>上限：当你的Buff达到上限时，不会再继续增加，没有特殊说明的Buff为无上限
@@ -1318,23 +1324,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 }
                 return null;
             };
-            game.frStars = function (num) {
-                if (num == 0) {
-                    return '☆☆☆☆☆☆'
-                } else if (num == 1) {
-                    return '★☆☆☆☆☆'
-                } else if (num == 2) {
-                    return '★★☆☆☆☆'
-                } else if (num == 3) {
-                    return '★★★☆☆☆'
-                } else if (num == 4) {
-                    return '★★★★☆☆'
-                } else if (num == 5) {
-                    return '★★★★★☆'
-                } else if (num == 6) {
-                    return '★★★★★★'
-                }
-            }
 
             //------------------------------------------自定义get函数------------------------------------------//
             get.FrskillTips = function (tipname, id) {
@@ -1849,7 +1838,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + '<div id="active" style="text-align: center;width: 100%;border: double;border-radius: 3px;padding-bottom: 5px;"><div>使用福利码</div><br><input type="text" name="activeKey" placeholder="请输入福利码"/>&nbsp&nbsp<button id="activeKey">激活</button></div>',
             diskURL: "",
             forumURL: "",
-            version: "3.0.3",
+            version: "3.0.4",
         },
         files: {
             "character": [],

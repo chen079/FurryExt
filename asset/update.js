@@ -6,12 +6,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             changeLog: [
                 '/setPlayer/',
                 '/setRedoPlayer/',
-                '修改了召唤的范围限制',
-                '修复了莫卡林的碎岩bug',
-                '修复了AI换将部分技能无法清除的bug',
-                '修复了多戈的bug',
-                '移除武将缪斯，直到未来能够解决ai问题',
-                '修改刃狼原画',
+                '修改了很多东西',
                 '移除了herobrine',
                 '修复很多bug',
                 '新增更多bug...'
@@ -452,7 +447,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 else myConfirm(`福瑞拓展检测到更新(v${data.version}), 是否更新?\n${data.changeLog}`, furryUpdating);
             })
             .catch(e => {
-                alert('自动更新网络请求出错，请检查您的网络。\n您也可以前往设置中关闭自动更新检查，不再弹出此窗口。');
+                alert('福瑞拓展：自动更新网络请求出错，请检查您的网络。\n您也可以前往设置中关闭自动更新检查，不再弹出此窗口。');
             });
 
     }

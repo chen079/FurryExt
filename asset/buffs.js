@@ -3,6 +3,48 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
     //---------------------------------------定义Buff-----------------------------------------//
     //现在定义新的Buff时，在lib.FrBuff中请不要加前缀Fr_Buff_
     lib.FrBuff = {
+        //凝滞
+        'ningzhi': {
+            intro: {
+                name: "凝滞",
+                content: "<li>当你受到非「<font color=yellow>凝滞</font>」造成的伤害时，累计此伤害值并取消之。<li>当你消解「<font color=yellow>凝滞</font>」时，你受到记录值的伤害。",
+            },
+            forced: true,
+            silent: true,
+            charlotte: true,
+            init: function (player) {
+                if (!player.ningzhi) player.ningzhi = 0
+            },
+            trigger: {
+                player: ['damageBegin3', 'reduceFrBuffBegin2']
+            },
+            filter: function (event, player, onrewrite) {
+                if (onrewrite == 'damageBegin3') {
+                    return player.hasFrBuff('ningzhi') && !event.ningzhi;
+                } else {
+                    return event.buff == 'ningzhi' && player.countFrBuffNum('ningzhi') <= event.num && event.num > 0
+                }
+            },
+            content: function () {
+                'step 0'
+                if (event.triggername == 'damageBegin3') {
+                    player.ningzhi += trigger.num
+                    game.log(player, '受「<font color=yellow>凝滞</font>」影响，取消本次伤害，当前累计伤害值为' + player.ningzhi);
+                    trigger.cancel()
+                } else {
+                    player.damage(player.ningzhi).ningzhi = true
+                    player.ningzhi = 0
+                }
+            },
+            priority: 3,
+            FrBuffInfo: {
+                naturalLose: true,
+                buffRank: {
+                    random: [1, 1]
+                },
+                type: 'none',
+            },
+        },
         //言灵
         'yanling': {
             intro: {
@@ -156,7 +198,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             mod: {
                 aiOrder: function (player, card, num) {
-                    if (typeof card == 'object' && 4 - player.countFrBuffNum('jingji') >= player.countUsed() + 1) return num - 10;
+                    if (typeof card == 'object' && (4 - player.countFrBuffNum('jingji') < player.countUsed())) return num - 5 + 2 * player.countCards('h', 'tao') + player.countCards('h', 'jiu');
                 },
             },
             FrBuffInfo: {
@@ -1829,9 +1871,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             var buff = event.buffList.shift()
             if (player.hasFrBuff(buff)) {
                 player.clearFrBuff(buff);
+            } else {
+                if (event.buffList.length > 0) event.redo()
             }
-            'step 2'
-            if (event.buffList.length) event.goto(1)
         }
     }
     lib.translate["_naturalLoseFrBuff"] = "自然衰减";
@@ -2063,6 +2105,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         }
         if (next.source == undefined) next.source = 'nosource'
         if (!next.num) next.num = 1;
+        if (next.num > 0) {
+            next.num = game.checkMod(next.player, get.FrBuffName(next.buff, false), next.num, next.num, 'FixedFrBuff', next.player)
+        }
         next.setContent(function () {
             "step 0"
             if (this.player.isImmFrBuff(get.FrBuffName(this.buff, false)) && this.num > 0) {
@@ -2073,10 +2118,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             } else if (this.isReject) {
                 event.goto(3);
             } else {
-                this.trigger('changeFrBuffToBegin1'); //事件开始，取消事件的地方
+                this.trigger('changeFrBuffBegin1'); //事件开始，取消事件的地方
             }
             "step 1"
-            this.trigger('changeFrBuffToBegin2'); //事件开始，修改事件参数的地方
+            this.trigger('changeFrBuffBegin2'); //事件开始，修改事件参数的地方
             "step 2"
             if (!lib.FrBuff[get.FrBuffName(this.buff, false)]) {
                 event.finish();
@@ -2107,7 +2152,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     if (!this.player.storage[Buff]) {
                         this.player.storage[Buff] = 0;
                         tip1 = '附加了';
-                        this.trigger('toHasFrBuff')
                     } else {
                         tip1 = '增加了';
                     }

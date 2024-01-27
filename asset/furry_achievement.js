@@ -1,6 +1,7 @@
 window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 	//胜利台词
 	lib.fr_winnerSay = {
+		'fr_froh': '即使是石头之中，也能盛开出鲜花',
 		'fr_bwol': '看看那火焰中盛开的鲜花！',
 		'fr_mile': '你看见我的朋友们了吗？',
 		'fr_siji': "天下弗安，黎民阻饥，<br>拯民降谷，功在司稷",
@@ -498,11 +499,16 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		var background = ui.create.div('.frw-background', document.body);
 		var head = ui.create.div('.fr-winner-head');
 		var biankuang = ui.create.div('.fr-winner-biankuang');
-		head.setBackgroundImage('extension/福瑞拓展/image/skin/origin-standard/' + name + '.jpg');
+		if (name.indexOf('fr_boss') == 0) {
+			var rawName = 'fr_' + name.slice(7)
+		} else {
+			var rawName = name
+		}
+		head.setBackgroundImage('extension/福瑞拓展/image/skin/origin-standard/' + rawName + '.jpg');
 		background.appendChild(head);
 		background.appendChild(biankuang);
 		var text = ui.create.div('.fr-winner-text');
-		var say = lib.fr_winnerSay[name];
+		var say = lib.fr_winnerSay[rawName];
 		if (say) {
 			text.innerHTML = say;
 		}
