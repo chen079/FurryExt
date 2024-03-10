@@ -5,15 +5,13 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         var changeInfo = {
             changeLog: [
                 '/setPlayer/',
-                '/setRedoPlayer/',
                 '修改了很多东西',
                 '移除了herobrine',
                 '修复很多bug',
                 '新增更多bug...'
             ],
-            players: ['fr_mile', 'fr_bwol'],
+            players: ['fr_luwu', 'fr_delagu'],
             cards: [],
-            redoPlayers: ['fr_bladewolf']
         };
         var UpdateHistory = {
             '3.0.2': {

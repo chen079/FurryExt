@@ -1187,12 +1187,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             else {
                 audio.src = lib.assetURL + 'audio' + str + '.mp3';
             }
-            audio.addEventListener('ended', function () {
-                lib.frStory.remove();
-            });
             audio.onerror = function () {
                 if (lib.frStory._changed) {
-                    lib.frStory.remove();
                     if (onerror) {
                         onerror();
                     }

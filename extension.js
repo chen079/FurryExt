@@ -1838,7 +1838,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + '<div id="active" style="text-align: center;width: 100%;border: double;border-radius: 3px;padding-bottom: 5px;"><div>使用福利码</div><br><input type="text" name="activeKey" placeholder="请输入福利码"/>&nbsp&nbsp<button id="activeKey">激活</button></div>',
             diskURL: "",
             forumURL: "",
-            version: "3.0.4",
+            version: "3.0.5",
         },
         files: {
             "character": [],
