@@ -224,7 +224,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             charlotte: true,
             silent: true,
             priority: 3,
-            filter: (event, player) => player.countCards('he') > 0 && game.hasPlayer(target => target != player && event.targets.contains(target)),
+            filter: (event, player) => player.countCards('he') > 0 && game.hasPlayer(target => target != player && event.targets.includes(target)),
             content: function () {
                 'step 0'
                 player.chooseCardTarget({
@@ -233,7 +233,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     forced: true,
                     selectTarget: 1,
                     selectCard: 1,
-                    filterTarget: (card, player, target) => target != player && trigger.targets.contains(target),
+                    filterTarget: (card, player, target) => target != player && trigger.targets.includes(target),
                     ai1: function (card) {
                         return 10 - get.value(card);
                     },
@@ -280,11 +280,11 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             silent: true,
             charlotte: true,
             priority: 3,
-            filter: (event, player) => game.hasPlayer(target => target != player && event.targets.contains(target) && target.countCards('he') > 0),
+            filter: (event, player) => game.hasPlayer(target => target != player && event.targets.includes(target) && target.countCards('he') > 0),
             content: function () {
                 'step 0'
                 player.chooseTarget('令一名不为你的目标角色交给你一张牌', 1)
-                    .set('filterTarget', (card, player, target) => target != player && trigger.targets.contains(target) && target.countCards('he') > 0)
+                    .set('filterTarget', (card, player, target) => target != player && trigger.targets.includes(target) && target.countCards('he') > 0)
                     .set('ai', target => -get.attitude(player, target))
                 'step 1'
                 if (result.bool) {
@@ -480,7 +480,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             silent: true,
             priority: 3,
             filter: function (event, player) {
-                return event.player != player && event.card.name == 'sha' && !event.targets.contains(player) && event.player.inRange(player);
+                return event.player != player && event.card.name == 'sha' && !event.targets.includes(player) && event.player.inRange(player);
             },
             content: function () {
                 trigger.getParent().targets.push(player);
@@ -555,7 +555,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             mod: {
                 playerEnabled: function (card, player, target) {
-                    if (player.storage['Fr_Buff_zhenhan_Source'].contains(target)) return false;
+                    if (player.storage['Fr_Buff_zhenhan_Source'].includes(target)) return false;
                 },
             },
             FrBuffInfo: {
@@ -2094,7 +2094,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     next.source = arguments[i]
                 }
             } else if (typeof arguments[i] == 'string') {
-                if (['naturalLose', 'isReject'].contains(arguments[i])) {
+                if (['naturalLose', 'isReject'].includes(arguments[i])) {
                     next[arguments[i]] = true;
                 } else {
                     next.buff = get.FrBuffName(arguments[i]);
@@ -2339,7 +2339,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 next.num = arguments[i]
             }
             else if (typeof arguments[i] == 'string') {
-                if (['naturalLose', 'isReject'].contains(arguments[i])) {
+                if (['naturalLose', 'isReject'].includes(arguments[i])) {
                     next[arguments[i]] = true;
                 } else {
                     next.buff = arguments[i];
@@ -2378,9 +2378,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 source = arguments[i]
             } else if (typeof arguments[i] == 'number') {
                 num = arguments[i]
-            } else if (['array', 'object'].contains(get.objtype(arguments[i]))) {
+            } else if (['array', 'object'].includes(get.objtype(arguments[i]))) {
                 expire = arguments[i]
-            } else if (['naturalLose', 'isReject'].contains(arguments[i])) {
+            } else if (['naturalLose', 'isReject'].includes(arguments[i])) {
                 losetype = arguments[i]
             } else {
                 buff = arguments[i]

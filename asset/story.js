@@ -1172,7 +1172,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 }
                 if (_status.video) break;
             }
-            //if(!lib.config.repeat_audio&&_status.skillaudio.contains(str)) return;
+            //if(!lib.config.repeat_audio&&_status.skillaudio.includes(str)) return;
             _status.skillaudio.add(str);
             game.addVideo('playAudio', null, str);
             setTimeout(function () {

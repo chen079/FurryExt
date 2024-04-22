@@ -46,7 +46,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                         event.target.gainMaxHp()
                         event.target.hp++
                     }
-                    if (!lib.character[result.links[0]][4].contains("hiddenSkill")) {
+                    if (!lib.character[result.links[0]][4].includes("hiddenSkill")) {
                         event.target.showCharacter(2, false)
                     }
                     if (get.is.double(result.links[0])) {

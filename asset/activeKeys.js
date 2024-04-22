@@ -26,7 +26,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         },
         active: function (key) {
             if (!keys[md5(key)]) return alert('福利码不存在！')
-            if (!lib.config.frActiveKeys.actived.contains(key)) {
+            if (!lib.config.frActiveKeys.actived.includes(key)) {
                 var items = keys[md5(key)]
                 for (var i in items) {
                     if (this.getType(i, md5(key)) == 'character') {

@@ -663,7 +663,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                             var d = arr[1] - arr[0];
                             var max = arr[arr.length - 1];
                             var min = arr[0];
-                            return [min - d, max + d].contains(get.number(button));
+                            return [min - d, max + d].includes(get.number(button));
                         });
                     } else {
                         return event.finish()
@@ -1242,7 +1242,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     target.showCards(result.cards)
                     var handcards = target.getCards('h')
                     for (var i = 0; i < handcards.length; i++) {
-                        if (handcards.contains(result.cards[i])) {
+                        if (handcards.includes(result.cards[i])) {
                             handcards.remove(result.cards[i])
                         }
                     }
@@ -1350,7 +1350,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 },
                 charlotte: true,
                 filter: function (event, player) {
-                    return player.storage.pojia.cards && event.card && player.storage.pojia.cards.contains(event.card) && (event.name != 'damage' || event.notLink());
+                    return player.storage.pojia.cards && event.card && player.storage.pojia.cards.includes(event.card) && (event.name != 'damage' || event.notLink());
                 },
                 silent: true,
                 forced: true,
@@ -1439,7 +1439,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     for (var i in lib.skill.wxpp_skill.music) {
                         if (event.index.join('').lastIndexOf(i) === Math.max(event.index.length - i.length, 0)) {
                             player.$fullscreenpop(lib.skill.wxpp_skill.music[i], 'soil', false, true);
-                            if (lib.skill.wxpp_skill.music_achieve.contains(i) && !game.frAchi.hasAchi('你会弹琴吗？', 'special')) {
+                            if (lib.skill.wxpp_skill.music_achieve.includes(i) && !game.frAchi.hasAchi('你会弹琴吗？', 'special')) {
                                 game.frAchi.addProgress('你会弹琴吗？', 'special')
                             }
                         }
@@ -1645,7 +1645,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                                 if (evt.name != 'chooseToUse') evt = evt.getParent('chooseToUse');
                                 if (!evt || !evt.respondTo || evt.respondTo[1].name != 'sha') return;
                                 for (var i of player.storage.ar15_skill_block) {
-                                    if (i[1].contains(suit)) return false;
+                                    if (i[1].includes(suit)) return false;
                                 }
                             },
                         },
@@ -1779,7 +1779,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 filter: function (event, player) {
                     if (!event.player.isAlive()) return false;
                     if (!lib.filter.targetEnabled({ name: 'fr_card_xzst' }, player, event.player)) return false;
-                    if (event._notrigger.contains(event.player)) return false;
+                    if (event._notrigger.includes(event.player)) return false;
                     return player.hasUsableCard('fr_card_xzst');
                 },
                 content: function () {

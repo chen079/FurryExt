@@ -262,7 +262,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                                 card: arg.card
                             }))) return true;
                             return player.countCards('h', function (card) {
-                                return card != arg.card && (!arg.card.cards || !arg.card.cards.contains(card)) && get.value(card) <= 4 && (get.number(card) >= (11 + arg.target.countCards('h') / 2) || get.suit(card, player) == 'heart');
+                                return card != arg.card && (!arg.card.cards || !arg.card.cards.includes(card)) && get.value(card) <= 4 && (get.number(card) >= (11 + arg.target.countCards('h') / 2) || get.suit(card, player) == 'heart');
                             }) > 0;
                         }();
                         delete player._krikt_gzly_temp;
@@ -337,7 +337,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     return att1 > 0 && att2 <= 0;
                 },
                 filter: function (event, player) {
-                    return (event.source && event.player.classList.contains('dead') == false && player.countCards('he'));
+                    return (event.source && event.player.classList.includes('dead') == false && player.countCards('he'));
                 },
                 direct: true,
                 content: function () {

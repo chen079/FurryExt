@@ -88,10 +88,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         return lib.config.frjh_skilltexiao !== false;
     };
     game.frHasExtension = function(str){
-        return lib.config.extensions && lib.config.extensions.contains(str) && lib.config['extension_'+str+'_enable'];
+        return lib.config.extensions && lib.config.extensions.includes(str) && lib.config['extension_'+str+'_enable'];
     };
     game.frHasExtensionInstalled = function(str){
-        return lib.config.extensions && lib.config.extensions.contains(str);
+        return lib.config.extensions && lib.config.extensions.includes(str);
     };
 	game.frPlayAnimOnCard = function (name, card, repeat, abis) {
 		if (!repeat) repeat = 1;

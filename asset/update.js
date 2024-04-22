@@ -5,15 +5,24 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         var changeInfo = {
             changeLog: [
                 '/setPlayer/',
-                '修改了很多东西',
-                '移除了herobrine',
-                '修复很多bug',
-                '新增更多bug...'
+                'up联动：八狸桥',
+                '陆伍重做'
             ],
-            players: ['fr_luwu', 'fr_delagu'],
+            players: ['fr_luwu', 'fr_baliqiao'],
             cards: [],
         };
         var UpdateHistory = {
+            '3.0.4':{
+                changeLog:[
+                    '/setPlayer/',
+                    '修改了很多东西',
+                    '移除了herobrine',
+                    '修复很多bug',
+                    '新增更多bug...'
+                ],
+                players: ['fr_luwu', 'fr_delagu'],
+                cards: [],
+            },
             '3.0.2': {
                 changeLog: [
                     '/setRedoPlayer/',
@@ -124,7 +133,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         dialog.content.appendChild(ul);
         dialog.open();
         var hidden = false;
-        if (!ui.auto.classList.contains('hidden')) {
+        if (!ui.auto.classList.includes('hidden')) {
             ui.auto.hide();
             hidden = true;
         }

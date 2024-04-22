@@ -261,7 +261,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     _status.sceneChanged = true;
                     for (var i = 0; i < packnode.childElementCount; i++) {
                         if (packnode.childNodes[i].link == 'scene_' + name) {
-                            if (packnode.childNodes[i].classList.contains('active')) {
+                            if (packnode.childNodes[i].classList.includes('active')) {
                                 for (var j = 0; j < packnode.childElementCount; j++) {
                                     if (packnode.childNodes[j].link == 'scene') {
                                         clickCapt.call(packnode.childNodes[j]);
@@ -278,7 +278,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     game.save('stage', lib.storage.stage);
                     for (var i = 0; i < packnode.childElementCount; i++) {
                         if (packnode.childNodes[i].link == 'stage_' + name) {
-                            if (packnode.childNodes[i].classList.contains('active')) {
+                            if (packnode.childNodes[i].classList.includes('active')) {
                                 for (var j = 0; j < packnode.childElementCount; j++) {
                                     if (get.is.empty(lib.storage.scene)) {
                                         if (packnode.childNodes[j].link == 'scene') {

@@ -400,7 +400,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 window.furry.traverseFolder(sourceDir, false).then(function (Files) {
                     var needToImport = Files.filter(function (i) {
                         var extname = i.split('/')[0]
-                        return lib.config.extensions.contains(extname) !== -1 && lib.config['extension_' + extname + '_enable'];
+                        return lib.config.extensions.includes(extname) !== -1 && lib.config['extension_' + extname + '_enable'];
                     });
                     var progressBG = ui.create.div(".progressBG", ui.window);
                     var progressBar = ui.create.div(progressBG);
@@ -697,7 +697,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 for (let pack of ["furryPack"]) {
                     for (let name in lib.characterPack[pack]) {
                         let bool = ['junk', 'common', 'rare', 'epic', 'legend'].some(function (rarity) {
-                            if (lib.characterPack[pack][name][4].contains(rarity)) {
+                            if (lib.characterPack[pack][name][4].includes(rarity)) {
                                 if (rarity != "common") lib.rank.rarity[rarity].add(name);
                                 return true;
                             }
@@ -709,7 +709,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     window.furry.update2()
                 };
                 //---------------------------------------初始化势力------------------------------------------//
-                if (lib.config.extensions && lib.config.extensions.contains('无名补丁') && lib.config['extension_无名补丁_enable']) {
+                if (lib.config.extensions && lib.config.extensions.includes('无名补丁') && lib.config['extension_无名补丁_enable']) {
                     setTimeout(() => {
                         lib.groupnature.fr_g_dragon = 'fr_g_dragon'
                         lib.groupnature.fr_g_ji = 'fr_g_ji'
@@ -720,25 +720,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     alert('福瑞拓展提示：检测到您没有开启千幻扩展，将无法使用武将皮肤功能。')
                     game.saveConfig('extension_福瑞拓展_frSkin', false);
                 }
-                //---------------------------------------武将标签------------------------------------------//
-                if (lib.config.extensions && lib.config.extensions.contains('十周年UI') && lib.config['extension_十周年UI_enable']) {
-                    if (lib.config['extension_十周年UI_showJieMark']) {
-                        lib.fr_playerinit = lib.element.player.init;
-                        lib.element.player.init = function (character, character2, skill) {
-                            var player = lib.fr_playerinit.apply(this, arguments);
-                            if (character && lib.characterPack.furryPack[character]) {
-                                if (this.$jieMark == undefined) {
-                                    this.$jieMark = dui.element.create('jie-mark', this);
-                                } else {
-                                    this.appendChild(this.$jieMark);
-                                };
-                                this.$jieMark.style.backgroundImage = 'url("' + lib.assetURL + "extension/福瑞拓展/image/biaoqian/mark_furry.png" + '")';
-                                return this;
-                            };
-                            return this;
-                        };
-                    };
-                };
                 //------------------------------------------设置：背景音乐------------------------------------------//
                 if (lib.config.extension_福瑞拓展_Background_Music && lib.config.extension_福瑞拓展_Background_Music != "1") {
                     game.frplayBackgroundMusic();
@@ -753,7 +734,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             if (lib.config.extension_福瑞拓展_hp_mutiply !== 1) {
                 lib.arenaReady.push(function () {
                     var list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-                    if (!list.contains(lib.config.extension_福瑞拓展_hp_mutiply)) {
+                    if (!list.includes(lib.config.extension_福瑞拓展_hp_mutiply)) {
                         game.saveConfig('extension_福瑞拓展_hp_mutiply', 1)
                         lib.config.extension_福瑞拓展_hp_mutiply = 1
                     }
@@ -793,7 +774,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                 var group2 = lib.character[name2][1];
                                 if (group1 == 'ye') return group2 != 'ye';
                                 var double = get.is.double(name2, true);
-                                if (double) return double.contains(group1);
+                                if (double) return double.includes(group1);
                                 return group1 == group2;
                             };
                             for (var i = 0; i < list.length - 1; i++) {
@@ -880,13 +861,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             event.list = [];
                             for (i in lib.character) {
                                 if (i.indexOf('gz_shibing') == 0) continue;
-                                if (chosen.contains(i)) continue;
+                                if (chosen.includes(i)) continue;
                                 if (lib.filter.characterDisabled(i)) continue;
                                 if (get.config('onlyguozhan')) {
                                     if (!lib.characterPack.mode_guozhan[i]) continue;
                                     if (get.is.jun(i)) continue;
                                 }
-                                if (lib.character[i][4].contains('hiddenSkill')) continue;
+                                if (lib.character[i][4].includes('hiddenSkill')) continue;
                                 //if(lib.character[i][2]==6||lib.character[i][2]==8||lib.character[i][2]==10)
                                 event.list.push(i);
                             }
@@ -932,13 +913,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                             }
                                         }
                                     }
-                                    if (lib.character[button.link][4].contains('hiddenSkill')) return false;
+                                    if (lib.character[button.link][4].includes('hiddenSkill')) return false;
                                     if (ui.selected.buttons.length == 0) {
                                         if (get.is.double(button.link)) return false;
                                         if (lib.character[button.link][1] == 'ye') return true;
                                         for (var i = 0; i < ui.dialog.buttons.length; i++) {
                                             var double = get.is.double(ui.dialog.buttons[i].link, true);
-                                            if (ui.dialog.buttons[i] != button && (lib.character[button.link][1] == lib.character[ui.dialog.buttons[i].link][1] || double && double.contains(lib.character[button.link][1]))) {
+                                            if (ui.dialog.buttons[i] != button && (lib.character[button.link][1] == lib.character[ui.dialog.buttons[i].link][1] || double && double.includes(lib.character[button.link][1]))) {
                                                 return true;
                                             }
                                         }
@@ -947,7 +928,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                                     if (!lib.character[button.link] || lib.character[button.link][1] == 'ye') return false;
                                     if (get.is.double(ui.selected.buttons[0].link)) return false;
                                     if (lib.character[ui.selected.buttons[0].link][1] == 'ye') return true;
-                                    if (get.is.double(button.link)) return get.is.double(button.link, true).contains(lib.character[ui.selected.buttons[0].link][1]);
+                                    if (get.is.double(button.link)) return get.is.double(button.link, true).includes(lib.character[ui.selected.buttons[0].link][1]);
                                     return (lib.character[button.link][1] == lib.character[ui.selected.buttons[0].link][1]);
                                 };
                                 next.switchToAuto = function () {
@@ -1159,7 +1140,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //---------------------------------------自动开启武将------------------------------------------//
             if (!lib.config.extension_福瑞拓展_autoOpenPack) {
                 var Packs = ['furryPack', 'furryBoss', 'furryGZPack']
-                var unloadPacks = Packs.filter(i => !lib.config.characters.contains(i))
+                var unloadPacks = Packs.filter(i => !lib.config.characters.includes(i))
                 for (var i = 0; i < unloadPacks.length; i++) {
                     lib.config.characters.push(unloadPacks[i])
                 }
@@ -1838,7 +1819,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + '<div id="active" style="text-align: center;width: 100%;border: double;border-radius: 3px;padding-bottom: 5px;"><div>使用福利码</div><br><input type="text" name="activeKey" placeholder="请输入福利码"/>&nbsp&nbsp<button id="activeKey">激活</button></div>',
             diskURL: "",
             forumURL: "",
-            version: "3.0.5",
+            version: "3.0.6",
         },
         files: {
             "character": [],

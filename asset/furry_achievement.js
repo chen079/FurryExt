@@ -594,7 +594,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 					let level = 3;
 					let ranks = Object.keys(lib.rank.rarity).reverse();
 					for (let i = 0; i < ranks.length; i++) {
-						if (lib.characterPack.furryPack[name][4].contains(ranks[i])) {
+						if (lib.characterPack.furryPack[name][4].includes(ranks[i])) {
 							level = i + 1;
 							break;
 						}
@@ -619,7 +619,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 						case 'fr_qima': reward = function () { game.frAchi.unlockCard(['spade', '4', 'fr_equip2_yyxl']) }; rewardInfo = '奖励：解锁新卡牌——影夜项链'; break;
 						case 'fr_liya': reward = function () { game.frAchi.unlockCard(['heart', "7", 'fr_equip5_wxpp']) }; rewardInfo = '奖励：解锁新卡牌——忘弦琵琶'; break;
 					}
-					if (!lib.characterPack.furryPack[name][4].contains('unseen')) {
+					if (!lib.characterPack.furryPack[name][4].includes('unseen')) {
 						lib.fr_achievement['character'][lib.characterTitle[name]] = {
 							name: lib.characterTitle[name],
 							info: "使用" + lib.translate[name] + "获得一场胜利。",
@@ -720,10 +720,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		},
 		unlockCharacter: function () {
 			var characters = Array.prototype.slice.call(arguments);
-			if (characters.filter(i => !lib.config.achiReward.character.contains(i)).length) {
+			if (characters.filter(i => !lib.config.achiReward.character.includes(i)).length) {
 				var str = '已解锁新角色：'
 				for (var i = 0; i < characters.length; i++) {
-					if (!lib.config.achiReward.character.contains(characters[i])) {
+					if (!lib.config.achiReward.character.includes(characters[i])) {
 						lib.config.achiReward.character.push(characters[i]);
 						str += ' ' + get.translation(characters[i])
 					}
@@ -734,9 +734,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		},
 		unlockCard: function () {
 			var cards = Array.prototype.slice.call(arguments);
-			if (cards.filter(i => !lib.config.achiReward.card.contains(i)).length) {
+			if (cards.filter(i => !lib.config.achiReward.card.includes(i)).length) {
 				for (var i = 0; i < cards.length; i++) {
-					if (!lib.config.achiReward.card.contains(cards[i])) {
+					if (!lib.config.achiReward.card.includes(cards[i])) {
 						lib.config.achiReward.card.push(cards[i]);
 					}
 				}
@@ -754,7 +754,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		amount: function (type) {
 			var types = ['character', 'game', 'special'];
 			if (type) {
-				if (!types.contains(type)) return -1;
+				if (!types.includes(type)) return -1;
 				return Object.keys(lib.fr_achievement[type]).length;
 			}
 			var sum = 0;
@@ -838,7 +838,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		},
 		//达成新成就
 		got: function (name) {
-			if (lib.config.frAchiStorage.got.contains(name)) return;
+			if (lib.config.frAchiStorage.got.includes(name)) return;
 			lib.config.frAchiStorage.got.push(name);
 			var date = new Date();
 			lib.config.frAchiStorage.date[name] = (new Date()).getTime();
@@ -883,9 +883,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		hasAchi: function (name, type) {
 			if (typeof type == 'string') {
 				let name2 = this.nameOf(name, type);
-				return lib.config.frAchiStorage.got.contains(name2);
+				return lib.config.frAchiStorage.got.includes(name2);
 			}
-			return lib.config.frAchiStorage.got.contains(name);
+			return lib.config.frAchiStorage.got.includes(name);
 		},
 		//获取成就信息
 		info: function (name, type) {
@@ -1121,7 +1121,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 					rwd_info.hide();
 				};
 				if (i <= score) {
-					if ((item.type == 'character' && lib.config.achiReward.character.contains(item.id)) || (item.type == 'skin' && (lib.config[item.id + '_unlock'] == true))) button.style.backgroundImage = "url('" + lib.assetURL + "extension/福瑞拓展/image/achievement/received.png')";
+					if ((item.type == 'character' && lib.config.achiReward.character.includes(item.id)) || (item.type == 'skin' && (lib.config[item.id + '_unlock'] == true))) button.style.backgroundImage = "url('" + lib.assetURL + "extension/福瑞拓展/image/achievement/received.png')";
 					else {
 						button.onclick = function () {
 							if (this._item) {
@@ -1198,11 +1198,11 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				hideGained: false,
 				checkFilter: function (name) {
 					var info = game.frAchi.info(name, game.frAchi.thisType);
-					return !game.frAchi.hideLevel.contains(info.level);
+					return !game.frAchi.hideLevel.includes(info.level);
 				},
 				changeFilter: function (num) {
-					if ([1, 2, 3, 4, 5, 6, 7].contains(num)) {
-						if (game.frAchi.hideLevel.contains(num)) {
+					if ([1, 2, 3, 4, 5, 6, 7].includes(num)) {
+						if (game.frAchi.hideLevel.includes(num)) {
 							game.frAchi.hideLevel.remove(num);
 							return false;
 						} else if (game.frAchi.hideLevel.length < 7) {
@@ -1232,7 +1232,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 						let name2 = game.frAchi.nameOf(name, game.frAchi.thisType);
 						text += "<p style=\"min-height:100px;\">";
 						//显示已完成
-						if (lib.config.frAchiStorage.got.contains(name2)) {
+						if (lib.config.frAchiStorage.got.includes(name2)) {
 							text += "<img src='" + lib.assetURL + "extension/福瑞拓展/image/achievement/isGained.png' style='height:60px;'/>";
 						}
 						//<--
@@ -1267,7 +1267,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 						}
 						//<--
 						//显示进度（如果未达成的话）
-						if (!lib.config.frAchiStorage.got.contains(name2)) {
+						if (!lib.config.frAchiStorage.got.includes(name2)) {
 							if (!info.progress) {
 								text += "（0/1）";
 							} else {
@@ -1315,12 +1315,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				//七星
 				var hiden_lv7 = ui.create.div('.fr-achiWindow-filter-lv', filterIn);
 				hiden_lv7.style.top = '150%'
-				if (game.frAchi.hideLevel.contains(7)) {
+				if (game.frAchi.hideLevel.includes(7)) {
 					hiden_lv7.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional_on.png');
 				}
 				hiden_lv7.innerHTML = '<br><img src="' + lib.assetURL + 'extension/福瑞拓展/image/achievement/star7.png" style="height:50%;"/>&thinsp;显示七级成就&emsp;&thinsp;';
 				hiden_lv7.listen(function () {
-					if (game.frAchi.hideLevel.contains(7)) {
+					if (game.frAchi.hideLevel.includes(7)) {
 						game.frAchi.hideLevel.remove(7);
 						hiden_lv7.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional.png');
 					} else if (game.frAchi.hideLevel.length < 6) {
@@ -1332,12 +1332,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				//六星
 				var hiden_lv6 = ui.create.div('.fr-achiWindow-filter-lv', filterIn);
 				hiden_lv6.style.top = '125%'
-				if (game.frAchi.hideLevel.contains(6)) {
+				if (game.frAchi.hideLevel.includes(6)) {
 					hiden_lv6.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional_on.png');
 				}
 				hiden_lv6.innerHTML = '<br><img src="' + lib.assetURL + 'extension/福瑞拓展/image/achievement/star6.png" style="height:50%;"/>&thinsp;显示六级成就&emsp;&thinsp;';
 				hiden_lv6.listen(function () {
-					if (game.frAchi.hideLevel.contains(6)) {
+					if (game.frAchi.hideLevel.includes(6)) {
 						game.frAchi.hideLevel.remove(6);
 						hiden_lv6.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional.png');
 					} else if (game.frAchi.hideLevel.length < 6) {
@@ -1349,12 +1349,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				//五星
 				var hiden_lv5 = ui.create.div('.fr-achiWindow-filter-lv', filterIn);
 				hiden_lv5.style.top = '100%'
-				if (game.frAchi.hideLevel.contains(5)) {
+				if (game.frAchi.hideLevel.includes(5)) {
 					hiden_lv5.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional_on.png');
 				}
 				hiden_lv5.innerHTML = '<br><img src="' + lib.assetURL + 'extension/福瑞拓展/image/achievement/star5.png" style="height:50%;"/>&thinsp;显示五级成就&emsp;&thinsp;';
 				hiden_lv5.listen(function () {
-					if (game.frAchi.hideLevel.contains(5)) {
+					if (game.frAchi.hideLevel.includes(5)) {
 						game.frAchi.hideLevel.remove(5);
 						hiden_lv5.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional.png');
 					} else if (game.frAchi.hideLevel.length < 6) {
@@ -1366,12 +1366,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				//四星
 				var hiden_lv4 = ui.create.div('.fr-achiWindow-filter-lv', filterIn);
 				hiden_lv4.style.top = '75%'
-				if (game.frAchi.hideLevel.contains(4)) {
+				if (game.frAchi.hideLevel.includes(4)) {
 					hiden_lv4.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional_on.png');
 				}
 				hiden_lv4.innerHTML = '<br><img src="' + lib.assetURL + 'extension/福瑞拓展/image/achievement/star4.png" style="height:50%;"/>&thinsp;显示四级成就&emsp;&thinsp;';
 				hiden_lv4.listen(function () {
-					if (game.frAchi.hideLevel.contains(4)) {
+					if (game.frAchi.hideLevel.includes(4)) {
 						game.frAchi.hideLevel.remove(4);
 						hiden_lv4.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional.png');
 					} else if (game.frAchi.hideLevel.length < 6) {
@@ -1383,12 +1383,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				//三星
 				var hiden_lv3 = ui.create.div('.fr-achiWindow-filter-lv', filterIn);
 				hiden_lv3.style.top = '50%'
-				if (game.frAchi.hideLevel.contains(3)) {
+				if (game.frAchi.hideLevel.includes(3)) {
 					hiden_lv3.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional_on.png');
 				}
 				hiden_lv3.innerHTML = '<br><img src="' + lib.assetURL + 'extension/福瑞拓展/image/achievement/star3.png" style="height:50%;"/>&thinsp;显示三级成就&emsp;&thinsp;';
 				hiden_lv3.listen(function () {
-					if (game.frAchi.hideLevel.contains(3)) {
+					if (game.frAchi.hideLevel.includes(3)) {
 						game.frAchi.hideLevel.remove(3);
 						hiden_lv3.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional.png');
 					} else if (game.frAchi.hideLevel.length < 6) {
@@ -1400,12 +1400,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				//两星
 				var hiden_lv2 = ui.create.div('.fr-achiWindow-filter-lv', filterIn);
 				hiden_lv2.style.top = '25%'
-				if (game.frAchi.hideLevel.contains(2)) {
+				if (game.frAchi.hideLevel.includes(2)) {
 					hiden_lv2.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional_on.png');
 				}
 				hiden_lv2.innerHTML = '<img src="' + lib.assetURL + 'extension/福瑞拓展/image/achievement/star2.png" style="height:50%;"/>&thinsp;显示二级成就&emsp;&thinsp;';
 				hiden_lv2.listen(function () {
-					if (game.frAchi.hideLevel.contains(2)) {
+					if (game.frAchi.hideLevel.includes(2)) {
 						game.frAchi.hideLevel.remove(2);
 						hiden_lv2.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional.png');
 					} else if (game.frAchi.hideLevel.length < 6) {
@@ -1416,12 +1416,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				});
 				//一星
 				var hiden_lv1 = ui.create.div('.fr-achiWindow-filter-lv', filterIn);
-				if (game.frAchi.hideLevel.contains(1)) {
+				if (game.frAchi.hideLevel.includes(1)) {
 					hiden_lv1.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional_on.png');
 				}
 				hiden_lv1.innerHTML = '<br><img src="' + lib.assetURL + 'extension/福瑞拓展/image/achievement/star1.png" style="height:50%;"/>&thinsp;显示一级成就&emsp;&thinsp;';
 				hiden_lv1.listen(function () {
-					if (game.frAchi.hideLevel.contains(1)) {
+					if (game.frAchi.hideLevel.includes(1)) {
 						game.frAchi.hideLevel.remove(1);
 						hiden_lv1.setBackgroundImage('extension/福瑞拓展/image/achievement/filter_optional.png');
 					} else if (game.frAchi.hideLevel.length < 6) {

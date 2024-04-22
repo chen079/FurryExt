@@ -16,7 +16,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     name = name.slice(3, 11);
                 }
                 else {
-                    if (lib.config.mode_config.guozhan.guozhanSkin && lib.character[name] && lib.character[name][4].contains('gzskin')) gzbool = true;
+                    if (lib.config.mode_config.guozhan.guozhanSkin && lib.character[name] && lib.character[name][4].includes('gzskin')) gzbool = true;
                     name = name.slice(3);
                 }
             }
@@ -199,7 +199,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             return this.sex;
         }
         var info = get.character(this.name == 'unknown' ? this.name1 : this.name, 4);
-        if (info && info.contains('frPrimarySexFemale')) {
+        if (info && info.includes('frPrimarySexFemale')) {
             return 'female';
         }
         return 'male';
@@ -265,7 +265,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     if (event.filterText) {
                         var ok
                         if (typeof event.filterText == 'function') ok = event.filterText(input.value)
-                        else if (Array.isArray(event.filterText)) ok = event.filterText.contains(input.value)
+                        else if (Array.isArray(event.filterText)) ok = event.filterText.includes(input.value)
                         if (!ok) return alert('您输入的内容不符合要求')
                     }
                     event.result.bool = true
@@ -409,9 +409,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     for (const [div, [sym2, num]] of divsConfig) {
                         switch (sym2) {
                             case symbol.l:
-                                if (event.num === num && !div.classList.contains("disabled"))
+                                if (event.num === num && !div.classList.includes("disabled"))
                                     div.classList.add("disabled");
-                                else if (div.classList.contains("disabled"))
+                                else if (div.classList.includes("disabled"))
                                     div.classList.remove("disabled");
 
                                 break;
@@ -420,11 +420,11 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                                     case symbol.i:
                                         switch (sym2) {
                                             case symbol.p:
-                                                if (event.num + num <= event.max && div.classList.contains("disabled"))
+                                                if (event.num + num <= event.max && div.classList.includes("disabled"))
                                                     div.classList.remove("disabled");
                                                 break;
                                             case symbol.m:
-                                                if (event.num + num >= event.min && div.classList.contains("disabled"))
+                                                if (event.num + num >= event.min && div.classList.includes("disabled"))
                                                     div.classList.remove("disabled");
                                                 break;
                                         }
@@ -432,35 +432,35 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                                     case symbol.l:
                                         switch (event.num) {
                                             case event.min:
-                                                if (sym2 === symbol.p && div.classList.contains("disabled"))
+                                                if (sym2 === symbol.p && div.classList.includes("disabled"))
                                                     div.classList.remove("disabled");
-                                                if (sym2 === symbol.m && !div.classList.contains("disabled"))
+                                                if (sym2 === symbol.m && !div.classList.includes("disabled"))
                                                     div.classList.add("disabled");
                                                 break;
                                             case event.max:
-                                                if (sym2 === symbol.m && div.classList.contains("disabled"))
+                                                if (sym2 === symbol.m && div.classList.includes("disabled"))
                                                     div.classList.remove("disabled");
-                                                if (sym2 === symbol.p && !div.classList.contains("disabled"))
+                                                if (sym2 === symbol.p && !div.classList.includes("disabled"))
                                                     div.classList.add("disabled");
                                                 break;
                                         }
                                         break;
                                     case symbol.m:
-                                        if (event.num + num <= event.max && div.classList.contains("disabled"))
+                                        if (event.num + num <= event.max && div.classList.includes("disabled"))
                                             div.classList.remove("disabled");
-                                        if (event.num + num < event.min && !div.classList.contains("disabled"))
+                                        if (event.num + num < event.min && !div.classList.includes("disabled"))
                                             div.classList.add("disabled");
                                         break;
                                     case symbol.p:
-                                        if (event.num + num >= event.min && div.classList.contains("disabled"))
+                                        if (event.num + num >= event.min && div.classList.includes("disabled"))
                                             div.classList.remove("disabled");
-                                        if (event.num + num > event.max && !div.classList.contains("disabled"))
+                                        if (event.num + num > event.max && !div.classList.includes("disabled"))
                                             div.classList.add("disabled");
                                         break;
                                     default:
-                                        if (event.num + num < event.min && !div.classList.contains("disabled"))
+                                        if (event.num + num < event.min && !div.classList.includes("disabled"))
                                             div.classList.add("disabled");
-                                        if (event.num + num > event.max && !div.classList.contains("disabled"))
+                                        if (event.num + num > event.max && !div.classList.includes("disabled"))
                                             div.classList.add("disabled");
                                         break;
                                 }
@@ -472,18 +472,18 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 const doFilter = () => {
                     if (event.filter) {
                         const result = event.filter(event.num);
-                        if (result && event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.remove("disabled");
-                        else if (!result && !event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.add("disabled");
+                        if (result && event.controls.clear.classList.includes("disabled")) event.controls.clear.classList.remove("disabled");
+                        else if (!result && !event.controls.clear.classList.includes("disabled")) event.controls.clear.classList.add("disabled");
                     }
                 };
 
                 const doShow = () => {
                     event.controls.num.textContent = (Reflect.get(event.show, event.num) !== undefined ? Reflect.get(event.show, event.num) : event.num).toString();
-                    if (event.controls.num.classList.contains("disabled")) event.controls.num.classList.remove("disabled");
+                    if (event.controls.num.classList.includes("disabled")) event.controls.num.classList.remove("disabled");
                 };
 
                 const pressTemplate = (self, sym, num) => () => {
-                    if (!self.classList.contains("disabled")) {
+                    if (!self.classList.includes("disabled")) {
                         event.num = num + event.num * Number(sym !== symbol.l);
 
                         doUpdate(sym);
@@ -498,7 +498,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                         delete self._setTimeout;
                         self._setInterval = setInterval(() => {
                             doMethod();
-                            if (self.classList.contains("disabled")) {
+                            if (self.classList.includes("disabled")) {
                                 clearInterval(self._setInterval);
                                 delete self._setInterval;
                             }
@@ -550,12 +550,12 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 
                 let numdiv = event.controls.num;
                 numdiv.addEventListener(lib.config.touchscreen ? "touchend" : "click", _click => {
-                    if (!numdiv.classList.contains("disabled")) {
+                    if (!numdiv.classList.includes("disabled")) {
                         isInput = true;
 
                         numdiv.classList.add("disabled");
                         for (const [div, _item] of divsConfig)
-                            if (!div.classList.contains("disabled"))
+                            if (!div.classList.includes("disabled"))
                                 div.classList.add("disabled");
 
                         if (!event.prompt) event.controls.dialog.show();
@@ -575,7 +575,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 
                         event._div = div;
                         event._input = input;
-                        if (event.controls.clear.classList.contains("disabled")) event.controls.clear.classList.remove("disabled");
+                        if (event.controls.clear.classList.includes("disabled")) event.controls.clear.classList.remove("disabled");
                     }
                 })
 
@@ -726,23 +726,23 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 event.dialog.open();
 
                 event.custom.replace.button = function (button) {
-                    if (!event.dialog.contains(button.parentNode)) return;
-                    if (button.classList.contains('unselectable')) return;
+                    if (!event.dialog.includes(button.parentNode)) return;
+                    if (button.classList.includes('unselectable')) return;
 
                     for (let i of event.dialog.buttons) i.classList.remove('unselectable');
 
-                    if (button.classList.contains('selected')) {
+                    if (button.classList.includes('selected')) {
                         event.buttons.remove(button);
                         button.classList.remove('selected');
                         for (let i of event.dialog.buttons) {
-                            if (event.buttons.contains(i)) continue;
+                            if (event.buttons.includes(i)) continue;
                             if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
                         }
                     } else {
                         event.buttons.add(button);
                         button.classList.add('selected');
                         for (let i of event.dialog.buttons) {
-                            if (event.buttons.contains(i)) continue;
+                            if (event.buttons.includes(i)) continue;
                             if (!event.multibutton) i.classList.add('unselectable');
                             else if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
                         }
@@ -768,10 +768,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     else newControls = [];
 
                     if (event.multibutton) {
-                        if (newControls.contains('cancel2')) newControls.remove('cancel2');
+                        if (newControls.includes('cancel2')) newControls.remove('cancel2');
                         if (!event.forced) newControls.add('cancel2');
                     }
-                    else if (!event.forced && !newControls.contains('cancel2')) {
+                    else if (!event.forced && !newControls.includes('cancel2')) {
                         if (newControls.length == 0 || event.buttons.length == 0) newControls.add('cancel2');
                     }
 
@@ -1141,7 +1141,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             if (player.name1 != name && player.name2 != name) return;
             var skills = info[3].slice(0);
             if (name == player.name1) {
-                if (player.classList.contains(_status.video ? 'unseen_v' : 'unseen')) return;
+                if (player.classList.includes(_status.video ? 'unseen_v' : 'unseen')) return;
                 game.log('#g' + player.name1, '进入了隐匿状态')
                 player.classList.add(_status.video ? 'unseen_v' : 'unseen');
                 player.name = 'unknown';
@@ -1151,7 +1151,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 };
                 player.sex = 'male';
             } else {
-                if (player.classList.contains(_status.video ? 'unseen2_v' : 'unseen2')) return;
+                if (player.classList.includes(_status.video ? 'unseen2_v' : 'unseen2')) return;
                 game.log('#g' + player.name2, '进入了隐匿状态')
                 player.classList.add(_status.video ? 'unseen2_v' : 'unseen2');
             };
