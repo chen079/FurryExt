@@ -635,7 +635,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                             spanElement.innerHTML = '每日一言：<br><div style="background: none;">&nbsp&nbsp&nbsp&nbsp' + hitokoto.hitokoto + '</div><br><div style="display: flex; justify-content: flex-end; background: none;">———' + hitokoto.from + "&nbsp&nbsp</div>"
                         })
                         .catch((error) => {
-                            hitokoto = {
+                            const hitokoto = {
                                 hitokoto: "您的网络或配置错误，无法获取一言内容。",
                                 from: '钫酸酱',
                             }

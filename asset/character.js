@@ -87,7 +87,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'fr_mouse': ['female', 'qun', 4, ['mouse_bm'], ['epic', 'unseen']],
 			'fr_lamas': ['male', 'wei', 4, ['lamas_zj'], ['rare']],
 			'fr_blam': ['male', 'qun', 4, ['blame_jj'], ['legend', 'unseen']],
-			'fr_gairtelu': ['male', 'wei', 4, ['gairtelu_aq', 'gairtelu_cf', 'gairtelu_yj'], ['epic', 'unseen']],
+			'fr_gairtelu': ['male', 'wei', 4, ['gairtelu_sf', 'gairtelu_zs', 'gairtelu_aq'], ['epic', 'zhu', 'unseen']],
 			'fr_tails': ['male', 'qun', 3, ['tails_jd', 'tails_qx'], ['legend']],
 			'fr_zhan': ['male', 'qun', 3, ['zhan_sf', 'zhan_jf'], ['legend', 'unseen']],
 			'fr_sheep': ['female', 'fr_g_ji', 3, ['sheep_jf', 'sheep_rh'], ['legend']],
@@ -198,6 +198,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"fr_fox": ["male", "shu", 4, ["fox_hm"], ['epic']],
 			"fr_molis": ["female", "wei", 3, ["molis_hs", "molis_sy"], ['legend']],
 			"fr_shisan": ["male", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], ['legend']],
+			"fr_yizhiqiu": ["male", "shu", 3, ["yizhiqiu_yl", "yizhiqiu_qp"], ['legend']],
+			"fr_liuyin": ["male", "qun", 3, ["liuyin_yf", "liuyin_lz"], ['legend']],
+
 		},
 		skill: {
 			'baliqiao_bl': {
@@ -462,13 +465,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				},
 				content: function () {
 					'step 0'
-					trigger.source.choosePlayerCard('h', trigger.player, true)
+					trigger.source.choosePlayerCard('h', trigger.player, true);
 					'step 1'
-					var card = result.cards[0]
-					trigger.source.showCards(card);
+					var card = result.cards[0];
+					trigger.player.showCards(card);
 					if (get.color(card) == 'black') {
-						trigger.cancel()
-						trigger.source.discard(card)
+						trigger.player.discard(card);
+						trigger.cancel();
 					}
 				}
 			},
@@ -476,7 +479,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				trigger: {
 					global: ["loseAfter", "loseAsyncAfter"],
 				},
-				direct:true,
+				direct: true,
 				filter: function (event, player) {
 					if (event.type != 'discard' || event.getlx === false) return false;
 					var evt = event.getl(event.player);
@@ -6680,6 +6683,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					order: 4,
 				}
 			},
+			/* 
 			'gairtelu_aq': {
 				trigger: {
 					player: "useCard2",
@@ -6718,7 +6722,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					}
 				},
 			},
-			"gairtelu_cf": {
+			"gairtelu_sf": {
 				trigger: {
 					player: "phaseDrawBegin2",
 				},
@@ -6731,9 +6735,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				content: function () {
 					var num = Math.ceil(game.players.length / 2) + 1
 					trigger.num += num;
-					player.addTempSkill('gairtelu_cf_1');
+					player.addTempSkill('gairtelu_sf_1');
 				},
-				group: "gairtelu_cf_2",
+				group: "gairtelu_sf_2",
 				subSkill: {
 					1: {
 						trigger: {
@@ -6776,6 +6780,154 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					effect: {
 						target: function (card, player, target, current) {
 							if (card.name == 'sha' && !target.countCards('he')) return [1, -2];
+						},
+					},
+				},
+			},
+			 */
+			'gairtelu_sf': {
+				trigger: {
+					player: "useCardAfter",
+				},
+				filter(event, player) {
+					const suit = get.suit(event.card);
+					return !player.hasHistory("useCard", evt => evt !== event && get.suit(evt.card) === suit, event);
+				},
+				forced: true,
+				direct: true,
+				async content(event, trigger, player) {
+					if (!player.storage.gairtelu_sf) {
+						player.when({ global: "phaseUseAfter" }).then(() => {
+							player.unmarkSkill("gairtelu_sf");
+						});
+					}
+					player.markAuto("gairtelu_sf", get.suit(trigger.card));
+
+					const targets = [];
+					game.getGlobalHistory("useCard", evt => {
+						if (evt.player !== player) return;
+						if (!evt.targets || !evt.targets.length) return;
+						targets.addArray(evt.targets);
+					});
+					targets.add(player);
+
+					player.logSkill(event.name, targets);
+					const result = await player.chooseToDebate(targets).forResult();
+					const map = {
+						gain: [],
+						use: [],
+					};
+					["red", "black"].forEach(opinion => {
+						if (opinion === result.opinion) map.gain.addArray(result[opinion].map(i => i[1]));
+						else map.use.addArray(result[opinion]);
+					});
+					map.use.sort((a, b) => lib.sort.seat(a[0], b[0]));
+					if (map.gain.length) await player.gain(map.gain);
+					for (const [target, card] of map.use) {
+						if (lib.filter.targetEnabled2(card, target, player)) await target.useCard(card, player);
+						else await target.discard(card);
+					}
+				},
+				intro: {
+					content: "本阶段已使用过$",
+					onunmark: true,
+				},
+			},
+			'gairtelu_zs': {
+				trigger: {
+					player: "useCardBegin",
+				},
+				filter(event, player) {
+					if (!event.targets) return false;
+					if (!["basic", "trick"].includes(get.type(event.card))) return false;
+					const info = get.info(event.card);
+					if (info.multitarget) return false;
+					return game.hasPlayer(current => lib.filter.targetEnabled2(event.card, event.player, current));
+				},
+				forced: true,
+				direct: true,
+				async content(event, trigger, player) {
+					const card = trigger.card;
+					const { targets } = await player.chooseTarget([1, Infinity], true, (_, player, target) => lib.filter.targetEnabled2(card, player, target))
+						.set("prompt", get.translation("gairtelu_zs") + "：为" + get.translation(trigger.card) + "重新分配目标")
+						.set("ai", function (target) {
+							var trigger = _status.event.getTrigger();
+							var player = _status.event.player;
+							return get.effect(target, trigger.card, player, player);
+						}).forResult();
+					trigger.targets = targets;
+					targets.forEach(i => i.addTempSkill("gairtelu_zs_banned", { global: "phaseUseEnd" }));
+				},
+				mod: {
+					targetInRange: function (card, player, target, now) {
+						return true;
+					},
+				},
+				subSkill: {
+					banned: {
+						mark: true,
+						intro: {
+							content: "本阶段不能成为盖尔德鲁使用牌的目标",
+						},
+						mod: {
+							targetEnabled: function (card, player, target, now) {
+								if (player.hasSkill("gairtelu_zs")) return false;
+							},
+						},
+					}
+				}
+			},
+			'gairtelu_aq': {
+				zhuSkill: true,
+				trigger: {
+					player: "chooseCardBegin",
+				},
+				forced: true,
+				filter(event, player) {
+					return event.getParent(2).name === "chooseToDebate";
+				},
+				async content(event, trigger, player) {
+					const red = game.createCard("ying", "heart", 1);
+					const black = game.createCard("ying", "spade", 1);
+					const { links } = await player.chooseButton([trigger.prompt, [[red, black], 'card']], true).forResult();
+					[red, black].forEach(i => {
+						if (i !== links[0]) {
+							i.fix();
+							i.delete();
+						}
+					});
+					trigger.directresult = links;
+					const cardToDestroy = links[0];
+					player.when({ global: "gainBegin" })
+						.filter(event => event.cards.includes(cardToDestroy))
+						.then(() => {
+							trigger.cards.remove(cardToDestroy);
+							game.cardsDiscard(cardToDestroy)
+						})
+						.vars({ cardToDestroy });
+				},
+				group: "gairtelu_aq_change",
+				subSkill: {
+					change: {
+						trigger: {
+							global: "debateShowOpinion",
+						},
+						filter(event, player) {
+							return event.targets.includes(player);
+						},
+						forced: true,
+						direct: true,
+						async content(event, trigger, player) {
+							const opinion = ["red", "black"].find(o => trigger[o].some(i => i[0] === player));
+							if (!opinion) return;
+							const differentOpinion = opinion === "red" ? "black" : "red";
+							for (let i = 0; i < trigger[differentOpinion].length; i++) {
+								const [target, card] = trigger[differentOpinion][i];
+								if (target.group === "wei") {
+									trigger[differentOpinion].splice(i--, 1);
+									trigger[opinion].add([target, card]);
+								}
+							}
 						},
 					},
 				},
@@ -22704,6 +22856,131 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					event.target.useCard(event.target1, result.cards, false)
 				},
 			},
+			"yizhiqiu_yl": {
+				enable: "chooseToUse",
+				filter: function (event, player) {
+					if (player.countCards("h") === 0 || player.countCards("he") <= 1) return false;
+					const list = player.getStorage("yizhiqiu_yl");
+					for (const card of player.getCards("h")) {
+						if (get.type(card) === "equip" || get.type(card) === "delay" || list.includes(get.name(card))) continue;
+						if (event.filterCard(get.autoViewAs({ name: get.name(card), nature: get.nature(card) }, "unsure"), player, event)) return true;
+					}
+					return false;
+				},
+				chooseButton: {
+					dialog: function (event, player) {
+						const cards = [];
+						const list = player.getStorage("yizhiqiu_yl");
+						for (const card of player.getCards("h")) {
+							if (get.type(card) === "equip" || get.type(card) === "delay" || list.includes(get.name(card))) continue;
+							if (event.filterCard(get.autoViewAs({ name: get.name(card), nature: get.nature(card) }, "unsure"), player, event)) cards.push(card);
+						}
+						return ui.create.dialog("刈论", [cards, "card"], "hidden");
+					},
+					backup: function (links, player) {
+						return {
+							audio: "yizhiqiu_yl",
+							check: function (card) {
+								return 1 / Math.max(0.1, get.value(card));
+							},
+							filterCard: function (card) {
+								return card !== links[0];
+							},
+							viewAs: {
+								name: get.name(links[0]),
+								nature: get.nature(links[0]),
+							},
+							position: "he",
+							popname: true,
+							ignoreMod: true,
+							onuse(result, player) {
+								if (!player.storage.liuyin_yf) {
+									player.when({ global: "phaseAfter" }).then(() => {
+										player.unmarkSkill("yizhiqiu_yl");
+									});
+								}
+								player.markAuto("yizhiqiu_yl", get.name(links[0]));
+							},
+						};
+					},
+					prompt: function (links, player) {
+						return "将一张牌当作" + get.translation(links[0]) + "使用";
+					},
+				},
+				marktext: "论",
+				intro: {
+					content: "本回合已因〖刈论〗使用过$",
+					onunmark: true,
+				},
+			},
+			"yizhiqiu_qp": {
+				trigger: { global: "useCard" },
+				filter(event, player) {
+					return !player.hasHistory("useCard", evtx => evtx !== event);
+				},
+				async content(event, trigger, player) {
+					await player.showHandcards();
+					const cards = player.getCards("h");
+					if (cards.some(card => get.name(card) === get.name(event.card))) await player.draw();
+					else {
+						trigger.targets.length = 0;
+						trigger.all_excluded = true;
+					}
+				},
+			},
+			"liuyin_yf": {
+				enable: "phaseUse",
+				usable: 1,
+				filterTarget: lib.filter.notMe,
+				selectTarget() {
+					return [1, _status.event.player.countCards("he")];
+				},
+				multitarget: true,
+				async content(event, trigger, player) {
+					const gainCards = [];
+					for (const target of event.targets) {
+						await player.chooseToGive(target, "he", true);
+						if (!target.countCards("he", { type: "equip" })) await target.showHandcards();
+						else {
+							const { cards } = await target.chooseCard("he", (card, player, target) => get.type(card, player) === "equip", true).forResult();
+							await target.$throw(cards.length);
+							gainCards.addArray(cards);
+						}
+					}
+					if (gainCards.length) await player.gain(gainCards);
+				}
+			},
+			"liuyin_lz": {
+				trigger: { player: "useCardToPlayered" },
+				filter(event, player) {
+					return event.card && event.card.name === "sha" && player.countCards("e") > 0;
+				},
+				async cost(event, trigger, player) {
+					const suits = [];
+					player.getCards("e").forEach(i => suits.add(get.suit(i)));
+					event.result = await player.chooseCard(suits.length, "he", (card, player) => {
+						if (!lib.filter.cardRecastable(card, player)) return false;
+						return !ui.selected.cards.some(cardx => get.suit(cardx, player) == get.suit(card, player));
+					}).set("prompt", "列装：重铸" + get.cnNumber(suits.length) + "张花色不同的牌").set("complexCard", true).forResult();
+				},
+				async content(event, trigger, player) {
+					const cards = event.cards;
+					await player.recast(event.cards);
+					await trigger.target.chooseToDiscard("h", event.cards.length, true);
+					player.when({ global: "damageBegin" })
+						.filter(evt => evt.getParent("useCard") === event.getParent("useCard") && evt.player === event.target)
+						.then(() => {
+							trigger.num += num;
+						})
+						.vars({ num: event.cards.filter(card => get.type(card) === "equip").length });
+				},
+				mod: {
+					cardUsable(card, player, num) {
+						if (card.name === "sha") return num + 1;
+					},
+				},
+			},
+
 		},
 		dynamicTranslate: {
 			francium_sx: function (player) {
@@ -22980,12 +23257,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'dolina_sl_info': '游戏开始时，你记录牌堆中带有伤害标签的牌名；出牌阶段，你可以删除一个记录牌将一张手牌当成此牌使用。',
 			'dolina_wy': "威仪",
 			'dolina_wy_info': "锁定技，当你受到一名角色造成的伤害时，你亮出牌堆顶的一张牌，然后其须弃置与此牌类型相同的一张牌，否则其取消此次伤害。",
-			'gairtelu_yj': '怨积',
-			'gairtelu_yj_info': '锁定技，当你受到牌造成的伤害时，若此伤害是【杀】造成的且你没有牌，或此伤害不是【杀】造成的且你没有手牌，则此伤害+1。',
-			'gairtelu_cf': '奢繁',
-			'gairtelu_cf_info': '摸牌阶段开始时，你可以多摸X+1张牌（X为场上的角色数的一半并向上取整），若如此做，当你于你的回合内使用基本牌或普通锦囊牌时，你弃置一张牌。出牌阶段开始时，你视为对所有角色使用一张【弹尽粮绝】。',
+			// 'gairtelu_yj': '怨积',
+			// 'gairtelu_yj_info': '锁定技，当你受到牌造成的伤害时，若此伤害是【杀】造成的且你没有牌，或此伤害不是【杀】造成的且你没有手牌，则此伤害+1。',
+			// 'gairtelu_sf': '奢繁',
+			// 'gairtelu_sf_info': '摸牌阶段开始时，你可以多摸X+1张牌（X为场上的角色数的一半并向上取整），若如此做，当你于你的回合内使用基本牌或普通锦囊牌时，你弃置一张牌。出牌阶段开始时，你视为对所有角色使用一张【弹尽粮绝】。',
+			// 'gairtelu_aq': '傲权',
+			// 'gairtelu_aq_info': "你使用有目标的基本牌或普通锦囊牌时，你可以额外指定至多两名你本回合内使用的上一张牌的目标为目标。",
+			'gairtelu_sf': '奢繁',
+			'gairtelu_sf_info': '锁定技，出牌阶段，你首次使用一种花色的牌后，你与本回合成为过你牌目标的角色议事，意见与结果不同/相同的其他角色将展示牌对你使用/交给你（若不能使用则弃置）。',
+			'gairtelu_zs': '恣睢',
+			'gairtelu_zs_info': '锁定技，当你于出牌阶段内使用基本牌或普通锦囊牌时，你重新指定任意名合法角色为目标，然后这些角色本阶段不能再成为你使用牌的目标。',
 			'gairtelu_aq': '傲权',
-			'gairtelu_aq_info': "你使用有目标的基本牌或普通锦囊牌时，你可以额外指定至多两名你本回合内使用的上一张牌的目标为目标。",
+			'gairtelu_aq_info': "主公技，锁定技，①你议事中不展示手牌，改为声明一种颜色，视为你的意见；②所有魏势力角色的意见视为和你相同。",
 			'thunder_lj': "流雷",
 			'thunder_lj_info': "出牌阶段限一次，你可以弃置一张手牌，令所有其他角色打出一张与上一名以此法打出或弃置的牌点数或花色相同的牌，否则你对其造成1点雷电伤害，此技能结算完毕后，你获得其他角色至多X张因此技能打出的牌（X为未打出牌的角色数）。每回合限两次，当你造成雷属性伤害后，你可以令目标角色回复1点体力并摸一张牌。",
 			'thunder_fz': '奋决',
@@ -23544,6 +23827,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"shisan_dg_info": "锁定技，当你使用" + get.frIntroduce('jishi') + "结算完毕后，你弃置手牌数不小于你的一名角色的一张牌。",
 			"shisan_tx": "推心",
 			"shisan_tx_info": "你未使用过牌的回合结束时，你可以视为使用一张无距离限制的【推心置腹】。然后目标需要对你指定的另一名角色选择一项：<li>1.使用一张无距离限制的【杀】；<li>2.交给其两张手牌（不足则全交）。",
+			"yizhiqiu_yl": "刈论",
+			"yizhiqiu_yl_info": "你可以展示一张基本或普通锦囊牌，然后将一张牌当做此牌的同名牌使用，每种牌名每回合限一次。",
+			"yizhiqiu_qp": "清评",
+			"yizhiqiu_qp_info": "每名角色每回合首次用牌时，你可以展示其手牌，若其中没有同名牌，此牌无效并取消所有目标，否则其摸一张牌。",
+			"liuyin_yf": "易服",
+			"liuyin_yf_info": "出牌阶段限一次，你可以交给任意名其他角色各一张牌，这些角色须交给你一张装备（若没有须展示所有手牌）。",
+			"liuyin_lz": "列装",
+			"liuyin_lz_info": "每阶段你可以多使用一张【杀】 。每回合限两次，当你使用【杀】指定目标后，你可以重铸X张不同花色的牌令目标弃X张手牌（X为你装备区的花色数），然后你每重铸一张装备牌，此【杀】伤害+1。",
 
 			//武将
 			'fr_baliqiao': '✡八狸桥',
@@ -23715,6 +24006,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"fr_rasali": "✡洛",
 			"fr_sheep": "✡西普",
 			"fr_zhan": "✡展",
+			"fr_yizhiqiu": "✡刈之秋",
+			"fr_liuyin": "✡流银",
 
 			//分类
 			'wanling': "万灵之森",
