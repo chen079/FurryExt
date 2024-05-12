@@ -4326,18 +4326,19 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				},
 				subSkill: {
 					1: {
-						init: function (player) {
-							player.markSkill('baixi_bm_1')
-						},
-						onremove: function (player) {
-							player.unmarkSkill('baixi_bm_1')
-						},
+						mark: true,
 						intro: {
 							content: '本回合不能使用或打出牌'
 						},
 						mod: {
-							"cardEnabled2": function (card, player) {
-								if (get.itemtype(card) == 'card') return false;
+							cardEnabled: function () {
+								return false;
+							},
+							cardRespondable: function () {
+								return false;
+							},
+							cardSavable: function () {
+								return false;
 							},
 						}
 					},
