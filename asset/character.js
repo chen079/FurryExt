@@ -14139,7 +14139,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					return att1 > 0 && att2 <= 0;
 				},
 				filter: function (event, player) {
-					return (event.source && event.player.classList.includes('dead') == false && player.countCards('he') && event.source != player);
+					return (event.source && !event.player.isDead() && player.countCards('he') && event.source !== player);
 				},
 				direct: true,
 				content: function () {
