@@ -4441,7 +4441,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						}
 					}, player);
 					game.addVideo('link', player, player.isLinked());
-					game.addVideo('turnOver', player, player.classList.includes('turnedover'));
+					game.addVideo('turnOver', player, player.classList.contains('turnedover'));
 					'step 1'
 					event.trigger('die');
 					'step 2'
@@ -10035,7 +10035,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 											_status.tempNoButton = false;
 										}, 500);
 										var link = this.link;
-										if (!this.classList.includes('bluebg')) {
+										if (!this.classList.contains('bluebg')) {
 											if (rSkill.length >= 3) return;
 											rSkill.add(link);
 											this.classList.add('bluebg');
