@@ -22917,12 +22917,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"yizhiqiu_qp": {
 				trigger: { global: "useCard" },
 				filter(event, player) {
-					return !player.hasHistory("useCard", evtx => evtx !== event);
+					return !event.player.hasHistory("useCard", evtx => evtx !== event);
 				},
 				async content(event, trigger, player) {
-					await player.showHandcards();
-					const cards = player.getCards("h");
-					if (cards.some(card => get.name(card) === get.name(event.card))) await player.draw();
+					await trigger.player.showHandcards();
+					const cards = trigger.player.getCards("h");
+					if (cards.some(card => get.name(card) === get.name(trigger.card))) await trigger.player.draw();
 					else {
 						trigger.targets.length = 0;
 						trigger.all_excluded = true;
