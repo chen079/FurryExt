@@ -45,6 +45,9 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 filterTarget: function (card, player, target) {
                     return target == player && target.hujia < 5;
                 },
+                modTarget: function (card, player, target) {
+                    return target.hujia < 5;
+                },
                 modTarget: true,
                 content: function () {
                     'step 0'
