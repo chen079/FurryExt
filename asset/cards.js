@@ -1691,9 +1691,12 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 direct: true,
                 content: function () {
                     "step 0"
-                    player.chooseCard('h', 2, '是否发动【霜月之弓】?'
+                    player.chooseCard('he', 2, '是否发动【霜月之弓】?'
                     ).set('filterCard', function (card, player) {
-                        return lib.filter.cardDiscardable(card, player);
+                        if (_status.event.ignoreCard) return true;
+                        var cards = player.getEquips("fr_equip1_syzg");
+                        if (!cards.includes(card)) return true;
+                        return cards.some((cardx) => cardx != card && !ui.selected.cards.includes(cardx));
                     }).set('ai', function (card) {
                         var source = _status.event.source
                         if (get.attitude(_status.event.player, source) > 0) return 0
