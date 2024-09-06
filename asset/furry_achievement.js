@@ -381,7 +381,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 	}
 	if (lib.config.extension_千幻聆音_enable) {
 		for (let name in lib.lockedSkin) {
-			if (!lib.config[lib.lockedSkin[name] + '_unlock'] && lib.config.qhly_skinset.skin[name] && lib.config.qhly_skinset.skin[name] == lib.lockedSkin[name] + '.jpg') lib.config.qhly_skinset.skin[name] = null;
+			if (lib.config.qhly_skinset&&!lib.config[lib.lockedSkin[name] + '_unlock'] && lib.config.qhly_skinset.skin[name] && lib.config.qhly_skinset.skin[name] == lib.lockedSkin[name] + '.jpg') lib.config.qhly_skinset.skin[name] = null;
 		}
 	}
 	lib.fr_achievementRewards = {
