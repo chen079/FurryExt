@@ -198,7 +198,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"fr_fox": ["male", "shu", 4, ["fox_hm"], ['epic']],
 			"fr_molis": ["female", "wei", 3, ["molis_hs", "molis_sy"], ['legend']],
 			"fr_shisan": ["male", "fr_g_dragon", 3, ["shisan_dg", "shisan_tx"], ['legend']],
-			"fr_yizhiqiu": ["male", "shu", 3, ["yizhiqiu_yl", "yizhiqiu_qp"], ['legend']],
+			"fr_qiuyi": ["male", "shu", 3, ["qiuyi_yl", "qiuyi_qp"], ['legend']],
 			"fr_liuyin": ["male", "qun", 3, ["liuyin_yf", "liuyin_lz"], ['legend']],
 
 		},
@@ -22857,11 +22857,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					event.target.useCard(event.target1, result.cards, false)
 				},
 			},
-			"yizhiqiu_yl": {
+			"qiuyi_yl": {
 				enable: "chooseToUse",
 				filter: function (event, player) {
 					if (player.countCards("h") === 0 || player.countCards("he") <= 1) return false;
-					const list = player.getStorage("yizhiqiu_yl");
+					const list = player.getStorage("qiuyi_yl");
 					for (const card of player.getCards("h")) {
 						if (get.type(card) === "equip" || get.type(card) === "delay" || list.includes(get.name(card))) continue;
 						if (event.filterCard(get.autoViewAs({ name: get.name(card), nature: get.nature(card) }, "unsure"), player, event)) return true;
@@ -22871,7 +22871,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				chooseButton: {
 					dialog: function (event, player) {
 						const cards = [];
-						const list = player.getStorage("yizhiqiu_yl");
+						const list = player.getStorage("qiuyi_yl");
 						for (const card of player.getCards("h")) {
 							if (get.type(card) === "equip" || get.type(card) === "delay" || list.includes(get.name(card))) continue;
 							if (event.filterCard(get.autoViewAs({ name: get.name(card), nature: get.nature(card) }, "unsure"), player, event)) cards.push(card);
@@ -22880,7 +22880,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					},
 					backup: function (links, player) {
 						return {
-							audio: "yizhiqiu_yl",
+							audio: "qiuyi_yl",
 							check: function (card) {
 								return 1 / Math.max(0.1, get.value(card));
 							},
@@ -22897,10 +22897,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							onuse(result, player) {
 								if (!player.storage.liuyin_yf) {
 									player.when({ global: "phaseAfter" }).then(() => {
-										player.unmarkSkill("yizhiqiu_yl");
+										player.unmarkSkill("qiuyi_yl");
 									});
 								}
-								player.markAuto("yizhiqiu_yl", get.name(links[0]));
+								player.markAuto("qiuyi_yl", get.name(links[0]));
 							},
 						};
 					},
@@ -22914,7 +22914,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					onunmark: true,
 				},
 			},
-			"yizhiqiu_qp": {
+			"qiuyi_qp": {
 				trigger: { global: "useCard" },
 				filter(event, player) {
 					return !event.player.hasHistory("useCard", evtx => evtx !== event);
@@ -23828,10 +23828,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"shisan_dg_info": "锁定技，当你使用" + get.frIntroduce('jishi') + "结算完毕后，你弃置手牌数不小于你的一名角色的一张牌。",
 			"shisan_tx": "推心",
 			"shisan_tx_info": "你未使用过牌的回合结束时，你可以视为使用一张无距离限制的【推心置腹】。然后目标需要对你指定的另一名角色选择一项：<li>1.使用一张无距离限制的【杀】；<li>2.交给其两张手牌（不足则全交）。",
-			"yizhiqiu_yl": "刈论",
-			"yizhiqiu_yl_info": "你可以展示一张基本或普通锦囊牌，然后将一张牌当做此牌的同名牌使用，每种牌名每回合限一次。",
-			"yizhiqiu_qp": "清评",
-			"yizhiqiu_qp_info": "每名角色每回合首次用牌时，你可以展示其手牌，若其中没有同名牌，此牌无效并取消所有目标，否则其摸一张牌。",
+			"qiuyi_yl": "刈论",
+			"qiuyi_yl_info": "你可以展示一张基本或普通锦囊牌，然后将一张牌当做此牌的同名牌使用，每种牌名每回合限一次。",
+			"qiuyi_qp": "清评",
+			"qiuyi_qp_info": "每名角色每回合首次用牌时，你可以展示其手牌，若其中没有同名牌，此牌无效并取消所有目标，否则其摸一张牌。",
 			"liuyin_yf": "易服",
 			"liuyin_yf_info": "出牌阶段限一次，你可以交给任意名其他角色各一张牌，这些角色须交给你一张装备（若没有须展示所有手牌）。",
 			"liuyin_lz": "列装",
@@ -24007,7 +24007,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"fr_rasali": "✡洛",
 			"fr_sheep": "✡西普",
 			"fr_zhan": "✡展",
-			"fr_yizhiqiu": "✡刈之秋",
+			"fr_qiuyi": "✡刈之秋",
 			"fr_liuyin": "✡流银",
 
 			//分类
@@ -24358,6 +24358,27 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			drawer: 'AI',
 			designer: '白曦',
 			coder: '钫酸酱の祝福',
+		},
+		'fr_qiuyi': {
+			skin: '',
+			writer: '白曦',
+			drawer: 'AI',
+			designer: '白曦',
+			coder: '狂神',
+		},
+		'fr_luwu': {
+			skin: '',
+			writer: '白曦',
+			drawer: 'AI',
+			designer: '白曦',
+			coder: '狂神',
+		},
+		'fr_liuyin': {
+			skin: '',
+			writer: '白曦',
+			drawer: 'AI',
+			designer: '白曦',
+			coder: '狂神',
 		},
 		'fr_zhanggu': {
 			skin: '',
