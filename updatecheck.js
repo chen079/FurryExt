@@ -1,9 +1,9 @@
 (() => ({
 	// 扩展版本
-	version: "3.0.6",
+	version: "4.0.0",
 
 	// 扩展的上一个版本
-	oldversion: "3.0.5",
+	oldversion: "3.0.6",
 
 	// 更新内容汇总
 	changeLog: `

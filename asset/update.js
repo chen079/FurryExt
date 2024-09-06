@@ -5,13 +5,22 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         var changeInfo = {
             changeLog: [
                 '/setPlayer/',
-                'up联动：八狸桥',
-                '陆伍重做'
+                '修复一堆bug',
+                '新角色：秋刈，流银'
             ],
-            players: ['fr_luwu', 'fr_baliqiao'],
+            players: ['fr_qiuyi', 'fr_liuyin'],
             cards: [],
         };
         var UpdateHistory = {
+            '3.0.6':{
+                changeLog: [
+                    '/setPlayer/',
+                    'up联动：八狸桥',
+                    '陆伍重做'
+                ],
+                players: ['fr_luwu', 'fr_baliqiao'],
+                cards: [],
+            },
             '3.0.4':{
                 changeLog:[
                     '/setPlayer/',

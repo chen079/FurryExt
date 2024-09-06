@@ -24007,7 +24007,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"fr_rasali": "✡洛",
 			"fr_sheep": "✡西普",
 			"fr_zhan": "✡展",
-			"fr_qiuyi": "✡刈之秋",
+			"fr_qiuyi": "✡秋刈",
 			"fr_liuyin": "✡流银",
 
 			//分类
@@ -24049,6 +24049,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			}
 		},
 		characterTitle: {
+			"fr_liuyin": "易服",
+			"fr_qiuyi": "针砭时弊",
 			'fr_luwu': '兵圣',
 			'fr_zhanggu': '蛊鸩毒医',
 			'fr_liping': '救世神医',
