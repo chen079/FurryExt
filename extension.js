@@ -1405,7 +1405,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             if (furryPack.enable) {
                 //------------------------------------------载入初始js------------------------------------------//
                 var JsForExt = ["functions.js", "buffs.js", "furry_mode.js", "cards.js", "character.js", "animation.js", "boss.js", "drama.js", "functions.js", "globalSkill.js", "guozhan.js", "mp.js", "shop.js", "skin.js", "update.js", 'story.js', 'activeKeys.js']
-                lib.init.jsForExtension(lib.assetURL + 'extension/福瑞拓展/asset/', JsForExt.map(i => i.split('.')[0]))
+                var promise = Promise.resolve();
+                for (var i of JsForExt.map(i => i.split('.')[0])) {
+                    promise = promise.then(() => lib.init.promises.js(lib.assetURL + 'extension/福瑞拓展/asset/', i));
+                }
+                
                 //定义势力
                 game.addGroup('fr_g_dragon', '龙', {
                     color: 'black',
