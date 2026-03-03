@@ -25,6 +25,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             this.save()
         },
         active: function (key) {
+            // const md5=require("./extension/福瑞拓展/Lib/md5.min.js");
             if (!keys[md5(key)]) return alert('福利码不存在！')
             if (!lib.config.frActiveKeys.actived.includes(key)) {
                 var items = keys[md5(key)]

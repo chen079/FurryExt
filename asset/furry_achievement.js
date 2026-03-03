@@ -517,7 +517,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 		win.setBackgroundImage('extension/福瑞拓展/image/others/victory.png')
 		win.style['padding-bottom'] = '10px'
 		text.style.color = 'yellow';
-		background.animate('start');
+		background.addTempClass('start');
 		setTimeout(function () {
 			var button = ui.create.div('.fr-win-close-button', background);
 			button.innerHTML = "关闭";
@@ -553,7 +553,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 			if (game.me && game.me.name && game.me.name.indexOf('fr_') == 0 && game.me.group) {
 				try {
 					game.frAchi.addProgress(lib.characterTitle[game.me.name], 'character');
-					if (game.me.identity == 'nei' && player.isCharacter('fr_rest') && !game.frAchi.hasAchi('人鱼狂流', 'character')) {
+					if (game.me.identity == 'nei' && get.player().isCharacter('fr_rest') && !game.frAchi.hasAchi('人鱼狂流', 'character')) {
 						game.frAchi.addProgress('人鱼狂流', 'character');
 					}
 				} catch (e) {

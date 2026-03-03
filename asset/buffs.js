@@ -195,6 +195,11 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 presha: true,
                 pretao: true,
                 nokeep: true,
+                skillTagFilter(player,tag,arg){
+                    if(tag=="nokeep"){
+                        return player.isPhaseUsing();
+                    }
+                }
             },
             mod: {
                 aiOrder: function (player, card, num) {
@@ -732,9 +737,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             content: function () {
                 player.clearFrBuff("sleep");
             },
-            ai: {
-                "directHit_ai": true,
-            },
+            // ai: {
+            //     "directHit_ai": true,
+            // },
             FrBuffInfo: {
                 naturalLose: true,
                 limit: 1,
@@ -1528,6 +1533,9 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             ai: {
                 save: true,
+                skillTagFilter(player, tag, target) {
+                    return player == target;
+                },
                 threaten: 0.6
             },
             FrBuffInfo: {

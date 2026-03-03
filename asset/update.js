@@ -142,7 +142,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         dialog.content.appendChild(ul);
         dialog.open();
         var hidden = false;
-        if (!ui.auto.classList.includes('hidden')) {
+        if (!ui.auto.classList.contains('hidden')) {
             ui.auto.hide();
             hidden = true;
         }

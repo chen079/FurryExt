@@ -37,13 +37,12 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 script.src = modulePath;
                 script.async = true;
                 let getModuleName = modulePath => modulePath.split('/').pop().replace('.js', '');
-
                 script.onload = () => {
+                    // console.log(window[getModuleName(modulePath)]);
                     resolve(window[getModuleName(modulePath)]);
                     console.log(`Success to load module: ${getModuleName(modulePath)}`)
                     document.head.removeChild(script);
                 };
-
                 script.onerror = () => {
                     reject(new Error(`Failed to load module: ${getModuleName(modulePath)}`));
                     document.head.removeChild(script);
@@ -539,7 +538,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 lib.skill[name].intro.name = get.dialogIntro(i, 'buff')
             }
         },
-        precontent: function (furryPack) {
+        async precontent(furryPack) {
             if (!get.is.object(window.OLUI_extAssets)) {
                 window.OLUI_extAssets = {
                     playerGroup: {},
@@ -705,9 +704,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         if (!bool) console.log('Rarity Error: Cannot read the rarity of ' + name + ' in ' + pack);
                     }
                 }
-                if (lib.config.extension_福瑞拓展_furry_onlineUpdate2) {
-                    window.furry.update2()
-                };
                 //---------------------------------------初始化势力------------------------------------------//
                 if (lib.config.extensions && lib.config.extensions.includes('无名补丁') && lib.config['extension_无名补丁_enable']) {
                     setTimeout(() => {
@@ -1404,12 +1400,13 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             //------------------------------------------武将包------------------------------------------//
             if (furryPack.enable) {
                 //------------------------------------------载入初始js------------------------------------------//
-                var JsForExt = ["functions.js", "buffs.js", "furry_mode.js", "cards.js", "character.js", "animation.js", "boss.js", "drama.js", "functions.js", "globalSkill.js", "guozhan.js", "mp.js", "shop.js", "skin.js", "update.js", 'story.js', 'activeKeys.js']
-                var promise = Promise.resolve();
-                for (var i of JsForExt.map(i => i.split('.')[0])) {
-                    promise = promise.then(() => lib.init.promises.js(lib.assetURL + 'extension/福瑞拓展/asset/', i));
+                var JsForExt = ["functions.js", "buffs.js", "furry_mode.js", "cards.js", "character.js", "animation.js", "boss.js", "drama.js", "globalSkill.js", "guozhan.js", "mp.js", "shop.js", "skin.js", "update.js", 'story.js', 'activeKeys.js']
+                for(let i of JsForExt){
+                    await import (lib.assetURL + './asset/'+i)
                 }
-                
+                if (lib.config.extension_福瑞拓展_furry_onlineUpdate2) {
+                    window.furry.update2()
+                };
                 //定义势力
                 game.addGroup('fr_g_dragon', '龙', {
                     color: 'black',
@@ -1419,11 +1416,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     color: 'purple',
                     image: 'ext:福瑞拓展/image/group/name_fr_g_ji.png'
                 })
-                lib.config.all.characters.push('furryPack');
+                // lib.config.all.characters.push('furryPack');
                 lib.translate['furryPack_character_config'] = "<img style='width:100px' src=" + lib.assetURL + "extension/福瑞拓展/image/others/title.png>";// 包名翻译
                 //卡包（手牌）
                 lib.translate['furryCard_card_config'] = '福瑞卡牌';
-                lib.config.all.cards.push('furryCard');
+                // lib.config.all.cards.push('furryCard');
             }
         },
         config: {

@@ -1,0 +1,10 @@
+- 将update2放在import后，修复因加载顺序可能的变化导致的报错
+- 采用ESM标准导入await import，顺便将precontent换成async
+- 去除lib.config.all.characters和cards的push操作，徒增错误
+- ui.auto.classList在新版无名杀中改为了DOMTokenList，原本的includes()方法不可用导致报错，现改为contains()
+- 修复md5.min.js，使之可以被挂载到全局使用
+- 加入tiers的skillTagFilter，防止控制台叫唤
+- 提高huye的order，防止ai不发动技能
+- 去除shark调试过程中log的行为
+- 重写sayisu的技能sayisu_fj的妄行部分，修复报错
+- olas_bx和jackson_eb_2的gain操作增加合法性检测部分，防止被控制台警告

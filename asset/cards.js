@@ -937,7 +937,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         });
                     'step 1'
                     if (result.bool) {
-                        player.give(result.cards, target)
+                        if(player.countCards("h"))player.give(result.cards, target)
                     } else {
                         event.finish()
                     }
@@ -1635,6 +1635,11 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 ai: {
                     threaten: 3.5,
                     "directHit_ai": true,
+                    skillTagFilter(player, tag, arg){
+                        if(tag=="directHit_ai"){
+                            return arg?.card?.name == "sha";
+                        }
+                    },
                     halfneg: true,
                 },
                 subSkill: {

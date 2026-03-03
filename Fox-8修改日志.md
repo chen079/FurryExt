@@ -1,0 +1,20 @@
+- 将update2放在import后，修复因加载顺序可能的变化导致的报错
+- 采用ESM标准导入await import，顺便将precontent换成async
+- 去除lib.config.all.characters和cards的push操作，徒增错误
+- ui.auto.classList在新版无名杀中改为了DOMTokenList，原本的includes()方法不可用导致报错，现改为contains()
+- 修复md5.min.js，使之可以被挂载到全局使用
+- 加入tiers、ar15_skill的skillTagFilter，防止控制台叫唤
+- 提高huye的order，防止ai不发动技能
+- 去除shark调试过程中log的行为
+- 重写sayisu的技能sayisu_fj的妄行部分，修复报错
+- olas_bx、jackson_eb_2、nanci_tq、fr_card_ttbl的gain操作增加合法性检测部分，防止被控制台警告
+- 重构 bwol_mb 修复ai无限循环的bug，并规范改写
+- 修复nine_fw中processAI导致报错的逻辑错误
+- 修复nine_dx中导致平局的bug并重写洗牌逻辑，使之与反向检测洗牌的武将对接
+- 重构verb_zy，修复目标因技能死亡报错的bug
+- 修复流失体力死亡的角色仍能发动verb_zy的bug
+- 修复nine_cj没有弃牌目标导致报错的bug
+- 修复mislee_zr空放和无限摸牌的bug
+- 修复liuyin_lz描述不符的bug
+- 修复“人鱼狂潮”成就判定时player未定义的bug
+- 将相当大一部分描述中的技能和卡牌名加入本体poptip(累死我啦)
