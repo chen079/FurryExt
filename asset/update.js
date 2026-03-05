@@ -5,13 +5,25 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         var changeInfo = {
             changeLog: [
                 '/setPlayer/',
-                '修复一堆bug',
-                '新角色：秋刈，流银'
+                '给拓展打灰，修复大量因年久失修导致的加载失败、控制台异常输出、报错、无限循环、异常平局等bug，使拓展可以正常兼容本体11.2版本',
+                '重写部分武将的洗牌、三项转换技等逻辑，使之与本体机制和反向检测将(如神张角)对接',
+                '大量调整描述',
+                '给大部分引用技能、卡牌的描述添加poptip，调整扩展部分tip并适配联机，以后不用被信息差啦~',
+                '这两个将不是这次做的，是上次，因为历史原因现在宣传一下~'
             ],
             players: ['fr_qiuyi', 'fr_liuyin'],
             cards: [],
         };
         var UpdateHistory = {
+            '4.0.0':{
+                changeLog: [
+                    '/setPlayer/',
+                    '修复一堆bug',
+                    '新角色：秋刈，流银'
+                ],
+                players: ['fr_qiuyi', 'fr_liuyin'],
+                cards: [],
+            },
             '3.0.6':{
                 changeLog: [
                     '/setPlayer/',

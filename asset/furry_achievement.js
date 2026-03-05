@@ -283,7 +283,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
 				reward: function () {
 					game.frAchi.unlockCharacter('fr_hars')
 				},
-				rewardInfo: '奖励：解锁角色——哈尔',
+				rewardInfo: '奖励：解锁角色——哈尔斯',
 				progress: 1,
 			},
 			'屠神者': {
