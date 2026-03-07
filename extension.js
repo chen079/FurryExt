@@ -226,13 +226,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 name: "暴虐值",
                 info: "<li>当你造成或受到伤害后，你获得等量的暴虐值。<li>暴虐值的上限为5。"
             },
+            "mpcost": {
+                name: "<span class='bluetext'>①</span>",
+                info: "<li>你需要消耗对应的魔力才能发动后续效果。"
+            },
             "hubian": {
                 name: '互变',
-                info: '<li>角色共有两种状态，分别为“圣咏”和“暗涌”。<li>游戏开始时，角色处于暗涌状态。<li>当你改变互变状态时，角色由暗涌/圣咏状态变为圣咏/暗涌状态。'
+                info: '<li>游戏开始时，角色处于暗涌状态。<li>当你改变互变状态时，在暗涌/圣咏状态之间转换。'
             },
             "hubianji": {
                 name: '互变技',
-                info: '<li>互变技是一种特殊的技能标签。<li>根据角色互变状态的不同，互变技执行不同的效果。<li>所有具有“互变技”标签的技能改为执行对应状态的选项。'
+                info: '<li>类似转换技，只执行对应效果。<li>游戏开始时，角色处于暗涌状态。<li>当你改变互变状态时，在暗涌/圣咏状态之间转换。'
             },
             "kamidamage": {
                 name: "神圣伤害",
@@ -240,11 +244,11 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             },
             "qianghua_buff": {
                 name: "强化",
-                info: "<li>1.当你处于“强化”状态时，所有带有“强化技”标签的技能改为执行其强化效果，在你的一个强化技执行完毕后，你结束“强化”效果。<li>2.“强化”效果不可叠加。"
+                info: "<li>1.当你处于“强化”状态时，所有带有“强化技”标签的技能额外执行其强化效果，在你的一个强化技执行完毕后，你结束“强化”效果。<li>2.“强化”效果不可叠加。"
             },
             "qianghua": {
                 name: "强化技",
-                info: "<li>当你处于“强化”状态时，此技能改为执行强化效果，执行完毕后，结束“强化”效果。"
+                info: "<li>1.当你处于“强化”状态时，所有带有“强化技”标签的技能额外执行其强化效果，在你的一个强化技执行完毕后，你结束“强化”效果。<li>2.“强化”效果不可叠加。<li>3.拥有强化技的角色出牌阶段限一次，其可以失去1点体力或弃置两张牌，进入“强化”状态。"
             },
             "chouhua": {
                 name: "筹划",
@@ -1303,7 +1307,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
             };
 
             //------------------------------------------自定义get函数------------------------------------------//
-            get.FrskillTips = function (tipname, id) {
+            window.FrskillTips = function (tipname, id) {
                 const frtip = ui.create.div('.Fr-frtips', document.body);
                 var isPhone = /mobile|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i.test(navigator.userAgent);
                 frtip.style.zIndex = 998;
@@ -1329,19 +1333,19 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                     if (type == 'game') {
                         let str1 = window.furry.introduce[name].name;
                         let str2 = window.furry.introduce[name].info;
-                        let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:get.FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
+                        let link = "<a id='" + temp + "' style='color:unset' href='#' onclick=\"FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
                         return link;
                     } else {
                         let str1 = window.furry[type + 'Introduce'][name].name;
                         let str2 = window.furry[type + 'Introduce'][name].info;
-                        let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:get.FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
+                        let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
                         return link;
                     }
                 } else {
-                    let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:get.FrskillTips('" + str + "','" + temp + "');\">" + name + "※</a>";
+                    let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:FrskillTips('" + str + "','" + temp + "');\">" + name + "※</a>";
                     return link;
                 }
-            }
+            };
             //------------------------------------------自定义window函数------------------------------------------//
             window.furryIntroduce = function (name, type) {
                 if (!type) {
@@ -1820,7 +1824,7 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                 + '<div id="active" style="text-align: center;width: 100%;border: double;border-radius: 3px;padding-bottom: 5px;"><div>使用福利码</div><br><input type="text" name="activeKey" placeholder="请输入福利码"/>&nbsp&nbsp<button id="activeKey">激活</button></div>',
             diskURL: "",
             forumURL: "",
-            version: "4.0.0",
+            version: "4.0.1",
         },
         files: {
             "character": [],
