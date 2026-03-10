@@ -726,23 +726,23 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 event.dialog.open();
 
                 event.custom.replace.button = function (button) {
-                    if (!event.dialog.includes(button.parentNode)) return;
-                    if (button.classList.includes('unselectable')) return;
+                    if (!event.dialog.contains(button.parentNode)) return;
+                    if (button.classList.contains('unselectable')) return;
 
                     for (let i of event.dialog.buttons) i.classList.remove('unselectable');
 
-                    if (button.classList.includes('selected')) {
+                    if (button.classList.contains('selected')) {
                         event.buttons.remove(button);
                         button.classList.remove('selected');
                         for (let i of event.dialog.buttons) {
-                            if (event.buttons.includes(i)) continue;
+                            if (event.buttons.contains(i)) continue;
                             if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
                         }
                     } else {
                         event.buttons.add(button);
                         button.classList.add('selected');
                         for (let i of event.dialog.buttons) {
-                            if (event.buttons.includes(i)) continue;
+                            if (event.buttons.contains(i)) continue;
                             if (!event.multibutton) i.classList.add('unselectable');
                             else if (!event.filterButton(event.buttons.slice(0).add(i), i)) i.classList.add('unselectable');
                         }
@@ -768,10 +768,10 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     else newControls = [];
 
                     if (event.multibutton) {
-                        if (newControls.includes('cancel2')) newControls.remove('cancel2');
+                        if (newControls.contains('cancel2')) newControls.remove('cancel2');
                         if (!event.forced) newControls.add('cancel2');
                     }
-                    else if (!event.forced && !newControls.includes('cancel2')) {
+                    else if (!event.forced && !newControls.contains('cancel2')) {
                         if (newControls.length == 0 || event.buttons.length == 0) newControls.add('cancel2');
                     }
 
@@ -1141,7 +1141,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             if (player.name1 != name && player.name2 != name) return;
             var skills = info[3].slice(0);
             if (name == player.name1) {
-                if (player.classList.includes(_status.video ? 'unseen_v' : 'unseen')) return;
+                if (player.classList.contains(_status.video ? 'unseen_v' : 'unseen')) return;
                 game.log('#g' + player.name1, '进入了隐匿状态')
                 player.classList.add(_status.video ? 'unseen_v' : 'unseen');
                 player.name = 'unknown';

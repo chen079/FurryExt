@@ -422,30 +422,32 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 unique: true,
                 limited: true,
                 notemp: true,
+                filter(event, player) {
+                    return player.getCards('hej').length;
+                },
                 content: function () {
                     'step 0'
                     player.awakenSkill('molis_gzhs')
                     event.doing = player.storage.molis_gzhs
-                    if (player.isDead()) player.revive(1);
-                    'step 1'
+                    // if (player.isDead()) player.revive(1);
                     player.hp = event.doing.hp
-                    var hs = player.getCards('he');
-                    if (hs.length) player.lose(hs)._triggered = null;
-                    'step 2'
+                    var hs = player.getCards('hej');
+                    if (hs.length) player.discard(hs)
+                    'step 1'
                     var hs = event.doing.hs
                     if (hs.length) player.directgain(hs);
-                    'step 3'
+                    'step 2'
                     var isDisabled = event.doing.isDisabled;
                     for (var i = 0; i < isDisabled.length; i++) {
                         if (isDisabled[i] == false && player.isDisabled(i + 1)) player.enableEquip(i + 1)._triggered = null;
                         if (isDisabled[i] == true && !player.isDisabled(i + 1)) player.disableEquip(i + 1)._triggered = null;
                     }
-                    'step 4'
+                    'step 3'
                     var es = event.doing.es;
                     if (es.length) player.directequip(es);
-                    'step 5'
+                    'step 4'
                     player.update();
-                    'step 6'
+                    'step 5'
                     game.animate.window(1);
                     var data = {};
                     for (var i = 0; i < game.players.length; i++) {
@@ -458,7 +460,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     game.addVideo('skill', player, ['molis_gzhs', data]);
                     game.animate.window(2);
                     ui.updatehl();
-                    "step 7"
+                    "step 6"
                     game.updateRoundNumber();
                     player.mayChangeVice();
                 },
@@ -596,7 +598,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             "miya_gzhz": "挥斩",
             "miya_gzhz_info": "当你的【杀】造成伤害后，你摸一张牌并获得1个“挥斩”标记，然后本回合内下一次因执行【杀】的效果造成的伤害+X（X为“挥斩”标记数量）。",
             "kref_gzyz": "月临",
-            "kref_gzyz_info": "一名角色受到伤害后，你可以弃置一张牌并进行一次判定。若结果为黑色，该角色依次执行以下效果，①获得伤害来源的X张牌，②获得造成伤害的牌，③摸X张牌（X为此次伤害值）；若结果为红色，该角色依次执行以下效果，①回复一点体力，②复原武将牌，③伤害来源翻面。",
+            "kref_gzyz_info": "一名角色受到伤害后，你可以弃置一张牌并进行一次判定。若结果为黑色，该角色依次执行以下效果，①获得伤害来源的X张牌，②获得造成伤害的牌，③摸X张牌（X为此次伤害值）；若结果为红色，该角色依次执行以下效果，①回复1点体力，②复原武将牌，③伤害来源翻面。",
             "wore_gzhy": "万变",
             "wore_gzhy_info": "每轮游戏开始时，你从四名随机角色中选择一名角色并获得其所有技能，然后失去你获得的上一名角色的所有技能。",
 

@@ -5,13 +5,40 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         var changeInfo = {
             changeLog: [
                 '/setPlayer/',
-                '修复一堆bug',
-                '新角色：秋刈，流银'
+                '4.1.0',
+                '修复大量描述异常、异步错误、报错bug、异常结算bug(是的，要打的灰还有一大堆呜呜)',
+                '进行大量的机制标准化，少量ai优化',
+                '优化akain_jh的技能显示、诸多frIntroduce内容',
+                '调整灵秘、强化技机制，皮特莱克削弱为3血(小孩子要这么多血干嘛)，但控魂多发动一次',
+                '订正库伦名字错误',
+                '删除压缩过程中产生的大量乱码图片',
             ],
-            players: ['fr_qiuyi', 'fr_liuyin'],
+            players: ['fr_qiushou', 'fr_liuqing'],
             cards: [],
         };
         var UpdateHistory = {
+            '4.0.1':{
+                changeLog: [
+                    '/setPlayer/',
+                    '4.0.1',
+                    '给拓展打灰，修复大量因年久失修导致的加载失败、控制台异常输出、报错、无限循环、异常平局等bug，使拓展可以正常兼容本体11.2版本',
+                    '重写部分武将的洗牌、三项转换技等逻辑，使之与本体机制和反向检测将(如神张角)对接',
+                    '大量调整描述',
+                    '给大部分引用技能、卡牌的描述添加poptip，调整扩展部分tip并适配联机，以后不用被信息差啦~',
+                    '这两个将不是这次做的，是上次，因为历史原因现在宣传一下~'
+                ],
+                players: ['fr_qiuyi', 'fr_liuyin'],
+                cards: [],
+            },
+            '4.0.0':{
+                changeLog: [
+                    '/setPlayer/',
+                    '修复一堆bug',
+                    '新角色：秋刈，流银'
+                ],
+                players: ['fr_qiuyi', 'fr_liuyin'],
+                cards: [],
+            },
             '3.0.6':{
                 changeLog: [
                     '/setPlayer/',

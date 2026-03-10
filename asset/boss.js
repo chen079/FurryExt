@@ -218,7 +218,6 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: "phaseBegin",
                 },
-                firstDo: true,
                 logTarget: function (event, player) {
                     return game.filterPlayer(function (current) {
                         return current.isAlive();
@@ -230,48 +229,49 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                     game.countPlayer(function (current) {
                         if (current != player) {
                             current.addTempSkill('baiban')
+                            current.addTempSkill("qinggang2")
                         }
                     })
                 },
-                group: ["oert_bosswy_nouse"],
-                subSkill: {
-                    nouse: {
-                        trigger: {
-                            player: "phaseZhunbeiBegin",
-                        },
-                        logTarget: function (event, player) {
-                            return game.filterPlayer(function (current) {
-                                return current.isAlive();
-                            });
-                        },
-                        lastDo: true,
-                        forced: true,
-                        content: function () {
-                            'step 0'
-                            var list = game.filterPlayer(function (current) {
-                                return current.isAlive();
-                            }).sortBySeat();
-                            list.remove(player)
-                            event.list = list;
-                            'step 1'
-                            if (event.list.length) {
-                                event.list.shift().addTempSkill("qinggang2");
-                                event.redo();
-                            }
-                        },
-                        sub: true,
-                    },
-                },
+                // group: ["oert_bosswy_nouse"],
+                // subSkill: {
+                //     nouse: {
+                //         trigger: {
+                //             player: "phaseZhunbeiBegin",
+                //         },
+                //         logTarget: function (event, player) {
+                //             return game.filterPlayer(function (current) {
+                //                 return current.isAlive();
+                //             });
+                //         },
+                //         lastDo: true,
+                //         forced: true,
+                //         content: function () {
+                //             'step 0'
+                //             const list = game.filterPlayer(function (current) {
+                //                 return current.isAlive();
+                //             }).sortBySeat();
+                //             list.remove(player)
+                //             event.list = list;
+                //             'step 1'
+                //             if (event.list.length) {
+                //                 event.list.shift().addTempSkill("qinggang2");
+                //                 event.redo();
+                //             }
+                //         },
+                //         sub: true,
+                //     },
+                // },
             },
         },
         translate: {
             //skill
             "wore_bosshy": "惑言",
-            "wore_bosshy_info": "锁定技，此技能不会失效；每轮游戏开始时或当你受到伤害、失去体力、失去体力上限后，你获得随机一个角色的所有技能。",
+            "wore_bosshy_info": "锁定技，charlotte技，每轮游戏开始时或当你受到伤害、失去体力、失去体力上限后，你获得随机一个角色的所有技能。",
             "oert_bosslh": "轮回",
             "oert_bosslh_info": "锁定技，①你的回合结束阶段/当你受到伤害后，进行一次判定，若结果为不为♥，则你进行一个额外的回合/回复1点体力，否则，你摸等同于你体力上限的牌/你获得当前回合角色区域内的至多两张牌，②摸牌阶段你多摸等同于你已损体力值的牌。",
             "oert_bosswy": "威压",
-            "oert_bosswy_info": "锁定技，回合开始时，你令所有其他角色的非charlotte技能与防具无效直到回合结束。",
+            "oert_bosswy_info": "锁定技，回合开始时，你令所有其他角色的技能与防具无效直到回合结束。",
             'wore_bossty': "天佑",
             "wore_bossty_info": "锁定技，你的阶段不会被跳过，你每回合能受到伤害、失去体力、失去体力上限的总和至多为游戏轮数。",
 

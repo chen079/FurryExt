@@ -54,7 +54,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     event.cards = target.getCards('h')
                     target.discard(event.cards)
                     'step 1'
-                    target.changeHujia(event.cards.length, 'gain', true);
+                    target.changeHujia(event.cards.length,null,true);
                 },
                 ai: {
                     basic: {
@@ -1359,11 +1359,11 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 forced: true,
                 popup: false,
                 priority: 12,
-                content: function () {
+                async content(event, trigger, player) {
                     player.storage.pojia.cards.remove(trigger.card);
                     if (!player.storage.pojia.cards.length) {
                         if (player.storage.pojia.hujia != 0) {
-                            player.changeHujia(player.storage.pojia.hujia)
+                            await player.changeHujia(player.storage.pojia.hujia,null,true);
                             player.storage.pojia.hujia = 0
                         }
                         player.removeSkill('pojia')
@@ -1555,16 +1555,28 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                         content: function () {
                             'step 0'
                             player.chooseTarget(1, '是否令一名角色的技能失效直到其回合结束', function (card, player, target) {
-                                return target != player && !target.hasSkill('baiban')
+                                return target != player && !target.hasSkill('wxpp_skill_baiban')
                             }).set('ai', function (target) {
                                 var player = _status.event.player
                                 return -get.attitude(player, target)
                             })
                             'step 1'
                             if (result.bool) {
-                                result.targets[0].addTempSkill('baiban', { player: "phaseEnd" })
+                                result.targets[0].addTempSkill('wxpp_skill_baiban', { player: "phaseEnd" })
                             }
                         }
+                    },
+                    yubaiban:{
+                        init(player, skill) {
+                            player.addSkillBlocker(skill);
+                            player.addTip(skill, "羽声  技能失效");
+                        },
+                        onremove(player, skill) {
+                            player.removeSkillBlocker(skill);
+                            player.removeTip(skill);
+                        },
+                        inherit: "baiban",
+                        marktext: "羽",
                     }
                 }
             },
@@ -1731,14 +1743,12 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                 trigger: {
                     player: "phaseEnd",
                 },
-                popup: false,
-                lastDo: true,
-                charlotte: true,
                 forced: true,
-                content: function () {
+                locked:false,
+                async content(event, trigger, player) {
                     player.removeSkill('card_sx')
                     if (player.getStat().kill > 0) {
-                        player.draw(3)
+                        await player.draw(3)
                         player.insertPhase();
                     }
                 },
@@ -1748,11 +1758,41 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
                     target: "useCardToPlayer",
                 },
                 forced: true,
+                equipSkill:true,
+                logTarget: "player",
                 filter: function (event, player) {
                     return event.player != player && event.card.name == 'sha';
                 },
                 content: function () {
-                    trigger.player.addTempSkill('fengyin', 'shaAfter')
+                    // trigger.player.addTempSkill('fengyin', 'shaAfter')
+                    trigger.player.addTempSkill("yy_skill_fengyin");
+                    trigger.player.markAuto("yy_skill_fengyin", [trigger.card]);
+                },
+                subSkill:{
+                    fengyin:{
+                        equipSkill: true,
+                        trigger: { global: "useCardAfter" },
+                        forced: true,
+                        charlotte: true,
+                        popup: false,
+                        firstDo: true,
+                        // onremove: true,
+                        filter(event, player) {
+                            return player.storage.yy_skill_fengyin && player.storage.yy_skill_fengyin.includes(event.card);
+                        },
+                        content() {
+                            player.storage.yy_skill_fengyin.remove(trigger.card);
+                            if (!player.storage.yy_skill_fengyin.length) {
+                                player.removeSkill("yy_skill_fengyin");
+                            }
+                        },
+                        mark: true,
+                        marktext: "月",
+                        intro: {
+                            content: "非锁定技无效",
+                        },
+                        inherit:"fengyin",
+                    },
                 }
             },
             'card_djlj': {
@@ -1849,7 +1889,7 @@ game.import('card', function (lib, game, ui, get, ai, _status) {
             'fr_card_djlj': '弹尽粮绝',
             'fr_card_djlj_info': '出牌阶段，对所有未获得此牌效果的角色使用，目标角色获得以下效果直到其回合结束：①摸牌阶段额定摸牌数-1，②每回合限四次，使用牌结算完毕后，若此牌造成了伤害，摸一张牌。',
             "fr_card_zfxd": '针锋相对',
-            'fr_card_zfxd_info': "此牌可被重铸。出牌阶段，对一名角色使用。令其与你指定的另一名在其攻击范围内的角色各声明一张【杀】或【闪】；若二者都声明【杀】，二者各流失一点体力；若二者都声明【闪】，二者各弃置一张牌；否则，声明【杀】的角色摸两张牌并对声明【闪】的角色造成一点伤害。",
+            'fr_card_zfxd_info': "此牌可被重铸。出牌阶段，对一名角色使用。令其与你指定的另一名在其攻击范围内的角色各声明一张【杀】或【闪】；若二者都声明【杀】，二者各流失1点体力；若二者都声明【闪】，二者各弃置一张牌；否则，声明【杀】的角色摸两张牌并对声明【闪】的角色造成1点伤害。",
             "fr_card_cmhc": "筹谋划策",
             "fr_card_cmhc_info": "出牌阶段，对一名角色使用，若判定结果为红色，该角色进行一次“" + get.frIntroduce('chouhua') + "”。",
             "fr_equip5_wxpp": "忘弦琵琶",
