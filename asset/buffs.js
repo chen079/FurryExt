@@ -421,7 +421,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             skillBlocker: function (skill, player) {
                 if (!player.hasFrBuff('konghuang')) return;
                 if (!_status.currentPhase || _status.currentPhase != player) return;
-                return !lib.skill[skill].charlotte && !get.is.locked(skill, player);;
+                return !lib.skill[skill].charlotte && !get.is.locked(skill, player) && !lib.skill[skill].persevereSkill;
             },
             charlotte: true,
             forced: true,
@@ -709,7 +709,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
                 player.removeSkillBlocker(skill);
             },
             skillBlocker: function (skill, player) {
-                return !lib.skill[skill].charlotte && !get.is.locked(skill, player);
+                return !lib.skill[skill].charlotte && !get.is.locked(skill, player) && !lib.skill[skill].persevereSkill;
             },
             mod: {
                 cardEnabled: function (card, player) {
@@ -754,7 +754,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         "mad": {
             intro: {
                 name: "疯狂",
-                content: "<li>自然衰减时，你随机弃置1张牌",
+                content: "<li>自然衰减时，你随机弃置一张牌",
             },
             charlotte: true,
             trigger: {
@@ -1098,7 +1098,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         "shixue": {
             intro: {
                 name: "嗜血",
-                content: "<li>你造成伤害后，回复一点体力；你回复体力后，移除一层「<font color=red>嗜血</font>」。",
+                content: "<li>你造成伤害后，回复1点体力；你回复体力后，移除一层「<font color=red>嗜血</font>」。",
             },
             charlotte: true,
             trigger: {
@@ -1166,7 +1166,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         "zhongdu": {
             intro: {
                 name: "中毒",
-                content: "<li>你回复体力后，移除一层「<font color=green>中毒</font>」<li>自然衰减时，失去一点体力。",
+                content: "<li>你回复体力后，移除一层「<font color=green>中毒</font>」<li>自然衰减时，失去1点体力。",
             },
             charlotte: true,
             trigger: {
@@ -1477,7 +1477,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         'dongshang': {
             intro: {
                 name: "冻伤",
-                content: "<li>当你受到伤害时，弃置1张手牌，若此伤害为火属性，你减少1层「<font color=blue>冻伤</font>」并令此伤害+1。",
+                content: "<li>当你受到伤害时，弃置一张手牌，若此伤害为火属性，你减少1层「<font color=blue>冻伤</font>」并令此伤害+1。",
             },
             charlotte: true,
             trigger: {
@@ -1491,8 +1491,8 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
             },
             content: function () {
                 if (player.countCards('h') > 0) {
-                    player.chooseToDiscard('受到「<font color=blue>冻伤</font>」影响，弃置1张手牌', 'h', true)
-                    game.log(player, '受到「<font color=blue>冻伤</font>」影响，弃置1张手牌')
+                    player.chooseToDiscard('受到「<font color=blue>冻伤</font>」影响，弃置一张手牌', 'h', true)
+                    game.log(player, '受到「<font color=blue>冻伤</font>」影响，弃置一张手牌')
                 }
                 if (trigger.nature == 'fire') {
                     player.reduceFrBuff('dongshang')
@@ -1643,33 +1643,43 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         'lingmi': {
             intro: {
                 name: "灵秘",
-                content: "<li>你的所有牌均可重铸。<li>当你重铸一张原本不可重铸的牌时，「灵秘」层数-1",
+                content: "<li>出牌阶段，你可以消耗1层「灵秘」，重铸一张牌",
             },
-            trigger: {
-                player: 'recastAfter'
-            },
+            enable:"phaseUse",
+            // trigger: {
+            //     player: 'recastAfter'
+            // },
             charlotte: true,
-            forced: true,
+            // forced: true,
             silent: true,
             priority: 3,
-            filter: function (event, player) {
-                return event.cards.some(card => {
-                    var info = get.info(card), recastable = info.recastable || info.chongzhu
-                    return !Boolean(typeof recastable == 'function' ? recastable(_status.event, player) : recastable);
-                })
+            position: "he",
+            selectCard:1,
+            discard: false,
+            lose: false,
+            delay: false,
+            prompt:"消耗1层「灵秘」，选择一张牌重铸",
+            filterCard(card, player, event){
+                if(!event) event=_status.event;
+                return game.checkMod(card, player, "unchanged", "cardEnabled2", player);
             },
-            content: function () {
-                var num = trigger.cards.filter(i => {
-                    var info = get.info(i), recastable = info.recastable || info.chongzhu
-                    return !Boolean(typeof recastable == 'function' ? recastable(_status.event, player) : recastable);
-                }).length
-                player.reduceFrBuff('lingmi', num)
+            // filter: function (event, player) {
+            //     if(event.type != "phase")return;
+            //     return event.cards.some(card => {
+            //         var info = get.info(card), recastable = info.recastable || info.chongzhu
+            //         return !Boolean(typeof recastable == 'function' ? recastable(_status.event, player) : recastable);
+            //     })
+            // },
+            async content(event, trigger, player) {
+                player.reduceFrBuff('lingmi', 1);
+                await player.recast(event.cards);
+
             },
-            mod: {
-                cardRecastable: function (card, player) {
-                    if (player.hasFrBuff('lingmi')) return true
-                }
-            },
+            // mod: {
+            //     cardRecastable: function (card, player) {
+            //         if (player.hasFrBuff('lingmi')) return true
+            //     }
+            // },
             FrBuffInfo: {
                 naturalLose: false,
                 buffRank: {
