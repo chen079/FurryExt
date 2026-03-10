@@ -1078,6 +1078,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'froh_sn': {
 				unique: true,
 				trigger:{player:"dying"},
+				trigger:{player:"dying"},
 				mark: true,
 				skillAnimation: true,
 				limited: true,
@@ -1088,18 +1089,26 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				filter: function (event, player) {
 					if (player.storage.froh_sn) return false;
 					return true;
+					return true;
 				},
+				async content(event, trigger, player) {
 				async content(event, trigger, player) {
 					player.awakenSkill('froh_sn');
 					player.storage.froh_sn = true;
 					await player.discard(player.getCards('hej'));
+					await player.discard(player.getCards('hej'));
 					player.link(false);
+					await player.turnOver(false);
+					await player.gainMaxHp()
 					await player.turnOver(false);
 					await player.gainMaxHp()
 					'step 3'
 					await player.drawTo(player.maxHp);
 					await player.recover(player.maxHp - player.hp);
+					await player.drawTo(player.maxHp);
+					await player.recover(player.maxHp - player.hp);
 					'step 4'
+					player.changeHubian();
 					player.changeHubian();
 					if (!player.storage.hubian) {
 						player.setfrAvatar(player.name, player.name)
@@ -1137,6 +1146,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				},
 				// filter: (event, player) => !player.hasSkill('bwol_mb_blocker'),
 				async content(event,trigger,player){
+					player.removeSkill("bwol_mb_recover");
+					player.awakenSkill(event.name);
+					player.addSkill("bwol_mb_recover");
 					player.removeSkill("bwol_mb_recover");
 					player.awakenSkill(event.name);
 					player.addSkill("bwol_mb_recover");
@@ -2283,6 +2295,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							var evt = event.getl(player);
 							return evt && evt.cards2 && evt.cards2.length > 0 && player.hp > 0
 						},
+						async content(event, trigger, player) {
+							const num = player.getHp();
+							await player.draw(num);
+							await player.reduceFrBuff('mianyi');
 						async content(event, trigger, player) {
 							const num = player.getHp();
 							await player.draw(num);
@@ -4727,6 +4743,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				filter(event,player){
 					game.hasPlayer(c=>c!=player);
 				},
+				filter(event,player){
+					game.hasPlayer(c=>c!=player);
+				},
 				content: function () {
 					'step 0'
 					player.chooseTarget(get.prompt2('sainit_jh'), function (card, player, target) {
@@ -4756,21 +4775,32 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						trigger: {
 							player: ["gainAfter"],
 							global: ["loseAsyncAfter"],
+							player: ["gainAfter"],
+							global: ["loseAsyncAfter"],
 						},
 						init: function (player) {
 							if (!player.storage.sainit_jh_count) player.storage.sainit_jh_count = 0;
+							if (!player.storage.sainit_jh_count) player.storage.sainit_jh_count = 0;
 						},
 						filter: function (event, player) {
+							if(!event.getg?.(player)?.length) return;
 							if(!event.getg?.(player)?.length) return;
 							return player.countCards('h') && player.countCards('h') > player.maxHp && !player.storage.sainit_yq
 						},
 						direct: true,
 						content() {
 							player.chooseToDiscard(player.countCards('h') - player.maxHp, true);		
+						content() {
+							player.chooseToDiscard(player.countCards('h') - player.maxHp, true);		
 						}
 					},
 					draw: {
 						trigger: {
+							player: "loseAfter",
+							global: ["loseAsyncAfter", "equipAfter", "addJudgeAfter", "gainAfter", "addToExpansionAfter"],
+						},
+						filter(event, player) {
+							return event.getl(player)?.cards2?.length;
 							player: "loseAfter",
 							global: ["loseAsyncAfter", "equipAfter", "addJudgeAfter", "gainAfter", "addToExpansionAfter"],
 						},
@@ -4785,12 +4815,14 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						forced: true,
 						content: function () {
 							player.storage.sainit_jh.draw(trigger.cards.length);
+							player.storage.sainit_jh.draw(trigger.cards.length);
 						}
 					}
 				}
 			},
 			'sainit_yq': {
 				trigger: {
+					player: ["loseAfter"],
 					player: ["loseAfter"],
 				},
 				juexingji: true,
@@ -4799,8 +4831,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				forced: true,
 				init: function (player) {
 					player.addSkill("sainit_yq_count");
+					player.addSkill("sainit_yq_count");
 					if (!player.storage.sainit_yq) player.storage.sainit_yq = false
 				},
+				filter: function (event, player) {
+					if(event.getParent(3).name!="sainit_jh_discard")return;
+					if(!(event.type == "discard" && event.getl(player)?.cards2?.length))return;
+					return player.countMark("sainit_yq_count")>=12;
 				filter: function (event, player) {
 					if(event.getParent(3).name!="sainit_jh_discard")return;
 					if(!(event.type == "discard" && event.getl(player)?.cards2?.length))return;
@@ -4814,6 +4851,34 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					player.addSkill('sainit_yj')
 					game.log(player, '移除了', '#g【镜华②】')
 				},
+				derivation: 'sainit_yj',
+				subSkill:{
+					count:{
+						trigger: {
+							player: ["loseAfter"],
+						},
+						mark: true,
+						marktext: "影",
+						intro: {
+							name:"影倾",
+							mark(dialog, storage, player) {
+								dialog.addText("你因【镜华】弃置了"+(player.countMark("sainit_yq_count") || 0) +"张牌");
+							},
+						},
+						forced: true,
+						firstDo:true,
+						charlotte:true,
+						filter: function (event, player) {
+							if(event.getParent(3).name!="sainit_jh_discard")return;
+							if(!(event.type == "discard" && event.getl(player)?.cards2?.length))return;
+							return true;
+							// return event.type == "discard" && event.getl(player).cards2.length;
+						},
+						content(){
+							player.addMark("sainit_yq_count",trigger.getl(player)?.cards2?.length);
+						}
+					}
+				}
 				derivation: 'sainit_yj',
 				subSkill:{
 					count:{
@@ -7963,6 +8028,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					var choiceList = ['获得一张指定类型的牌'];
 					if (player.canMoveCard()) choiceList.push('移动场上的一张牌');
 					player.chooseControl(true).set('choiceList', choiceList).set('prompt', get.prompt('zhan_sf')).set('ai', function () {
+					player.chooseControl(true).set('choiceList', choiceList).set('prompt', get.prompt('zhan_sf')).set('ai', function () {
 						var player = _status.event.player;
 						if (player.canMoveCard(true)) return 1;
 						return 0;
@@ -8096,6 +8162,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						return player.maxHp + player.hujia;
 					},
 				},
+				forced:true,
 				forced:true,
 				content: function () {
 					'step 0'
@@ -10050,8 +10117,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						trigger: {
 							global: "phaseBefore",
 							player: ["enterGame"],
+							global: "phaseBefore",
+							player: ["enterGame"],
 						},
 						forced: true,
+						filter(event,player){
+							return event.name != "phase" || game.phaseNumber == 0;
+						},
 						filter(event,player){
 							return event.name != "phase" || game.phaseNumber == 0;
 						},
@@ -14330,8 +14402,13 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						trigger: {
 							player: "loseAfter",
 							global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
+							player: "loseAfter",
+							global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
 						},
 						filter: function (event, player) {
+							const evt=event.getl(player);
+							if(evt?.cards2?.length) return;
+							return player != _status.currentPhase;
 							const evt=event.getl(player);
 							if(evt?.cards2?.length) return;
 							return player != _status.currentPhase;
@@ -14342,8 +14419,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 							for (let i = 0; i < evt.cards2.length; i++) {
 								if (player.getStorage('mliy_lf_num').includes(get.suit(evt.cards2[i]))) {
 									num += 1;
+						getIndex(event, player){
+							let num = 0
+							const evt=event.getl(player);
+							for (let i = 0; i < evt.cards2.length; i++) {
+								if (player.getStorage('mliy_lf_num').includes(get.suit(evt.cards2[i]))) {
+									num += 1;
 								}
 							}
+							return num;
+						},
+						content: function () {
+							player.draw(num);
 							return num;
 						},
 						content: function () {
@@ -15026,6 +15113,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				},
 				forced: true,
 				locked:false,
+				locked:false,
 				filter: function (event, player) {
 					return !game.hasPlayer(function (current) {
 						return current.hasSkill("muli_zc")
@@ -15073,6 +15161,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			},
 			"muli_zc": {
 				trigger: {
+					source: ["damageBegin1", "die"],
 					source: ["damageBegin1", "die"],
 				},
 				mark: true,
@@ -15432,6 +15521,9 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					}) > 0
 				},
 				direct: true,
+				async content(event, trigger, player) {
+					await player.give(event.cards, event.target);
+					await event.target.draw();
 				async content(event, trigger, player) {
 					await player.give(event.cards, event.target);
 					await event.target.draw();
@@ -19743,18 +19835,28 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
                 marktext: '☯',
                 zhuanhuanji: 'number',
                 zhuanhuanLimit: 3,
+                marktext: '☯',
+                zhuanhuanji: 'number',
+                zhuanhuanLimit: 3,
 				trigger: {
 					player: "loseAfter",
+					global: ["loseAsyncAfter", "equipAfter", "addJudgeAfter", "gainAfter", "addToExpansionAfter"],
 					global: ["loseAsyncAfter", "equipAfter", "addJudgeAfter", "gainAfter", "addToExpansionAfter"],
 				},
 				mark: true,
 				intro: {
 					markcount: (storage) => ['①', '②', '③'][(storage || 0) % 3],
+					markcount: (storage) => ['①', '②', '③'][(storage || 0) % 3],
 					content: function (storage, player, skill) {
+                        return '当你不因使用或此技能而失去手牌后，若你有手牌，你'+["将一张牌置于牌堆顶","从牌堆底摸一张牌","获得一名其他角色的一张牌，然后你可以视为使用无距离限制的【杀】并失去1点体力"][(storage || 0) % 3] + '。';
                         return '当你不因使用或此技能而失去手牌后，若你有手牌，你'+["将一张牌置于牌堆顶","从牌堆底摸一张牌","获得一名其他角色的一张牌，然后你可以视为使用无距离限制的【杀】并失去1点体力"][(storage || 0) % 3] + '。';
 					},
 				},
 				filter: function (event, player) {
+					if (event.getParent().name == "useCard") return false;
+					if (event.getParent().name == 'paers_fy') return false;
+					if (!player.countCards("h")) return;
+					return event.getl(player)?.hs.length;
 					if (event.getParent().name == "useCard") return false;
 					if (event.getParent().name == 'paers_fy') return false;
 					if (!player.countCards("h")) return;
@@ -19764,14 +19866,19 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					"step 0"
 					player.changeZhuanhuanji("paers_fy");
 					if (player.countMark("paers_fy")%3 == 1) {
+					player.changeZhuanhuanji("paers_fy");
+					if (player.countMark("paers_fy")%3 == 1) {
 						player.chooseCard('he', '将一张牌置于牌堆顶', true).set('ai', function (card) {
 							return get.value(card)
 						})
 					} else if (player.countMark("paers_fy")%3 == 2) {
+					} else if (player.countMark("paers_fy")%3 == 2) {
 						player.draw('bottom')
 						event.finish()
 					} else if (player.countMark("paers_fy")%3 == 0 && game.hasPlayer(function (current) { return current != player && current.countCards('he') > 0 })) {
+					} else if (player.countMark("paers_fy")%3 == 0 && game.hasPlayer(function (current) { return current != player && current.countCards('he') > 0 })) {
 						event.goto(2)
+					}else{
 					}else{
 						event.goto(4)
 					}
@@ -19781,7 +19888,10 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					game.log(player, '将', result.cards, '置于牌堆顶');
 					game.updateRoundNumber();
 					event.finish();
+					game.updateRoundNumber();
+					event.finish();
 					"step 2"
+					player.chooseTarget('获得一名其他角色的一张牌', true, function (card, player, target) {
 					player.chooseTarget('获得一名其他角色的一张牌', true, function (card, player, target) {
 						return player != target && target.countCards('he') > 0
 					}).set('ai', function (target) {
@@ -19797,6 +19907,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 					})
 					"step 5"
 					if (result.bool) {
+						player.loseHp();
 						player.loseHp();
 					}
 				},
@@ -20178,6 +20289,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				trigger: {
 					player: ["loseAfter"],
 					global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
+					player: ["loseAfter"],
+					global: ["equipAfter", "addJudgeAfter", "gainAfter", "loseAsyncAfter", "addToExpansionAfter"],
 				},
 				forced: true,
 				logTarget:_status.currentPhase,
@@ -20188,9 +20301,19 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						evt &&
 						evt.cards2.length
 					);			
+				logTarget:_status.currentPhase,
+				filter(event, player) {
+					if(!_status.currentPhase || _status.currentPhase == player || _status.currentPhase.countGainableCards('he') == 0) return false;
+					let evt = event.getl(player);
+					return (
+						evt &&
+						evt.cards2.length
+					);			
 				},
 				content() {
+				content() {
 					var target = _status.currentPhase;
+					player.gainPlayerCard(target, 'he',"获得"+get.translation(target)+"的一张牌",true);
 					player.gainPlayerCard(target, 'he',"获得"+get.translation(target)+"的一张牌",true);
 				},
 			},
@@ -23128,6 +23251,8 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			sainit_jh: function (player) {
 				if (!player.storage.sainit_yq) return '①回合开始时，你选择一名其他角色，直到你下次发动该技能，当该角色失去牌后，你摸等于此次失去牌数的牌；②当你的手牌数大于X时，你将手牌数弃至X（X为你体力上限）。'
 				else return '回合开始时，你选择一名其他角色，直到你下次发动该技能，当该角色失去牌后，你摸等于此次失去牌数的牌。'
+				if (!player.storage.sainit_yq) return '①回合开始时，你选择一名其他角色，直到你下次发动该技能，当该角色失去牌后，你摸等于此次失去牌数的牌；②当你的手牌数大于X时，你将手牌数弃至X（X为你体力上限）。'
+				else return '回合开始时，你选择一名其他角色，直到你下次发动该技能，当该角色失去牌后，你摸等于此次失去牌数的牌。'
 			}
 		},
 		translate: {
@@ -23141,6 +23266,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'baliqiao_qm': '启明',
 			'baliqiao_qm_info': '锁定技，你/其他角色获得其他角色/你区域内的牌后，摸一张牌。',
 			'baliqiao_sj': '丝尽',
+			'baliqiao_sj_info': '结束阶段，你可以交给一名其他角色X张手牌（X为你的体力值）。若如此做，其下一个回合内使用牌时，其需交给你一张牌。',
 			'baliqiao_sj_info': '结束阶段，你可以交给一名其他角色X张手牌（X为你的体力值）。若如此做，其下一个回合内使用牌时，其需交给你一张牌。',
 			'baliqiao_bl': '博览',
 			'baliqiao_bl_info': '锁定技，你于回合外获得的牌不计入手牌上限。',
@@ -23188,6 +23314,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'snake_tj_info': '出牌阶段限一次，你弃置任意张同颜色的牌并对一名角色进行一次' + get.frIntroduce('peizhi'),
 			'mile_tl': '通灵',
 			'mile_tl_info': `出牌阶段限一次，你可以选择一张非“灵体”手牌复制之（${get.poptip("fr_card_xysx")}除外），然后交给一名角色称为“灵体”。一名角色使用或打出此“灵体”结算结束后(装备牌除外)，其获得之，然后其本回合不能再使用或打出此牌并令你摸一张牌。`,
+			'mile_tl_info': `出牌阶段限一次，你可以选择一张非“灵体”手牌复制之（${get.poptip("fr_card_xysx")}除外），然后交给一名角色称为“灵体”。一名角色使用或打出此“灵体”结算结束后(装备牌除外)，其获得之，然后其本回合不能再使用或打出此牌并令你摸一张牌。`,
 			'sangdi_zy': '捉影',
 			'sangdi_zy_info': '你获得其他的角色牌时，若其中含有黑色牌，可以视为你对其使用了一张【杀】，若其中含有红色牌，可以视为你或其使用了【桃】。',
 			'sangdi_at': '暗探',
@@ -23202,6 +23329,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'siji_jg_info': '出牌阶段限一次，你可以展示你的所有手牌，并弃置其中的基本牌，然后你选择视为使用【五谷丰登】或【桃园结义】，且可为此牌减少任意名目标，目标数至少为1。',
 			'youying_qy': '浅吟',
 			'youying_qy_info': "锁定技，当你造成/受到伤害后，你将手牌数调整为你/伤害来源的体力值（至多调整五张牌）。",
+			'youying_qy_info': "锁定技，当你造成/受到伤害后，你将手牌数调整为你/伤害来源的体力值（至多调整五张牌）。",
 			'youying_jg': '剑歌',
 			'youying_jg_info': '当你使用一张牌时，若此牌的牌名与你于本局游戏使用的上一张牌的牌名押韵，你可以摸一张牌，否则，你可以重铸一张牌；然后，你可以弃置一张与此牌名押韵的牌令其额外结算一次。',
 			'rabby_xj': '卸甲',
@@ -23215,6 +23343,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'mokalin_sy': "碎岩",
 			'mokalin_sy_info': '你使用【杀】指定一名角色为目标后，你可失去1点体力令此【杀】对其伤害+1，然后可以弃置任意张【杀】并弃置其等量牌。',
 			'mokalin_dh': '地护',
+			'mokalin_dh_info': '每个回合开始时，你的' + get.dialogIntro('mianyi') + '调整至1层；你的「免疫」消解后，弃置X张手牌，不足则全弃，然后可以令任意名角色获得其中一张；每回合限一次，你失去牌后，可以摸X张牌，令「免疫」层数–1（X为你的体力值）。',
 			'mokalin_dh_info': '每个回合开始时，你的' + get.dialogIntro('mianyi') + '调整至1层；你的「免疫」消解后，弃置X张手牌，不足则全弃，然后可以令任意名角色获得其中一张；每回合限一次，你失去牌后，可以摸X张牌，令「免疫」层数–1（X为你的体力值）。',
 			'yinlong_jh': '惊鸿',
 			'yinlong_jh_info': '锁定技，弃牌阶段开始时，若你不是全场手牌唯一最多的角色，本回合手牌上限+2，否则你摸一张牌。你的♣手牌因弃置进入弃牌堆时，你可以摸<span class="bluetext">2</span>张牌并可以使用至多<span class="bluetext">1</span>张牌。',
@@ -23288,6 +23417,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'baixi_lj_info': '锁定技，你的红色牌不计入手牌上限，你使用黑色牌无距离与次数限制。出牌阶段，你可以将手牌中的♥/♦与♠/♣牌的花色相互交换。',
 			'baixi_dy': '德怨',
 			'baixi_dy_info': `锁定技，若你的红色手牌数量大于黑色，则你拥有${get.poptip("bazhen")}、${get.poptip("jijiu")}。若小于则你拥有${get.poptip("rewansha")}、${get.poptip("baixi_jc")}。若等于，则你拥有${get.poptip("reenyuan")}。`,
+			'baixi_dy_info': `锁定技，若你的红色手牌数量大于黑色，则你拥有${get.poptip("bazhen")}、${get.poptip("jijiu")}。若小于则你拥有${get.poptip("rewansha")}、${get.poptip("baixi_jc")}。若等于，则你拥有${get.poptip("reenyuan")}。`,
 			'baixi_bm': '白墨',
 			'baixi_bm_info': '出牌阶段限一次，你可以弃置一张颜色最多的手牌，然后选择一名其他角色，令其本回合无法使用或打出牌，其下一个摸牌阶段开始时，其放弃摸牌，然后你与其将手牌摸至4。',
 			'kulun_zn': '注能',
@@ -23305,6 +23435,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'sainit_yq': '影倾',
 			'sainit_yq_info': `觉醒技，当你因${get.poptip("sainit_jh")}②累计弃置不小于12张牌时,你获得${get.poptip("sainit_yj")}并移除${get.poptip("sainit_jh")}②。`,
 			'sainit_jh': '镜华',
+			'sainit_jh_info': '①回合开始时，你选择一名其他角色，直到你下次发动该技能，当该角色失去牌后，你摸等于此次失去牌数的牌；②当你的手牌数大于X时，你将手牌数弃至X（X为你体力上限）。',
 			'sainit_jh_info': '①回合开始时，你选择一名其他角色，直到你下次发动该技能，当该角色失去牌后，你摸等于此次失去牌数的牌；②当你的手牌数大于X时，你将手牌数弃至X（X为你体力上限）。',
 			'luyezhi_zye': '逐野',
 			'luyezhi_zye_info': '出牌阶段限一次，你可以弃置任意张花色不同的牌并令等量名角色的武将牌横置。若该角色已横置，则改为对其造成1点火焰伤害。',
@@ -23418,11 +23549,15 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'rasali_ly_info': '每回合限一次，一名角色进入濒死状态前，你可以将牌堆顶的四张牌置于你的武将牌上称为“引”，然后你可以任意交换你的“引”和手牌并依次执行：<li>①若“引”的花色均不同，你弃置所有“引”并令该角色立即死亡，<li>②若“引”的颜色均相同，你交给该角色所有“引”并令该角色将体力值回复至1点，然后该角色弃置两张手牌，<li>③若“引”的花色均相同，该角色回复1点体力值并摸两张牌，然后该角色获得1个“善”标记，<li>④若你的武将牌上有“引”，获得的所有“引”然后弃置两张手牌。</li>一名有“善”的角色受到伤害时，其移去1个“善”然后免除此次伤害，若此伤害有来源，你对该伤害来源造成1点伤害。',
 			'zhan_sf': '束缚',
 			'zhan_sf_info': `锁定技。①当你受到1点伤害后，你选择一项：获得牌堆里你选择的类型的一张牌，或移动场上的一张牌。②你除了${get.poptip("zhan_sf")}和${get.poptip("zhan_jf")}外的技能无效。③当你受到伤害结算完毕后，你回复1点体力。`,
+			'zhan_sf_info': `锁定技。①当你受到1点伤害后，你选择一项：获得牌堆里你选择的类型的一张牌，或移动场上的一张牌。②你除了${get.poptip("zhan_sf")}和${get.poptip("zhan_jf")}外的技能无效。③当你受到伤害结算完毕后，你回复1点体力。`,
 			'zhan_jf': '解放',
+			'zhan_jf_info': `觉醒技，准备阶段，若你累计受到与造成过的伤害之和不小于你体力上限两倍，你增加1点体力上限并回复1点体力，然后失去${get.poptip("zhan_sf")}并获得${get.poptip("zhan_jn")}与${get.poptip("zhan_zb")}，然后你可以令至多X名其他角色获得3层` + get.dialogIntro('zaie') + `（X为场上角色数的一半并向下取整）。`,
 			'zhan_jf_info': `觉醒技，准备阶段，若你累计受到与造成过的伤害之和不小于你体力上限两倍，你增加1点体力上限并回复1点体力，然后失去${get.poptip("zhan_sf")}并获得${get.poptip("zhan_jn")}与${get.poptip("zhan_zb")}，然后你可以令至多X名其他角色获得3层` + get.dialogIntro('zaie') + `（X为场上角色数的一半并向下取整）。`,
 			'zhan_jn': '聚能',
 			'zhan_jn_info': '锁定技，准备阶段，若你的体力上限小于10，你增加1点体力上限；若你的护甲小于5，你获得1点护甲；你的手牌上限等于你的体力上限与护甲之和。',
+			'zhan_jn_info': '锁定技，准备阶段，若你的体力上限小于10，你增加1点体力上限；若你的护甲小于5，你获得1点护甲；你的手牌上限等于你的体力上限与护甲之和。',
 			'zhan_zb': '震爆',
+			'zhan_zb_info': '一名角色的回合开始时，若你的体力上限大于其体力值，你可以失去任意点体力上限并对其造成等量雷电伤害。',
 			'zhan_zb_info': '一名角色的回合开始时，若你的体力上限大于其体力值，你可以失去任意点体力上限并对其造成等量雷电伤害。',
 			'derk_ly': '连语',
 			'derk_ly_info': '当你使用牌时，若此牌的点数与你使用的前两张牌的点数和对13取余（若整除则视为K）相等，你摸两张牌；锁定技，你使用与你上一张使用牌的颜色相同的牌无次数限制。',
@@ -23451,6 +23586,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			'dier_sb': '守宝',
 			'dier_sb_info': '当你成为其他角色使用【杀】的目标后，你可以与该角色拼点并令此牌对你无效，若你赢，你摸两张牌，然后令其失去1点体力，否则，你失去1点体力并弃置其一张牌。',
 			'ala_dy': "对弈",
+			'ala_dy_info': "当你受到其他角色造成的伤害时，你可以与其进行“对策”，若你赢，你取消此次伤害，对其造成等量同属性伤害。",
 			'ala_dy_info': "当你受到其他角色造成的伤害时，你可以与其进行“对策”，若你赢，你取消此次伤害，对其造成等量同属性伤害。",
 			'ala_gm': '讨雠',
 			'ala_gm_info': "一名其他角色受到另一名其他角色的伤害前，你可以令该角色选择是否交给你X张牌（X为其手牌数的一半并向下取整且至少为1），然后将此伤害转移给你并令你摸Y+1张牌（Y为你的已损失体力值）。",
@@ -23517,6 +23653,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"hynea_cg": "蹴功",
 			"hynea_cg_info": "锁定技。你使用【酒】无次数限制；当你的体力值不小于[4]时，你的【闪】和【桃】均视为【酒】。",
 			"wore_hy": "惑言",
+			"wore_hy_info": "锁定技，首轮游戏开始时，或当你受到伤害结算完毕后，你获得并切换至随从“催眠者”（体力上限为1，初始手牌为4，手牌上限为3，催眠者从三个随机武将中获得其中一个武将的技能，死亡时切回本体）。",
 			"wore_hy_info": "锁定技，首轮游戏开始时，或当你受到伤害结算完毕后，你获得并切换至随从“催眠者”（体力上限为1，初始手牌为4，手牌上限为3，催眠者从三个随机武将中获得其中一个武将的技能，死亡时切回本体）。",
 			"tiers_qp": "强破",
 			"tiers_qp_info": get.frIntroduce('xuli') + "，每回合限一次，当你使用【杀】指定目标后，你可以失去<font color=#ffff7a>1</font>点体力，令此【杀】伤害+<font color=#eb6e3a>1</font>且无视防具。",
@@ -23652,6 +23789,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"mislee_tj_info": "出牌阶段每项限一次。你可以弃置一张武器牌/防具牌/其他装备牌，并发起一次“锻造”。然后你从锻造结果中选择一张牌，置于一名角色的装备区内（可替换原装备）。当有因你发动〖神工〗而加入游戏的牌进入弃牌堆后，你将此牌移出游戏，然后你于当前回合结束后摸一张牌。",
 			"mislee_zr": "移赠",
 			"mislee_zr_info": "出牌阶段限一次，你可以将任意一名角色装备区或判定区的牌移动到另一名角色对应的区域。当你失去装备区的牌后，你摸两张牌。",
+			"mislee_zr_info": "出牌阶段限一次，你可以将任意一名角色装备区或判定区的牌移动到另一名角色对应的区域。当你失去装备区的牌后，你摸两张牌。",
 			"kref_yz": "月临",
 			"kref_yz_info": "一名角色受到来源不为你的伤害后，你可以弃置一张牌并进行一次判定。若结果为黑色，该角色依次执行以下效果，①获得伤害来源的X张牌，②获得造成伤害的牌，③摸X张牌（X为此次伤害值）；若结果为红色，该角色依次执行以下效果，①回复1点体力，②复原武将牌，③伤害来源翻面。",
 			"krif_zl": "追猎",
@@ -23660,17 +23798,20 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"krif_lj_info": "锁定技，当你对一名其他角色造成伤害时，若你与其距离为1且其位于你的下家，则你令此伤害+1。",
 			"mliy_lf": "流风",
 			"mliy_lf_info": "一轮游戏开始时，若你有未被记录的花色，你可以进行判定，然后记录该判定牌的花色；当你于回合外失去一张已被记录花色牌后，你摸一张牌。",
+			"mliy_lf_info": "一轮游戏开始时，若你有未被记录的花色，你可以进行判定，然后记录该判定牌的花色；当你于回合外失去一张已被记录花色牌后，你摸一张牌。",
 			"mliy_hx": "回雪",
 			"mliy_hx_info": "准备阶段，你可以选择一名其他角色并选择一项：1.你弃置其与你区域内的各一张牌，然后各回复1点体力；2.你与其各失去1点体力，然后各摸一张牌。",
 			"sier_xl": "降龙",
 			"sier_xl_info": "你可以将两张不同颜色的牌当作任意基本牌使用或打出。",
 			"sier_fh": "伏虎",
 			"sier_fh_info": "觉醒技，当你进入濒死状态时，你回复3点体力并摸四种花色的牌各一张，然后修改〖降龙〗。",
+			"sier_fh_info": "觉醒技，当你进入濒死状态时，你回复3点体力并摸四种花色的牌各一张，然后修改〖降龙〗。",
 			"sier_ql": "驱狼",
 			"sier_ql_info": "若你处于濒死状态，你的【桃】和【酒】对你自己生效时，数值+1。出牌阶段，你可以将一张点数为K的手牌交给另一名角色，其摸一张牌。",
 			"sier_xlg": "降龙·改",
 			"sier_xlg_info": "你可以将一张点数不为K的牌当作任意基本牌使用或打出。",
 			"kesaya_zw": "祭献",
+			"kesaya_zw_info": "你的体力上限始终等于2；出牌阶段，若你未受伤，你可以失去1点体力并摸三张牌。",
 			"kesaya_zw_info": "你的体力上限始终等于2；出牌阶段，若你未受伤，你可以失去1点体力并摸三张牌。",
 			"luciya_hl": "唤雷",
 			"luciya_hl_info": "每回合限一次，当你于回合外使用或打出牌时，你可令任意一名角色进行一次判定。若结果为♠2~9，该角色受到X点无来源的雷属性伤害（X为〖唤雷〗判定成功的次数且至少为1）。",
@@ -23686,9 +23827,12 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"sam_wh_info": "锁定技，当你使用带伤害标签的牌指定其他角色为目标后，你令其防具和技能失效直至此回合结束。每回合限一次，当你造成伤害后，你摸两张牌，然后此回合你使用【杀】无距离限制且次数上限+1。",
 			"muli_cm": "绸缪",
 			"muli_cm_info": `每轮开始时，若场上没有技能${get.poptip("muli_zc")}，你须获得${get.poptip("muli_zc")}并获得1个“策”标记；每名角色回合开始时，若其有${get.poptip("muli_zc")}，你可以弃置两张手牌然后获得${get.poptip("muli_zc")}与其所有策标记，然后其失去${get.poptip("muli_zc")}并失去1点体力。`,
+			"muli_cm_info": `每轮开始时，若场上没有技能${get.poptip("muli_zc")}，你须获得${get.poptip("muli_zc")}并获得1个“策”标记；每名角色回合开始时，若其有${get.poptip("muli_zc")}，你可以弃置两张手牌然后获得${get.poptip("muli_zc")}与其所有策标记，然后其失去${get.poptip("muli_zc")}并失去1点体力。`,
 			"muli_zc": "终策",
 			"muli_zc_info": "锁定技，你对其他角色造成伤害时，令其获得技能〖终策〗与你的所有“策”并失去技能〖终策〗(若你没有〖绸缪〗，你先失去1点体力)。结束阶段，若你拥有“策”，你失去X点体力（X为“策”的数量），然后“策”的数量+1；当你死亡后，你令一名其他角色获得〖终策〗与你的所有“策”。",
+			"muli_zc_info": "锁定技，你对其他角色造成伤害时，令其获得技能〖终策〗与你的所有“策”并失去技能〖终策〗(若你没有〖绸缪〗，你先失去1点体力)。结束阶段，若你拥有“策”，你失去X点体力（X为“策”的数量），然后“策”的数量+1；当你死亡后，你令一名其他角色获得〖终策〗与你的所有“策”。",
 			"muli_yl": "远虑",
+			"muli_yl_info": "锁定技，一名角色失去体力时，你摸失去量的牌，然后若该角色为你，改为仅失去1点。",
 			"muli_yl_info": "锁定技，一名角色失去体力时，你摸失去量的牌，然后若该角色为你，改为仅失去1点。",
 			"hars_sz": "傀炼",
 			"hars_sz_info": "其他角色死亡时，你可以令其获得技能“傀尸”。拥有技能“傀尸”的角色回合即将开始时，此回合改为由你操控。",
@@ -23705,6 +23849,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"berg_jh": "镜花",
 			"berg_jh_info": "每轮限一次，当你成为一名其他角色的卡牌唯一目标时，你可以" + get.frIntroduce('found2') + "一张牌代替此牌",
 			"berg_sy": "水月",
+			"berg_sy_info": "当你对唯一目标声明使用一张牌时，你可以" + get.frIntroduce('found2') + "一张牌代替此牌结算。",
 			"berg_sy_info": "当你对唯一目标声明使用一张牌时，你可以" + get.frIntroduce('found2') + "一张牌代替此牌结算。",
 			"lint_nd": "掣肘",
 			"lint_nd_info": "出牌阶段限一次，你可以选择一名角色并弃置一张牌。若你弃置的牌为红色，该角色的下一个出牌阶段开始时与出牌阶段结束时，其将手牌摸至五张。若你弃置的牌为黑色，该角色的下一个出牌阶段开始时与出牌阶段结束时，其将手牌弃至一张。",
@@ -23762,6 +23907,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"faers_yl_info": "锁定技，当你弃置你的【桃】后，你回复1点体力。",
 			"site_qj": "权解",
 			"site_qj_info": "当你受到伤害时，你可以改为失去等量体力上限，然后摸等量牌。",
+			"site_qj_info": "当你受到伤害时，你可以改为失去等量体力上限，然后摸等量牌。",
 			"edmond_jz": "激战",
 			"edmond_jz_info": "锁定技，当你不因〖护幼〗成为其他角色唯一牌的目标时，若此牌不为转化牌且对应的实体牌牌数为1且不为【桃】或【酒】且你的“战”数不大于你的体力值的两倍，则你将此牌置于你的武将牌上，称为“战”，且取消此牌的目标。",
 			"edmond_jj": "护幼",
@@ -23784,13 +23930,17 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"terlk_pj_info": "锁定技，当你使用【杀】指定目标后，你令此牌需要依次使用或打出X张【闪】响应（X为目标角色的体力值）。",
 			"terlk_zj": "斩棘",
 			"terlk_zj_info": "出牌阶段开始时，你可以令所有角色失去或回复1点体力，若如此做，你摸X张牌（X为场上已受伤的角色数）并翻面，然后本回合你对攻击范围内的角色使用牌无距离与次数限制。",
+			"terlk_zj_info": "出牌阶段开始时，你可以令所有角色失去或回复1点体力，若如此做，你摸X张牌（X为场上已受伤的角色数）并翻面，然后本回合你对攻击范围内的角色使用牌无距离与次数限制。",
 			"nulia_dh": "渡化",
 			"nulia_dh_info": "出牌阶段限一次，你可以失去1点体力，令一名死亡角色复活至1点体力并摸两张牌，然后将其身份改为与你相同(若你是主公则改为忠臣)。",
+			"nulia_dh_info": "出牌阶段限一次，你可以失去1点体力，令一名死亡角色复活至1点体力并摸两张牌，然后将其身份改为与你相同(若你是主公则改为忠臣)。",
 			"nulia_hj": "合击",
+			"nulia_hj_info": "你的手牌上限等于你的体力上限；摸牌阶段，你可以多摸X张牌（若你为主公，X为场上忠臣数；否则X为场上与你同身份的角色数）。",
 			"nulia_hj_info": "你的手牌上限等于你的体力上限；摸牌阶段，你可以多摸X张牌（若你为主公，X为场上忠臣数；否则X为场上与你同身份的角色数）。",
 			"taber_jj": "度衡",
 			"taber_jj_info": "出牌阶段限一次，你可以选择至多X名角色并展示牌堆顶等量的牌（X为场上存活的人数并向上取整），然后这些角色依次选择是否用一张手牌交换其中的一张牌；结算完毕后，你令一名角色获得剩余的所有牌。",
 			"verb_zy": "征言",
+			"verb_zy_info": "出牌阶段限一次，你令有手牌的角色依次选择一项：1.交给你一张牌，2.失去1点体力；出牌阶段结束时，你须依次交给这些角色一张手牌。",
 			"verb_zy_info": "出牌阶段限一次，你令有手牌的角色依次选择一项：1.交给你一张牌，2.失去1点体力；出牌阶段结束时，你须依次交给这些角色一张手牌。",
 			"verb_fs": "逢生",
 			"verb_fs_info": "当你成为其他角色使用牌的目标时，若你的手牌数不大于你的体力上限，你可" + get.frIntroduce('found') + "一张牌。",
@@ -23830,6 +23980,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"terz_ts_info": "锁定技，一名角色造成伤害时，若二者都拥有技能〖流域〗且状态不同，处于〖流域〗阴状态的角色获得阳状态角色的一张牌，然后你摸一张牌。",
 			"delta_sz": "瞬斩",
 			"delta_sz_info": "当你造成/受到伤害时，你可以失去1点体力并摸两张牌，然后令此伤害翻倍/减半（向下取整）。",
+			"delta_sz_info": "当你造成/受到伤害时，你可以失去1点体力并摸两张牌，然后令此伤害翻倍/减半（向下取整）。",
 			"jet_ww": "危望",
 			"jet_ww_info": "一名其他角色使用【杀】指定另一名其他角色为目标后，使用者可以交给你一张牌，然后你选择一项：①令此【杀】不可被响应；②成为此【杀】的额外目标。",
 			"jet_fy": "拂衣",
@@ -23842,6 +23993,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"nier_zj_info": "每名角色的回合开始/当你区域内牌数发生变化时，你记录X（X为你的体力值与手牌数之差的绝对值），若此X与你本回合内所记录过的X均不相同：若X为奇数，你可以将一张牌当任意基本牌使用或打出，若X为偶数且不为0，你可以将一张牌当任意单体普通锦囊牌使用。",
 			"paers_fy": "愤延",
 			"paers_fy_info": "锁定技，转换技，当你不因使用或此技能而失去手牌后，若你有手牌，你①将一张牌置于牌堆顶。②从牌堆底摸一张牌。③获得一名其他角色的一张牌，且可以视为使用无距离限制的【杀】并失去1点体力。",
+			"paers_fy_info": "锁定技，转换技，当你不因使用或此技能而失去手牌后，若你有手牌，你①将一张牌置于牌堆顶。②从牌堆底摸一张牌。③获得一名其他角色的一张牌，且可以视为使用无距离限制的【杀】并失去1点体力。",
 			"pares_xh": "星汇",
 			"pares_xh_info": "锁定技，当你造成或受到伤害后，将你的手牌数调整为你的当前体力值，若你因此失去了牌，你摸一张牌。",
 			"slen_xj": "心计",
@@ -23853,6 +24005,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"zenia_ld": "律动",
 			"zenia_ld_info": "锁定技，出牌阶段，你使用牌时，你本回合的手牌上限+1。",
 			"slen_gc": "纲常",
+			"slen_gc_info": "锁定技，当你于回合外失去牌后，你获得当前回合角色的一张牌。",
 			"slen_gc_info": "锁定技，当你于回合外失去牌后，你获得当前回合角色的一张牌。",
 			"lamost_zf": "知繁",
 			"lamost_zf_info": "锁定技，牌堆顶X+1张牌始终对你可见；你可将牌堆顶X+1张牌如手牌般使用或打出。（X为你的已损失体力值）",
@@ -23908,9 +24061,11 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 			"liya_sj_info": "锁定技，你造成的伤害均视为" + get.frIntroduce('kamidamage') + "。",
 			"laays_cs": "存生",
 			"laays_cs_info": "出牌阶段限一次，你可以令一名其他角色选择是否令你摸X张牌，然后你可以交给其2X张手牌并重复此流程（X为本回合内你发动〖存生〗的次数）。",
+			"laays_cs_info": "出牌阶段限一次，你可以令一名其他角色选择是否令你摸X张牌，然后你可以交给其2X张手牌并重复此流程（X为本回合内你发动〖存生〗的次数）。",
 			"mala_ht": "宏腾",
 			"mala_ht_info": "锁定技，你使用牌无距离与次数限制，且你的单体锦囊牌与【杀】可以多指定X个目标（X为你的已损体力值）；准备阶段，你随机失去一张判定区内的牌。",
 			"mala_ly": "龙脉",
+			"mala_ly_info": "锁定技，当你受到属性伤害或失去体力时，你取消之并摸X张牌（X为此次伤害或失去体力的值）；摸牌阶段，你多摸Y张牌（Y为你已损体力值的一半，向上取整）。",
 			"mala_ly_info": "锁定技，当你受到属性伤害或失去体力时，你取消之并摸X张牌（X为此次伤害或失去体力的值）；摸牌阶段，你多摸Y张牌（Y为你已损体力值的一半，向上取整）。",
 			"dier_ly": "龙翼",
 			"dier_ly_info": "锁定技，你使用牌无距离限制；当你受到属性伤害或失去体力时，你摸X张牌（X为此次伤害或失去体力的值）；摸牌阶段，你多摸Y张牌（Y为你已损体力值的一半并向上取整）。",
