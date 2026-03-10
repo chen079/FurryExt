@@ -1297,7 +1297,6 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
 
             //------------------------------------------自定义get函数------------------------------------------//
             window.FrskillTips = function (tipname, id) {
-            window.FrskillTips = function (tipname, id) {
                 const frtip = ui.create.div('.Fr-frtips', document.body);
                 var isPhone = /mobile|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i.test(navigator.userAgent);
                 frtip.style.zIndex = 998;
@@ -1324,21 +1323,17 @@ game.import("extension", function (lib, game, ui, get, ai, _status) {
                         let str1 = window.furry.introduce[name].name;
                         let str2 = window.furry.introduce[name].info;
                         let link = "<a id='" + temp + "' style='color:unset' href='#' onclick=\"FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
-                        let link = "<a id='" + temp + "' style='color:unset' href='#' onclick=\"FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
                         return link;
                     } else {
                         let str1 = window.furry[type + 'Introduce'][name].name;
                         let str2 = window.furry[type + 'Introduce'][name].info;
                         let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
-                        let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:FrskillTips('" + str2 + "','" + temp + "');\">" + str1 + "※</a>";
                         return link;
                     }
                 } else {
                     let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:FrskillTips('" + str + "','" + temp + "');\">" + name + "※</a>";
-                    let link = "<a id='" + temp + "' style='color:unset' href=\"javascript:FrskillTips('" + str + "','" + temp + "');\">" + name + "※</a>";
                     return link;
                 }
-            };
             };
             //------------------------------------------自定义window函数------------------------------------------//
             window.furryIntroduce = function (name, type) {
