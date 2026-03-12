@@ -8047,22 +8047,18 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				intro: {
 					content: "当前累计受到与造成了总计$点伤害",
 				},
-				content: function () {
-					'step 0'
+				async content(event,trigger,player) {
 					player.awakenSkill('zhan_jf');
-					player.gainMaxHp();
-					player.recover()
+					await player.gainMaxHp();
+					await player.recover()
 					player.removeSkill('zhan_sf')
-					'step 1'
 					player.addSkill('zhan_jn')
 					player.addSkill('zhan_zb')
-					"step 2"
-					player.chooseTarget([1, Math.floor(game.countPlayer() / 2)], "令至多" + get.translation(Math.floor(game.countPlayer() / 2)) + "名角色获得〖厄临〗", function (card, target, player) {
+					const result = await player.chooseTarget([1, Math.floor(game.countPlayer() / 2)], "令至多" + get.translation(Math.floor(game.countPlayer() / 2)) + "名角色获得3层「灾厄」", function (card, target, player) {
 						return target != player
 					}, false).set('ai', function (target) {
 						return -get.attitude(_status.event.player, target) * (1 + target.countCards('j'))
-					})
-					"step 3"
+					}).forResult();
 					if (result.bool) {
 						for (var i = 0; i < result.targets.length; i++) {
 							result.targets[i].addFrBuff('zaie', 3)
@@ -8114,18 +8110,16 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 				check: function (event, player) {
 					return get.attitude(player, event.player) < 0
 				},
-				content: function () {
-					'step 0'
-					player.chooseNumber([1, player.maxHp], player.maxHp)
+				async content(event,trigger,player) {
+					const result = await player.chooseNumber([1, player.maxHp], player.maxHp)
 						.set("prompt", get.prompt2(event.name))
 						.set("ai", function (player, _event) {
 							if (trigger.player.isUnknown()) return 1
 							return Math.min(trigger.player.hp, player.getDamagedHp())
-						})
-					'step 1'
+						}).forResult();
 					if (result.bool) {
-						player.loseMaxHp(result.choice)
-						trigger.player.damage(result.choice, player, 'thunder')
+						await player.loseMaxHp(result.choice);
+						await trigger.player.damage(result.choice, player, 'thunder');
 					}
 				}
 			},
