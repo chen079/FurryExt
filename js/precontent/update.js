@@ -5,6 +5,7 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         var changeInfo = {
             changeLog: [
                 '4.1.1',
+                '钫酸酱重构了扩展！本次更新一定要移除整个扩展再重新导入！(记得将扩展根目录下的save.json拷贝出来，那是你的扩展数据存档)',
                 '紧急更新！修复恶性bug！',
                 '修复【附尾】导致报错的bug',
                 '修复【列装】加伤异常的bug',
