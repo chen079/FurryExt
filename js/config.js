@@ -330,7 +330,7 @@ export let config = {
     "furry_onlineUpdate2": {
         "name": "<b>自动更新</b>",
         "intro": "游戏开始后会自动检查福瑞拓展是否为最新版",
-        "init": true,
+        "init": false,
     },
     "group_egg": {
         "name": "<b>交流群号:556343851</b>",
