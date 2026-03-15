@@ -9006,7 +9006,7 @@ game.import('character', function (lib, game, ui, get, ai, _status) {
 						} else {
 							trigger.cancel()
 						}
-						lib.frStory.playfrAudio('tails_argue_win')
+						lib.frStory.playfrAudio('tails_argue')
 						player.chooseButton(['谋弈：请选择一种策略', [[['', '', 'fr_card_chongci'], ['', '', 'fr_card_zhuanyi']], 'vcard']], true).set('ai', function (button) {
 							var player = _status.event.player;
 							var target = _status.event.target;
