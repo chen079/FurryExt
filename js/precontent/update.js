@@ -4,19 +4,33 @@ window.furry.frImport(function (lib, game, ui, get, ai, _status) {
         version = version || lib.extensionPack["福瑞拓展"].version;
         var changeInfo = {
             changeLog: [
-                '/setPlayer/',
-                '4.1.0',
-                '修复大量描述异常、异步错误、报错bug、异常结算bug(是的，要打的灰还有一大堆呜呜)',
-                '进行大量的机制标准化，少量ai优化',
-                '优化akain_jh的技能显示、诸多frIntroduce内容',
-                '调整灵秘、强化技机制，皮特莱克削弱为3血(小孩子要这么多血干嘛)，但控魂多发动一次',
-                '订正库伦名字错误',
-                '删除压缩过程中产生的大量乱码图片',
+                '4.1.1',
+                '紧急更新！修复恶性bug！',
+                '修复【附尾】导致报错的bug',
+                '修复【列装】加伤异常的bug',
+                '修复【浅吟】结算异常的bug',
+                '修复【清评】ai无脑发动提升血压的bug',
+                '修复【歃血】结算严重异常的bug，并优化文字提示',
+                '由于自动更新模块异常，现默认关闭',
             ],
-            players: ['fr_qiushou', 'fr_liuqing'],
+            players: [],
             cards: [],
         };
         var UpdateHistory = {
+            '4.1.0':{
+                changeLog: [
+                    '/setPlayer/',
+                    '4.1.0',
+                    '修复大量描述异常、异步错误、报错bug、异常结算bug(是的，要打的灰还有一大堆呜呜)',
+                    '进行大量的机制标准化，少量ai优化',
+                    '优化akain_jh的技能显示、诸多frIntroduce内容',
+                    '调整灵秘、强化技机制，皮特莱克削弱为3血(小孩子要这么多血干嘛)，但控魂多发动一次',
+                    '订正库伦名字错误',
+                    '删除压缩过程中产生的大量乱码图片',
+                ],
+                players: ['fr_qiushou', 'fr_liuqing'],
+                cards: [],
+            },
             '4.0.1':{
                 changeLog: [
                     '/setPlayer/',
