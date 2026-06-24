@@ -1,6 +1,8 @@
 import { lib, game, ui, get, ai, _status } from '../../../../noname.js';
+import { InitFurry } from '../core.js'
 
 export async function precontent(furryPack) {
+    InitFurry()
     if (!get.is.object(window.OLUI_extAssets)) {
         window.OLUI_extAssets = {
             playerGroup: {},
@@ -8,37 +10,27 @@ export async function precontent(furryPack) {
             playerName: {},
             cardImage: {},
             playerButtonGroup: {},
-            playerButtonHp: {}
+            playerButtonHp: {},
         };
     }
     window.furry.traverseFolder('extension/福瑞拓展/image/card/OLUI', false)
         .then(files => {
             var assets = {
-                // 玩家势力素材
                 playerGroup: {
-                    // 势力图片素材
                     fr_g_dragon: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/group_fr_g_dragon.png',
                     fr_g_ji: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/group_fr_g_ji.png',
                 },
-                // 玩家势力对应的手牌数素材
                 playerGroupCount: {
-                    // 势力对应的手牌数素材
                     fr_g_dragon: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/fr_g_dragon.png',
                     fr_g_ji: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/fr_g_ji.png',
                 },
-                // 扩展要添加的玩家势力名字横幅素材
                 playerName: {
-                    // 势力横幅(其他人)
                     fr_g_dragon: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/general_name_bg_fr_g_dragon.png',
                     fr_g_ji: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/general_name_bg_fr_g_ji.png',
-                    // 势力横幅(自己)
                     fr_g_dragon_s: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/general_name_bg_fr_g_dragon_s.png',
                     fr_g_ji_s: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/general_name_bg_fr_g_ji_s.png',
                 },
-                // 卡牌图片
-                cardImage: {
-
-                },
+                cardImage: {},
                 playerButtonGroup: {
                     fr_g_dragon: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/group_fr_g_dragon.png',
                     fr_g_ji: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/group_fr_g_ji.png',
@@ -47,72 +39,70 @@ export async function precontent(furryPack) {
                     fr_g_dragon: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/fr_g_dragon_hp.png',
                     fr_g_ji: lib.assetURL + 'extension/福瑞拓展/image/biaoqian/fr_g_ji_hp.png',
                 },
-            }
+            };
             for (var i of files) {
-                var type = i.slice(0, i.lastIndexOf('/'))
-                var file = i.slice(i.lastIndexOf('/') + 1)
-                var name = file.slice(0, file.lastIndexOf('.'))
-                if (!assets.cardImage[name]) assets.cardImage[name] = {}
-                assets.cardImage[name][type] = lib.assetURL + 'extension/福瑞拓展/image/card/OLUI/' + i
+                var type = i.slice(0, i.lastIndexOf('/'));
+                var file = i.slice(i.lastIndexOf('/') + 1);
+                var name = file.slice(0, file.lastIndexOf('.'));
+                if (!assets.cardImage[name]) assets.cardImage[name] = {};
+                assets.cardImage[name][type] = lib.assetURL + 'extension/福瑞拓展/image/card/OLUI/' + i;
             }
-            throw (assets)
+            return assets;
         })
-        .catch(assets => {
+        .then(assets => {
             for (var i in assets) {
                 Object.assign(window.OLUI_extAssets[i], assets[i]);
             }
         })
+        .catch(error => console.error(error));
     lib.onover.push(function (bool) {
         if (bool && lib.config.mode == 'boss') {
             for (var i = 0; i < game.dead.length; i++) {
-                if (game.dead[i].name == 'fr_bosshars' && !game.frAchi.hasAchi('斩断纵丝', 'special')) game.frAchi.addProgress('斩断纵丝', 'special')
-                if (game.dead[i].name == 'fr_bossfaers' && !game.frAchi.hasAchi('打碎永恒', 'special')) game.frAchi.addProgress('打碎永恒', 'special')
-                if (game.dead[i].name == 'fr_bossmala' && !game.frAchi.hasAchi('屠神者', 'special')) game.frAchi.addProgress('屠神者', 'special')
-                if (game.dead[i].name == 'fr_bossoert' && !game.frAchi.hasAchi('踏破轮回', 'special')) game.frAchi.addProgress('踏破轮回', 'special')
+                if (game.dead[i].name == 'fr_bosshars' && !game.frAchi.hasAchi('斩断纵丝', 'special')) game.frAchi.addProgress('斩断纵丝', 'special');
+                if (game.dead[i].name == 'fr_bossfaers' && !game.frAchi.hasAchi('打碎永恒', 'special')) game.frAchi.addProgress('打碎永恒', 'special');
+                if (game.dead[i].name == 'fr_bossmala' && !game.frAchi.hasAchi('屠神者', 'special')) game.frAchi.addProgress('屠神者', 'special');
+                if (game.dead[i].name == 'fr_bossoert' && !game.frAchi.hasAchi('踏破轮回', 'special')) game.frAchi.addProgress('踏破轮回', 'special');
             }
         }
-    })
+    });
     window.furry.getExtensionNode("福瑞拓展")
         .then(([leftBar, rightBar]) => {
-            const divElements = rightBar.getElementsByClassName('config')
-            let spanElement, thanksElement, activeKeys
+            const divElements = rightBar.getElementsByClassName('config');
+            let spanElement, thanksElement, activeKeys;
             for (let i = 0; i < divElements.length; i++) {
-                spanElement = divElements[i].querySelector('div#yiyan')
-                thanksElement = divElements[i].querySelector('div#thanks')
-                activeKeys = divElements[i].querySelector('div#active')
-                if (spanElement && thanksElement && activeKeys) {
-                    break;
-                }
+                spanElement = divElements[i].querySelector('div#yiyan');
+                thanksElement = divElements[i].querySelector('div#thanks');
+                activeKeys = divElements[i].querySelector('div#active');
+                if (spanElement && thanksElement && activeKeys) break;
             }
-            var keybutton = activeKeys.querySelector('button#activeKey')
+            if (!spanElement || !thanksElement || !activeKeys) return;
+            var keybutton = activeKeys.querySelector('button#activeKey');
             keybutton.addEventListener(lib.config.touchscreen ? "touchend" : "click", function () {
-                lib.frActiveKeys.active(activeKeys.querySelector('input').value)
-                activeKeys.querySelector('input').value = ''
+                lib.frActiveKeys.active(activeKeys.querySelector('input').value);
+                activeKeys.querySelector('input').value = '';
             });
-            //---------------------------------------一言------------------------------------------//
             fetch("https://v1.hitokoto.cn/")
                 .then((respond) => respond.json())
                 .then((hitokoto) => {
-                    spanElement.innerHTML = '每日一言：<br><div style="background: none;">&nbsp&nbsp&nbsp&nbsp' + hitokoto.hitokoto + '</div><br><div style="display: flex; justify-content: flex-end; background: none;">———' + hitokoto.from + "&nbsp&nbsp</div>"
+                    spanElement.innerHTML = '每日一言：<br><div style="background: none;">&nbsp&nbsp&nbsp&nbsp' + hitokoto.hitokoto + '</div><br><div style="display: flex; justify-content: flex-end; background: none;">———' + hitokoto.from + "&nbsp&nbsp</div>";
                 })
                 .catch((error) => {
                     const hitokoto = {
                         hitokoto: "您的网络或配置错误，无法获取一言内容。",
                         from: '钫酸酱',
-                    }
-                    spanElement.innerHTML = '每日一言：<br><div style="background: none;">&nbsp&nbsp&nbsp&nbsp' + hitokoto.hitokoto + '</div><br><div style="display: flex; justify-content: flex-end;background: none;">———' + hitokoto.from + "&nbsp&nbsp</div>"
+                    };
+                    spanElement.innerHTML = '每日一言：<br><div style="background: none;">&nbsp&nbsp&nbsp&nbsp' + hitokoto.hitokoto + '</div><br><div style="display: flex; justify-content: flex-end;background: none;">———' + hitokoto.from + "&nbsp&nbsp</div>";
                     console.error(error);
                 });
-            spanElement.style.border = 'double'
-            spanElement.style.borderRadius = '3px'
-            spanElement.style.width = '100%'
-            leftBar.innerHTML = "<div id='furry' style='animation: flicker 1.5s infinite alternate;'>福瑞拓展</div>"
-            leftBar.setBackgroundImage('extension/福瑞拓展/image/background/wall.png')
-            //鸣谢清单
+            spanElement.style.border = 'double';
+            spanElement.style.borderRadius = '3px';
+            spanElement.style.width = '100%';
+            leftBar.innerHTML = "<div id='furry' style='animation: flicker 1.5s infinite alternate;'>福瑞拓展</div>";
+            leftBar.setBackgroundImage('extension/福瑞拓展/image/background/wall.png');
             var box = document.createElement('div');
-            let arrow = thanksElement.childNodes[1]
+            let arrow = thanksElement.childNodes[1];
             box.style.display = 'none';
-            box.style.textAlign = 'left'
+            box.style.textAlign = 'left';
             box.style.border = '1px solid white';
             window.furry.traverseFolder('extension/福瑞拓展/image/acknowledgments', false, 1)
                 .then(fonlders => {
@@ -120,7 +110,7 @@ export async function precontent(furryPack) {
                         box.innerHTML += "<li><img style='width:40px;height:40px;border-radius:50%;' src=" + lib.assetURL + "extension/福瑞拓展/image/acknowledgments/" + i + "></img>" + i.slice(0, -4);
                     }
                 })
-                .catch(error => console.log(error))
+                .catch(error => console.log(error));
             thanksElement.appendChild(box);
             thanksElement.addEventListener(lib.config.touchscreen ? "touchend" : "click", function () {
                 if (arrow.style.transform === 'rotate(90deg)') {
@@ -132,7 +122,7 @@ export async function precontent(furryPack) {
                 }
             });
             box.addEventListener(lib.config.touchscreen ? "touchend" : "click", function (e) {
-                e.stopPropagation(); // 阻止事件冒泡
+                e.stopPropagation();
             });
         })
         .catch(error => {
@@ -738,10 +728,10 @@ export async function precontent(furryPack) {
     };
     // 成就系统
     // 原版这里通过 lib.init.js 从 asset 目录加载 furry_achievement.js。
-    // 但当前扩展结构中该文件位于 js/precontent 下，因此改为直接动态导入该模块。
+    // 当前扩展结构中该文件位于 js/system 下，因此改为直接动态导入该模块。
     (async function () {
         try {
-            await import(/* @vite-ignore */ './furry_achievement.js');
+            await import(/* @vite-ignore */ '../system/furry_achievement.js');
             lib.arenaReady.push(function () {
                 ui.create.system("福瑞成就", function () {
                     if (typeof window.openfrAchievement == 'function') {
@@ -873,25 +863,25 @@ export async function precontent(furryPack) {
         // 使用形如 `./functions.js` 的相对 specifier，避免在浏览器端出现
         // “Failed to resolve module specifier 'extension/福瑞拓展/…'” 这类错误。
         const JsForExt = [
-            "functions.js",
-            "buffs.js",
-            "furry_mode.js",
-            "cards.js",
-            "character.js",
-            "animation.js",
-            "boss.js",
-            "drama.js",
-            "globalSkill.js",
-            "guozhan.js",
-            "mp.js",
-            "shop.js",
-            "skin.js",
-            "update.js",
-            "story.js",
-            "activeKeys.js",
+            "../system/functions.js",
+            "../system/buffs.js",
+            "../../packs/furry_mode.js",
+            "../../packs/cards.js",
+            "../../packs/character.js",
+            "../system/animation.js",
+            "../../packs/boss.js",
+            "../system/drama.js",
+            "../system/globalSkill.js",
+            "../../packs/guozhan.js",
+            "../system/mp.js",
+            "../system/shop.js",
+            "../system/skin.js",
+            "../system/update.js",
+            "../system/story.js",
+            "../system/activeKeys.js",
         ];
         for (const file of JsForExt) {
-            await import(/* @vite-ignore */ `./${file}`);
+            await import(/* @vite-ignore */ file);
         }
         if (lib.config.extension_福瑞拓展_furry_onlineUpdate2) {
             window.furry.update2()

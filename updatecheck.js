@@ -1,9 +1,9 @@
 (() => ({
 	// 扩展版本
-	version: "4.1.1",
+	version: "3.0.6",
 
 	// 扩展的上一个版本
-	oldversion: "4.1.0",
+	oldversion: "3.0.5",
 
 	// 更新内容汇总
 	changeLog: `
@@ -12,25 +12,33 @@
 
 	// 本次更新的所有文件(不包括文件夹)
 	updateFiles: [
+		'extension.js',
+		'info.json',
 		'css/mainPage.css',
 		'css/achievement.css',
 		'css/extension.css',
-		'asset/animation.js',
-		'asset/boss.js',
-		'asset/buffs.js',
-		'asset/cards.js',
-		'asset/character.js',
-		'asset/drama.js',
-		'asset/functions.js',
-		'asset/furry_mode.js',
-		'asset/furry_achievement.js',
-		'asset/globalSkill.js',
-		'asset/guozhan.js',
-		'asset/layout.js',
-		'asset/mp.js',
-		'asset/skin.js',
-		'asset/update.js',
-		'extension.js',
+		'js/config.js',
+		'js/content.js',
+		'js/core.js',
+		'js/help.js',
+		'js/precontent/index.js',
+		'js/system/activeKeys.js',
+		'js/system/animation.js',
+		'js/system/buffs.js',
+		'js/system/drama.js',
+		'js/system/functions.js',
+		'js/system/furry_achievement.js',
+		'js/system/globalSkill.js',
+		'js/system/mp.js',
+		'js/system/shop.js',
+		'js/system/skin.js',
+		'js/system/story.js',
+		'js/system/update.js',
+		'packs/boss.js',
+		'packs/cards.js',
+		'packs/character.js',
+		'packs/furry_mode.js',
+		'packs/guozhan.js',
 	],
 	// 扩展内所有文件(不包括文件夹)
 	allFiles: [
